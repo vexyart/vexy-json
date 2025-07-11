@@ -1,0 +1,49 @@
+[build-system]
+requires = [ "maturin>=1.0,<2.0" ]
+build-backend = "maturin"
+
+
+[project]
+name = "vexy_json"
+version = "2.2.3"
+description = "A forgiving JSON parser for Python - port of the JavaScript library jsonic"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = [ "json", "parser", "forgiving", "repair", "jsonic" ]
+classifiers = [
+"Development Status :: 4 - Beta",
+"Intended Audience :: Developers",
+"License :: OSI Approved :: MIT License",
+"License :: OSI Approved :: Apache Software License",
+"Programming Language :: Python :: 3",
+"Programming Language :: Python :: 3.8",
+"Programming Language :: Python :: 3.9",
+"Programming Language :: Python :: 3.10",
+"Programming Language :: Python :: 3.11",
+"Programming Language :: Python :: 3.12",
+"Programming Language :: Python :: 3.13",
+"Programming Language :: Rust",
+"Topic :: Software Development :: Libraries :: Python Modules",
+"Topic :: Text Processing :: Markup"
+]
+
+
+[project.license]
+text = "MIT OR Apache-2.0"
+
+
+[[project.authors]]
+name = "Adam Twardoch"
+email = "adam+github@twardoch.com"
+
+
+[project.urls]
+Homepage = "https://github.com/twardoch/vexy_json"
+Repository = "https://github.com/twardoch/vexy_json"
+Issues = "https://github.com/twardoch/vexy_json/issues"
+
+
+[tool.maturin]
+python-source = "src"
+module-name = "vexy_json.vexy_json"
+features = [ "pyo3/extension-module" ]

@@ -1,0 +1,29 @@
+# this_file: oss-fuzz/project.yaml
+
+homepage: "https://github.com/twardoch/pub/vexy_json"
+language: rust
+primary_contact: "adam@twardoch.com"
+auto_ccs:
+  - "adam@twardoch.com"
+
+# Fuzzing engines to use
+fuzzing_engines:
+  - libfuzzer
+  - afl
+  - honggfuzz
+
+# Sanitizers to use
+sanitizers:
+  - address
+  - undefined
+  - memory
+
+# Build process
+build_type: "cargo"
+
+# Coverage information
+coverage_extra_args: "--target-dir=/tmp/coverage"
+
+# Additional configuration
+main_repo: "https://github.com/twardoch/pub/vexy_json"
+file_github_issue: true

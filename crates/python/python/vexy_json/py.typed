@@ -1,0 +1,3 @@
+# this_file: crates/python/python/vexy_json/py.typed
+
+# Marker file for PEP 561 indicating that this package supports typing

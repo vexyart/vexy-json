@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- this_file: docs/test-browsers.html -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vexy_json Cross-Browser Test Suite</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .test-result {
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+      .test-pass {
+        color: #10b981;
+      }
+      .test-fail {
+        color: #ef4444;
+      }
+      .test-pending {
+        color: #f59e0b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mx-auto p-4">
+      <div class="hero bg-base-200 rounded-lg mb-6">
+        <div class="hero-content text-center">
+          <div class="max-w-md">
+            <h1 class="text-3xl font-bold">
+              vexy_json Cross-Browser Test Suite
+            </h1>
+            <p class="py-6">
+              Comprehensive testing for WASM compatibility across browsers
+            </p>
+            <button id="runTests" class="btn btn-primary">Run All Tests</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Browser Detection -->
+      <div class="card bg-base-100 shadow-xl mb-6">
+        <div class="card-body">
+          <h2 class="card-title">Browser Environment</h2>
+          <div id="browserInfo" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Browser info will be populated here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Test Results -->
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">Test Results</h2>
+          <div class="progress w-full mb-4">
+            <progress
+              id="progressBar"
+              class="progress progress-primary w-full"
+              value="0"
+              max="100"
+            ></progress>
+          </div>
+          <div id="testResults" class="test-result">
+            Click "Run All Tests" to start the test suite...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      // Browser feature detection and information
+      function detectBrowserFeatures() {
+        const info = {
+          userAgent: navigator.userAgent,
+          webAssembly: typeof WebAssembly !== 'undefined',
+          modules: 'noModule' in HTMLScriptElement.prototype,
+          workers: typeof Worker !== 'undefined',
+          localStorage: typeof Storage !== 'undefined',
+          indexedDB: typeof indexedDB !== 'undefined',
+          promises: typeof Promise !== 'undefined',
+          asyncAwait: (async () => {})().constructor.name === 'AsyncFunction',
+          bigint: typeof BigInt !== 'undefined',
+          dynamicImport:
+            'import' in window || typeof importScripts !== 'undefined',
+        };
+
+        // Parse browser name and version
+        const browserRegexes = [
+          { name: 'Chrome', regex: /Chrome\/([0-9.]+)/ },
+          { name: 'Firefox', regex: /Firefox\/([0-9.]+)/ },
+          { name: 'Safari', regex: /Version\/([0-9.]+).*Safari/ },
+          { name: 'Edge', regex: /Edg\/([0-9.]+)/ },
+          { name: 'Opera', regex: /OPR\/([0-9.]+)/ },
+        ];
+
+        let browserName = 'Unknown';
+        let browserVersion = 'Unknown';
+
+        for (const { name, regex } of browserRegexes) {
+          const match = navigator.userAgent.match(regex);
+          if (match) {
+            browserName = name;
+            browserVersion = match[1];
+            break;
+          }
+        }
+
+        info.browserName = browserName;
+        info.browserVersion = browserVersion;
+
+        return info;
+      }
+
+      // Test suite definition
+      const testSuite = [
+        {
+          name: 'WASM Module Loading',
+          test: async () => {
+            try {
+              const wasmModule = await import('../pkg/vexy_json_wasm.js');
+              return {
+                success: true,
+                message: 'WASM module loaded successfully',
+              };
+            } catch (error) {
+              return {
+                success: false,
+                message: `Failed to load WASM: ${error.message}`,
+              };
+            }
+          },
+        },
+        {
+          name: 'Basic JSON Parsing',
+          test: async () => {
+            try {
+              const wasmModule = await import('../pkg/vexy_json_wasm.js');
+              const result = wasmModule.parse_json('{"test": "value"}');
+              const parsed = JSON.parse(result);
+              if (parsed.test === 'value') {
+                return { success: true, message: 'Basic JSON parsing works' };
+              } else {
+                return { success: false, message: 'Unexpected parse result' };
+              }
+            } catch (error) {
+              return {
+                success: false,
+                message: `Parse error: ${error.message}`,
+              };
+            }
+          },
+        },
+        {
+          name: 'Comment Support',
+          test: async () => {
+            try {
+              const wasmModule = await import('../pkg/vexy_json_wasm.js');
+              const input = '{"test": "value" /* comment */}';
+              const result = wasmModule.parse_json(input);
+              const parsed = JSON.parse(result);
+              if (parsed.test === 'value') {
+                return { success: true, message: 'Comment parsing works' };
+              } else {
+                return {
+                  success: false,
+                  message: 'Failed to parse with comments',
+                };
+              }
+            } catch (error) {
+              return {
+                success: false,
+                message: `Comment parse error: ${error.message}`,
+              };
+            }
+          },
+        },
+        {
+          name: 'Unquoted Keys',
+          test: async () => {
+            try {
+              const wasmModule = await import('../pkg/vexy_json_wasm.js');
+              const input = '{test: "value"}';
+              const result = wasmModule.parse_json(input);
+              const parsed = JSON.parse(result);
+              if (parsed.test === 'value') {
+                return { success: true, message: 'Unquoted keys work' };
+              } else {
+                return {
+                  success: false,
+                  message: 'Failed to parse unquoted keys',
+                };
+              }
+            } catch (error) {
+              return {
+                success: false,
+                message: `Unquoted key error: ${error.message}`,
+              };
+            }
+          },
+        },
+        {
+          name: 'Trailing Commas',
+          test: async () => {
+            try {
+              const wasmModule = await import('../pkg/vexy_json_wasm.js');
+              const input = '{"test": "value",}';
+              const result = wasmModule.parse_json(input);
+              const parsed = JSON.parse(result);
+              if (parsed.test === 'value') {
+                return { success: true, message: 'Trailing commas work' };
+              } else {
+                return {
+                  success: false,
+                  message: 'Failed to parse trailing commas',
+                };
+              }
+            } catch (error) {
+              return {
+                success: false,
+                message: `Trailing comma error: ${error.message}`,
+              };
+            }
+          },
+        },
+        {
+          name: 'Error Handling',
+          test: async () => {
+            try {
+              const wasmModule = await import('../pkg/vexy_json_wasm.js');
+              try {
+                wasmModule.parse_json('invalid json {{{');
+                return {
+                  success: false,
+                  message: 'Should have thrown error for invalid JSON',
+                };
+              } catch (error) {
+                return {
+                  success: true,
+                  message: 'Error handling works correctly',
+                };
+              }
+            } catch (error) {
+              return {
+                success: false,
+                message: `Error handling test failed: ${error.message}`,
+              };
+            }
+          },
+        },
+        {
+          name: 'Performance Test',
+          test: async () => {
+            try {
+              const wasmModule = await import('../pkg/vexy_json_wasm.js');
+              const largeJson = JSON.stringify({
+                array: Array(1000)
+                  .fill()
+                  .map((_, i) => ({ id: i, name: `item${i}` })),
+              });
+
+              const start = performance.now();
+              const result = wasmModule.parse_json(largeJson);
+              const end = performance.now();
+
+              const parseTime = end - start;
+              if (parseTime < 100) {
+                // Should parse 1000 items in under 100ms
+                return {
+                  success: true,
+                  message: `Performance good: ${parseTime.toFixed(2)}ms`,
+                };
+              } else {
+                return {
+                  success: false,
+                  message: `Performance slow: ${parseTime.toFixed(2)}ms`,
+                };
+              }
+            } catch (error) {
+              return {
+                success: false,
+                message: `Performance test error: ${error.message}`,
+              };
+            }
+          },
+        },
+        {
+          name: 'Memory Management',
+          test: async () => {
+            try {
+              const wasmModule = await import('../pkg/vexy_json_wasm.js');
+
+              // Run multiple parse operations to test memory management
+              for (let i = 0; i < 100; i++) {
+                wasmModule.parse_json(`{"iteration": ${i}}`);
+              }
+
+              return {
+                success: true,
+                message: 'Memory management test passed',
+              };
+            } catch (error) {
+              return {
+                success: false,
+                message: `Memory test error: ${error.message}`,
+              };
+            }
+          },
+        },
+      ];
+
+      // Display browser information
+      function displayBrowserInfo() {
+        const info = detectBrowserFeatures();
+        const browserInfoEl = document.getElementById('browserInfo');
+
+        browserInfoEl.innerHTML = `
+              <div class="stat">
+                  <div class="stat-title">Browser</div>
+                  <div class="stat-value text-sm">${info.browserName} ${
+          info.browserVersion
+        }</div>
+              </div>
+              <div class="stat">
+                  <div class="stat-title">WebAssembly</div>
+                  <div class="stat-value text-sm ${
+                    info.webAssembly ? 'text-success' : 'text-error'
+                  }">
+                      ${info.webAssembly ? '✓ Supported' : '✗ Not Supported'}
+                  </div>
+              </div>
+              <div class="stat">
+                  <div class="stat-title">ES6 Modules</div>
+                  <div class="stat-value text-sm ${
+                    info.modules ? 'text-success' : 'text-error'
+                  }">
+                      ${info.modules ? '✓ Supported' : '✗ Not Supported'}
+                  </div>
+              </div>
+              <div class="stat">
+                  <div class="stat-title">Async/Await</div>
+                  <div class="stat-value text-sm ${
+                    info.asyncAwait ? 'text-success' : 'text-error'
+                  }">
+                      ${info.asyncAwait ? '✓ Supported' : '✗ Not Supported'}
+                  </div>
+              </div>
+          `;
+      }
+
+      // Run test suite
+      async function runTestSuite() {
+        const resultsEl = document.getElementById('testResults');
+        const progressEl = document.getElementById('progressBar');
+        const runButton = document.getElementById('runTests');
+
+        runButton.disabled = true;
+        runButton.textContent = 'Running Tests...';
+
+        resultsEl.innerHTML = 'Running tests...\n\n';
+
+        let passCount = 0;
+        let failCount = 0;
+
+        for (let i = 0; i < testSuite.length; i++) {
+          const testCase = testSuite[i];
+          progressEl.value = (i / testSuite.length) * 100;
+
+          resultsEl.innerHTML += `Running: ${testCase.name}... `;
+
+          try {
+            const result = await testCase.test();
+            if (result.success) {
+              resultsEl.innerHTML += `<span class="test-pass">PASS</span> - ${result.message}\n`;
+              passCount++;
+            } else {
+              resultsEl.innerHTML += `<span class="test-fail">FAIL</span> - ${result.message}\n`;
+              failCount++;
+            }
+          } catch (error) {
+            resultsEl.innerHTML += `<span class="test-fail">ERROR</span> - ${error.message}\n`;
+            failCount++;
+          }
+
+          // Small delay to show progress
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+
+        progressEl.value = 100;
+
+        resultsEl.innerHTML += `\n--- Test Summary ---\n`;
+        resultsEl.innerHTML += `Total: ${testSuite.length}\n`;
+        resultsEl.innerHTML += `<span class="test-pass">Passed: ${passCount}</span>\n`;
+        resultsEl.innerHTML += `<span class="test-fail">Failed: ${failCount}</span>\n`;
+
+        if (failCount === 0) {
+          resultsEl.innerHTML += `\n🎉 All tests passed! vexy_json WASM is compatible with this browser.`;
+        } else {
+          resultsEl.innerHTML += `\n⚠️ Some tests failed. Check the results above for details.`;
+        }
+
+        runButton.disabled = false;
+        runButton.textContent = 'Run Tests Again';
+      }
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', () => {
+        displayBrowserInfo();
+        document
+          .getElementById('runTests')
+          .addEventListener('click', runTestSuite);
+      });
+    </script>
+  </body>
+</html>

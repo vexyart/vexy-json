@@ -1,0 +1,8 @@
+When I do `./release.sh 2.0.8`, I want the release script to: 
+
+- actually add/commit everything to git
+- git-tag with semver like `v2.0.8` 
+- as much as possible cause all versioning everywhere to be based on the git-tag-semver 
+- build, locally build deliverables (nicely named, placed in 'dist')
+- git-push 
+- do "everything" (as much as possible, as cleanly as possible, and also as ROBUSTLY as possible)

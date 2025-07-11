@@ -1,0 +1,167 @@
+/* Custom styles for vexy_json web tool */
+
+/* Editor enhancements */
+.textarea-editor {
+    font-family: 'Fira Code', 'Courier New', Courier, monospace;
+    line-height: 1.5;
+    tab-size: 2;
+}
+
+/* Syntax highlighting classes (will be used with JavaScript) */
+.json-key { color: #0969da; }
+.json-string { color: #032f62; }
+.json-number { color: #0550ae; }
+.json-boolean { color: #cf222e; }
+.json-null { color: #6e7781; }
+.json-comment { color: #6e7781; font-style: italic; }
+
+/* Error highlighting */
+.error-highlight {
+    background-color: #ffebe9;
+    border-bottom: 2px wavy #d1242f;
+}
+
+/* Dark mode syntax colors */
+[data-theme="dark"] .json-key { color: #79c0ff; }
+[data-theme="dark"] .json-string { color: #a5d6ff; }
+[data-theme="dark"] .json-number { color: #79c0ff; }
+[data-theme="dark"] .json-boolean { color: #ff7b72; }
+[data-theme="dark"] .json-null { color: #8b949e; }
+[data-theme="dark"] .json-comment { color: #8b949e; }
+[data-theme="dark"] .error-highlight {
+    background-color: #8b1a1a;
+    border-bottom-color: #ff7b72;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .stats {
+        grid-auto-flow: row;
+    }
+    
+    .stat {
+        place-items: center;
+    }
+}
+
+/* Copy button feedback */
+.copy-success {
+    position: relative;
+}
+
+.copy-success::after {
+    content: "Copied!";
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #10b981;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    animation: fadeOut 2s ease-out;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Loading state for buttons */
+.btn-loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.btn-loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s linear infinite;
+}
+
+@keyframes button-loading-spinner {
+    from { transform: rotate(0turn); }
+    to { transform: rotate(1turn); }
+}
+
+/* Pretty print output */
+.pretty-print {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Line numbers for errors */
+.line-numbers {
+    counter-reset: line;
+}
+
+.line-numbers .line {
+    counter-increment: line;
+    position: relative;
+    padding-left: 3.5em;
+}
+
+.line-numbers .line::before {
+    content: counter(line);
+    position: absolute;
+    left: 0;
+    width: 3em;
+    text-align: right;
+    color: #6e7781;
+    padding-right: 0.5em;
+}
+
+/* Tab content animation */
+.tab-content {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Improved scrollbar for output */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}

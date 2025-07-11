@@ -1,0 +1,30 @@
+{
+    "name": "vexy_json-testing-scripts",
+    "version": "1.0.0",
+    "description": "Testing and monitoring scripts for vexy_json project",
+    "main": "cross-browser-test.js",
+    "scripts": {
+        "test:browser": "node cross-browser-test.js",
+        "test:browser:all": "node cross-browser-test.js --all-browsers",
+        "test:browser:mobile": "node cross-browser-test.js --mobile-only",
+        "test:browser:chrome": "node cross-browser-test.js --browser=chrome",
+        "test:browser:firefox": "node cross-browser-test.js --browser=firefox",
+        "test:browser:safari": "node cross-browser-test.js --browser=safari",
+        "test:browser:edge": "node cross-browser-test.js --browser=edge",
+        "monitor:performance": "node performance-monitor.js"
+    },
+    "dependencies": {
+        "puppeteer": "^21.0.0"
+    },
+    "devDependencies": {
+        "jest": "^29.0.0"
+    },
+    "keywords": [
+        "testing",
+        "cross-browser",
+        "performance",
+        "vexy_json"
+    ],
+    "author": "vexy_json team",
+    "license": "MIT"
+}

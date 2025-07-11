@@ -1,0 +1,11 @@
+{
+  name: "test",
+  value: 42,
+  array: [1, 2, 3],
+  nested: {
+    key: "value",
+    another_key: 'single quotes'
+  },
+  special-key: "with-dashes",
+  123: "numeric key"
+}

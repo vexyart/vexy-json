@@ -1,0 +1,759 @@
+# JSON Repair Integration Specification for vexy_json
+
+## Executive Summary
+
+This document provides a detailed specification for integrating the `json-repair` crate into the vexy_json project to handle mismatched brackets and braces - a limitation that neither our `vexy_json` nor the original `jsonic` parser can currently overcome. The integration will implement a three-tier parsing approach with performance-optimized fallback chains.
+
+## 1. Problem Statement
+
+### Current Limitations
+- Both `vexy_json` and `jsonic` fail on mismatched brackets/braces (e.g., `{key: "value"]`, `[1, 2, 3}`)
+- No error recovery mechanism for structural delimiter mismatches
+- Complete parsing failure rather than partial recovery with error reporting
+- Missing brackets at end-of-input cause total failure
+
+### Research Findings
+Based on extensive research into error recovery techniques:
+- **Academic solutions**: PEG with labeled failures, GLR parsers, minimal edit distance repairs
+- **Practical implementations**: `json-repair` crate, panic-mode recovery, bracket balancing heuristics
+- **Industry examples**: VSCode's `jsonc-parser`, Chrome's V8 JSON parser with error recovery
+
+## 2. Architecture Overview
+
+### Three-Tier Parsing Strategy
+
+```
+Input JSON → Tier 1: Fast Path → Tier 2: Forgiving Path → Tier 3: Repair Path → Output
+             (serde_json)      (vexy_json core)         (json-repair)
+```
+
+**Tier 1: Fast Path (serde_json)**
+- Fastest possible parsing for valid JSON
+- Zero-copy optimization where possible
+- Immediate failure on any syntax error
+
+**Tier 2: Forgiving Path (vexy_json core)**
+- Current vexy_json parser with all forgiving features
+- Handles comments, trailing commas, unquoted keys, etc.
+- Fails on bracket mismatches
+
+**Tier 3: Repair Path (json-repair)**
+- Automatic bracket/brace balancing
+- Minimal edit distance repairs
+- Always produces valid JSON output
+- Comprehensive error reporting
+
+## 3. Dependencies
+
+### Primary Dependency
+```toml
+[dependencies]
+json-repair = "0.2"
+```
+
+### Version Compatibility
+- `json-repair` 0.2.x: Stable API, bracket balancing, minimal dependencies
+- Compatible with current `vexy_json` dependency stack
+- No conflicting dependencies identified
+
+## 4. Core Implementation
+
+### 4.1 New Parser Configuration
+
+```rust
+// In crates/core/src/parser.rs
+#[derive(Debug, Clone)]
+pub struct ParserOptions {
+    // ... existing fields ...
+    
+    /// Enable JSON repair functionality for bracket mismatches
+    pub enable_repair: bool,
+    /// Maximum number of repairs to attempt
+    pub max_repairs: usize,
+    /// Prefer speed over repair quality
+    pub fast_repair: bool,
+    /// Report all repairs made
+    pub report_repairs: bool,
+}
+
+impl Default for ParserOptions {
+    fn default() -> Self {
+        ParserOptions {
+            // ... existing defaults ...
+            enable_repair: true,
+            max_repairs: 100,
+            fast_repair: false,
+            report_repairs: true,
+        }
+    }
+}
+```
+
+### 4.2 Enhanced Result Type
+
+```rust
+// In crates/core/src/error/mod.rs
+#[derive(Debug, Clone)]
+pub struct ParseResult<T> {
+    pub value: T,
+    pub errors: Vec<ParseError>,
+    pub repairs: Vec<RepairAction>,
+    pub parsing_tier: ParsingTier,
+}
+
+#[derive(Debug, Clone)]
+pub enum ParsingTier {
+    Fast,      // serde_json succeeded
+    Forgiving, // vexy_json succeeded
+    Repair,    // json-repair succeeded
+}
+
+#[derive(Debug, Clone)]
+pub struct RepairAction {
+    pub action_type: RepairType,
+    pub position: usize,
+    pub original: String,
+    pub replacement: String,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub enum RepairType {
+    InsertBracket,
+    RemoveBracket,
+    ReplaceBracket,
+    BalanceQuotes,
+    InsertComma,
+    RemoveComma,
+}
+```
+
+### 4.3 Main Parser Implementation
+
+```rust
+// In crates/core/src/parser.rs
+pub fn parse_with_fallback(input: &str, options: &ParserOptions) -> ParseResult<Value> {
+    // Tier 1: Fast Path - serde_json
+    if let Ok(value) = serde_json::from_str::<serde_json::Value>(input) {
+        return ParseResult {
+            value: convert_serde_value(value),
+            errors: Vec::new(),
+            repairs: Vec::new(),
+            parsing_tier: ParsingTier::Fast,
+        };
+    }
+
+    // Tier 2: Forgiving Path - vexy_json core
+    match parse_with_options(input, options) {
+        Ok(value) => {
+            return ParseResult {
+                value,
+                errors: Vec::new(),
+                repairs: Vec::new(),
+                parsing_tier: ParsingTier::Forgiving,
+            };
+        }
+        Err(error) => {
+            // Check if this is a bracket mismatch error
+            if !options.enable_repair || !is_bracket_mismatch_error(&error) {
+                return ParseResult {
+                    value: Value::Null,
+                    errors: vec![error],
+                    repairs: Vec::new(),
+                    parsing_tier: ParsingTier::Forgiving,
+                };
+            }
+        }
+    }
+
+    // Tier 3: Repair Path - json-repair
+    parse_with_repair(input, options)
+}
+
+fn parse_with_repair(input: &str, options: &ParserOptions) -> ParseResult<Value> {
+    let mut repairs = Vec::new();
+    let mut repair_input = input.to_string();
+
+    // Apply json-repair preprocessing
+    match json_repair::repair(&repair_input) {
+        Ok(repaired_json) => {
+            // Track what repairs were made
+            repairs.extend(detect_repairs(input, &repaired_json));
+
+            // Parse the repaired JSON with vexy_json
+            match parse_with_options(&repaired_json, options) {
+                Ok(value) => ParseResult {
+                    value,
+                    errors: Vec::new(),
+                    repairs,
+                    parsing_tier: ParsingTier::Repair,
+                },
+                Err(error) => {
+                    // Even repair failed - return best effort
+                    ParseResult {
+                        value: Value::Null,
+                        errors: vec![error],
+                        repairs,
+                        parsing_tier: ParsingTier::Repair,
+                    }
+                }
+            }
+        }
+        Err(repair_error) => {
+            ParseResult {
+                value: Value::Null,
+                errors: vec![Error::RepairFailed(repair_error.to_string())],
+                repairs: Vec::new(),
+                parsing_tier: ParsingTier::Repair,
+            }
+        }
+    }
+}
+```
+
+### 4.4 Bracket Mismatch Detection
+
+```rust
+// In crates/core/src/error/utils.rs
+pub fn is_bracket_mismatch_error(error: &Error) -> bool {
+    match error {
+        Error::UnexpectedToken(token, _) => {
+            matches!(token, 
+                Token::RightBrace | Token::RightBracket | 
+                Token::LeftBrace | Token::LeftBracket
+            )
+        }
+        Error::UnexpectedEof => true,
+        Error::UnexpectedChar(ch, _) => {
+            matches!(ch, '{' | '}' | '[' | ']')
+        }
+        _ => false,
+    }
+}
+
+pub fn detect_repairs(original: &str, repaired: &str) -> Vec<RepairAction> {
+    let mut repairs = Vec::new();
+    
+    // Simple diff-based repair detection
+    // This is a simplified version - full implementation would use
+    // more sophisticated diff algorithms
+    
+    let original_brackets = count_brackets(original);
+    let repaired_brackets = count_brackets(repaired);
+    
+    for (bracket_type, (orig_count, rep_count)) in original_brackets.iter().zip(repaired_brackets.iter()) {
+        if orig_count != rep_count {
+            repairs.push(RepairAction {
+                action_type: if rep_count > orig_count { 
+                    RepairType::InsertBracket 
+                } else { 
+                    RepairType::RemoveBracket 
+                },
+                position: 0, // Would need actual position tracking
+                original: bracket_type.to_string(),
+                replacement: format!("{} (count: {} → {})", bracket_type, orig_count, rep_count),
+                description: format!("Balanced {} brackets", bracket_type),
+            });
+        }
+    }
+    
+    repairs
+}
+
+fn count_brackets(input: &str) -> HashMap<char, usize> {
+    let mut counts = HashMap::new();
+    for ch in input.chars() {
+        match ch {
+            '{' | '}' | '[' | ']' => {
+                *counts.entry(ch).or_insert(0) += 1;
+            }
+            _ => {}
+        }
+    }
+    counts
+}
+```
+
+## 5. Error Handling Enhancement
+
+### 5.1 New Error Types
+
+```rust
+// In crates/core/src/error/types.rs
+#[derive(Debug, Clone, thiserror::Error)]
+pub enum Error {
+    // ... existing error types ...
+    
+    #[error("JSON repair failed: {0}")]
+    RepairFailed(String),
+    
+    #[error("Bracket mismatch at position {0}: expected {1}, found {2}")]
+    BracketMismatch(usize, char, char),
+    
+    #[error("Unbalanced brackets: {0} extra opening, {1} extra closing")]
+    UnbalancedBrackets(usize, usize),
+    
+    #[error("Maximum repair attempts exceeded ({0})")]
+    MaxRepairsExceeded(usize),
+}
+```
+
+### 5.2 Enhanced Error Reporting
+
+```rust
+// In crates/core/src/error/mod.rs
+impl ParseResult<Value> {
+    pub fn is_success(&self) -> bool {
+        self.errors.is_empty()
+    }
+    
+    pub fn was_repaired(&self) -> bool {
+        !self.repairs.is_empty()
+    }
+    
+    pub fn get_performance_tier(&self) -> ParsingTier {
+        self.parsing_tier
+    }
+    
+    pub fn get_repair_summary(&self) -> String {
+        if self.repairs.is_empty() {
+            "No repairs needed".to_string()
+        } else {
+            format!("Applied {} repairs: {}", 
+                self.repairs.len(),
+                self.repairs.iter()
+                    .map(|r| &r.description)
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            )
+        }
+    }
+}
+```
+
+## 6. API Integration
+
+### 6.1 Public API Changes
+
+```rust
+// In crates/core/src/lib.rs
+pub use parser::{
+    parse, parse_with_options, parse_with_fallback,
+    Parser, ParserOptions, ParseResult, ParsingTier, RepairAction, RepairType
+};
+
+// New convenience functions
+pub fn parse_with_repair(input: &str) -> ParseResult<Value> {
+    let options = ParserOptions::default();
+    parse_with_fallback(input, &options)
+}
+
+pub fn parse_strict(input: &str) -> Result<Value> {
+    let options = ParserOptions {
+        enable_repair: false,
+        allow_comments: false,
+        allow_trailing_commas: false,
+        allow_unquoted_keys: false,
+        allow_single_quotes: false,
+        implicit_top_level: false,
+        newline_as_comma: false,
+        max_depth: 128,
+        max_repairs: 0,
+        fast_repair: false,
+        report_repairs: false,
+    };
+    
+    match parse_with_fallback(input, &options) {
+        result if result.is_success() => Ok(result.value),
+        result => Err(result.errors.into_iter().next().unwrap_or(Error::UnexpectedEof)),
+    }
+}
+```
+
+### 6.2 Backward Compatibility
+
+```rust
+// Maintain existing API - no breaking changes
+pub fn parse(input: &str) -> Result<Value> {
+    match parse_with_repair(input) {
+        result if result.is_success() => Ok(result.value),
+        result => Err(result.errors.into_iter().next().unwrap_or(Error::UnexpectedEof)),
+    }
+}
+```
+
+## 7. CLI Integration
+
+### 7.1 New Command Line Options
+
+```rust
+// In crates/cli/src/main.rs
+#[derive(Parser)]
+#[command(name = "vexy_json")]
+struct Cli {
+    // ... existing options ...
+    
+    /// Enable JSON repair for bracket mismatches
+    #[arg(long, default_value_t = true)]
+    repair: bool,
+    
+    /// Maximum number of repairs to attempt
+    #[arg(long, default_value_t = 100)]
+    max_repairs: usize,
+    
+    /// Show repair actions taken
+    #[arg(long)]
+    show_repairs: bool,
+    
+    /// Show which parsing tier was used
+    #[arg(long)]
+    show_tier: bool,
+    
+    /// Disable repair and use strict parsing
+    #[arg(long)]
+    strict: bool,
+}
+```
+
+### 7.2 Enhanced CLI Output
+
+```rust
+// CLI output enhancement
+fn main() -> Result<()> {
+    let cli = Cli::parse();
+    
+    let mut options = ParserOptions::default();
+    options.enable_repair = cli.repair && !cli.strict;
+    options.max_repairs = cli.max_repairs;
+    options.report_repairs = cli.show_repairs;
+    
+    // ... existing CLI logic ...
+    
+    match parse_with_fallback(&input, &options) {
+        result if result.is_success() => {
+            println!("{}", serde_json::to_string_pretty(&result.value)?);
+            
+            if cli.show_tier {
+                eprintln!("Parsing tier: {:?}", result.parsing_tier);
+            }
+            
+            if cli.show_repairs && result.was_repaired() {
+                eprintln!("Repairs: {}", result.get_repair_summary());
+            }
+        }
+        result => {
+            eprintln!("Parse error: {:?}", result.errors);
+            std::process::exit(1);
+        }
+    }
+    
+    Ok(())
+}
+```
+
+## 8. Testing Strategy
+
+### 8.1 Unit Tests
+
+```rust
+// In crates/core/src/parser/tests.rs
+#[cfg(test)]
+mod repair_tests {
+    use super::*;
+    
+    #[test]
+    fn test_bracket_mismatch_repair() {
+        let input = r#"{"key": "value"]"#;
+        let result = parse_with_repair(input);
+        
+        assert!(result.is_success());
+        assert!(result.was_repaired());
+        assert_eq!(result.parsing_tier, ParsingTier::Repair);
+        assert_eq!(result.repairs.len(), 1);
+        assert_eq!(result.repairs[0].action_type, RepairType::ReplaceBracket);
+    }
+    
+    #[test]
+    fn test_missing_closing_bracket() {
+        let input = r#"{"key": "value""#;
+        let result = parse_with_repair(input);
+        
+        assert!(result.is_success());
+        assert!(result.was_repaired());
+        assert_eq!(result.repairs[0].action_type, RepairType::InsertBracket);
+    }
+    
+    #[test]
+    fn test_extra_closing_bracket() {
+        let input = r#"{"key": "value"}}"#;
+        let result = parse_with_repair(input);
+        
+        assert!(result.is_success());
+        assert!(result.was_repaired());
+        assert_eq!(result.repairs[0].action_type, RepairType::RemoveBracket);
+    }
+    
+    #[test]
+    fn test_performance_tiers() {
+        // Fast tier
+        let valid_json = r#"{"key": "value"}"#;
+        let result = parse_with_fallback(valid_json, &ParserOptions::default());
+        assert_eq!(result.parsing_tier, ParsingTier::Fast);
+        
+        // Forgiving tier
+        let forgiving_json = r#"{key: 'value'}"#;
+        let result = parse_with_fallback(forgiving_json, &ParserOptions::default());
+        assert_eq!(result.parsing_tier, ParsingTier::Forgiving);
+        
+        // Repair tier
+        let broken_json = r#"{"key": "value"]"#;
+        let result = parse_with_fallback(broken_json, &ParserOptions::default());
+        assert_eq!(result.parsing_tier, ParsingTier::Repair);
+    }
+}
+```
+
+### 8.2 Integration Tests
+
+```rust
+// In tests/repair_integration.rs
+#[cfg(test)]
+mod integration_tests {
+    use vexy_json::{parse_with_fallback, ParserOptions, ParsingTier};
+    
+    #[test]
+    fn test_complex_bracket_mismatch() {
+        let input = r#"
+        {
+            "array": [1, 2, 3},
+            "nested": {
+                "inner": [4, 5, 6]
+            }
+        ]
+        "#;
+        
+        let result = parse_with_fallback(input, &ParserOptions::default());
+        assert!(result.is_success());
+        assert!(result.was_repaired());
+        assert_eq!(result.parsing_tier, ParsingTier::Repair);
+        
+        // Verify the structure was preserved
+        let value = result.value;
+        assert!(value.is_object());
+        assert!(value["array"].is_array());
+        assert!(value["nested"]["inner"].is_array());
+    }
+}
+```
+
+## 9. Performance Considerations
+
+### 9.1 Optimization Strategies
+
+1. **Fast Path Optimization**
+   - Use `serde_json` for performance-critical paths
+   - Zero-copy parsing where possible
+   - Early exit on valid JSON
+
+2. **Repair Caching**
+   - Cache common repair patterns
+   - Memoize bracket balancing results
+   - Reuse repair computations
+
+3. **Lazy Repair Detection**
+   - Only analyze repairs when requested
+   - Defer expensive diff computations
+   - Stream processing for large inputs
+
+### 9.2 Benchmarking
+
+```rust
+// In benches/repair_benchmark.rs
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use vexy_json::{parse_with_fallback, ParserOptions};
+
+fn bench_parsing_tiers(c: &mut Criterion) {
+    let mut group = c.benchmark_group("parsing_tiers");
+    
+    // Fast tier
+    let valid_json = r#"{"key": "value", "array": [1, 2, 3]}"#;
+    group.bench_function("fast_tier", |b| {
+        b.iter(|| parse_with_fallback(black_box(valid_json), &ParserOptions::default()))
+    });
+    
+    // Forgiving tier
+    let forgiving_json = r#"{key: 'value', array: [1, 2, 3,]}"#;
+    group.bench_function("forgiving_tier", |b| {
+        b.iter(|| parse_with_fallback(black_box(forgiving_json), &ParserOptions::default()))
+    });
+    
+    // Repair tier
+    let broken_json = r#"{"key": "value", "array": [1, 2, 3]}"#;
+    group.bench_function("repair_tier", |b| {
+        b.iter(|| parse_with_fallback(black_box(broken_json), &ParserOptions::default()))
+    });
+    
+    group.finish();
+}
+
+criterion_group!(benches, bench_parsing_tiers);
+criterion_main!(benches);
+```
+
+## 10. Documentation Updates
+
+### 10.1 README.md Changes
+
+```markdown
+## Enhanced Error Recovery
+
+vexy_json now features advanced error recovery capabilities that can handle mismatched brackets and braces:
+
+```rust
+use vexy_json::{parse_with_fallback, ParserOptions};
+
+// This will now succeed with automatic repair
+let broken_json = r#"{"key": "value"]"#;
+let result = parse_with_fallback(broken_json, &ParserOptions::default());
+
+if result.is_success() {
+    println!("Parsed: {}", result.value);
+    if result.was_repaired() {
+        println!("Repairs: {}", result.get_repair_summary());
+    }
+}
+```
+
+### Three-Tier Parsing
+
+1. **Fast Tier**: Uses `serde_json` for maximum performance on valid JSON
+2. **Forgiving Tier**: Uses vexy_json's forgiving features for relaxed JSON syntax
+3. **Repair Tier**: Uses `json-repair` for automatic bracket balancing and error correction
+```
+
+### 10.2 API Documentation
+
+```rust
+/// Parse JSON with automatic error recovery and repair.
+///
+/// This function implements a three-tier parsing strategy:
+/// 1. Fast path using `serde_json` for valid JSON
+/// 2. Forgiving path using vexy_json's tolerant parsing
+/// 3. Repair path using `json-repair` for bracket mismatches
+///
+/// # Examples
+///
+/// ```rust
+/// use vexy_json::{parse_with_fallback, ParserOptions};
+///
+/// // Valid JSON - uses fast path
+/// let valid = r#"{"key": "value"}"#;
+/// let result = parse_with_fallback(valid, &ParserOptions::default());
+/// assert_eq!(result.parsing_tier, ParsingTier::Fast);
+///
+/// // Forgiving JSON - uses forgiving path
+/// let forgiving = r#"{key: 'value'}"#;
+/// let result = parse_with_fallback(forgiving, &ParserOptions::default());
+/// assert_eq!(result.parsing_tier, ParsingTier::Forgiving);
+///
+/// // Broken JSON - uses repair path
+/// let broken = r#"{"key": "value"]"#;
+/// let result = parse_with_fallback(broken, &ParserOptions::default());
+/// assert_eq!(result.parsing_tier, ParsingTier::Repair);
+/// assert!(result.was_repaired());
+/// ```
+pub fn parse_with_fallback(input: &str, options: &ParserOptions) -> ParseResult<Value>
+```
+
+## 11. Migration Guide
+
+### 11.1 Existing Code Compatibility
+
+All existing code will continue to work without changes:
+
+```rust
+// This still works exactly as before
+let value = vexy_json::parse(r#"{"key": "value"}"#)?;
+```
+
+### 11.2 New Features Adoption
+
+```rust
+// Opt into new features gradually
+use vexy_json::{parse_with_fallback, ParserOptions};
+
+// Enable repair with configuration
+let options = ParserOptions {
+    enable_repair: true,
+    max_repairs: 50,
+    report_repairs: true,
+    ..Default::default()
+};
+
+let result = parse_with_fallback(input, &options);
+if result.was_repaired() {
+    println!("Applied repairs: {}", result.get_repair_summary());
+}
+```
+
+## 12. Implementation Timeline
+
+### Phase 1: Core Implementation (Week 1-2)
+- [ ] Add `json-repair` dependency
+- [ ] Implement `ParseResult` type
+- [ ] Create `parse_with_fallback` function
+- [ ] Add bracket mismatch detection
+- [ ] Basic repair functionality
+
+### Phase 2: Enhanced Features (Week 3-4)
+- [ ] Repair action tracking
+- [ ] Performance optimizations
+- [ ] CLI integration
+- [ ] Comprehensive error reporting
+
+### Phase 3: Testing & Documentation (Week 5-6)
+- [ ] Unit test suite
+- [ ] Integration tests
+- [ ] Performance benchmarks
+- [ ] Documentation updates
+- [ ] Migration guide
+
+### Phase 4: Polish & Release (Week 7-8)
+- [ ] Code review and refinement
+- [ ] Performance tuning
+- [ ] Documentation polish
+- [ ] Release preparation
+
+## 13. Risks and Mitigation
+
+### 13.1 Performance Risks
+- **Risk**: Three-tier parsing adds overhead
+- **Mitigation**: Fast path optimization, caching, lazy evaluation
+
+### 13.2 Compatibility Risks
+- **Risk**: Changes break existing code
+- **Mitigation**: Maintain backward compatibility, comprehensive testing
+
+### 13.3 Dependency Risks
+- **Risk**: `json-repair` crate maintenance issues
+- **Mitigation**: Fork capability, alternative implementations
+
+## 14. Success Metrics
+
+### 14.1 Functionality Metrics
+- [ ] 100% of bracket mismatch cases handled
+- [ ] Zero breaking changes to existing API
+- [ ] Comprehensive error reporting
+- [ ] Performance within 10% of current implementation
+
+### 14.2 Quality Metrics
+- [ ] 95%+ test coverage
+- [ ] All benchmark tests pass
+- [ ] Documentation completeness
+- [ ] Zero regressions in existing tests
+
+## 15. Conclusion
+
+This specification provides a comprehensive roadmap for integrating `json-repair` into vexy_json while maintaining backward compatibility and performance. The three-tier parsing approach ensures optimal performance for valid JSON while providing robust error recovery for malformed input.
+
+The implementation will significantly expand vexy_json's capabilities while maintaining its core design principles of being fast, forgiving, and user-friendly.

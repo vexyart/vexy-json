@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vexy JSON Error Debug</title>
+  </head>
+  <body>
+    <h1>Vexy JSON Error Debug Test</h1>
+    <button onclick="runTest()">Run Test</button>
+    <pre id="log"></pre>
+
+    <script type="module">
+      import init, {
+        parse_json,
+        parse_json_with_options,
+      } from '../pkg/vexy_json_wasm.js';
+
+      let log = '';
+      function appendLog(message) {
+        log += message + '\n';
+        document.getElementById('log').textContent = log;
+        console.log(message);
+      }
+
+      let initialized = false;
+
+      async function initWasm() {
+        try {
+          await init();
+          initialized = true;
+          appendLog('✅ WASM module initialized successfully');
+        } catch (error) {
+          appendLog('❌ WASM initialization failed: ' + error);
+          console.error('WASM init error:', error);
+        }
+      }
+
+      window.runTest = async function () {
+        if (!initialized) {
+          appendLog('⏳ Initializing WASM...');
+          await initWasm();
+        }
+
+        appendLog('\n🔍 Starting error debug tests...');
+
+        // Test with intentionally broken JSON to see if errors work
+        try {
+          const input1 = '{broken json';
+          appendLog(`📝 Testing broken JSON: ${input1}`);
+          const result1 = parse_json(input1);
+          appendLog(`❌ Unexpectedly succeeded: ${JSON.stringify(result1)}`);
+        } catch (error) {
+          appendLog(`✅ Correctly failed with error: ${error}`);
+          console.log('Error object:', error);
+        }
+
+        // Test empty input
+        try {
+          const input2 = '';
+          appendLog(`\n📝 Testing empty input: "${input2}"`);
+          const result2 = parse_json(input2);
+          appendLog(
+            `✅ Result: ${JSON.stringify(result2)}, type: ${typeof result2}`
+          );
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+        }
+
+        // Test null input
+        try {
+          const input3 = 'null';
+          appendLog(`\n📝 Testing null: ${input3}`);
+          const result3 = parse_json(input3);
+          appendLog(
+            `✅ Result: ${JSON.stringify(result3)}, type: ${typeof result3}`
+          );
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+        }
+
+        // Test true/false
+        try {
+          const input4 = 'true';
+          appendLog(`\n📝 Testing boolean: ${input4}`);
+          const result4 = parse_json(input4);
+          appendLog(
+            `✅ Result: ${JSON.stringify(result4)}, type: ${typeof result4}`
+          );
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+        }
+
+        // Test catching exceptions from options
+        try {
+          const input5 = '{"a":1}';
+          const badOptions = { not_a_valid_option: true };
+          appendLog(`\n📝 Testing with invalid options: ${input5}`);
+          const result5 = parse_json_with_options(input5, badOptions);
+          appendLog(`✅ Result: ${JSON.stringify(result5)}`);
+        } catch (error) {
+          appendLog(`⚠️  Options error: ${error}`);
+        }
+
+        // Test with console.log to see what actually happens
+        try {
+          const input6 = '{"test": 123}';
+          appendLog(`\n📝 Testing with console inspection: ${input6}`);
+          const result6 = parse_json(input6);
+          console.log('Raw result:', result6);
+          console.log('Result type:', typeof result6);
+          console.log('Result constructor:', result6?.constructor?.name);
+          console.log('Result keys:', Object.keys(result6 || {}));
+          console.log('JSON stringify:', JSON.stringify(result6));
+          appendLog(`✅ Check console for detailed result inspection`);
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+          console.error('Error details:', error);
+        }
+      };
+
+      // Auto-initialize when page loads
+      initWasm();
+    </script>
+  </body>
+</html>

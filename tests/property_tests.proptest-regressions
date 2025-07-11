@@ -1,0 +1,8 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 35c00cd52e7b6cf58ff3b52f99660bf42eae45da8b9f95430375ac51ef3b0dc1 # shrinks to string_val = "", int_val = -9064044958303099, float_val = 0.0, bool_val = false
+cc 79ad8ae3dc5cdfe85464a692df1de4949f31230efaa3a3f10dd6fecb93fb5ecf # shrinks to value = String("")

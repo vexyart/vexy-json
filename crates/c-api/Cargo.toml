@@ -1,0 +1,31 @@
+[package]
+name = "vexy_json-c-api"
+version = "2.2.3"
+authors = [ "Vexy JSON Contributors" ]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "C API for the vexy_json JSON parser"
+repository = "https://github.com/twardoch/pub-vexy_json"
+
+
+[lib]
+name = "vexy_json_c_api"
+crate-type = [ "cdylib", "staticlib" ]
+
+
+[dependencies]
+libc = "0.2"
+serde_json = "1.0"
+
+
+[dependencies.vexy_json-core]
+path = "../core"
+features = [ "serde" ]
+
+
+[build-dependencies]
+cbindgen = "0.24"
+
+
+[features]
+default = [ ]

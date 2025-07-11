@@ -1,0 +1,14 @@
+{
+    "user": {
+        "name": "John Doe",
+        "email": "john@example.com",
+        "metadata": {
+            "created": "2023-01-01",
+            "lastLogin": "2023-12-01",
+            "preferences": {
+                "theme": "dark",
+                "notifications": true
+            }
+        }
+    }
+}

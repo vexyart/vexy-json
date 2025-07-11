@@ -1,0 +1,11 @@
+Read the @llms.txt code snapshot and into `vexify.txt` record all occurrences of all case variants of `vexy_json` found in the codebase. 
+
+Write a `vexify.py` tool that will generally replace both in the current codebase and in the entire git history the name `vexy_json` with `vexy json` but in a smart way: 
+
+- In filenames, it should replace `vexy_json` with `vexy_json`
+- In code, it should replace `vexy_json` with `vexy_json` when it is used as a variable or function name, not in comments or strings.
+- In documentation, comments and UI strings (like in HTML) it should replace the all-uppercase `Vexy JSON` with `Vexy JSON`.
+- Cases like `VexyJSONConfig`, `VexyJSONWrapper` or so should become `VexyJSONConfig`, `VexyJSONWrapper`
+- It should report all changes made, including filenames, code changes, and documentation updates, and then report the places where `vexy_json` still occurs.
+
+Make it Fire CLI. If `--deep` is given, it should also rewrite the git history. Without `--deep`, it should only modify the current state of the codebase.

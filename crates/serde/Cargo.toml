@@ -1,0 +1,22 @@
+[package]
+name = "vexy_json-serde"
+version = "2.2.3"
+edition = "2021"
+
+
+[lib]
+path = "src/lib.rs"
+
+
+[dependencies.vexy_json-core]
+path = "../core"
+features = [ "serde" ]
+
+
+[dependencies.serde]
+version = "1.0"
+features = [ "derive" ]
+
+
+[features]
+serde = [ ]

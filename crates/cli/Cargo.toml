@@ -1,0 +1,40 @@
+[package]
+name = "vexy_json-cli"
+version = "2.2.3"
+edition = "2021"
+
+
+[[bin]]
+name = "vexy_json"
+path = "src/main.rs"
+
+
+[dependencies]
+rayon = "1.7"
+colored = "2.0"
+thiserror = "2.0"
+notify = "6.0"
+dirs = "5.0"
+
+
+[dependencies.vexy_json-core]
+path = "../core"
+
+
+[dependencies.clap]
+version = "4.0"
+features = [ "derive" ]
+
+
+[dependencies.tokio]
+version = "1.0"
+features = [ "full" ]
+
+
+[dependencies.serde]
+version = "1.0"
+features = [ "derive" ]
+
+
+[features]
+cli = [ ]

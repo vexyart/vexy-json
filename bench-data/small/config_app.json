@@ -1,0 +1,46 @@
+{
+  "app": {
+    "name": "MyApp",
+    "version": "1.2.3",
+    "debug": true,
+    "environment": "development"
+  },
+  "server": {
+    "host": "localhost",
+    "port": 8080,
+    "ssl": {
+      "enabled": false,
+      "cert": "/path/to/cert.pem",
+      "key": "/path/to/key.pem"
+    }
+  },
+  "database": {
+    "type": "postgres",
+    "host": "db.example.com",
+    "port": 5432,
+    "credentials": {
+      "user": "dbuser",
+      "password": "secret"
+    },
+    "pool": {
+      "min": 5,
+      "max": 20,
+      "idle_timeout": 30000
+    }
+  },
+  "features": [
+    "new-ui",
+    "analytics",
+    "beta-api"
+  ],
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "outputs": ["console", "file"],
+    "file": {
+      "path": "/var/log/app.log",
+      "max_size": "100MB",
+      "backup_count": 5
+    }
+  }
+}

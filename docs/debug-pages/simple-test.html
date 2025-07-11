@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Vexy JSON Test</title>
+  </head>
+  <body>
+    <h1>Simple Vexy JSON Test</h1>
+    <input type="text" id="input" value="{a:1}" style="width: 300px" />
+    <button onclick="parseInput()">Parse</button>
+    <pre id="output"></pre>
+
+    <script type="module">
+      import init, { parse_json_with_options } from '../pkg/vexy_json_wasm.js';
+
+      let initialized = false;
+
+      async function initWasm() {
+        await init();
+        initialized = true;
+        document.getElementById('output').textContent =
+          'WASM initialized. Ready to parse.';
+      }
+
+      window.parseInput = function () {
+        if (!initialized) {
+          document.getElementById('output').textContent =
+            'WASM not initialized yet';
+          return;
+        }
+
+        const input = document.getElementById('input').value;
+        const options = {
+          allow_comments: true,
+          allow_trailing_commas: true,
+          allow_unquoted_keys: true,
+          allow_single_quotes: true,
+          implicit_top_level: true,
+          newline_as_comma: true,
+          max_depth: 128,
+        };
+
+        try {
+          const result = parse_json_with_options(
+            input,
+            options.allow_comments,
+            options.allow_trailing_commas,
+            options.allow_unquoted_keys,
+            options.allow_single_quotes,
+            options.implicit_top_level,
+            options.newline_as_comma,
+            false, // enable_repair
+            options.max_depth
+          );
+          const jsonString = JSON.stringify(result, null, 2);
+          document.getElementById('output').textContent =
+            'Result:\n' + jsonString;
+        } catch (error) {
+          document.getElementById('output').textContent =
+            'Error:\n' + error.toString();
+        }
+      };
+
+      initWasm();
+    </script>
+  </body>
+</html>

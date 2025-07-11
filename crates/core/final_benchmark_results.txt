@@ -1,0 +1,742 @@
+   Compiling vexy_json-core v0.2.0 (/Users/adam/Developer/vcs/github.twardoch/pub/vexy_json/crates/core)
+warning: unnecessary qualification
+   --> crates/core/src/optimization/memory_pool.rs:157:34
+    |
+157 |             return Some(unsafe { std::slice::from_raw_parts(slice.as_ptr(), 0) });
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> crates/core/src/lib.rs:6:5
+    |
+6   |     unused_qualifications
+    |     ^^^^^^^^^^^^^^^^^^^^^
+help: remove the unnecessary path segments
+    |
+157 -             return Some(unsafe { std::slice::from_raw_parts(slice.as_ptr(), 0) });
+157 +             return Some(unsafe { slice::from_raw_parts(slice.as_ptr(), 0) });
+    |
+
+warning: unreachable pattern
+   --> crates/core/src/streaming/mod.rs:152:17
+    |
+152 |                 _ => false,
+    |                 ^ no value can reach this
+    |
+note: multiple earlier patterns match some of the same values
+   --> crates/core/src/streaming/mod.rs:152:17
+    |
+142 |                 ParserState::ExpectingValue => self.process_value(token)?,
+    |                 --------------------------- matches some of the same values
+143 |                 ParserState::InObject { expecting_key } => {
+    |                 --------------------------------------- matches some of the same values
+...
+150 |                 ParserState::InArray { .. } => self.process_value(token)?,
+    |                 --------------------------- matches some of the same values
+151 |                 ParserState::BetweenValues => self.process_between_values(token)?,
+    |                 -------------------------- matches some of the same values
+152 |                 _ => false,
+    |                 ^ collectively making this unreachable
+    = note: `#[warn(unreachable_patterns)]` on by default
+
+warning: fields `pattern`, `strategy`, and `confidence` are never read
+  --> crates/core/src/error/recovery.rs:51:5
+   |
+49 | struct ContextRule {
+   |        ----------- fields in this struct
+50 |     /// Pattern to match in the error context
+51 |     pattern: String,
+   |     ^^^^^^^
+52 |     /// Recovery strategy to apply
+53 |     strategy: RecoveryStrategy,
+   |     ^^^^^^^^
+54 |     /// Confidence level (0.0 to 1.0)
+55 |     confidence: f32,
+   |     ^^^^^^^^^^
+   |
+   = note: `ContextRule` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` on by default
+
+warning: methods `analyze_missing_comma`, `analyze_unquoted_key`, `analyze_invalid_comment`, `analyze_duplicate_key`, `analyze_parsing_failed`, and `analyze_invalid_utf8` are never used
+   --> crates/core/src/error/recovery.rs:340:8
+    |
+58  | impl ErrorRecoveryAnalyzer {
+    | -------------------------- methods in this implementation
+...
+340 |     fn analyze_missing_comma(&self, error: &Error, _input: &str) -> Vec<RecoveryStrategy> {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+...
+353 |     fn analyze_unquoted_key(&self, error: &Error, _input: &str) -> Vec<RecoveryStrategy> {
+    |        ^^^^^^^^^^^^^^^^^^^^
+...
+364 |     fn analyze_invalid_comment(&self, error: &Error, _input: &str) -> Vec<RecoveryStrategy> {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+...
+386 |     fn analyze_duplicate_key(&self, _error: &Error, _input: &str) -> Vec<RecoveryStrategy> {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+...
+442 |     fn analyze_parsing_failed(&self, _error: &Error, _input: &str) -> Vec<RecoveryStrategy> {
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+...
+453 |     fn analyze_invalid_utf8(&self, _error: &Error, _input: &str) -> Vec<RecoveryStrategy> {
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: field `value_builder` is never read
+   --> crates/core/src/parser.rs:129:5
+    |
+119 | pub struct Parser<'a> {
+    |            ------ field in this struct
+...
+129 |     value_builder: ValueBuilder,
+    |     ^^^^^^^^^^^^^
+
+warning: field `first_element` is never read
+  --> crates/core/src/streaming/mod.rs:73:15
+   |
+73 |     InArray { first_element: bool },
+   |     -------   ^^^^^^^^^^^^^
+   |     |
+   |     field in this variant
+   |
+   = note: `ParserState` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `temp_state` is never read
+  --> crates/core/src/streaming/buffered.rs:59:5
+   |
+41 | pub struct BufferedStreamingParser<R: Read> {
+   |            ----------------------- field in this struct
+...
+59 |     temp_state: TempParsingState,
+   |     ^^^^^^^^^^
+
+warning: multiple fields are never read
+  --> crates/core/src/streaming/buffered.rs:66:5
+   |
+64 | struct TempParsingState {
+   |        ---------------- fields in this struct
+65 |     /// Buffer for accumulating string content
+66 |     string_buffer: String,
+   |     ^^^^^^^^^^^^^
+67 |     /// Whether we're inside a string literal
+68 |     in_string: bool,
+   |     ^^^^^^^^^
+69 |     /// Whether we're inside a comment
+70 |     in_comment: bool,
+   |     ^^^^^^^^^^
+71 |     /// Comment type (single or multi-line)
+72 |     comment_type: CommentType,
+   |     ^^^^^^^^^^^^
+73 |     /// Escape sequence state
+74 |     escape_next: bool,
+   |     ^^^^^^^^^^^
+75 |     /// Unicode escape accumulator
+76 |     unicode_buffer: String,
+   |     ^^^^^^^^^^^^^^
+77 |     /// Bracket depth for object/array nesting
+78 |     bracket_depth: i32,
+   |     ^^^^^^^^^^^^^
+   |
+   = note: `TempParsingState` has derived impls for the traits `Default` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: variants `SingleLine` and `MultiLine` are never constructed
+  --> crates/core/src/streaming/buffered.rs:85:5
+   |
+83 | enum CommentType {
+   |      ----------- variants in this enum
+84 |     None,
+85 |     SingleLine,
+   |     ^^^^^^^^^^
+86 |     MultiLine,
+   |     ^^^^^^^^^
+   |
+   = note: `CommentType` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: method `char_to_token` is never used
+   --> crates/core/src/streaming/buffered.rs:267:8
+    |
+95  | impl<R: Read> BufferedStreamingParser<R> {
+    | ---------------------------------------- method in this implementation
+...
+267 |     fn char_to_token(&self, ch: char) -> Result<Token> {
+    |        ^^^^^^^^^^^^^
+
+warning: enum `TokenizeResult` is never used
+   --> crates/core/src/streaming/buffered.rs:543:6
+    |
+543 | enum TokenizeResult {
+    |      ^^^^^^^^^^^^^^
+
+warning: method `available` is never used
+  --> crates/core/src/optimization/memory_pool.rs:54:8
+   |
+44 | impl Block {
+   | ---------- method in this implementation
+...
+54 |     fn available(&self) -> usize {
+   |        ^^^^^^^^^
+
+warning: fields `input` and `options` are never read
+  --> crates/core/src/lazy/mod.rs:40:5
+   |
+36 | pub struct LazyObject {
+   |            ---------- fields in this struct
+...
+40 |     input: Arc<str>,
+   |     ^^^^^
+41 |     /// Parser options
+42 |     options: ParserOptions,
+   |     ^^^^^^^
+   |
+   = note: `LazyObject` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: fields `input` and `options` are never read
+  --> crates/core/src/lazy/mod.rs:51:5
+   |
+47 | pub struct LazyArray {
+   |            --------- fields in this struct
+...
+51 |     input: Arc<str>,
+   |     ^^^^^
+52 |     /// Parser options
+53 |     options: ParserOptions,
+   |     ^^^^^^^
+   |
+   = note: `LazyArray` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `max_repairs` is never read
+  --> crates/core/src/repair/advanced.rs:94:5
+   |
+92 | pub struct AdvancedJsonRepairer {
+   |            -------------------- field in this struct
+93 |     /// Maximum number of repairs to attempt
+94 |     max_repairs: usize,
+   |     ^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:15:18
+   |
+15 |     InsertText { position: usize, text: String },
+   |                  ^^^^^^^^^^^^^^^
+   |
+note: the lint level is defined here
+  --> crates/core/src/lib.rs:3:5
+   |
+3  |     missing_docs,
+   |     ^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:15:35
+   |
+15 |     InsertText { position: usize, text: String },
+   |                                   ^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:17:18
+   |
+17 |     RemoveText { span: Span },
+   |                  ^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:19:19
+   |
+19 |     ReplaceText { span: Span, replacement: String },
+   |                   ^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:19:31
+   |
+19 |     ReplaceText { span: Span, replacement: String },
+   |                               ^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:21:18
+   |
+21 |     AddClosing { position: usize, delimiter: char },
+   |                  ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:21:35
+   |
+21 |     AddClosing { position: usize, delimiter: char },
+   |                                   ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:23:18
+   |
+23 |     FixQuoting { span: Span, quote_char: char },
+   |                  ^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:23:30
+   |
+23 |     FixQuoting { span: Span, quote_char: char },
+   |                              ^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:25:20
+   |
+25 |     RepairNumber { span: Span, corrected_value: String },
+   |                    ^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:25:32
+   |
+25 |     RepairNumber { span: Span, corrected_value: String },
+   |                                ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:27:16
+   |
+27 |     AddComma { position: usize },
+   |                ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:29:27
+   |
+29 |     RemoveTrailingComma { position: usize },
+   |                           ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:31:16
+   |
+31 |     QuoteKey { span: Span },
+   |                ^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:33:18
+   |
+33 |     FixComment { span: Span },
+   |                  ^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/core/src/error/recovery.rs:35:26
+   |
+35 |     ManualIntervention { suggestions: Vec<String> },
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:18:5
+   |
+18 |     pub const RESET: &'static str = "\x1b[0m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:19:5
+   |
+19 |     pub const BOLD: &'static str = "\x1b[1m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:20:5
+   |
+20 |     pub const DIM: &'static str = "\x1b[2m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:21:5
+   |
+21 |     pub const ITALIC: &'static str = "\x1b[3m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:22:5
+   |
+22 |     pub const UNDERLINE: &'static str = "\x1b[4m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:25:5
+   |
+25 |     pub const RED: &'static str = "\x1b[31m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:26:5
+   |
+26 |     pub const GREEN: &'static str = "\x1b[32m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:27:5
+   |
+27 |     pub const YELLOW: &'static str = "\x1b[33m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:28:5
+   |
+28 |     pub const BLUE: &'static str = "\x1b[34m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:29:5
+   |
+29 |     pub const MAGENTA: &'static str = "\x1b[35m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:30:5
+   |
+30 |     pub const CYAN: &'static str = "\x1b[36m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:31:5
+   |
+31 |     pub const WHITE: &'static str = "\x1b[37m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:32:5
+   |
+32 |     pub const GRAY: &'static str = "\x1b[90m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:35:5
+   |
+35 |     pub const BRIGHT_RED: &'static str = "\x1b[91m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:36:5
+   |
+36 |     pub const BRIGHT_GREEN: &'static str = "\x1b[92m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:37:5
+   |
+37 |     pub const BRIGHT_YELLOW: &'static str = "\x1b[93m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:38:5
+   |
+38 |     pub const BRIGHT_BLUE: &'static str = "\x1b[94m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:39:5
+   |
+39 |     pub const BRIGHT_MAGENTA: &'static str = "\x1b[95m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:40:5
+   |
+40 |     pub const BRIGHT_CYAN: &'static str = "\x1b[96m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:41:5
+   |
+41 |     pub const BRIGHT_WHITE: &'static str = "\x1b[97m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:44:5
+   |
+44 |     pub const BG_RED: &'static str = "\x1b[41m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:45:5
+   |
+45 |     pub const BG_GREEN: &'static str = "\x1b[42m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:46:5
+   |
+46 |     pub const BG_YELLOW: &'static str = "\x1b[43m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:47:5
+   |
+47 |     pub const BG_BLUE: &'static str = "\x1b[44m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:48:5
+   |
+48 |     pub const BG_MAGENTA: &'static str = "\x1b[45m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:49:5
+   |
+49 |     pub const BG_CYAN: &'static str = "\x1b[46m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated constant
+  --> crates/core/src/error/terminal.rs:50:5
+   |
+50 |     pub const BG_WHITE: &'static str = "\x1b[47m";
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: returned pointer of `as_ptr` call is never null, so checking it for null will always return false
+   --> crates/core/src/optimization/memory_pool.rs:380:18
+    |
+380 |         assert!(!ptr.as_ptr().is_null());
+    |                  ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(useless_ptr_null_checks)]` on by default
+
+warning: `vexy_json-core` (lib) generated 58 warnings (run `cargo fix --lib -p vexy_json-core` to apply 1 suggestion)
+warning: unused import: `parse_optimized_v2_with_options`
+  --> crates/core/benches/parser_benchmarks.rs:12:38
+   |
+12 |                  parse_optimized_v2, parse_optimized_v2_with_options, parse_v2_with_stats, ParserOptions};
+   |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: function `bench_error_recovery` is never used
+   --> crates/core/benches/parser_benchmarks.rs:246:4
+    |
+246 | fn bench_error_recovery(c: &mut Criterion) {
+    |    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: constant `MALFORMED_JSON` is never used
+  --> crates/core/benches/parser_benchmarks.rs:55:15
+   |
+55 |     pub const MALFORMED_JSON: &str = r#"{'name': 'John', age: 30, "items": [1, 2, 3,]}"#;
+   |               ^^^^^^^^^^^^^^
+
+warning: `vexy_json-core` (lib test) generated 59 warnings (58 duplicates)
+warning: `vexy_json-core` (bench "parser_benchmarks") generated 3 warnings (run `cargo fix --bench "parser_benchmarks"` to apply 1 suggestion)
+    Finished `bench` profile [optimized] target(s) in 1m 06s
+     Running unittests src/lib.rs (/Users/adam/Developer/vcs/github.twardoch/pub/vexy_json/target/release/deps/vexy_json_core-61b1bad5e05d5e9e)
+
+running 100 tests
+test error::recovery::tests::test_number_format_fix ... ignored
+test error::recovery::tests::test_recovery_analyzer_creation ... ignored
+test error::recovery::tests::test_recovery_strategy_confidence ... ignored
+test error::recovery::tests::test_recovery_strategy_description ... ignored
+test error::recovery::tests::test_trailing_comma_analysis ... ignored
+test error::recovery::tests::test_unexpected_eof_analysis ... ignored
+test error::reporter::tests::test_comprehensive_report ... ignored
+test error::reporter::tests::test_error_reporter_creation ... ignored
+test error::reporter::tests::test_quick_error_report ... ignored
+test error::reporter::tests::test_report_config_creation ... ignored
+test error::reporter::tests::test_text_wrapping ... ignored
+test error::span::tests::test_byte_to_line_col ... ignored
+test error::span::tests::test_enhanced_span ... ignored
+test error::span::tests::test_span_contains ... ignored
+test error::span::tests::test_span_creation ... ignored
+test error::span::tests::test_span_extract ... ignored
+test error::span::tests::test_span_merge ... ignored
+test error::span::tests::test_span_single ... ignored
+test error::terminal::tests::test_bold_colorize ... ignored
+test error::terminal::tests::test_color_scheme_codes ... ignored
+test error::terminal::tests::test_format_error_code ... ignored
+test error::terminal::tests::test_format_line_number ... ignored
+test error::terminal::tests::test_format_suggestion ... ignored
+test error::terminal::tests::test_formatter_with_colors ... ignored
+test error::terminal::tests::test_formatter_without_colors ... ignored
+test error::utils::tests::test_bracket_counting ... ignored
+test error::utils::tests::test_bracket_mismatch_detection ... ignored
+test error::utils::tests::test_error_categorization ... ignored
+test error::utils::tests::test_position_extraction ... ignored
+test error::utils::tests::test_repair_detection ... ignored
+test lazy::tests::test_lazy_array ... ignored
+test lazy::tests::test_lazy_parser_small_object ... ignored
+test lazy::tests::test_lazy_parser_with_threshold ... ignored
+test lazy::tests::test_lazy_value_resolved ... ignored
+test optimization::benchmarks::tests::test_benchmark_backslash_detection ... ignored
+test optimization::benchmarks::tests::test_benchmark_string_unescaping ... ignored
+test optimization::benchmarks::tests::test_benchmark_string_validation ... ignored
+test optimization::benchmarks::tests::test_benchmark_whitespace_skipping ... ignored
+test optimization::benchmarks::tests::test_performance_monitor_creation ... ignored
+test optimization::benchmarks::tests::test_run_all_benchmarks ... ignored
+test optimization::benchmarks::tests::test_scalar_implementations ... ignored
+test optimization::memory_pool::tests::test_basic_allocation ... ignored
+test optimization::memory_pool::tests::test_large_allocation ... ignored
+test optimization::memory_pool::tests::test_reset ... ignored
+test optimization::memory_pool::tests::test_scoped_pool ... ignored
+test optimization::memory_pool::tests::test_string_allocation ... ignored
+test optimization::memory_pool_v2::tests::test_adaptive_pooling ... ignored
+test optimization::memory_pool_v2::tests::test_medium_allocation_pooled ... ignored
+test optimization::memory_pool_v2::tests::test_scoped_pool ... ignored
+test optimization::memory_pool_v2::tests::test_small_allocation_bypass ... ignored
+test optimization::simd::tests::test_has_backslash_simd ... ignored
+test optimization::simd::tests::test_parse_number_simd ... ignored
+test optimization::simd::tests::test_skip_whitespace_simd ... ignored
+test optimization::simd::tests::test_unescape_string_simd ... ignored
+test optimization::simd::tests::test_validate_json_string_simd ... ignored
+test optimization::string_parser::tests::test_extract_string_content ... ignored
+test optimization::string_parser::tests::test_parse_number_optimized ... ignored
+test optimization::string_parser::tests::test_unescape_no_escapes ... ignored
+test optimization::string_parser::tests::test_unescape_with_escapes ... ignored
+test optimization::value_builder::tests::test_build_array ... ignored
+test optimization::value_builder::tests::test_build_number ... ignored
+test optimization::value_builder::tests::test_build_object ... ignored
+test optimization::value_builder::tests::test_build_string ... ignored
+test optimization::zero_copy::tests::test_fast_number_float ... ignored
+test optimization::zero_copy::tests::test_fast_number_integer ... ignored
+test optimization::zero_copy::tests::test_zero_copy_no_escapes ... ignored
+test optimization::zero_copy::tests::test_zero_copy_with_escapes ... ignored
+test parser::optimized::tests::test_branch_prediction_stats ... ignored
+test parser::optimized::tests::test_optimized_parser_simple ... ignored
+test parser::optimized::tests::test_parser_with_stats ... ignored
+test parser::optimized_v2::tests::test_adaptive_pooling ... ignored
+test parser::optimized_v2::tests::test_branch_prediction_stats ... ignored
+test parser::optimized_v2::tests::test_optimized_parser_v2_simple ... ignored
+test parser::optimized_v2::tests::test_parser_v2_with_stats ... ignored
+test repair::advanced::tests::test_preview_mode ... ignored
+test repair::advanced::tests::test_quote_repair ... ignored
+test repair::advanced::tests::test_repair_confidence ... ignored
+test repair::advanced::tests::test_repair_history ... ignored
+test repair::advanced::tests::test_type_coercion ... ignored
+test repair::tests::test_balanced_json ... ignored
+test repair::tests::test_debug_bracket_balance ... ignored
+test repair::tests::test_detailed_repair_tracking ... ignored
+test repair::tests::test_missing_closing_brace ... ignored
+test repair::tests::test_missing_closing_bracket ... ignored
+test repair::tests::test_nested_structures ... ignored
+test repair::tests::test_repair_caching ... ignored
+test repair::tests::test_string_with_brackets ... ignored
+test streaming::buffered::tests::test_buffered_streaming_array ... ignored
+test streaming::buffered::tests::test_buffered_streaming_simple_object ... ignored
+test streaming::buffered::tests::test_buffered_streaming_to_value ... ignored
+test streaming::buffered::tests::test_custom_buffer_config ... ignored
+test streaming::ndjson::tests::test_empty_lines ... ignored
+test streaming::ndjson::tests::test_ndjson_parser ... ignored
+test streaming::ndjson::tests::test_streaming_ndjson ... ignored
+test streaming::simple_lexer::tests::test_incremental_string ... ignored
+test streaming::simple_lexer::tests::test_keywords ... ignored
+test streaming::simple_lexer::tests::test_numbers ... ignored
+test streaming::simple_lexer::tests::test_simple_tokens ... ignored
+test streaming::tests::test_streaming_parser_creation ... ignored
+test streaming::tests::test_value_builder ... ignored
+
+test result: ok. 0 passed; 0 failed; 100 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running benches/parser_benchmarks.rs (/Users/adam/Developer/vcs/github.twardoch/pub/vexy_json/target/release/deps/parser_benchmarks-6ba04f7e4c288a89)
+Gnuplot not found, using plotters backend
+Benchmarking basic_parsing/simple_object
+Benchmarking basic_parsing/simple_object: Warming up for 3.0000 s
+Benchmarking basic_parsing/simple_object: Collecting 100 samples in estimated 5.0042 s (2.8M iterations)
+Benchmarking basic_parsing/simple_object: Analyzing
+basic_parsing/simple_object
+                        time:   [1.7254 µs 1.7579 µs 1.7970 µs]
+                        change: [-4.6199% +0.8791% +5.0317%] (p = 0.78 > 0.05)
+                        No change in performance detected.
+Found 12 outliers among 100 measurements (12.00%)
+  7 (7.00%) high mild
+  5 (5.00%) high severe
+Benchmarking basic_parsing/nested_object
+Benchmarking basic_parsing/nested_object: Warming up for 3.0000 s
+Benchmarking basic_parsing/nested_object: Collecting 100 samples in estimated 5.0022 s (1.0M iterations)
+Benchmarking basic_parsing/nested_object: Analyzing
+basic_parsing/nested_object
+                        time:   [4.5680 µs 4.6285 µs 4.7405 µs]
+                        change: [+5.9135% +8.3455% +11.046%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 12 outliers among 100 measurements (12.00%)
+  7 (7.00%) low mild
+  4 (4.00%) high mild
+  1 (1.00%) high severe
+Benchmarking basic_parsing/array_of_objects
+Benchmarking basic_parsing/array_of_objects: Warming up for 3.0000 s
+Benchmarking basic_parsing/array_of_objects: Collecting 100 samples in estimated 5.0348 s (510k iterations)
+Benchmarking basic_parsing/array_of_objects: Analyzing
+basic_parsing/array_of_objects
+                        time:   [10.249 µs 10.608 µs 11.094 µs]
+                        change: [+16.696% +22.855% +29.252%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 9 outliers among 100 measurements (9.00%)
+  5 (5.00%) high mild
+  4 (4.00%) high severe
+
+Benchmarking optimized_parsing/simple_object_optimized
+Benchmarking optimized_parsing/simple_object_optimized: Warming up for 3.0000 s
+Benchmarking optimized_parsing/simple_object_optimized: Collecting 100 samples in estimated 5.0116 s (1.1M iterations)
+Benchmarking optimized_parsing/simple_object_optimized: Analyzing
+optimized_parsing/simple_object_optimized
+                        time:   [4.5384 µs 4.7621 µs 5.0934 µs]
+                        change: [+10.843% +16.582% +26.311%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 8 outliers among 100 measurements (8.00%)
+  4 (4.00%) high mild
+  4 (4.00%) high severe
+Benchmarking optimized_parsing/string_heavy_optimized
+Benchmarking optimized_parsing/string_heavy_optimized: Warming up for 3.0000 s
+Benchmarking optimized_parsing/string_heavy_optimized: Collecting 100 samples in estimated 5.0384 s (460k iterations)
+Benchmarking optimized_parsing/string_heavy_optimized: Analyzing
+optimized_parsing/string_heavy_optimized
+                        time:   [9.9602 µs 10.191 µs 10.567 µs]
+                        change: [+3.9339% +8.2492% +12.407%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 7 outliers among 100 measurements (7.00%)
+  4 (4.00%) high mild
+  3 (3.00%) high severe
+Benchmarking optimized_parsing/number_heavy_optimized
+Benchmarking optimized_parsing/number_heavy_optimized: Warming up for 3.0000 s
+Benchmarking optimized_parsing/number_heavy_optimized: Collecting 100 samples in estimated 5.0450 s (389k iterations)
+Benchmarking optimized_parsing/number_heavy_optimized: Analyzing
+optimized_parsing/number_heavy_optimized
+                        time:   [12.482 µs 12.775 µs 13.221 µs]
+                        change: [+11.512% +15.225% +20.195%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 13 outliers among 100 measurements (13.00%)
+  2 (2.00%) high mild
+  11 (11.00%) high severe
+
+Benchmarking optimized_v2_parsing/simple_object_optimized_v2
+Benchmarking optimized_v2_parsing/simple_object_optimized_v2: Warming up for 3.0000 s
+Benchmarking optimized_v2_parsing/simple_object_optimized_v2: Collecting 100 samples in estimated 5.0045 s (2.3M iterations)
+Benchmarking optimized_v2_parsing/simple_object_optimized_v2: Analyzing
+optimized_v2_parsing/simple_object_optimized_v2
+                        time:   [2.0874 µs 2.1171 µs 2.1577 µs]
+Found 8 outliers among 100 measurements (8.00%)
+  3 (3.00%) high mild
+  5 (5.00%) high severe
+Benchmarking optimized_v2_parsing/string_heavy_optimized_v2
+Benchmarking optimized_v2_parsing/string_heavy_optimized_v2: Warming up for 3.0000 s
+Benchmarking optimized_v2_parsing/string_heavy_optimized_v2: Collecting 100 samples in estimated 5.0117 s (561k iterations)
+Benchmarking optimized_v2_parsing/string_heavy_optimized_v2: Analyzing
+optimized_v2_parsing/string_heavy_optimized_v2
+                        time:   [8.2963 µs 8.5138 µs 8.8115 µs]
+Found 11 outliers among 100 measurements (11.00%)
+  4 (4.00%) high mild
+  7 (7.00%) high severe
+Benchmarking optimized_v2_parsing/number_heavy_optimized_v2
+Benchmarking optimized_v2_parsing/number_heavy_optimized_v2: Warming up for 3.0000 s
+Benchmarking optimized_v2_parsing/number_heavy_optimized_v2: Collecting 100 samples in estimated 5.0072 s (460k iterations)
+Benchmarking optimized_v2_parsing/number_heavy_optimized_v2: Analyzing
+optimized_v2_parsing/number_heavy_optimized_v2
+                        time:   [9.8913 µs 10.258 µs 10.788 µs]
+Found 15 outliers among 100 measurements (15.00%)
+  4 (4.00%) high mild
+  11 (11.00%) high severe
+Benchmarking optimized_v2_parsing/small_strings_optimized_v2
+Benchmarking optimized_v2_parsing/small_strings_optimized_v2: Warming up for 3.0000 s
+Benchmarking optimized_v2_parsing/small_strings_optimized_v2: Collecting 100 samples in estimated 5.0397 s (500k iterations)
+Benchmarking optimized_v2_parsing/small_strings_optimized_v2: Analyzing
+optimized_v2_parsing/small_strings_optimized_v2
+                        time:   [9.3459 µs 9.5433 µs 9.8063 µs]
+Found 10 outliers among 100 measurements (10.00%)
+  3 (3.00%) high mild
+  7 (7.00%) high severe
+
+Benchmarking memory_pool/with_pooling_v1
+Benchmarking memory_pool/with_pooling_v1: Warming up for 3.0000 s
+Benchmarking memory_pool/with_pooling_v1: Collecting 100 samples in estimated 5.0792 s (308k iterations)
+Benchmarking memory_pool/with_pooling_v1: Analyzing
+memory_pool/with_pooling_v1
+                        time:   [15.827 µs 16.371 µs 17.023 µs]
+Found 16 outliers among 100 measurements (16.00%)
+  7 (7.00%) high mild
+  9 (9.00%) high severe
+Benchmarking memory_pool/with_pooling_v2
+Benchmarking memory_pool/with_pooling_v2: Warming up for 3.0000 s
+
+thread 'main' panicked at crates/core/benches/parser_benchmarks.rs:184:13:
+assertion failed: memory_stats.total_bytes > 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+error: bench failed, to rerun pass `--bench parser_benchmarks`

@@ -1,0 +1,129 @@
+   Compiling vexy_json-core v0.2.0 (/Users/adam/Developer/vcs/github.twardoch/pub/vexy_json/crates/core)
+warning: unnecessary qualification
+   --> crates/core/src/optimization/memory_pool.rs:157:34
+    |
+157 |             return Some(unsafe { std::slice::from_raw_parts(slice.as_ptr(), 0) });
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> crates/core/src/lib.rs:6:5
+    |
+6   |     unused_qualifications
+    |     ^^^^^^^^^^^^^^^^^^^^^
+help: remove the unnecessary path segments
+    |
+157 -             return Some(unsafe { std::slice::from_raw_parts(slice.as_ptr(), 0) });
+157 +             return Some(unsafe { slice::from_raw_parts(slice.as_ptr(), 0) });
+    |
+
+warning: unused import: `std::mem`
+  --> crates/core/src/optimization/memory_pool_v2.rs:10:5
+   |
+10 | use std::mem;
+   |     ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+error[E0515]: cannot return value referencing local variable `memory_pool`
+  --> crates/core/src/parser/optimized_v2.rs:79:9
+   |
+77 |           let scoped_pool = ScopedOptimizedPool::new(&memory_pool);
+   |                                                      ------------ `memory_pool` is borrowed here
+78 |           
+79 | /         Self {
+80 | |             input,
+81 | |             lexer: Lexer::new(input),
+82 | |             options,
+...  |
+86 | |             stats: ParserStats::default(),
+87 | |         }
+   | |_________^ returns a value referencing data owned by the current function
+
+error[E0505]: cannot move out of `memory_pool` because it is borrowed
+  --> crates/core/src/parser/optimized_v2.rs:83:13
+   |
+73 |   impl<'a> OptimizedParserV2<'a> {
+   |        -- lifetime `'a` defined here
+...
+76 |           let memory_pool = OptimizedMemoryPool::new();
+   |               ----------- binding `memory_pool` declared here
+77 |           let scoped_pool = ScopedOptimizedPool::new(&memory_pool);
+   |                                                      ------------ borrow of `memory_pool` occurs here
+78 |           
+79 | /         Self {
+80 | |             input,
+81 | |             lexer: Lexer::new(input),
+82 | |             options,
+83 | |             memory_pool,
+   | |             ^^^^^^^^^^^ move out of `memory_pool` occurs here
+...  |
+86 | |             stats: ParserStats::default(),
+87 | |         }
+   | |_________- returning this value requires that `memory_pool` is borrowed for `'a`
+
+error[E0515]: cannot return value referencing local variable `memory_pool`
+   --> crates/core/src/parser/optimized_v2.rs:95:9
+    |
+93  |           let scoped_pool = ScopedOptimizedPool::new(&memory_pool);
+    |                                                      ------------ `memory_pool` is borrowed here
+94  |           
+95  | /         Self {
+96  | |             input,
+97  | |             lexer: Lexer::new(input),
+98  | |             options,
+...   |
+102 | |             stats: ParserStats::default(),
+103 | |         }
+    | |_________^ returns a value referencing data owned by the current function
+
+error[E0505]: cannot move out of `memory_pool` because it is borrowed
+   --> crates/core/src/parser/optimized_v2.rs:99:13
+    |
+73  |   impl<'a> OptimizedParserV2<'a> {
+    |        -- lifetime `'a` defined here
+...
+92  |           let memory_pool = OptimizedMemoryPool::with_config(use_thread_local, true);
+    |               ----------- binding `memory_pool` declared here
+93  |           let scoped_pool = ScopedOptimizedPool::new(&memory_pool);
+    |                                                      ------------ borrow of `memory_pool` occurs here
+94  |           
+95  | /         Self {
+96  | |             input,
+97  | |             lexer: Lexer::new(input),
+98  | |             options,
+99  | |             memory_pool,
+    | |             ^^^^^^^^^^^ move out of `memory_pool` occurs here
+...   |
+102 | |             stats: ParserStats::default(),
+103 | |         }
+    | |_________- returning this value requires that `memory_pool` is borrowed for `'a`
+
+warning: unreachable pattern
+   --> crates/core/src/streaming/mod.rs:152:17
+    |
+152 |                 _ => false,
+    |                 ^ no value can reach this
+    |
+note: multiple earlier patterns match some of the same values
+   --> crates/core/src/streaming/mod.rs:152:17
+    |
+142 |                 ParserState::ExpectingValue => self.process_value(token)?,
+    |                 --------------------------- matches some of the same values
+143 |                 ParserState::InObject { expecting_key } => {
+    |                 --------------------------------------- matches some of the same values
+...
+150 |                 ParserState::InArray { .. } => self.process_value(token)?,
+    |                 --------------------------- matches some of the same values
+151 |                 ParserState::BetweenValues => self.process_between_values(token)?,
+    |                 -------------------------- matches some of the same values
+152 |                 _ => false,
+    |                 ^ collectively making this unreachable
+    = note: `#[warn(unreachable_patterns)]` on by default
+
+Some errors have detailed explanations: E0505, E0515.
+For more information about an error, try `rustc --explain E0505`.
+warning: `vexy_json-core` (lib) generated 3 warnings
+error: could not compile `vexy_json-core` (lib) due to 4 previous errors; 3 warnings emitted
+warning: build failed, waiting for other jobs to finish...
+warning: `vexy_json-core` (lib test) generated 3 warnings (3 duplicates)
+error: could not compile `vexy_json-core` (lib test) due to 4 previous errors; 3 warnings emitted

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vexy JSON Console Debug</title>
+  </head>
+  <body>
+    <h1>Vexy JSON Console Debug Test</h1>
+    <button onclick="runTest()">Run Test</button>
+    <pre id="log"></pre>
+
+    <script type="module">
+      import init, {
+        parse_json,
+        parse_json_with_options,
+        get_parser_options,
+      } from '../pkg/vexy_json_wasm.js?v=' + Date.now();
+
+      let log = '';
+      function appendLog(message) {
+        log += message + '\n';
+        document.getElementById('log').textContent = log;
+        console.log(message);
+      }
+
+      // Capture console.log output to display on page
+      const originalConsoleLog = console.log;
+      console.log = function (...args) {
+        const message = args
+          .map((arg) => (typeof arg === 'string' ? arg : JSON.stringify(arg)))
+          .join(' ');
+        appendLog('CONSOLE: ' + message);
+        originalConsoleLog.apply(console, args);
+      };
+
+      let initialized = false;
+
+      async function initWasm() {
+        try {
+          await init();
+          initialized = true;
+          appendLog('✅ WASM module initialized successfully');
+        } catch (error) {
+          appendLog('❌ WASM initialization failed: ' + error);
+        }
+      }
+
+      window.runTest = async function () {
+        if (!initialized) {
+          appendLog('⏳ Initializing WASM...');
+          await initWasm();
+        }
+
+        appendLog('\n🔍 Starting console debug tests...');
+
+        // Test 1: Simple quoted object
+        try {
+          const input1 = '{"a":1}';
+          appendLog(`\n📝 Testing quoted object: ${input1}`);
+          const result1 = parse_json(input1);
+          appendLog(`✅ Result: ${JSON.stringify(result1)}`);
+          appendLog(`🔍 Result type: ${typeof result1}`);
+          appendLog(`🔍 Result keys: ${Object.keys(result1 || {})}`);
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+        }
+
+        // Test 2: Unquoted object with explicit options
+        try {
+          const input2 = '{a:1}';
+          const options = get_parser_options();
+          options.allow_unquoted_keys = true;
+
+          appendLog(`\n📝 Testing unquoted object: ${input2}`);
+          appendLog(`⚙️  Options: ${JSON.stringify(options)}`);
+
+          const result2 = parse_json_with_options(
+            input2,
+            options.allow_comments,
+            options.allow_trailing_commas,
+            options.allow_unquoted_keys,
+            options.allow_single_quotes,
+            false, // implicit_top_level
+            false, // newline_as_comma
+            false, // enable_repair
+            128    // max_depth
+          );
+          appendLog(`✅ Result: ${JSON.stringify(result2)}`);
+          appendLog(`🔍 Result type: ${typeof result2}`);
+          appendLog(`🔍 Result keys: ${Object.keys(result2 || {})}`);
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+        }
+
+        // Test 3: Simple number to verify parsing works
+        try {
+          const input3 = '42';
+          appendLog(`\n📝 Testing simple number: ${input3}`);
+          const result3 = parse_json(input3);
+          appendLog(`✅ Result: ${JSON.stringify(result3)}`);
+          appendLog(`🔍 Result type: ${typeof result3}`);
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+        }
+
+        // Test 4: Simple string to verify parsing works
+        try {
+          const input4 = '"hello"';
+          appendLog(`\n📝 Testing simple string: ${input4}`);
+          const result4 = parse_json(input4);
+          appendLog(`✅ Result: ${JSON.stringify(result4)}`);
+          appendLog(`🔍 Result type: ${typeof result4}`);
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+        }
+
+        appendLog(
+          '\n🔍 Debug test complete. Check console output above for Rust debug messages.'
+        );
+      };
+
+      // Auto-initialize when page loads
+      initWasm();
+    </script>
+  </body>
+</html>

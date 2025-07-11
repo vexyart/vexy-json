@@ -1,0 +1,93 @@
+[package]
+name = "vexy_json-core-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+
+[package.metadata]
+cargo-fuzz = true
+
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+
+[dependencies.vexy_json-core]
+path = "../crates/core"
+
+
+[dependencies.vexy_json]
+path = ".."
+
+
+[[bin]]
+name = "fuzz_target_1"
+path = "fuzz_targets/fuzz_target_1.rs"
+test = false
+doc = false
+bench = false
+
+
+[[bin]]
+name = "json_structure"
+path = "fuzz_targets/json_structure.rs"
+test = false
+doc = false
+bench = false
+
+
+[[bin]]
+name = "strings"
+path = "fuzz_targets/strings.rs"
+test = false
+doc = false
+bench = false
+
+
+[[bin]]
+name = "numbers"
+path = "fuzz_targets/numbers.rs"
+test = false
+doc = false
+bench = false
+
+
+[[bin]]
+name = "comments"
+path = "fuzz_targets/comments.rs"
+test = false
+doc = false
+bench = false
+
+
+[[bin]]
+name = "unquoted_keys"
+path = "fuzz_targets/unquoted_keys.rs"
+test = false
+doc = false
+bench = false
+
+
+[[bin]]
+name = "unicode"
+path = "fuzz_targets/unicode.rs"
+test = false
+doc = false
+bench = false
+
+
+[[bin]]
+name = "repair"
+path = "fuzz_targets/repair.rs"
+test = false
+doc = false
+bench = false
+
+
+[[bin]]
+name = "streaming"
+path = "fuzz_targets/streaming.rs"
+test = false
+doc = false
+bench = false

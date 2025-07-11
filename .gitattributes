@@ -1,0 +1,24 @@
+# Git attributes for proper handling of binary files
+
+# WebAssembly files are binary
+*.wasm binary
+
+# Ensure proper line endings
+*.rs text eol=lf
+*.toml text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+
+# Archive files are binary
+*.tar.gz binary
+*.zip binary
+
+# Lock files should not be modified
+Cargo.lock binary
+package-lock.json binary

@@ -1,0 +1,42 @@
+{
+    // Application configuration
+    app: {
+        name: 'MyApp',
+        version: '1.2.3',
+        debug: true,
+    },
+
+    // Server settings
+    server: {
+        host: 'localhost',
+        port: 8080,
+        ssl: {
+            enabled: false,
+            cert: '/path/to/cert.pem',
+            key: '/path/to/key.pem',
+        },
+    },
+
+    // Database configuration
+    database: {
+        type: 'postgres',
+        host: 'db.example.com',
+        port: 5432,
+        credentials: {
+            user: 'dbuser',
+            password: 'secret', // TODO: Use env var
+        },
+        pool: {
+            min: 5,
+            max: 20,
+            idle_timeout: 30000, // milliseconds
+        },
+    },
+
+    // Feature flags
+    features: [
+        'new-ui',
+        'analytics',
+        'beta-api',
+    ],
+}

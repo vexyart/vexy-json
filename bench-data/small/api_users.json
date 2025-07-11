@@ -1,0 +1,62 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "created_at": "2023-01-15T10:30:00Z",
+      "profile": {
+        "bio": "Software developer passionate about Rust",
+        "location": "San Francisco, CA",
+        "website": "https://johndoe.dev"
+      },
+      "preferences": {
+        "theme": "dark",
+        "notifications": true,
+        "language": "en"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@example.com",
+      "created_at": "2023-02-20T14:15:30Z",
+      "profile": {
+        "bio": "Full-stack developer and designer",
+        "location": "New York, NY",
+        "website": "https://janesmith.io"
+      },
+      "preferences": {
+        "theme": "light",
+        "notifications": false,
+        "language": "en"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Bob Johnson",
+      "email": "bob@example.com",
+      "created_at": "2023-03-10T09:45:00Z",
+      "profile": {
+        "bio": "DevOps engineer and automation specialist",
+        "location": "Austin, TX",
+        "website": null
+      },
+      "preferences": {
+        "theme": "dark",
+        "notifications": true,
+        "language": "en"
+      }
+    }
+  ],
+  "pagination": {
+    "total": 150,
+    "page": 1,
+    "per_page": 3,
+    "total_pages": 50
+  },
+  "meta": {
+    "generated_at": "2023-12-01T12:00:00Z",
+    "api_version": "v1"
+  }
+}

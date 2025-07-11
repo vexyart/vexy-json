@@ -1,0 +1,109 @@
+---
+# Site metadata for SEO
+author:
+  name: Adam Twardoch
+  url: https://github.com/twardoch
+baseurl: /vexy_json
+# Collections
+collections:
+  pages:
+    output: true
+    permalink: /:name/
+# Default front matter
+defaults:
+  - scope:
+      path: ''
+      type: pages
+    values:
+      layout: page
+  - scope:
+      path: pkg
+    values:
+      layout: none
+description: A Rust library for parsing forgiving JSON with comments, trailing commas, and unquoted keys
+# Exclude development files
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - vendor/
+  - '*.sh'
+  - '*.gemspec'
+  - '*.erb'
+  - '_posts/0000-00-00-welcome-to-jekyll.markdown.erb'
+  - 'vendor/bundle/**/*'
+  - 'vendor/bundle/ruby/**/*'
+  - 'vendor/bundle/ruby/*/gems/**/*'
+  - 'vendor/bundle/ruby/*/gems/jekyll-*/lib/site_template/**/*'
+  - '**/site_template/**/*'
+  - '**/gems/jekyll-*/lib/site_template/_posts/*'
+  - 'internal/**/*'
+github:
+  repository_url: https://github.com/twardoch/vexy_json
+highlighter: rouge
+# Include WASM and tool files in build
+include:
+  - pkg
+  - tool.html
+  - test-browsers.html
+  - test-mobile.html
+  - assets
+incremental: false
+# Development configuration
+livereload: true
+# Build settings
+markdown: kramdown
+# Just-the-docs theme configuration
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 2
+  preview_words_before: 3
+  preview_words_after: 3
+  tokenizer_separator: /[\s\-/]+/
+  rel_url: true
+  button: false
+
+# Back to top link
+back_to_top: true
+back_to_top_text: "Back to top"
+
+# Footer content
+footer_content: "Copyright &copy; 2025 Adam Twardoch. Distributed by an <a href=\"https://github.com/twardoch/vexy_json/tree/main/LICENSE\">MIT license.</a>"
+
+# External navigation links will be removed from here as just-the-docs handles them in the content
+# Plugin configuration
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-optional-front-matter
+# Repository information
+repository: twardoch/vexy_json
+# Performance and caching
+sass:
+  style: compressed
+# Social and sharing
+social:
+  - icon: github
+    name: GitHub
+    url: https://github.com/twardoch/vexy_json
+# WASM and static file configuration
+# Ensure proper MIME types for WebAssembly files
+static_files:
+  - /pkg/*.wasm
+  - /pkg/*.js
+  - /assets/**/*
+remote_theme: just-the-docs/just-the-docs
+# Site configuration for vexy_json documentation
+title: vexy_json - Forgiving JSON Parser
+url: https://twardoch.github.io
+# MIME type handling for GitHub Pages
+# Note: GitHub Pages automatically serves .wasm files with application/wasm MIME type
+webrick:
+  headers:
+    pkg:
+      Cache-Control: public, max-age=2592000

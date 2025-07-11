@@ -1,0 +1,30 @@
+[package]
+name = "vexy_json-python"
+version = "2.2.3"
+edition = "2021"
+description = "Python bindings for vexy_json - a forgiving JSON parser"
+repository = "https://github.com/twardoch/vexy_json"
+license = "MIT OR Apache-2.0"
+authors = [ "Adam Twardoch <adam+github@twardoch.com>" ]
+
+
+[lib]
+name = "vexy_json"
+crate-type = [ "cdylib" ]
+
+
+[dependencies]
+rustc-hash = "2.1"
+
+
+[dependencies.pyo3]
+version = "0.22"
+features = [ "extension-module" ]
+
+
+[dependencies.vexy_json-core]
+path = "../core"
+
+
+[build-dependencies]
+pyo3-build-config = "0.22"

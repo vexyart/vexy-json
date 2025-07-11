@@ -1,0 +1,2 @@
+Analyze the entire codebase. Then in ./IDEAS.md write an extensive spec that will describe in minute detail step-by-step how to extend the vexy_json parser with the functionality of INTELLIGENT completion of opening or closing braces. Right now our tolerant and forgiving JSON-esque parser can fix various things but it cannot overcome the situation of a braces mismatch. The original reference jsonic parser written in JS, of which vexy_json is a Rust port, does not have that functionality. But I want it.
+

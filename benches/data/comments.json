@@ -1,0 +1,15 @@
+{
+  // This is a comment
+  "name": "test", /* block comment */
+  "value": 42, // another comment
+  # shell-style comment
+  "array": [
+    1, // comment in array
+    2,
+    3
+  ],
+  "nested": {
+    // nested comment
+    "key": "value"
+  }
+}

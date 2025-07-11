@@ -1,0 +1,61 @@
+[build-system]
+requires = [ "maturin>=1.0,<2.0" ]
+build-backend = "maturin"
+
+
+[project]
+name = "vexy_json"
+description = "A forgiving JSON parser - Python bindings for the Rust vexy_json library"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+"Development Status :: 4 - Beta",
+"Intended Audience :: Developers",
+"License :: OSI Approved :: MIT License",
+"License :: OSI Approved :: Apache Software License",
+"Operating System :: OS Independent",
+"Programming Language :: Python :: 3",
+"Programming Language :: Python :: 3.8",
+"Programming Language :: Python :: 3.9",
+"Programming Language :: Python :: 3.10",
+"Programming Language :: Python :: 3.11",
+"Programming Language :: Python :: 3.12",
+"Programming Language :: Rust",
+"Topic :: Software Development :: Libraries :: Python Modules",
+"Topic :: Text Processing",
+"Topic :: Internet :: WWW/HTTP :: Dynamic Content"
+]
+keywords = [ "json", "parser", "forgiving", "jsonic", "rust" ]
+dynamic = [ "version" ]
+
+
+[[project.authors]]
+name = "Adam Twardoch"
+email = "adam+github@twardoch.com"
+
+
+[project.license]
+text = "MIT OR Apache-2.0"
+
+
+[project.urls]
+Homepage = "https://github.com/twardoch/vexy_json"
+Repository = "https://github.com/twardoch/vexy_json.git"
+Issues = "https://github.com/twardoch/vexy_json/issues"
+Documentation = "https://twardoch.github.io/vexy_json/"
+
+
+[project.optional-dependencies]
+dev = [ "pytest>=7.0", "pytest-benchmark>=4.0", "maturin>=1.0" ]
+
+
+[tool.maturin]
+features = [ "pyo3/extension-module" ]
+python-source = "python"
+module-name = "vexy_json._vexy_json"
+include = [ "python/vexy_json/__init__.pyi", "python/vexy_json/py.typed" ]
+
+
+[tool.pytest.ini_options]
+testpaths = [ "tests" ]
+python_files = [ "test_*.py", "*_test.py" ]

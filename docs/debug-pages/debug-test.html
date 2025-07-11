@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vexy JSON Debug Test</title>
+  </head>
+  <body>
+    <h1>Vexy JSON Debug Test</h1>
+    <p>Input: {a:1}</p>
+    <p>Expected output: {"a":1}</p>
+    <p id="result">Loading...</p>
+
+    <script type="module">
+      import init, { parse_json_with_options } from '../pkg/vexy_json_wasm.js';
+
+      async function test() {
+        try {
+          await init();
+          console.log('WASM module initialized');
+
+          const input = '{a:1}';
+          const options = {
+            allow_comments: true,
+            allow_trailing_commas: true,
+            allow_unquoted_keys: true,
+            allow_single_quotes: true,
+            implicit_top_level: true,
+            newline_as_comma: true,
+            max_depth: 128,
+          };
+
+          console.log('Input:', input);
+          console.log('Options:', options);
+
+          const result = parse_json_with_options(
+            input,
+            options.allow_comments,
+            options.allow_trailing_commas,
+            options.allow_unquoted_keys,
+            options.allow_single_quotes,
+            options.implicit_top_level,
+            options.newline_as_comma,
+            false, // enable_repair
+            options.max_depth
+          );
+          console.log('Parse result:', result);
+
+          const jsonString = JSON.stringify(result);
+          console.log('JSON string:', jsonString);
+
+          document.getElementById('result').textContent =
+            'Result: ' + jsonString;
+        } catch (error) {
+          console.error('Error:', error);
+          document.getElementById('result').textContent =
+            'Error: ' + error.message;
+        }
+      }
+
+      test();
+    </script>
+  </body>
+</html>

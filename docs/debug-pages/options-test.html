@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vexy JSON Default Options Test</title>
+  </head>
+  <body>
+    <h1>Vexy JSON Default Options Test</h1>
+    <button onclick="runTest()">Run Test</button>
+    <pre id="log"></pre>
+
+    <script type="module">
+      import init, {
+        parse_json_with_options,
+        get_parser_options,
+      } from '../pkg/vexy_json_wasm.js';
+
+      let log = '';
+      function appendLog(message) {
+        log += message + '\n';
+        document.getElementById('log').textContent = log;
+        console.log(message);
+      }
+
+      let initialized = false;
+
+      async function initWasm() {
+        try {
+          await init();
+          initialized = true;
+          appendLog('✅ WASM module initialized successfully');
+        } catch (error) {
+          appendLog('❌ WASM initialization failed: ' + error);
+        }
+      }
+
+      window.runTest = async function () {
+        if (!initialized) {
+          appendLog('⏳ Initializing WASM...');
+          await initWasm();
+        }
+
+        appendLog('\n🔍 Starting parse tests...');
+
+        // Test 1: Using get_parser_options()
+        try {
+          const input1 = '{a:1}';
+          const defaultOptionsStr = get_parser_options();
+          const defaultOptions = JSON.parse(defaultOptionsStr);
+
+          appendLog(`📝 Input: ${input1}`);
+          appendLog(`⚙️  Default Options: ${defaultOptionsStr}`);
+
+          const result1 = parse_json_with_options(
+            input1,
+            defaultOptions.allow_comments.default,
+            defaultOptions.allow_trailing_commas.default,
+            defaultOptions.allow_unquoted_keys.default,
+            defaultOptions.allow_single_quotes.default,
+            defaultOptions.implicit_top_level.default,
+            defaultOptions.newline_as_comma.default,
+            defaultOptions.enable_repair.default,
+            defaultOptions.max_depth.default
+          );
+          appendLog(`✅ Result: ${JSON.stringify(result1)}`);
+          appendLog(`🎯 Expected: {"a":1}`);
+
+          if (JSON.stringify(result1) === '{"a":1}') {
+            appendLog('✅ Test 1 PASSED');
+          } else {
+            appendLog('❌ Test 1 FAILED');
+          }
+        } catch (error) {
+          appendLog(`❌ Test 1 ERROR: ${error}`);
+        }
+
+        // Test 2: Minimal options (only unquoted keys enabled)
+        try {
+          const input2 = '{a:1}';
+          const result2 = parse_json_with_options(
+            input2,
+            false, // allow_comments
+            false, // allow_trailing_commas
+            true, // allow_unquoted_keys
+            false, // allow_single_quotes
+            false, // implicit_top_level
+            false, // newline_as_comma
+            false, // enable_repair
+            128 // max_depth
+          );
+          appendLog(`\n📝 Minimal options test: ${input2}`);
+          appendLog(`✅ Result: ${JSON.stringify(result2)}`);
+        } catch (error) {
+          appendLog(`❌ Minimal options ERROR: ${error}`);
+        }
+
+        // Test 3: Strict mode (should fail with unquoted keys)
+        try {
+          const input3 = '{a:1}';
+          const result3 = parse_json_with_options(
+            input3,
+            false, // allow_comments
+            false, // allow_trailing_commas
+            false, // allow_unquoted_keys (should fail)
+            false, // allow_single_quotes
+            false, // implicit_top_level
+            false, // newline_as_comma
+            false, // enable_repair
+            128 // max_depth
+          );
+          appendLog(`\n📝 Strict mode test: ${input3}`);
+          appendLog(
+            `❌ Should have failed but got: ${JSON.stringify(result3)}`
+          );
+        } catch (error) {
+          appendLog(`\n📝 Strict mode test: ${input3}`);
+          appendLog(`✅ Correctly failed: ${error}`);
+        }
+      };
+
+      // Auto-initialize when page loads
+      initWasm();
+    </script>
+  </body>
+</html>

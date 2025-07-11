@@ -1,0 +1,300 @@
+   Compiling vexy_json-core v2.2.3 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+warning: methods `analyze_custom_error`, `analyze_context_error`, and `analyze_invalid_utf8` are never used
+   --> crates/core/src/error/recovery/mod.rs:542:8
+    |
+22  | impl ErrorRecoveryAnalyzer {
+    | -------------------------- methods in this implementation
+...
+542 |     fn analyze_custom_error(&self, _error: &Error, _input: &str) -> Vec<RecoveryStrategy> {
+    |        ^^^^^^^^^^^^^^^^^^^^
+...
+553 |     fn analyze_context_error(&self, _error: &Error, _input: &str) -> Vec<RecoveryStrategy> {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+...
+628 |     fn analyze_invalid_utf8(&self, _error: &Error, _input: &str) -> Vec<RecoveryStrategy> {
+    |        ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: field `confidence` is never read
+  --> crates/core/src/error/recovery/context.rs:13:16
+   |
+7  | pub(super) struct ContextRule {
+   |                   ----------- field in this struct
+...
+13 |     pub(super) confidence: f64,
+   |                ^^^^^^^^^^
+   |
+   = note: `ContextRule` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: fields `patterns` and `learned_patterns` are never read
+  --> crates/core/src/error/recovery_v2.rs:91:5
+   |
+90 | struct PatternDatabase {
+   |        --------------- fields in this struct
+91 |     patterns: FxHashMap<String, ErrorPattern>,
+   |     ^^^^^^^^
+92 |     learned_patterns: Vec<LearnedPattern>,
+   |     ^^^^^^^^^^^^^^^^
+
+warning: field `lookahead_size` is never read
+   --> crates/core/src/error/recovery_v2.rs:113:5
+    |
+107 | struct ContextAnalyzer {
+    |        --------------- field in this struct
+...
+113 |     lookahead_size: usize,
+    |     ^^^^^^^^^^^^^^
+
+warning: method `name` is never used
+   --> crates/core/src/error/recovery_v2.rs:136:8
+    |
+134 | trait RecoveryStrategy {
+    |       ---------------- method in this trait
+135 |     /// Name of the strategy
+136 |     fn name(&self) -> &str;
+    |        ^^^^
+
+warning: field `weight` is never read
+  --> crates/core/src/error/ml_patterns.rs:32:5
+   |
+26 | struct Feature {
+   |        ------- field in this struct
+...
+32 |     weight: f64,
+   |     ^^^^^^
+   |
+   = note: `Feature` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: variants `InsertString`, `ReplaceRange`, `RemoveRange`, and `Complex` are never constructed
+  --> crates/core/src/error/ml_patterns.rs:58:5
+   |
+54 | enum FixTemplate {
+   |      ----------- variants in this enum
+...
+58 |     InsertString { string: String, offset: i32 },
+   |     ^^^^^^^^^^^^
+59 |     /// Replace a range with new text
+60 |     ReplaceRange { start: i32, end: i32, replacement: String },
+   |     ^^^^^^^^^^^^
+61 |     /// Remove a range
+62 |     RemoveRange { start: i32, end: i32 },
+   |     ^^^^^^^^^^^
+63 |     /// Complex operation with multiple sub-operations
+64 |     Complex(Vec<FixOperation>),
+   |     ^^^^^^^
+   |
+   = note: `FixTemplate` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: variants `Insert`, `Delete`, and `Replace` are never constructed
+  --> crates/core/src/error/ml_patterns.rs:70:5
+   |
+69 | enum FixOperation {
+   |      ------------ variants in this enum
+70 |     Insert {
+   |     ^^^^^^
+...
+74 |     Delete {
+   |     ^^^^^^
+...
+78 |     Replace {
+   |     ^^^^^^^
+   |
+   = note: `FixOperation` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: struct `SuccessfulFix` is never constructed
+  --> crates/core/src/error/ml_patterns.rs:87:8
+   |
+87 | struct SuccessfulFix {
+   |        ^^^^^^^^^^^^^
+
+warning: variant `StateChange` is never constructed
+  --> crates/core/src/lexer/debug_lexer.rs:46:5
+   |
+33 | enum DebugEvent {
+   |      ---------- variant in this enum
+...
+46 |     StateChange {
+   |     ^^^^^^^^^^^
+   |
+   = note: `DebugEvent` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `value_builder` is never read
+   --> crates/core/src/parser/mod.rs:113:16
+    |
+103 | pub struct Parser<'a> {
+    |            ------ field in this struct
+...
+113 |     pub(super) value_builder: ValueBuilder,
+    |                ^^^^^^^^^^^^^
+
+warning: method `is_only_whitespace_and_newlines` is never used
+   --> crates/core/src/parser/mod.rs:397:8
+    |
+116 | impl<'a> Parser<'a> {
+    | ------------------- method in this implementation
+...
+397 |     fn is_only_whitespace_and_newlines(&mut self) -> bool {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cold_path` is never used
+  --> crates/core/src/parser/optimized.rs:21:4
+   |
+21 | fn cold_path() {
+   |    ^^^^^^^^^
+
+warning: function `cold_path` is never used
+  --> crates/core/src/parser/optimized_v2.rs:22:4
+   |
+22 | fn cold_path() {
+   |    ^^^^^^^^^
+
+warning: field `first_element` is never read
+  --> crates/core/src/streaming/mod.rs:84:15
+   |
+84 |     InArray { first_element: bool },
+   |     -------   ^^^^^^^^^^^^^
+   |     |
+   |     field in this variant
+   |
+   = note: `ParserState` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `temp_state` is never read
+  --> crates/core/src/streaming/buffered/mod.rs:62:5
+   |
+44 | pub struct BufferedStreamingParser<R: Read> {
+   |            ----------------------- field in this struct
+...
+62 |     temp_state: TempParsingState,
+   |     ^^^^^^^^^^
+
+warning: method `char_to_token` is never used
+   --> crates/core/src/streaming/buffered/mod.rs:167:8
+    |
+65  | impl<R: Read> BufferedStreamingParser<R> {
+    | ---------------------------------------- method in this implementation
+...
+167 |     fn char_to_token(&self, ch: char) -> Result<Token> {
+    |        ^^^^^^^^^^^^^
+
+warning: enum `TokenizeResult` is never used
+   --> crates/core/src/streaming/buffered/mod.rs:448:6
+    |
+448 | enum TokenizeResult {
+    |      ^^^^^^^^^^^^^^
+
+warning: multiple fields are never read
+  --> crates/core/src/streaming/buffered/state.rs:7:16
+   |
+5  | pub(super) struct TempParsingState {
+   |                   ---------------- fields in this struct
+6  |     /// Buffer for accumulating string content
+7  |     pub(super) string_buffer: String,
+   |                ^^^^^^^^^^^^^
+8  |     /// Whether we're inside a string literal
+9  |     pub(super) in_string: bool,
+   |                ^^^^^^^^^
+10 |     /// Whether we're inside a comment
+11 |     pub(super) in_comment: bool,
+   |                ^^^^^^^^^^
+12 |     /// Comment type (single or multi-line)
+13 |     pub(super) comment_type: CommentType,
+   |                ^^^^^^^^^^^^
+14 |     /// Escape sequence state
+15 |     pub(super) escape_next: bool,
+   |                ^^^^^^^^^^^
+16 |     /// Unicode escape accumulator
+17 |     pub(super) unicode_buffer: String,
+   |                ^^^^^^^^^^^^^^
+18 |     /// Bracket depth for object/array nesting
+19 |     pub(super) bracket_depth: i32,
+   |                ^^^^^^^^^^^^^
+   |
+   = note: `TempParsingState` has derived impls for the traits `Default` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: variants `SingleLine` and `MultiLine` are never constructed
+  --> crates/core/src/streaming/buffered/state.rs:26:5
+   |
+24 | pub(super) enum CommentType {
+   |                 ----------- variants in this enum
+25 |     None,
+26 |     SingleLine,
+   |     ^^^^^^^^^^
+27 |     MultiLine,
+   |     ^^^^^^^^^
+   |
+   = note: `CommentType` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: method `update_object_context` is never used
+   --> crates/core/src/streaming/event_parser.rs:352:8
+    |
+163 | impl<H: JsonEventHandler> EventDrivenParser<H> {
+    | ---------------------------------------------- method in this implementation
+...
+352 |     fn update_object_context(&mut self, key: Option<String>) {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: field `options` is never read
+  --> crates/core/src/streaming/ndjson.rs:18:5
+   |
+14 | pub struct NdJsonParser {
+   |            ------------ field in this struct
+...
+18 |     options: ParserOptions,
+   |     ^^^^^^^
+
+warning: method `available` is never used
+  --> crates/core/src/optimization/memory_pool.rs:54:8
+   |
+44 | impl Block {
+   | ---------- method in this implementation
+...
+54 |     fn available(&self) -> usize {
+   |        ^^^^^^^^^
+
+warning: constant `SMALL_OBJECT_SIZE` is never used
+  --> crates/core/src/optimization/memory_pool_v3.rs:23:7
+   |
+23 | const SMALL_OBJECT_SIZE: usize = 4;
+   |       ^^^^^^^^^^^^^^^^^
+
+warning: fields `input` and `options` are never read
+  --> crates/core/src/lazy/array.rs:15:16
+   |
+11 | pub struct LazyArray {
+   |            --------- fields in this struct
+...
+15 |     pub(super) input: Arc<str>,
+   |                ^^^^^
+16 |     /// Parser options
+17 |     pub(super) options: crate::parser::ParserOptions,
+   |                ^^^^^^^
+   |
+   = note: `LazyArray` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: fields `input` and `options` are never read
+  --> crates/core/src/lazy/object.rs:16:16
+   |
+12 | pub struct LazyObject {
+   |            ---------- fields in this struct
+...
+16 |     pub(super) input: Arc<str>,
+   |                ^^^^^
+17 |     /// Parser options
+18 |     pub(super) options: crate::parser::ParserOptions,
+   |                ^^^^^^^
+   |
+   = note: `LazyObject` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: field `max_repairs` is never read
+  --> crates/core/src/repair/advanced.rs:96:5
+   |
+94 | pub struct AdvancedJsonRepairer {
+   |            -------------------- field in this struct
+95 |     /// Maximum number of repairs to attempt
+96 |     max_repairs: usize,
+   |     ^^^^^^^^^^^
+
+warning: `vexy_json-core` (lib) generated 27 warnings
+   Compiling vexy_json-cli v2.2.3 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.92s

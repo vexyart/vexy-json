@@ -1,0 +1,49 @@
+# Plan for Splitting Up Large Files
+
+This plan outlines how to refactor the largest source files in the codebase to improve modularity and maintainability.
+
+## 1. `crates/core/src/parser.rs` (45131 bytes)
+
+This file contains the core parsing logic and is the largest file in the project. It will be broken down into a `parser` module with submodules for each value type.
+
+*   **New Module:** `crates/core/src/parser/`
+*   **Files:**
+    *   `mod.rs`: The main `Parser` struct and its primary methods.
+    *   `string.rs`: Logic for parsing string literals.
+    *   `number.rs`: Logic for parsing numbers.
+    *   `boolean.rs`: Logic for parsing `true` and `false`.
+    *   `null.rs`: Logic for parsing `null`.
+    *   `array.rs`: Logic for parsing arrays.
+    *   `object.rs`: Logic for parsing objects.
+
+## 2. `crates/core/src/error/recovery.rs` (29810 bytes)
+
+This file handles error recovery mechanisms. It will be split into a `recovery` module with submodules for different recovery strategies.
+
+*   **New Module:** `crates/core/src/error/recovery/`
+*   **Files:**
+    *   `mod.rs`: The main error recovery logic.
+    *   `strategies.rs`: Different recovery strategies (e.g., skipping tokens, inserting missing tokens).
+    *   `context.rs`: Context-aware recovery logic.
+
+## 3. `crates/core/src/streaming/buffered.rs` (24082 bytes)
+
+This file contains the buffered streaming reader. It will be broken down into a `buffered` module.
+
+*   **New Module:** `crates/core/src/streaming/buffered/`
+*   **Files:**
+    *   `mod.rs`: The `BufferedStream` struct.
+    *   `buffer.rs`: Buffer management logic.
+    *   `state.rs`: Stream state management.
+
+## 4. `crates/core/src/lazy/mod.rs` (22088 bytes)
+
+This file contains the lazy parsing implementation. It will be split into a `lazy` module with submodules for each lazy value type.
+
+*   **New Module:** `crates/core/src/lazy/`
+*   **Files:**
+    *   `mod.rs`: The main `LazyValue` enum and related logic.
+    *   `string.rs`: Lazy string implementation.
+    *   `number.rs`: Lazy number implementation.
+    *   `array.rs`: Lazy array implementation.
+    *   `object.rs`: Lazy object implementation.

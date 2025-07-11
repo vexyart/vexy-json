@@ -1,0 +1,48 @@
+[package]
+name = "vexy_json-core"
+version = "2.2.3"
+edition = "2021"
+
+
+[lib]
+path = "src/lib.rs"
+
+
+[dependencies]
+thiserror = "2.0.12"
+logos = "0.12"
+serde_json = "1.0"
+regex = "1.10"
+rayon = "1.7"
+rustc-hash = "2.0"
+chrono = "0.4"
+
+
+[dependencies.tokio]
+version = "1.0"
+features = [ "io-util" ]
+optional = true
+
+
+[dependencies.serde]
+version = "1.0"
+features = [ "derive" ]
+optional = true
+
+
+[features]
+default = [ ]
+serde = [ "dep:serde" ]
+wasm = [ ]
+simd = [ ]
+async = [ "tokio" ]
+
+
+[dev-dependencies.criterion]
+version = "0.5"
+features = [ "html_reports" ]
+
+
+[[bench]]
+name = "parser_benchmarks"
+harness = false

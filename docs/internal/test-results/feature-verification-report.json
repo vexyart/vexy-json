@@ -1,0 +1,110 @@
+{
+  "timestamp": "2025-07-06T15:07:47.599Z",
+  "summary": {
+    "total": 11,
+    "passed": 11,
+    "failed": 0,
+    "successRate": 1
+  },
+  "results": [
+    {
+      "name": "Basic JSON",
+      "description": "Standard JSON should parse correctly",
+      "input": "{\"key\": \"value\", \"number\": 42}",
+      "success": true,
+      "output": "{\"key\":\"value\",\"number\":42}",
+      "error": null,
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.20s\n     Running `target/debug/vexy_json`\n"
+    },
+    {
+      "name": "Comments - Single Line",
+      "description": "Single-line comments should be ignored",
+      "input": "{\n  // This is a comment\n  \"key\": \"value\"\n}",
+      "success": true,
+      "output": "{\"key\":\"value\"}",
+      "error": null,
+      "stderr": "    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.72s\n     Running `target/debug/vexy_json`\n"
+    },
+    {
+      "name": "Comments - Multi Line",
+      "description": "Multi-line comments should be ignored",
+      "input": "{\n  /* Multi\n     line\n     comment */\n  \"key\": \"value\"\n}",
+      "success": true,
+      "output": "{\"key\":\"value\"}",
+      "error": null,
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s\n     Running `target/debug/vexy_json`\n"
+    },
+    {
+      "name": "Comments - Hash Style",
+      "description": "Hash-style comments should be ignored",
+      "input": "{\n  # Hash comment\n  \"key\": \"value\"\n}",
+      "success": true,
+      "output": "{\"key\":\"value\"}",
+      "error": null,
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.27s\n     Running `target/debug/vexy_json`\n"
+    },
+    {
+      "name": "Unquoted Keys",
+      "description": "Unquoted object keys should be accepted",
+      "input": "{key: \"value\", another: 123}",
+      "success": true,
+      "output": "{\"key\":\"value\",\"another\":123}",
+      "error": null,
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s\n     Running `target/debug/vexy_json`\n"
+    },
+    {
+      "name": "Single Quotes",
+      "description": "Single-quoted strings should be accepted",
+      "input": "{'key': 'value', \"mixed\": 'quotes'}",
+      "success": true,
+      "output": "{\"key\":\"value\",\"mixed\":\"quotes\"}",
+      "error": null,
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s\n     Running `target/debug/vexy_json`\n"
+    },
+    {
+      "name": "Trailing Commas - Object",
+      "description": "Trailing comma in object should be ignored",
+      "input": "{\"key\": \"value\", \"another\": 123,}",
+      "success": true,
+      "output": "{\"key\":\"value\",\"another\":123}",
+      "error": null,
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.24s\n     Running `target/debug/vexy_json`\n"
+    },
+    {
+      "name": "Trailing Commas - Array",
+      "description": "Trailing comma in array should be ignored",
+      "input": "[\"a\", \"b\", \"c\",]",
+      "success": true,
+      "output": "[\"a\",\"b\",\"c\"]",
+      "error": null,
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.21s\n     Running `target/debug/vexy_json`\n"
+    },
+    {
+      "name": "Implicit Array",
+      "description": "Implicit top-level array should be detected",
+      "input": "\"apple\", \"banana\", \"cherry\"",
+      "success": true,
+      "output": "[\"apple\",\"banana\",\"cherry\"]",
+      "error": null,
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.24s\n     Running `target/debug/vexy_json`\n"
+    },
+    {
+      "name": "Implicit Object",
+      "description": "Implicit top-level object should be detected",
+      "input": "key: \"value\", number: 42",
+      "success": true,
+      "output": "{\"number\":42,\"key\":\"value\"}",
+      "error": null,
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.21s\n     Running `target/debug/vexy_json`\n"
+    },
+    {
+      "name": "Complex Mixed Features",
+      "description": "Complex JSON with multiple forgiving features",
+      "input": "{\n  // Configuration with comments\n  name: 'vexy_json',           // Unquoted key, single quotes\n  version: \"1.1.0\",        /* Version string */\n  features: [\n    \"comments\",\n    'unquoted-keys',       // Mixed quotes\n    \"trailing-commas\",     // Trailing comma next\n  ],                       // Trailing comma in array\n  debug: true,             # Hash comment\n}",
+      "success": true,
+      "output": "{\"version\":\"1.1.0\",\"debug\":true,\"name\":\"vexy_json\",\"features\":[\"comments\",\"unquoted-keys\",\"trailing-commas\"]}",
+      "error": null,
+      "stderr": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s\n     Running `target/debug/vexy_json`\n"
+    }
+  ]
+}
