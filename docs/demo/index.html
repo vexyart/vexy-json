@@ -18,8 +18,8 @@
     
     <style>
         .demo-container { min-height: 400px; }
-        .editor-container { height: 300px; }
-        .result-container { max-height: 300px; overflow-y: auto; }
+        .editor-container { height: 350px; }
+        .result-container { max-height: 350px; overflow-y: auto; }
         
         /* Custom animations */
         .pulse-success { 
@@ -50,8 +50,9 @@
         <div class="navbar-center">
             <span class="text-sm opacity-70">Interactive Demo</span>
         </div>
-        <div class="navbar-end">
-            <a href="/" class="btn btn-sm btn-ghost">← Docs</a>
+        <div class="navbar-end space-x-2">
+            <a href="../index.html" class="btn btn-sm btn-ghost">← Documentation</a>
+            <a href="https://github.com/vexyart/vexy-json" class="btn btn-sm btn-outline" target="_blank">GitHub</a>
         </div>
     </header>
 
@@ -60,9 +61,15 @@
         <!-- Introduction -->
         <div class="hero bg-base-200 rounded-lg mb-6">
             <div class="hero-content text-center">
-                <div class="max-w-md">
+                <div class="max-w-2xl">
                     <h2 class="text-3xl font-bold">Try Vexy JSON</h2>
-                    <p class="py-4">A forgiving JSON parser that handles comments, trailing commas, unquoted keys, and more. Edit the JSON below and see it parsed in real-time!</p>
+                    <p class="py-4">A forgiving JSON parser that handles comments, trailing commas, unquoted keys, and more. Edit the JSON below and see it parsed in real-time using our WebAssembly implementation!</p>
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <div class="badge badge-primary">Comments Support</div>
+                        <div class="badge badge-secondary">Trailing Commas</div>
+                        <div class="badge badge-accent">Unquoted Keys</div>
+                        <div class="badge badge-info">Error Recovery</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,33 +81,42 @@
                 <div class="card-body">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="card-title">Input JSON</h3>
-                        <div class="dropdown dropdown-end">
-                            <label tabindex="0" class="btn btn-sm btn-outline">Examples</label>
-                            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-10">
-                                <li><a onclick="loadExample('comments')">With Comments</a></li>
-                                <li><a onclick="loadExample('trailing')">Trailing Commas</a></li>
-                                <li><a onclick="loadExample('unquoted')">Unquoted Keys</a></li>
-                                <li><a onclick="loadExample('mixed')">Mixed Features</a></li>
-                                <li><a onclick="loadExample('complex')">Complex Example</a></li>
-                            </ul>
+                        <div class="flex gap-2">
+                            <div class="dropdown dropdown-end">
+                                <label tabindex="0" class="btn btn-sm btn-outline">Examples</label>
+                                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-64 z-10">
+                                    <li><a onclick="loadExample('basic')">Basic JSON</a></li>
+                                    <li><a onclick="loadExample('comments')">With Comments</a></li>
+                                    <li><a onclick="loadExample('trailing')">Trailing Commas</a></li>
+                                    <li><a onclick="loadExample('unquoted')">Unquoted Keys</a></li>
+                                    <li><a onclick="loadExample('mixed')">Mixed Features</a></li>
+                                    <li><a onclick="loadExample('complex')">Complex Config</a></li>
+                                    <li><a onclick="loadExample('broken')">Broken JSON</a></li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-sm btn-ghost" onclick="clearInput()">Clear</button>
                         </div>
                     </div>
                     
                     <div id="input-editor" class="editor-container border rounded"></div>
                     
                     <!-- Options -->
-                    <div class="form-control mt-4">
+                    <div class="grid grid-cols-2 gap-2 mt-4">
                         <label class="label cursor-pointer">
-                            <span class="label-text">Allow Comments</span>
-                            <input type="checkbox" id="allow-comments" class="checkbox checkbox-primary" checked>
+                            <span class="label-text text-sm">Allow Comments</span>
+                            <input type="checkbox" id="allow-comments" class="checkbox checkbox-primary checkbox-sm" checked>
                         </label>
                         <label class="label cursor-pointer">
-                            <span class="label-text">Allow Trailing Commas</span>
-                            <input type="checkbox" id="allow-trailing-commas" class="checkbox checkbox-primary" checked>
+                            <span class="label-text text-sm">Trailing Commas</span>
+                            <input type="checkbox" id="allow-trailing-commas" class="checkbox checkbox-primary checkbox-sm" checked>
                         </label>
                         <label class="label cursor-pointer">
-                            <span class="label-text">Allow Unquoted Keys</span>
-                            <input type="checkbox" id="allow-unquoted-keys" class="checkbox checkbox-primary" checked>
+                            <span class="label-text text-sm">Unquoted Keys</span>
+                            <input type="checkbox" id="allow-unquoted-keys" class="checkbox checkbox-primary checkbox-sm" checked>
+                        </label>
+                        <label class="label cursor-pointer">
+                            <span class="label-text text-sm">Auto Repair</span>
+                            <input type="checkbox" id="allow-repair" class="checkbox checkbox-primary checkbox-sm" checked>
                         </label>
                     </div>
                 </div>
@@ -111,7 +127,10 @@
                 <div class="card-body">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="card-title">Parsed Output</h3>
-                        <div class="badge" id="status-badge">Ready</div>
+                        <div class="flex gap-2 items-center">
+                            <div class="badge" id="status-badge">Ready</div>
+                            <button class="btn btn-sm btn-ghost" onclick="copyOutput()">Copy</button>
+                        </div>
                     </div>
                     
                     <div id="output-container" class="result-container">
@@ -128,8 +147,23 @@
                             <div class="stat-title">Input Size</div>
                             <div class="stat-value text-sm" id="input-size">0 chars</div>
                         </div>
+                        <div class="stat">
+                            <div class="stat-title">Status</div>
+                            <div class="stat-value text-sm" id="parse-status">Waiting</div>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Error Display -->
+        <div id="error-container" class="alert alert-error shadow-lg mt-6 hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div>
+                <h3 class="font-bold">Parse Error</h3>
+                <div id="error-message" class="text-sm"></div>
             </div>
         </div>
 
@@ -139,26 +173,26 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="card bg-primary text-primary-content">
                     <div class="card-body">
-                        <h4 class="card-title text-sm">Comments</h4>
+                        <h4 class="card-title text-sm">💬 Comments</h4>
                         <p class="text-xs">Single-line // and multi-line /* */ comments</p>
                     </div>
                 </div>
                 <div class="card bg-secondary text-secondary-content">
                     <div class="card-body">
-                        <h4 class="card-title text-sm">Trailing Commas</h4>
+                        <h4 class="card-title text-sm">🏷️ Trailing Commas</h4>
                         <p class="text-xs">Extra commas in arrays and objects</p>
                     </div>
                 </div>
                 <div class="card bg-accent text-accent-content">
                     <div class="card-body">
-                        <h4 class="card-title text-sm">Unquoted Keys</h4>
+                        <h4 class="card-title text-sm">🔤 Unquoted Keys</h4>
                         <p class="text-xs">Object keys without quotes</p>
                     </div>
                 </div>
                 <div class="card bg-neutral text-neutral-content">
                     <div class="card-body">
-                        <h4 class="card-title text-sm">Error Recovery</h4>
-                        <p class="text-xs">Intelligent error handling and suggestions</p>
+                        <h4 class="card-title text-sm">🔧 Error Recovery</h4>
+                        <p class="text-xs">Intelligent error handling and repair</p>
                     </div>
                 </div>
             </div>
@@ -168,7 +202,9 @@
     <!-- Footer -->
     <footer class="footer footer-center p-4 bg-base-300 text-base-content mt-8">
         <div>
-            <p>Powered by Vexy JSON WASM • <a href="https://github.com/vexyart/vexy-json" class="link">GitHub</a></p>
+            <p>Powered by Vexy JSON WASM • 
+            <a href="https://github.com/vexyart/vexy-json" class="link">GitHub</a> • 
+            <a href="../user/quick-start.html" class="link">Get Started</a></p>
         </div>
     </footer>
 
@@ -176,7 +212,7 @@
     <div id="loading-modal" class="modal modal-open">
         <div class="modal-box">
             <h3 class="font-bold text-lg">Loading Vexy JSON...</h3>
-            <p class="py-4">Initializing WASM module</p>
+            <p class="py-4">Initializing WebAssembly module</p>
             <progress class="progress progress-primary w-full"></progress>
         </div>
     </div>
@@ -189,70 +225,84 @@
 
         // Example JSON snippets
         const examples = {
+            basic: `{
+  "name": "Vexy JSON",
+  "version": "1.0.7",
+  "features": ["forgiving", "fast", "rust"]
+}`,
             comments: `{
-    // This is a comment
-    "name": "Vexy JSON",
-    "version": "1.0.5", /* version comment */
-    "features": [
-        "comments", // inline comment
-        "trailing commas"
-    ]
+  // This is a single-line comment
+  "name": "Vexy JSON",
+  "version": "1.0.7", /* version comment */
+  "features": [
+    "comments", // inline comment
+    "trailing commas"
+  ]
 }`,
             trailing: `{
-    "users": [
-        {"name": "Alice", "age": 25},
-        {"name": "Bob", "age": 30},  // trailing comma here
-    ],
-    "active": true,  // and here
+  "users": [
+    {"name": "Alice", "age": 25},
+    {"name": "Bob", "age": 30},  // trailing comma here
+  ],
+  "active": true,  // and here
 }`,
             unquoted: `{
-    name: "Unquoted keys work",
-    version: 1.0,
-    settings: {
-        debug: true,
-        maxRetries: 3
-    }
+  name: "Unquoted keys work",
+  version: 1.0,
+  settings: {
+    debug: true,
+    maxRetries: 3
+  }
 }`,
             mixed: `{
-    // Configuration file
-    appName: "My App",
-    version: "2.1.0", // current version
-    
-    /* Database settings */
-    database: {
-        host: "localhost",
-        port: 5432,
-        ssl: true,  // enable SSL
-    },
-    
-    features: [
-        "auth",
-        "logging",  // comma here is OK
-    ],
+  // Configuration file
+  appName: "My App",
+  version: "2.1.0", // current version
+  
+  /* Database settings */
+  database: {
+    host: "localhost",
+    port: 5432,
+    ssl: true,  // enable SSL
+  },
+  
+  features: [
+    "auth",
+    "logging",  // comma here is OK
+  ],
 }`,
             complex: `{
-    // Complex configuration example
-    $schema: "config-v1",
-    
-    environments: {
-        development: {
-            apiUrl: "http://localhost:3000",
-            debug: true,
-            features: ["hotReload", "devTools",],  // trailing comma
-        },
-        
-        production: {
-            apiUrl: "https://api.example.com",
-            debug: false, // production ready
-            features: ["analytics", "monitoring"]
-        }
+  // Complex configuration example
+  $schema: "config-v1",
+  
+  environments: {
+    development: {
+      apiUrl: "http://localhost:3000",
+      debug: true,
+      features: ["hotReload", "devTools",],  // trailing comma
     },
     
-    /* Plugin configuration */
-    plugins: [
-        {name: "auth", enabled: true},
-        {name: "cache", enabled: false}, // disabled for now
-    ]
+    production: {
+      apiUrl: "https://api.example.com",
+      debug: false, // production ready
+      features: ["analytics", "monitoring"]
+    }
+  },
+  
+  /* Plugin configuration */
+  plugins: [
+    {name: "auth", enabled: true},
+    {name: "cache", enabled: false}, // disabled for now
+  ]
+}`,
+            broken: `{
+  "name": "Broken JSON",
+  "missing_quote: "This should be fixed",
+  "extra_comma": "here",
+  "array": [
+    "item1"
+    "item2"  // missing comma
+  ]
 }`
         };
 
@@ -303,7 +353,8 @@
         // Initialize WASM
         async function initWasm() {
             try {
-                const wasmModule = await import('./pkg/vexy_json_wasm.js');
+                // Try to load from the assets directory
+                const wasmModule = await import('../assets/wasm/vexy_json_wasm.js');
                 await wasmModule.default();
                 vexyJson = wasmModule;
                 return true;
@@ -315,7 +366,7 @@
 
         // Parse JSON with timing
         function parseJSON() {
-            if (!vexyJson || !inputEditor || !outputEditor) return;
+            if (!inputEditor || !outputEditor) return;
 
             const input = inputEditor.getValue();
             const startTime = performance.now();
@@ -324,15 +375,16 @@
             document.getElementById('input-size').textContent = `${input.length} chars`;
 
             try {
-                // Get options
-                const options = {
-                    allow_comments: document.getElementById('allow-comments').checked,
-                    allow_trailing_commas: document.getElementById('allow-trailing-commas').checked,
-                    allow_unquoted_keys: document.getElementById('allow-unquoted-keys').checked
-                };
-
-                // Parse with options (assuming parse_with_options exists in WASM)
-                const result = vexyJson.parse_json ? vexyJson.parse_json(input) : JSON.parse(input);
+                let result;
+                
+                if (vexyJson && vexyJson.parse_json) {
+                    // Use WASM parser
+                    result = vexyJson.parse_json(input);
+                } else {
+                    // Fallback to native JSON.parse
+                    result = JSON.parse(input);
+                }
+                
                 const endTime = performance.now();
                 const parseTime = (endTime - startTime).toFixed(2);
 
@@ -341,8 +393,12 @@
                 
                 // Update UI
                 document.getElementById('parse-time').textContent = `${parseTime}ms`;
+                document.getElementById('parse-status').textContent = 'Success';
                 document.getElementById('status-badge').textContent = 'Success';
                 document.getElementById('status-badge').className = 'badge badge-success';
+                
+                // Hide error container
+                document.getElementById('error-container').classList.add('hidden');
                 
                 // Add success animation
                 document.getElementById('output-container').classList.remove('pulse-error');
@@ -355,11 +411,20 @@
                 const endTime = performance.now();
                 const parseTime = (endTime - startTime).toFixed(2);
 
-                // Display error
-                outputEditor.setValue(`Error: ${error.message}`);
+                // Display error in output editor
+                outputEditor.setValue(`// Parse Error
+// ${error.message}
+
+// Original input:
+${input}`);
+                
+                // Show error in alert
+                document.getElementById('error-message').textContent = error.message;
+                document.getElementById('error-container').classList.remove('hidden');
                 
                 // Update UI
                 document.getElementById('parse-time').textContent = `${parseTime}ms`;
+                document.getElementById('parse-status').textContent = 'Error';
                 document.getElementById('status-badge').textContent = 'Error';
                 document.getElementById('status-badge').className = 'badge badge-error';
                 
@@ -379,10 +444,36 @@
             }
         };
 
+        // Clear input
+        window.clearInput = function() {
+            if (inputEditor) {
+                inputEditor.setValue('{\n  \n}');
+            }
+        };
+
+        // Copy output
+        window.copyOutput = function() {
+            if (outputEditor) {
+                const value = outputEditor.getValue();
+                navigator.clipboard.writeText(value).then(() => {
+                    // Show temporary success message
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    btn.classList.add('btn-success');
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.classList.remove('btn-success');
+                    }, 1000);
+                });
+            }
+        };
+
         // Option change handlers
         document.getElementById('allow-comments').addEventListener('change', parseJSON);
         document.getElementById('allow-trailing-commas').addEventListener('change', parseJSON);
         document.getElementById('allow-unquoted-keys').addEventListener('change', parseJSON);
+        document.getElementById('allow-repair').addEventListener('change', parseJSON);
 
         // Initialize everything
         async function init() {
@@ -391,14 +482,16 @@
                 const wasmLoaded = await initWasm();
                 
                 if (wasmLoaded) {
+                    console.log('WASM loaded successfully');
                     parseJSON(); // Initial parse
                 } else {
                     // Fallback to native JSON.parse
                     console.warn('WASM failed to load, using fallback JSON.parse');
+                    parseJSON();
                 }
             } catch (error) {
                 console.error('Initialization failed:', error);
-                outputEditor?.setValue('Failed to initialize demo');
+                outputEditor?.setValue('// Failed to initialize demo\n// Error: ' + error.message);
             } finally {
                 // Hide loading modal
                 document.getElementById('loading-modal').classList.remove('modal-open');

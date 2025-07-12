@@ -13,8 +13,8 @@ nav_order: 1
 ## 🚀 Quick Start
 
 ### Try It Now
-- **[Interactive Demo](demo.html)** - Test Vexy JSON in your browser with WASM
-- **[Legacy Tool](tool.html)** - Previous version of the web tool
+- **[Interactive Demo](demo/)** - Test Vexy JSON in your browser with WASM
+- **[Legacy Tool](demo/legacy.html)** - Previous version of the web tool
 
 ### Installation
 ```bash
@@ -45,27 +45,18 @@ fn main() {
 ## 📚 Documentation
 
 ### For Users
-- **[Getting Started](user/getting-started.md)** - Installation and basic usage
-- **[Features Overview](user/features.md)** - What makes Vexy JSON special
-- **[API Documentation](user/api/)** - Language-specific guides
-  - [Rust API](user/api/rust.md)
-  - [Python API](user/api/python-bindings.md)
-  - [WebAssembly](user/api/wasm.md)
-  - [Streaming API](user/api/streaming-api.md)
-- **[User Guides](user/guides/)**
-  - [Migration Guide](user/guides/migration.md)
-  - [Troubleshooting](user/guides/troubleshooting.md)
-  - [JSON Repair](user/guides/json-repair.md)
-- **[Reference](user/reference/)**
-  - [Release Notes](user/reference/release-notes.md)
+**[📖 User Documentation](user/)** - Complete user guide including:
+- Installation and getting started
+- API documentation for all languages
+- How-to guides and examples
+- Troubleshooting and reference
 
 ### For Developers
-- **[Contributing](dev/contributing.md)** - How to contribute to the project
-- **[Developer Guide](dev/developer-guide.md)** - Architecture and internals
-- **[Plugin Development](dev/plugin-development.md)** - Creating plugins
-- **[Build Process](dev/build-process.md)** - Building and testing
-- **[Release Process](dev/release-process.md)** - How releases are made
-- **[Benchmarks](dev/benchmarks.md)** - Performance comparisons
+**[🔧 Developer Documentation](dev/)** - For contributors and extension developers:
+- Contributing guidelines and setup
+- Architecture and internals
+- Plugin development
+- Build, test, and release processes
 
 ---
 

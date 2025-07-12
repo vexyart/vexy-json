@@ -1,21 +1,37 @@
 # User Documentation
 
-This directory contains documentation for end users of Vexy JSON.
+Welcome to Vexy JSON! This section contains everything you need to get started and make the most of our forgiving JSON parser.
 
-## Getting Started
-- [getting-started.md](getting-started.md) - Installation and basic usage
+## 🚀 Quick Start
+- **[Interactive Demo](../demo/)** - Try Vexy JSON in your browser
+- **[Getting Started](getting-started.md)** - Installation and basic usage
+- **[Features Overview](features.md)** - What makes Vexy JSON special
 
-## API Guides
-- [api/rust.md](api/rust.md) - Rust library documentation
-- [api/python-bindings.md](api/python-bindings.md) - Python package documentation  
-- [api/wasm.md](api/wasm.md) - WebAssembly documentation
-- [api/streaming-api.md](api/streaming-api.md) - Streaming API documentation
+## 📚 API Documentation
+Choose your preferred language or platform:
 
-## User Guides
-- [guides/migration.md](guides/migration.md) - Migration from other JSON parsers
-- [guides/troubleshooting.md](guides/troubleshooting.md) - Common issues and solutions
-- [guides/json-repair.md](guides/json-repair.md) - JSON repair capabilities
+- **[Rust](api/rust.md)** - Native Rust library
+- **[Python](api/python-bindings.md)** - Python bindings 
+- **[JavaScript/WASM](api/wasm.md)** - WebAssembly for browsers
+- **[CLI Tool](api/cli.md)** - Command-line interface
+- **[Streaming API](api/streaming-api.md)** - Process large JSON files
 
-## Reference
-- [reference/release-notes.md](reference/release-notes.md) - Version history and changes
-- [features.md](features.md) - Complete feature overview
+## 🎯 How-To Guides
+Step-by-step guides for common tasks:
+
+- **[Migration Guide](guides/migration.md)** - Switching from other JSON parsers
+- **[JSON Repair](guides/json-repair.md)** - Fix broken JSON automatically
+- **[Error Handling](guides/error-handling.md)** - Handle parsing errors gracefully
+- **[Troubleshooting](guides/troubleshooting.md)** - Common issues and solutions
+
+## 📖 Reference
+- **[Release Notes](reference/release-notes.md)** - Version history and changes
+- **[Configuration Options](reference/config.md)** - All parser options
+- **[Error Types](reference/errors.md)** - Complete error reference
+
+## 💡 Examples
+Real-world usage examples:
+
+- **[Configuration Files](examples/config-files.md)** - Parse config files with comments
+- **[API Responses](examples/api-responses.md)** - Handle malformed API data
+- **[Log Processing](examples/log-processing.md)** - Process JSON logs
