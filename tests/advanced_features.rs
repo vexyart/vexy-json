@@ -269,9 +269,7 @@ mod formatting_tolerance {
         ];
 
         for space in &unicode_spaces {
-            let input = format!(
-                "{space}{{{space}key{space}: {space}value{space}}}{space}"
-            );
+            let input = format!("{space}{{{space}key{space}: {space}value{space}}}{space}");
             let result = parse(&input);
             // Some unicode spaces might not be recognized, but shouldn't crash
             if result.is_ok() {

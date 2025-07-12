@@ -44,7 +44,7 @@ echo "Starting build process for vexy_json..."
     echo "  use vexy_json::parse;"
     echo "  let value = parse(\"'hello', 'world'\").unwrap();"
 
-} >build.log.txt 2>&1
+} >build.log.txt 2>build.err.txt
 
 echo "Build log created in: build.log.txt"
 echo ""

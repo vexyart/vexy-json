@@ -198,9 +198,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         obj.len()
                     );
                 } else {
-                    println!(
-                        "  {parser_name} parser: {duration:?} - unexpected type ⚠️"
-                    );
+                    println!("  {parser_name} parser: {duration:?} - unexpected type ⚠️");
                 }
             }
             Err(e) => {

@@ -336,9 +336,7 @@ fn test_error_recovery() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!(
-                    "⚠ Error case {description} unexpectedly succeeded: {val:?}"
-                );
+                println!("⚠ Error case {description} unexpectedly succeeded: {val:?}");
                 // Some malformed input might be handled gracefully
             }
             Err(err) => {

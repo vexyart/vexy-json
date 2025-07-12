@@ -109,7 +109,6 @@ impl ChunkedProcessor {
         Self { config }
     }
 
-
     /// Parse large JSON input using parallel chunking
     pub fn parse(&self, input: &str, options: ParserOptions) -> Result<ChunkedResult> {
         let start_time = std::time::Instant::now();

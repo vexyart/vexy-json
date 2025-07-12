@@ -206,7 +206,6 @@ impl JsonPath {
     pub fn pop(&mut self) -> Option<PathSegment> {
         self.segments.pop()
     }
-
 }
 
 impl fmt::Display for JsonPath {

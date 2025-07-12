@@ -40,9 +40,7 @@ fn test_newline_as_comma_separator() {
             println!("vexy_json parsed object newline as: {other:?}");
         }
         Err(e) => {
-            println!(
-                "vexy_json doesn't support newlines as separators in objects: {e:?}"
-            );
+            println!("vexy_json doesn't support newlines as separators in objects: {e:?}");
         }
     }
 
@@ -58,9 +56,7 @@ fn test_newline_as_comma_separator() {
             println!("vexy_json parsed array newline as: {other:?}");
         }
         Err(e) => {
-            println!(
-                "vexy_json doesn't support newlines as separators in arrays: {e:?}"
-            );
+            println!("vexy_json doesn't support newlines as separators in arrays: {e:?}");
         }
     }
 }
@@ -116,14 +112,10 @@ fn test_implicit_structures_with_newlines() {
             assert_eq!(obj.get("b").and_then(|v| v.as_f64()), Some(2.0));
         }
         Ok(other) => {
-            println!(
-                "vexy_json parsed implicit object with newlines as: {other:?}"
-            );
+            println!("vexy_json parsed implicit object with newlines as: {other:?}");
         }
         Err(e) => {
-            println!(
-                "vexy_json doesn't support implicit objects with newlines: {e:?}"
-            );
+            println!("vexy_json doesn't support implicit objects with newlines: {e:?}");
         }
     }
 
@@ -137,14 +129,10 @@ fn test_implicit_structures_with_newlines() {
             assert_eq!(arr[2].as_f64(), Some(3.0));
         }
         Ok(other) => {
-            println!(
-                "vexy_json parsed implicit array with newlines as: {other:?}"
-            );
+            println!("vexy_json parsed implicit array with newlines as: {other:?}");
         }
         Err(e) => {
-            println!(
-                "vexy_json doesn't support implicit arrays with newlines: {e:?}"
-            );
+            println!("vexy_json doesn't support implicit arrays with newlines: {e:?}");
         }
     }
 
@@ -165,9 +153,7 @@ fn test_implicit_structures_with_newlines() {
             println!("vexy_json parsed string sequence as: {other:?}");
         }
         Err(e) => {
-            println!(
-                "vexy_json doesn't support string sequences with newlines: {e:?}"
-            );
+            println!("vexy_json doesn't support string sequences with newlines: {e:?}");
         }
     }
 }
@@ -187,9 +173,7 @@ fn test_trailing_commas() {
             println!("vexy_json parsed trailing comma array as: {other:?}");
         }
         Err(e) => {
-            println!(
-                "vexy_json doesn't support trailing commas in arrays: {e:?}"
-            );
+            println!("vexy_json doesn't support trailing commas in arrays: {e:?}");
         }
     }
 
@@ -204,9 +188,7 @@ fn test_trailing_commas() {
             println!("vexy_json parsed trailing comma object as: {other:?}");
         }
         Err(e) => {
-            println!(
-                "vexy_json doesn't support trailing commas in objects: {e:?}"
-            );
+            println!("vexy_json doesn't support trailing commas in objects: {e:?}");
         }
     }
 }
@@ -409,9 +391,7 @@ fn test_special_cases() {
             println!("vexy_json parsed {{a:1}}, as implicit array: {arr:?}");
         }
         Ok(Value::Object(obj)) => {
-            println!(
-                "vexy_json parsed {{a:1}}, as object (ignored trailing comma): {obj:?}"
-            );
+            println!("vexy_json parsed {{a:1}}, as object (ignored trailing comma): {obj:?}");
         }
         Ok(other) => {
             println!("vexy_json parsed {{a:1}}, as: {other:?}");
@@ -433,9 +413,7 @@ fn test_special_cases() {
             println!("vexy_json parsed space-separated as: {other:?}");
         }
         Err(e) => {
-            println!(
-                "vexy_json doesn't support space-separated properties: {e:?}"
-            );
+            println!("vexy_json doesn't support space-separated properties: {e:?}");
         }
     }
 

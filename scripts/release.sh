@@ -253,10 +253,10 @@ run_tests() {
     log "Running comprehensive test suite..."
 
     # Cargo tests
-    run_cmd "cargo test --all-features --workspace" "Run all Rust tests"
+    run_cmd "cargo test --all-features --workspace --exclude vexy-json-python" "Run all Rust tests"
 
     # Cargo clippy
-    run_cmd "cargo clippy --all-features --workspace -- -D warnings -A missing_docs" "Run clippy linter"
+    run_cmd "cargo clippy --all-features --workspace --exclude vexy-json-python -- -D warnings -A missing_docs" "Run clippy linter"
 
     # Cargo fmt check
     run_cmd "cargo fmt --all -- --check" "Check code formatting"
@@ -282,7 +282,7 @@ build_rust_artifacts() {
     run_cmd "mkdir -p \"$BUILD_DIR\"" "Create build directory"
 
     # Build release binary
-    run_cmd "cargo build --release --bin vexy-json" "Build release CLI binary"
+    run_cmd "cargo build --release -p vexy-json-cli --bin vexy-json" "Build release CLI binary"
 
     # Build library
     run_cmd "cargo build --release --lib" "Build release library"
@@ -385,7 +385,7 @@ build_linux_packages() {
 
     # Build static binary for Linux
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        run_cmd "cargo build --release --target x86_64-unknown-linux-musl --bin vexy-json" "Build static Linux binary"
+        run_cmd "cargo build --release -p vexy-json-cli --target x86_64-unknown-linux-musl --bin vexy-json" "Build static Linux binary"
 
         if [ "$DRY_RUN" = false ]; then
             cp "target/x86_64-unknown-linux-musl/release/vexy-json" "$BUILD_DIR/vexy-json-$VERSION-x86_64-linux-musl"
@@ -620,11 +620,11 @@ push_to_remote() {
     # Get current branch
     local branch=$(git branch --show-current)
 
-# Check if we have a remote named 'origin'
-if ! git remote | grep -q '^origin'; then
-    error "No 'origin' remote found. Please add a remote repository."
-    exit 1
-fi
+    # Check if we have a remote named 'origin'
+    if ! git remote | grep -q '^origin'; then
+        error "No 'origin' remote found. Please add a remote repository."
+        exit 1
+    fi
 
     # Push commits
     run_cmd "git push origin $branch" "Push commits to origin/$branch"

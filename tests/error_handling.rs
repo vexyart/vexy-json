@@ -115,7 +115,7 @@ fn test_invalid_comma_usage() {
 fn test_valid_edge_cases() {
     // Test what vexy_json actually supports
 
-    // vexy_json may not support implicit null 
+    // vexy_json may not support implicit null
     assert!(
         parse(",]").is_err(),
         "Implicit null in array not supported in vexy_json"

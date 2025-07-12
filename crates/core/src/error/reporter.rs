@@ -208,9 +208,7 @@ impl ErrorReporter {
             .formatter
             .format_text(code.description(), ColorScheme::Info);
 
-        report.push_str(&format!(
-            "{code_header} {formatted_code} - {description}\n"
-        ));
+        report.push_str(&format!("{code_header} {formatted_code} - {description}\n"));
     }
 
     /// Adds the suggestions section with actionable recommendations.

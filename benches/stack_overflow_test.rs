@@ -368,7 +368,9 @@ fn bench_pathological_cases(c: &mut Criterion) {
 
     group.bench_function("recursive_smaller_alternating", |b| {
         b.iter(|| {
-            if parse_recursive(black_box(&smaller_alternating), black_box(options.clone())).is_ok() {}
+            if parse_recursive(black_box(&smaller_alternating), black_box(options.clone())).is_ok()
+            {
+            }
         });
     });
 

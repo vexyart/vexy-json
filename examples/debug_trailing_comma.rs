@@ -17,9 +17,7 @@ fn main() {
         match lexer.next_token() {
             Ok((token, span)) => {
                 let pos_after = lexer.position();
-                println!(
-                    "Token: {token:?} positions {pos_before}..{pos_after} (span: {span:?})"
-                );
+                println!("Token: {token:?} positions {pos_before}..{pos_after} (span: {span:?})");
                 if token == Token::Eof {
                     break;
                 }

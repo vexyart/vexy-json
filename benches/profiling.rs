@@ -62,11 +62,7 @@ fn profiling_forgiving_features(c: &mut Criterion) {
 fn profiling_memory_allocation(c: &mut Criterion) {
     // Test parsing many small objects to stress allocation
     let small_objects: Vec<String> = (0..1000)
-        .map(|i| {
-            format!(
-                "{{\"id\": {i}, \"name\": \"item{i}\", \"active\": true}}"
-            )
-        })
+        .map(|i| format!("{{\"id\": {i}, \"name\": \"item{i}\", \"active\": true}}"))
         .collect();
 
     c.bench_function("profiling_memory_allocation", |b| {

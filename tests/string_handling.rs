@@ -191,14 +191,10 @@ fn test_backslash_behavior() {
                 assert!(!s.is_empty(), "String should not be empty");
             }
             Ok(other) => {
-                panic!(
-                    "Expected string or error for {description}, got: {other:?}"
-                );
+                panic!("Expected string or error for {description}, got: {other:?}");
             }
             Err(_) => {
-                println!(
-                    "vexy_json errors on {description} - that's valid behavior"
-                );
+                println!("vexy_json errors on {description} - that's valid behavior");
             }
         }
     }

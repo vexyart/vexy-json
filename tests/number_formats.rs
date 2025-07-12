@@ -4,7 +4,7 @@ use vexy_json::Number;
 use vexy_json::{parse, Value};
 
 /// Tests for extended number format support including hex, octal, binary, and underscore separators.
-/// These formats are commonly used in configuration files 
+/// These formats are commonly used in configuration files
 
 #[test]
 fn test_underscore_separators() {

@@ -8,7 +8,7 @@
 
 use pyo3::exceptions::{PyTypeError, PyValueError};
 use pyo3::prelude::*;
-use pyo3::types::{PyDict, PyList};
+use pyo3::types::{PyBool, PyDict, PyList};
 use rustc_hash::FxHashMap;
 use vexy_json_core::ast::Value;
 use vexy_json_core::{parse, parse_with_options, ParserOptions};
@@ -17,19 +17,19 @@ use vexy_json_core::{parse, parse_with_options, ParserOptions};
 fn value_to_python(py: Python, value: &Value) -> PyResult<PyObject> {
     match value {
         Value::Null => Ok(py.None()),
-        Value::Bool(b) => Ok(b.into_pyobject(py)?.unbind().into()),
+        Value::Bool(b) => Ok(PyBool::new(py, *b).as_any().clone().unbind()),
         Value::Number(num) => match num {
-            vexy_json_core::ast::Number::Integer(i) => Ok(i.into_pyobject(py)?.unbind().into()),
-            vexy_json_core::ast::Number::Float(f) => Ok(f.into_pyobject(py)?.unbind().into()),
+            vexy_json_core::ast::Number::Integer(i) => Ok((*i).into_pyobject(py)?.unbind().into()),
+            vexy_json_core::ast::Number::Float(f) => Ok((*f).into_pyobject(py)?.unbind().into()),
         },
-        Value::String(s) => Ok(s.into_pyobject(py)?.unbind().into()),
+        Value::String(s) => Ok(s.as_str().into_pyobject(py)?.unbind().into()),
         Value::Array(arr) => {
             let py_list = PyList::empty(py);
             for item in arr {
                 let py_item = value_to_python(py, item)?;
                 py_list.append(py_item)?;
             }
-            Ok(py_list.into())
+            Ok(py_list.as_any().clone().unbind())
         }
         Value::Object(obj) => {
             let py_dict = PyDict::new(py);
@@ -37,7 +37,7 @@ fn value_to_python(py: Python, value: &Value) -> PyResult<PyObject> {
                 let py_value = value_to_python(py, value)?;
                 py_dict.set_item(key, py_value)?;
             }
-            Ok(py_dict.into())
+            Ok(py_dict.as_any().clone().unbind())
         }
     }
 }

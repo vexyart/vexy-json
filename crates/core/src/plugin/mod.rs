@@ -107,9 +107,7 @@ impl PluginRegistry {
         let name = plugin.name().to_string();
 
         if self.plugin_map.contains_key(&name) {
-            return Err(Error::Custom(format!(
-                "Plugin '{name}' already registered"
-            )));
+            return Err(Error::Custom(format!("Plugin '{name}' already registered")));
         }
 
         let index = self.plugins.len();

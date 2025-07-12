@@ -186,37 +186,31 @@ fn test_options_disabled() {
 
     // These should fail with strict options
     match parse_with_options("// comment\n42", options.clone()) {
-        Ok(v) => panic!(
-            "Comments should fail with allow_comments=false, but got: {v:?}"
-        ),
+        Ok(v) => panic!("Comments should fail with allow_comments=false, but got: {v:?}"),
         Err(e) => eprintln!("Comments correctly failed: {e:?}"),
     }
 
     match parse_with_options("[1, 2,]", options.clone()) {
-        Ok(v) => panic!(
-            "Trailing comma should fail with allow_trailing_commas=false, but got: {v:?}"
-        ),
+        Ok(v) => {
+            panic!("Trailing comma should fail with allow_trailing_commas=false, but got: {v:?}")
+        }
         Err(e) => eprintln!("Trailing comma correctly failed: {e:?}"),
     }
 
     match parse_with_options("{key: 1}", options.clone()) {
-        Ok(v) => panic!(
-            "Unquoted keys should fail with allow_unquoted_keys=false, but got: {v:?}"
-        ),
+        Ok(v) => panic!("Unquoted keys should fail with allow_unquoted_keys=false, but got: {v:?}"),
         Err(e) => eprintln!("Unquoted keys correctly failed: {e:?}"),
     }
 
     match parse_with_options("'string'", options.clone()) {
-        Ok(v) => panic!(
-            "Single quotes should fail with allow_single_quotes=false, but got: {v:?}"
-        ),
+        Ok(v) => panic!("Single quotes should fail with allow_single_quotes=false, but got: {v:?}"),
         Err(e) => eprintln!("Single quotes correctly failed: {e:?}"),
     }
 
     match parse_with_options("a: 1", options.clone()) {
-        Ok(v) => panic!(
-            "Implicit top-level should fail with implicit_top_level=false, but got: {v:?}"
-        ),
+        Ok(v) => {
+            panic!("Implicit top-level should fail with implicit_top_level=false, but got: {v:?}")
+        }
         Err(e) => eprintln!("Implicit top-level correctly failed: {e:?}"),
     }
 }
