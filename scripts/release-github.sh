@@ -190,7 +190,7 @@ if [ "$DRY_RUN" = false ]; then
     log_info "GitHub Actions release workflow triggered!"
     echo
     echo "You can monitor the release progress at:"
-    echo "https://github.com/twardoch/vexy_json/actions"
+    echo "https://github.com/vexyart/vexy-json/actions"
     echo
     echo "Or watch it here:"
     
@@ -201,7 +201,7 @@ if [ "$DRY_RUN" = false ]; then
     RUN_ID=$(gh run list --workflow=release.yml --limit 1 --json databaseId --jq '.[0].databaseId')
     
     if [ -n "$RUN_ID" ]; then
-        echo "Workflow run: https://github.com/twardoch/vexy_json/actions/runs/$RUN_ID"
+        echo "Workflow run: https://github.com/vexyart/vexy-json/actions/runs/$RUN_ID"
         echo
         echo "Watching workflow progress..."
         gh run watch "$RUN_ID"

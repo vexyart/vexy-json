@@ -16,9 +16,9 @@ The vexy_json project provides two interactive web tools for parsing JSON with d
 - **URL**: [https://twardoch.github.io/vexy_json/vexy_json-tool/](https://twardoch.github.io/vexy_json/vexy_json-tool/)
 - **Features**: WebAssembly-powered parsing with all vexy_json forgiving features
 
-### [Jsonic Parser]({{ '/jsonic-tool/' | relative_url }})
+### [Jsonic Parser]({{ '/vexy-json-tool/' | relative_url }})
 - **Library**: jsonic (JavaScript via CDN)
-- **URL**: [https://twardoch.github.io/vexy_json/jsonic-tool/](https://twardoch.github.io/vexy_json/jsonic-tool/)
+- **URL**: [https://twardoch.github.io/vexy_json/vexy-json-tool/](https://twardoch.github.io/vexy_json/vexy-json-tool/)
 - **Features**: Flexible JSON with object merging and property chains
 
 ### [Tools Overview]({{ '/tools/' | relative_url }})
@@ -56,6 +56,6 @@ Both tools share identical modern interfaces with:
 ## Technical Details
 
 - **Vexy JSON Tool**: Uses WebAssembly (WASM) to run the same Rust parser that powers the CLI
-- **Jsonic Tool**: Uses the official Jsonic library loaded via CDN
+- **Vexy JSON Tool**: Uses the official Jsonic library loaded via CDN
 - **Design**: Both tools use identical DaisyUI + Tailwind CSS styling
 - **Integration**: Full Jekyll integration with site navigation

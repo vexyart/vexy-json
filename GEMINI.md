@@ -3,18 +3,18 @@ After every iteration, /report and mark completed items as done in @PLAN.md and 
 
 ## 1. Project Overview
 
-`vexy_json` is a Rust port of the JavaScript library `jsonic`, a forgiving JSON parser. The project is officially named "Vexy JSON". The reference JavaScript implementation is located in the `ref/jsonic/` directory.
+`vexy_json` is a forgiving JSON parser, a forgiving JSON parser. The project is officially named "Vexy JSON". The reference JavaScript implementation is located in the `ref/the reference implementation/` directory.
 
 ## 2. Development Status
 
 This project is in an active development phase, focusing on post-migration cleanup and feature refinement. The core parsing engine is implemented, along with a comprehensive test suite, benchmarks, and WASM support. The current focus is on:
 
--   **Removing `jsonic` references**: Cleaning up legacy naming from 50 files.
+-   **Removing `the reference implementation` references**: Cleaning up legacy naming from 50 files.
 -   **Fixing test failures**: Specifically, `test_number_features` due to unsupported number formats (octal, binary, underscore separators).
 -   **Resolving build warnings**: Addressing 3 unused variable warnings in `examples/recursive_parser.rs`.
 -   **Reducing compilation warnings**: Aiming to reduce the current 24 warnings.
 
-The long-term focus remains on achieving full API compatibility with `jsonic`, refining the idiomatic Rust API, and improving performance, alongside planned architectural improvements, performance enhancements, and testing infrastructure upgrades.
+The long-term focus remains on achieving full API compatibility with `the reference implementation`, refining the idiomatic Rust API, and improving performance, alongside planned architectural improvements, performance enhancements, and testing infrastructure upgrades.
 
 ## 3. Rust Implementation
 
@@ -51,7 +51,7 @@ The Rust implementation is a cargo workspace organized into several crates:
 ### 3.2. Core Features
 
 -   **Standard JSON Parsing (RFC 8259):** Full support for the official JSON specification.
--   **Forgiving Features:** Compatibility with `jsonic`'s non-standard features is a primary goal:
+-   **Forgiving Features:** Compatibility with `the reference implementation`'s non-standard features is a primary goal:
     -   Single-line (`//`) and multi-line (`/* */`) comments.
     -   Trailing commas in objects and arrays.
     -   Unquoted object keys (where unambiguous).
@@ -63,7 +63,7 @@ The Rust implementation is a cargo workspace organized into several crates:
 
 -   **Error Handling:** Uses `Result<T, E>` and a custom `Error` enum (`src/error.rs`) for robust error handling with location information.
 -   **Testing:**
-    -   Unit and integration tests are located in the `tests/` directory, covering various aspects like `advanced_features.rs`, `basic_tests.rs`, `comma_handling.rs`, `comment_handling.rs`, `compat_tests.rs`, `comprehensive_tests.rs`, `error_handling.rs`, `feature_tests.rs`, `forgiving_features.rs`, `lexer_tests.rs`, `lib_integration.rs`, `newline_as_comma.rs`, `number_formats.rs`, `property_tests.rs`, `real_world_scenarios.rs`, and `string_handling.rs`. Many of these are ported from `jsonic`'s test suite.
+    -   Unit and integration tests are located in the `tests/` directory, covering various aspects like `advanced_features.rs`, `basic_tests.rs`, `comma_handling.rs`, `comment_handling.rs`, `compat_tests.rs`, `comprehensive_tests.rs`, `error_handling.rs`, `feature_tests.rs`, `forgiving_features.rs`, `lexer_tests.rs`, `lib_integration.rs`, `newline_as_comma.rs`, `number_formats.rs`, `property_tests.rs`, `real_world_scenarios.rs`, and `string_handling.rs`. Many of these are ported from `the reference implementation`'s test suite.
     -   The `examples/` directory contains numerous small, runnable programs for debugging specific features, such as `debug_comma_one.rs`, `debug_comment_tokens.rs`, `recursive_parser.rs`, and `test_number_types.rs`.
     -   Benchmarking is performed using `criterion.rs`, with benchmarks defined in the `benches/` directory, including `benchmark.rs`, `comparison.rs`, `comprehensive_comparison.rs`, `lexer_microbenchmarks.rs`, `memory_benchmarks.rs`, `parser_comparison.rs`, `parser_microbenchmarks.rs`, `parsing.rs`, `performance_comparison.rs`, `profiling.rs`, `real_world_benchmarks.rs`, `simd_benchmarks.rs`, and `stack_overflow_test.rs`.
     -   Property-based tests are implemented using `proptest` in `tests/property_tests.rs`.
@@ -89,12 +89,12 @@ After running the script, always review the output log to check for errors or wa
 cat ./build.log.txt
 ```
 
-### 4.2. Reference Implementation (jsonic)
+### 4.2. Reference Implementation (the reference implementation)
 
-When working with the reference JavaScript implementation in `ref/jsonic/`:
+When working with the reference JavaScript implementation in `ref/the reference implementation/`:
 
 ```bash
-cd ref/jsonic
+cd ref/the reference implementation
 
 # Build the TypeScript code
 npm run build
@@ -282,12 +282,12 @@ After running the script, always review the output log to check for errors or wa
 cat ./build.log.txt
 ```
 
-### 14.3. Reference Implementation (jsonic)
+### 14.3. Reference Implementation (the reference implementation)
 
-When working with the reference JavaScript implementation in `ref/jsonic/`:
+When working with the reference JavaScript implementation in `ref/the reference implementation/`:
 
 ```bash
-cd ref/jsonic
+cd ref/the reference implementation
 
 # Build the TypeScript code
 npm run build

@@ -64,8 +64,7 @@ fn profiling_memory_allocation(c: &mut Criterion) {
     let small_objects: Vec<String> = (0..1000)
         .map(|i| {
             format!(
-                "{{\"id\": {}, \"name\": \"item{}\", \"active\": true}}",
-                i, i
+                "{{\"id\": {i}, \"name\": \"item{i}\", \"active\": true}}"
             )
         })
         .collect();

@@ -22,8 +22,8 @@ All preparation work is complete. The package is ready for immediate publication
 
 - **Version**: 1.1.0
 - **Name**: vexy_json
-- **Description**: A forgiving JSON parser - Rust port of jsonic
-- **Repository**: https://github.com/twardoch/vexy_json
+- **Description**: A forgiving JSON parser - Rust forgiving JSON parser
+- **Repository**: https://github.com/vexyart/vexy-json
 - **License**: MIT OR Apache-2.0
 - **Keywords**: json, parser, forgiving, jsonic
 - **Categories**: parser-implementations, encoding

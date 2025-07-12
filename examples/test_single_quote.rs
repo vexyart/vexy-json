@@ -8,6 +8,6 @@ fn main() {
 
     match lexer.next_token() {
         Ok((token, _)) => println!("Token: {:?} at position {}", token, lexer.position()),
-        Err(e) => println!("Error: {:?}", e),
+        Err(e) => println!("Error: {e:?}"),
     }
 }

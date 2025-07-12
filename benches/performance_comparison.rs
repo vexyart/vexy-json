@@ -26,7 +26,7 @@ fn benchmark_parser_comparison(c: &mut Criterion) {
     let large_array_json = format!(
         "[{}]",
         (0..1000)
-            .map(|i| format!("{{\"id\":{}, \"value\":\"item{}\"}}", i, i))
+            .map(|i| format!("{{\"id\":{i}, \"value\":\"item{i}\"}}"))
             .collect::<Vec<_>>()
             .join(", ")
     );
@@ -133,7 +133,7 @@ fn benchmark_memory_allocation(c: &mut Criterion) {
 
     // Many small objects to test allocation patterns
     let small_objects: Vec<String> = (0..100)
-        .map(|i| format!(r#"{{"id": {}, "name": "item{}", "active": true}}"#, i, i))
+        .map(|i| format!(r#"{{"id": {i}, "name": "item{i}", "active": true}}"#))
         .collect();
 
     group.bench_function("vexy_json_small_objects", |b| {

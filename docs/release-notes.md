@@ -28,7 +28,7 @@ We're thrilled to announce **vexy_json v2.0.0**, a groundbreaking release that t
 
 **🚀 Stable Release - January 7, 2025**
 
-We're excited to announce the stable release of **vexy_json v1.0.0**, a production-ready forgiving JSON parser for Rust. This is a complete port of the JavaScript library [jsonic](https://github.com/jsonicjs/jsonic), bringing powerful and flexible JSON parsing capabilities to the Rust ecosystem.
+We're excited to announce the stable release of **vexy_json v1.0.0**, a production-ready forgiving JSON parser for Rust. This is a complete port of the JavaScript library [the reference implementation](https://github.com/jsonicjs/jsonic), bringing powerful and flexible JSON parsing capabilities to the Rust ecosystem.
 
 ## 🎉 What is vexy_json?
 
@@ -387,6 +387,6 @@ cargo add vexy_json@2.0.0
 
 For migration guidance, see our [Migration Guide](migration-guide/).
 
-**Questions or feedback?** Open an issue on [GitHub](https://github.com/twardoch/vexy_json/issues).
+**Questions or feedback?** Open an issue on [GitHub](https://github.com/vexyart/vexy-json/issues).
 
 **Happy parsing! 🦀**

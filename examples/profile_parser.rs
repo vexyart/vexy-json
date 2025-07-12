@@ -17,7 +17,7 @@ fn main() {
 
     // Parse forgiving features many times
     for _ in 0..2000 {
-        let _ = parse(&forgiving_json);
+        let _ = parse(forgiving_json);
     }
 
     // Parse string-heavy JSON many times
@@ -27,7 +27,7 @@ fn main() {
 
     // Many small objects to stress allocation
     for i in 0..5000 {
-        let small_obj = format!(r#"{{"id": {}, "name": "item{}", "active": true}}"#, i, i);
+        let small_obj = format!(r#"{{"id": {i}, "name": "item{i}", "active": true}}"#);
         let _ = parse(&small_obj);
     }
 

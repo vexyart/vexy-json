@@ -55,7 +55,7 @@ fn main() {
 
 See [Contributing](contributing.md) for how to help improve vexy_json.
 
-📦 **[Download the latest CLI release](https://github.com/twardoch/vexy_json/releases/latest)** - Get the `vexy_json` command-line interface for your platform.
+📦 **[Download the latest CLI release](https://github.com/vexyart/vexy-json/releases/latest)** - Get the `vexy_json` command-line interface for your platform.
 
 ## Features
 
@@ -120,4 +120,4 @@ fn main() {
 
 ## License
 
-`vexy_json` is distributed under the MIT License. See the [LICENSE](https://github.com/twardoch/vexy_json/blob/main/LICENSE) file for more details.
+`vexy_json` is distributed under the MIT License. See the [LICENSE](https://github.com/vexyart/vexy-json/blob/main/LICENSE) file for more details.

@@ -123,7 +123,7 @@ The release is successful when:
 
 1. Review and commit all changes
 2. Run `./scripts/release-github.sh --version 2.0.0`
-3. Monitor the release at https://github.com/twardoch/vexy_json/actions
+3. Monitor the release at https://github.com/vexyart/vexy-json/actions
 4. Once complete, announce the release
 
 The repository is now fully prepared for a professional v2.0.0 release with comprehensive CI/CD automation!

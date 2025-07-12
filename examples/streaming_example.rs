@@ -22,10 +22,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         match event {
             StreamingEvent::StartObject => println!("  → Start Object"),
             StreamingEvent::EndObject => println!("  → End Object"),
-            StreamingEvent::ObjectKey(key) => println!("  → Key: '{}'", key),
-            StreamingEvent::String(s) => println!("  → String: '{}'", s),
-            StreamingEvent::Number(n) => println!("  → Number: {}", n),
-            StreamingEvent::Bool(b) => println!("  → Boolean: {}", b),
+            StreamingEvent::ObjectKey(key) => println!("  → Key: '{key}'"),
+            StreamingEvent::String(s) => println!("  → String: '{s}'"),
+            StreamingEvent::Number(n) => println!("  → Number: {n}"),
+            StreamingEvent::Bool(b) => println!("  → Boolean: {b}"),
             StreamingEvent::Null => println!("  → Null"),
             StreamingEvent::EndOfInput => {
                 println!("  → End of Input");
@@ -58,7 +58,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("3. Incremental Processing:");
     let mut incremental_parser = StreamingParser::new();
 
-    let chunks = vec![r#"["#, r#"1, "#, r#"2, "#, r#"3"#, r#"]"#];
+    let chunks = [r#"["#, r#"1, "#, r#"2, "#, r#"3"#, r#"]"#];
 
     for (i, chunk) in chunks.iter().enumerate() {
         println!("  Feeding chunk {}: '{}'", i + 1, chunk);
@@ -69,7 +69,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             match event {
                 StreamingEvent::StartArray => println!("    → Array started"),
                 StreamingEvent::EndArray => println!("    → Array ended"),
-                StreamingEvent::Number(n) => println!("    → Number: {}", n),
+                StreamingEvent::Number(n) => println!("    → Number: {n}"),
                 StreamingEvent::EndOfInput => break,
                 _ => {}
             }

@@ -30,8 +30,8 @@ Interactive parser for Jsonic with flexible JSON syntax and advanced features.
   <a href="{{ '/vexy_json-tool/' | relative_url }}" class="btn btn-primary" style="font-size: 1.1em; padding: 0.7em 1.5em; margin: 0.5em;">
     🚀 Vexy JSON Tool
   </a>
-  <a href="{{ '/jsonic-tool/' | relative_url }}" class="btn btn-secondary" style="font-size: 1.1em; padding: 0.7em 1.5em; margin: 0.5em;">
-    🔧 Jsonic Tool
+  <a href="{{ '/vexy-json-tool/' | relative_url }}" class="btn btn-secondary" style="font-size: 1.1em; padding: 0.7em 1.5em; margin: 0.5em;">
+    🔧 Vexy JSON Tool
   </a>
 </div>
 
@@ -60,7 +60,7 @@ Both tools share identical interface design with:
 - Newline as comma separator
 - Extended number formats (hex, octal, binary, underscores)
 
-## [∞](#jsonic-specific-features) Jsonic Specific Features
+## [∞](#jsonic-specific-features) Vexy JSON Specific Features
 
 - Object merging: `a:{b:1},a:{c:2}` → `{a:{b:1,c:2}}`
 - Property chains: `a:b:c:1` → `{a:{b:{c:1}}}`
@@ -71,7 +71,7 @@ Both tools share identical interface design with:
 ## [∞](#technical-details) Technical Details
 
 - **Vexy JSON Tool**: Uses WebAssembly (WASM) to run the same Rust parser that powers the command-line tool
-- **Jsonic Tool**: Uses the official Jsonic library loaded via CDN
+- **Vexy JSON Tool**: Uses the official Jsonic library loaded via CDN
 - **Privacy**: All parsing happens locally in your browser - no data sent to servers
 - **Performance**: Both tools are optimized for excellent performance on all devices
 

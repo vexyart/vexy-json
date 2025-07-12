@@ -8,8 +8,8 @@ fn basic_parsing() {
     let json = r#"{"key": "value"}"#;
     let result = parse(json);
     match &result {
-        Err(e) => eprintln!("Parse error: {:?}", e),
-        Ok(v) => eprintln!("Parse success: {:?}", v),
+        Err(e) => eprintln!("Parse error: {e:?}"),
+        Ok(v) => eprintln!("Parse success: {v:?}"),
     }
     assert!(result.is_ok());
 }
@@ -23,13 +23,13 @@ fn test_forgiving_features() {
     let mut lexer = Lexer::new("'hello'");
     match lexer.next_token() {
         Ok(token) => println!("Lexer token: {:?} at position {}", token, lexer.position()),
-        Err(e) => println!("Lexer error: {:?}", e),
+        Err(e) => println!("Lexer error: {e:?}"),
     }
 
     match parse("'hello'") {
-        Ok(v) => println!("Success: {:?}", v),
+        Ok(v) => println!("Success: {v:?}"),
         Err(e) => {
-            println!("Error: {:?}", e);
+            println!("Error: {e:?}");
             panic!("Single quotes test failed");
         }
     }
@@ -46,20 +46,20 @@ fn test_forgiving_features() {
     // Trailing commas
     println!("\nTesting trailing commas:");
     match parse("[1, 2, 3,]") {
-        Ok(v) => println!("Trailing comma success: {:?}", v),
+        Ok(v) => println!("Trailing comma success: {v:?}"),
         Err(e) => {
-            println!("Trailing comma error: {:?}", e);
+            println!("Trailing comma error: {e:?}");
             panic!("Trailing comma test failed");
         }
     }
     match parse(r#"{"a": 1, "b": 2,}"#) {
-        Ok(v) => println!("Quoted keys with trailing comma: {:?}", v),
-        Err(e) => println!("Error with quoted keys: {:?}", e),
+        Ok(v) => println!("Quoted keys with trailing comma: {v:?}"),
+        Err(e) => println!("Error with quoted keys: {e:?}"),
     }
     match parse("{a: 1, b: 2,}") {
-        Ok(v) => println!("Unquoted keys with trailing comma: {:?}", v),
+        Ok(v) => println!("Unquoted keys with trailing comma: {v:?}"),
         Err(e) => {
-            println!("Error with unquoted keys: {:?}", e);
+            println!("Error with unquoted keys: {e:?}");
             panic!("Unquoted keys test failed");
         }
     }

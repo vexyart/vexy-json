@@ -117,15 +117,23 @@ proptest! {
         if min_len > 0 {
             // Test simple object using only the first min_len elements
             let mut obj_parts = Vec::new();
+            let mut unique_keys = std::collections::HashSet::new();
             for (key, value) in keys.iter().take(min_len).zip(values.iter().take(min_len)) {
                 obj_parts.push(format!("\"{}\": \"{}\"", key, value.replace("\"", "\\\"")));
+                unique_keys.insert(key);
             }
             let obj_json = format!("{{{}}}", obj_parts.join(", "));
 
             if let Ok(parsed) = parse(&obj_json) {
                 if let Value::Object(obj) = parsed {
-                    prop_assert_eq!(obj.len(), min_len);
-                    for (key, expected_value) in keys.iter().take(min_len).zip(values.iter().take(min_len)) {
+                    // Object length should equal the number of unique keys
+                    prop_assert_eq!(obj.len(), unique_keys.len());
+                    // Only check values for the last occurrence of each key
+                    let mut key_to_value: std::collections::HashMap<&str, &str> = std::collections::HashMap::new();
+                    for (key, value) in keys.iter().take(min_len).zip(values.iter().take(min_len)) {
+                        key_to_value.insert(key, value);
+                    }
+                    for (key, expected_value) in key_to_value {
                         if let Some(Value::String(actual_value)) = obj.get(key) {
                             prop_assert_eq!(actual_value, expected_value);
                         }
@@ -211,7 +219,7 @@ impl Arbitrary for ArbitraryJsonValue {
                 let mut variants = vec![];
                 let keys: Vec<_> = obj.keys().cloned().collect();
                 for key in keys {
-                    let mut smaller: FxHashMap<String, Value> = obj.clone().into();
+                    let mut smaller: FxHashMap<String, Value> = obj.clone();
                     smaller.remove(&key);
                     variants.push(ArbitraryJsonValue(Value::Object(smaller)));
                 }
@@ -259,7 +267,7 @@ fn arbitrary_json_value(g: &mut Gen, depth: usize) -> Value {
                 let size = g.choose(&[0, 1, 2]).unwrap();
                 let mut object = FxHashMap::default();
                 for i in 0..*size {
-                    let key = format!("key{}", i);
+                    let key = format!("key{i}");
                     let value = arbitrary_json_value(g, depth - 1);
                     object.insert(key, value);
                 }
@@ -289,10 +297,10 @@ fn arbitrary_json_string(g: &mut Gen) -> String {
     let mut s = String::new();
     for _ in 0..*len {
         let ch = match g.choose(&[0, 1, 2, 3]).unwrap() {
-            0 => g.choose(b"abcdefghijklmnopqrstuvwxyz").unwrap().clone() as char,
-            1 => g.choose(b"ABCDEFGHIJKLMNOPQRSTUVWXYZ").unwrap().clone() as char,
-            2 => g.choose(b"0123456789").unwrap().clone() as char,
-            _ => g.choose(b" -_").unwrap().clone() as char,
+            0 => *g.choose(b"abcdefghijklmnopqrstuvwxyz").unwrap() as char,
+            1 => *g.choose(b"ABCDEFGHIJKLMNOPQRSTUVWXYZ").unwrap() as char,
+            2 => *g.choose(b"0123456789").unwrap() as char,
+            _ => *g.choose(b" -_").unwrap() as char,
         };
         s.push(ch);
     }
@@ -318,8 +326,7 @@ fn prop_parse_serialize_roundtrip(value: ArbitraryJsonValue) -> TestResult {
             }
         }
         Err(e) => TestResult::error(format!(
-            "Failed to parse generated JSON: {}\nError: {:?}",
-            json_string, e
+            "Failed to parse generated JSON: {json_string}\nError: {e:?}"
         )),
     }
 }
@@ -391,8 +398,7 @@ fn prop_forgiving_features_preserve_meaning(value: ArbitraryJsonValue) -> TestRe
                 TestResult::passed()
             } else {
                 TestResult::error(format!(
-                    "Strict and forgiving parsing differ:\nStrict: {:?}\nForgiving: {:?}",
-                    strict_val, forgiving_val
+                    "Strict and forgiving parsing differ:\nStrict: {strict_val:?}\nForgiving: {forgiving_val:?}"
                 ))
             }
         }

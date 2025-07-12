@@ -13,10 +13,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Documentation fully migrated to Vexy JSON branding
   - Build scripts and configuration files updated
 
-### 🔧 Fixed (v2.3.2 - In Progress)
-- Began cleanup of legacy references from codebase (50 files identified)
-- Identified test_number_features failure for extended number formats
-- Identified 3 unused variable warnings in examples/recursive_parser.rs
+### 🔧 Fixed (v2.3.2 - Completed Critical Build Fixes)
+- **Build Script Improvements** - Rewrote `./build.sh` with modular commands (llms, clean, debug, release, install, wasm, help)
+- **Clippy Linter Errors** - Fixed all blocking clippy errors:
+  - Fixed uninlined-format-args errors in all build.rs files
+  - Fixed needless-borrows-for-generic-args errors
+  - Fixed unnecessary-map-or errors using `is_some_and()`
+- **Test Failures** - Fixed property test failure in tests/property_tests.rs (duplicate keys handling)
+- **Compilation Warnings** - Fixed unused variable warnings and useless_ptr_null_checks
+- **Rustfmt Formatting** - Applied formatting fixes across entire codebase
+
+### 🔧 Fixed (v2.3.3 - In Progress)
+- **Critical Clippy Errors** - Fixed all blocking compilation errors:
+  - Fixed while-let-on-iterator warning in parallel.rs
+  - Fixed uninlined-format-args errors 
+  - Implemented Default trait to fix should_implement_trait warning
+  - Added type aliases to fix type-complexity warnings
+  - Fixed unused mut warning
+- **Test Status** - All tests now passing (test_number_features fixed)
+- **Build Scripts** - Created automated jsonic reference removal scripts
+- **Partial jsonic Cleanup** - Reduced jsonic references but ~1800 remain across 41 files
+
+### 🔧 Fixed (v2.3.3)
+- **Build Deliverables** - Created comprehensive build-deliverables.sh script for all platforms
+- **Clippy Warnings** - Applied cargo clippy --fix to reduce warnings significantly
+- **Naming Unification Plan** - Created detailed naming standards documentation
+
+### 🔧 TODO (v2.3.3)
+- Complete jsonic references removal from remaining files (~1800 references)
+- Implement naming unification changes per docs/naming-unification-plan.md
+- Test and verify all build deliverables on target platforms
 
 ### 🔧 Fixed
 
@@ -283,10 +309,10 @@ let result = parse_parallel_chunked(large_json_input, config)?;
 
 ### Release Links
 
-[2.0.0]: https://github.com/twardoch/vexy_json/compare/v1.5.27...v2.0.0
-[1.5.27]: https://github.com/twardoch/vexy_json/compare/v1.5.26...v1.5.27
-[1.5.26]: https://github.com/twardoch/vexy_json/compare/v1.5.25...v1.5.26
-[1.5.25]: https://github.com/twardoch/vexy_json/compare/v1.5.24...v1.5.25
-[1.5.24]: https://github.com/twardoch/vexy_json/compare/v1.5.23...v1.5.24
-[1.5.23]: https://github.com/twardoch/vexy_json/releases/tag/v1.5.23
-[Unreleased]: https://github.com/twardoch/vexy_json/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/vexyart/vexy-json/compare/v1.5.27...v2.0.0
+[1.5.27]: https://github.com/vexyart/vexy-json/compare/v1.5.26...v1.5.27
+[1.5.26]: https://github.com/vexyart/vexy-json/compare/v1.5.25...v1.5.26
+[1.5.25]: https://github.com/vexyart/vexy-json/compare/v1.5.24...v1.5.25
+[1.5.24]: https://github.com/vexyart/vexy-json/compare/v1.5.23...v1.5.24
+[1.5.23]: https://github.com/vexyart/vexy-json/releases/tag/v1.5.23
+[Unreleased]: https://github.com/vexyart/vexy-json/compare/v2.0.0...HEAD

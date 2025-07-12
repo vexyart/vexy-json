@@ -29,7 +29,7 @@ The `vexy_json` project uses a multi-crate Cargo workspace structure with Jekyll
     *   `tool.html`: Vexy JSON interactive tool (WebAssembly-powered)
     *   `jsonic.html`: Jsonic interactive tool (CDN-powered)
     *   `vexy_json-tool.md`: Jekyll wrapper for Vexy JSON tool
-    *   `jsonic-tool.md`: Jekyll wrapper for Jsonic tool
+    *   `vexy-json-tool.md`: Jekyll wrapper for Jsonic tool
     *   `tool.md`: Tools overview page
     *   `assets/`: Static assets for the web tools.
         *   `css/`: CSS files, including `tool.css` and `enhanced-features.css`.

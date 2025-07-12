@@ -16,7 +16,7 @@ A Python library for parsing "forgiving" JSON, which is JSON that includes featu
 - Implicit top-level objects and arrays
 - Newlines as comma separators
 
-This is a Python binding for the Rust [vexy_json](https://github.com/twardoch/vexy_json) library, which is a port of the JavaScript [jsonic](https://github.com/jsonicjs/jsonic) library.
+This is a Python binding for the Rust [vexy_json](https://github.com/vexyart/vexy-json) library, which is a port of the JavaScript [the reference implementation](https://github.com/jsonicjs/jsonic) library.
 
 ## Installation
 

@@ -3,7 +3,7 @@ use vexy_json_core::lexer::JsonLexer;
 
 fn main() {
     let input = "/*a:1*/\nb:2";
-    println!("Testing input: {:?}", input);
+    println!("Testing input: {input:?}");
 
     let mut lexer = Lexer::new(input);
     let mut tokens = Vec::new();
@@ -19,11 +19,11 @@ fn main() {
                 tokens.push(token);
             }
             Err(e) => {
-                println!("Error: {:?}", e);
+                println!("Error: {e:?}");
                 break;
             }
         }
     }
 
-    println!("All tokens: {:?}", tokens);
+    println!("All tokens: {tokens:?}");
 }

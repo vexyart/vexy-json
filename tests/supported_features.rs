@@ -81,7 +81,7 @@ fn test_numbers() {
     assert_eq!(parse(".0").unwrap(), f(0.0));
     assert_eq!(parse("+.1").unwrap(), f(0.1));
 
-    // Trailing decimal point (jsonic compatibility - treated as integer)
+    // Trailing decimal point
     assert_eq!(parse("1.").unwrap(), n(1));
     assert_eq!(parse("-1.").unwrap(), n(-1));
     assert_eq!(parse("+1.").unwrap(), n(1));

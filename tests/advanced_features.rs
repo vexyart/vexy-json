@@ -228,7 +228,7 @@ mod value_edge_cases {
 
         // Very long strings
         let long_string = "a".repeat(1000);
-        let long_input = format!("\"{}\"", long_string);
+        let long_input = format!("\"{long_string}\"");
         assert_eq!(parse(&long_input).unwrap(), s(&long_string));
     }
 
@@ -270,8 +270,7 @@ mod formatting_tolerance {
 
         for space in &unicode_spaces {
             let input = format!(
-                "{}{{{}key{}: {}value{}}}{}",
-                space, space, space, space, space, space
+                "{space}{{{space}key{space}: {space}value{space}}}{space}"
             );
             let result = parse(&input);
             // Some unicode spaces might not be recognized, but shouldn't crash
@@ -420,7 +419,7 @@ mod stress_tests {
             if i > 0 {
                 input.push(',');
             }
-            input.push_str(&format!("key{}: {}", i, i));
+            input.push_str(&format!("key{i}: {i}"));
         }
         input.push('}');
 
@@ -627,7 +626,7 @@ mod unicode_tests {
         let cafe_nfd = "cafe\u{0301}"; // NFD form (e + combining acute accent)
 
         // Both should parse successfully (though they may not be equal)
-        assert!(parse(&format!("\"{}\"", cafe_nfc)).is_ok());
-        assert!(parse(&format!("\"{}\"", cafe_nfd)).is_ok());
+        assert!(parse(&format!("\"{cafe_nfc}\"")).is_ok());
+        assert!(parse(&format!("\"{cafe_nfd}\"")).is_ok());
     }
 }

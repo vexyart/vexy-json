@@ -1,11 +1,11 @@
 [package]
-name = "vexy_json-cli"
-version = "1.0.4"
+name = "vexy-json-cli"
+version = "1.0.5"
 edition = "2021"
 
 
 [[bin]]
-name = "vexy_json"
+name = "vexy-json"
 path = "src/main.rs"
 
 
@@ -17,7 +17,7 @@ notify = "6.0"
 dirs = "5.0"
 
 
-[dependencies.vexy_json-core]
+[dependencies.vexy-json-core]
 path = "../core"
 
 

@@ -81,7 +81,7 @@ jobs:
             ### Linux
             ```bash
             # Download and extract
-            curl -L https://github.com/twardoch/vexy_json/releases/download/v${{ steps.get_version.outputs.version }}/vexy_json-${{ steps.get_version.outputs.version }}-linux-x86_64.tar.gz | tar xz
+            curl -L https://github.com/vexyart/vexy-json/releases/download/v${{ steps.get_version.outputs.version }}/vexy_json-${{ steps.get_version.outputs.version }}-linux-x86_64.tar.gz | tar xz
             sudo mv vexy_json /usr/local/bin/
             ```
 
@@ -98,7 +98,7 @@ jobs:
 
             ## What's Changed
 
-            See [CHANGELOG.md](https://github.com/twardoch/vexy_json/blob/v${{ steps.get_version.outputs.version }}/CHANGELOG.md) for details.
+            See [CHANGELOG.md](https://github.com/vexyart/vexy-json/blob/v${{ steps.get_version.outputs.version }}/CHANGELOG.md) for details.
 
             ## Assets
 

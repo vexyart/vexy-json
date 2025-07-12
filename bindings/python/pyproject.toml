@@ -4,12 +4,12 @@ build-backend = "maturin"
 
 
 [project]
-name = "vexy_json"
-version = "1.0.4"
-description = "A forgiving JSON parser for Python - port of the JavaScript library jsonic"
+name = "vexy-json"
+version = "1.0.5"
+description = "A forgiving JSON parser for Python with relaxed syntax support"
 readme = "README.md"
 requires-python = ">=3.8"
-keywords = [ "json", "parser", "forgiving", "repair", "jsonic" ]
+keywords = [ "json", "parser", "forgiving", "repair",  ]
 classifiers = [
 "Development Status :: 4 - Beta",
 "Intended Audience :: Developers",
@@ -38,9 +38,9 @@ email = "adam+github@twardoch.com"
 
 
 [project.urls]
-Homepage = "https://github.com/twardoch/vexy_json"
-Repository = "https://github.com/twardoch/vexy_json"
-Issues = "https://github.com/twardoch/vexy_json/issues"
+Homepage = "https://github.com/vexyart/vexy-json"
+Repository = "https://github.com/vexyart/vexy-json"
+Issues = "https://github.com/vexyart/vexy-json/issues"
 
 
 [tool.maturin]

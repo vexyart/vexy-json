@@ -11,7 +11,7 @@ fn main() {
     println!("Input:  {}", input1);
 
     match repairer.repair(input1) {
-        Ok((repaired, _strategies)) => {
+        Ok((repaired, strategies)) => {
             println!("Output: {}", repaired);
             println!("Repairs applied: {}", strategies.len());
             for strategy in strategies {
@@ -33,7 +33,7 @@ fn main() {
     println!("Input:  {}", input2);
 
     match repairer.repair(input2) {
-        Ok((repaired, _strategies)) => {
+        Ok((repaired, strategies)) => {
             println!("Output: {}", repaired);
             println!("Repairs applied: {}", strategies.len());
             for strategy in strategies {

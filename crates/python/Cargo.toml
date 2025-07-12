@@ -1,9 +1,9 @@
 [package]
-name = "vexy_json-python"
-version = "1.0.4"
+name = "vexy-json-python"
+version = "1.0.5"
 edition = "2021"
 description = "Python bindings for vexy_json - a forgiving JSON parser"
-repository = "https://github.com/twardoch/vexy_json"
+repository = "https://github.com/vexyart/vexy-json"
 license = "MIT OR Apache-2.0"
 authors = [ "Adam Twardoch <adam+github@twardoch.com>" ]
 
@@ -22,7 +22,7 @@ version = "0.22"
 features = [ "extension-module" ]
 
 
-[dependencies.vexy_json-core]
+[dependencies.vexy-json-core]
 path = "../core"
 
 

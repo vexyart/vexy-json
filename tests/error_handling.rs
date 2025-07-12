@@ -2,7 +2,7 @@
 
 use vexy_json::{parse, parse_with_options, ParserOptions};
 
-/// Comprehensive error handling tests ported from jsonic error.test.js
+/// Comprehensive error handling tests based on reference implementation tests from error.test.js
 /// These tests ensure vexy_json properly handles malformed input and provides meaningful error messages.
 /// Reference: ref/jsonic/test/error.test.js
 
@@ -97,7 +97,6 @@ fn test_invalid_colon_usage() {
 #[test]
 fn test_invalid_comma_usage() {
     // Test invalid comma combinations
-    // Reference: jsonic error.test.js line 184-185
     assert!(
         parse("{,]").is_err(),
         "Comma then mismatched bracket should error"
@@ -114,10 +113,9 @@ fn test_invalid_comma_usage() {
 
 #[test]
 fn test_valid_edge_cases() {
-    // Test what vexy_json actually supports vs jsonic expectations
-    // Reference: jsonic error.test.js line 205-213
+    // Test what vexy_json actually supports
 
-    // vexy_json may not support implicit null like jsonic does
+    // vexy_json may not support implicit null 
     assert!(
         parse(",]").is_err(),
         "Implicit null in array not supported in vexy_json"
@@ -145,9 +143,8 @@ fn test_valid_edge_cases() {
 #[test]
 fn test_implicit_array_with_object() {
     // Special case: array notation with object content
-    // Reference: jsonic error.test.js line 209-213
 
-    // vexy_json doesn't support object notation inside arrays like jsonic does
+    // vexy_json doesn't support object notation inside arrays
     assert!(
         parse("[a:1]").is_err(),
         "Object notation in array not supported in vexy_json"
@@ -164,7 +161,6 @@ fn test_implicit_array_with_object() {
 #[test]
 fn test_ascii_escape_errors() {
     // Test invalid ASCII escape sequences
-    // Reference: jsonic error.test.js line 113-117
 
     // Invalid ASCII escapes should error
     assert!(
@@ -184,7 +180,6 @@ fn test_ascii_escape_errors() {
 #[test]
 fn test_unicode_escape_errors() {
     // Test invalid Unicode escape sequences
-    // Reference: jsonic error.test.js line 103-111
 
     // Invalid Unicode escapes should error
     assert!(
@@ -208,13 +203,11 @@ fn test_unicode_escape_errors() {
 #[test]
 fn test_unprintable_characters() {
     // Test handling of unprintable characters
-    // Reference: jsonic error.test.js line 119-122
 
     // vexy_json may allow null characters in strings (unlike strict JSON)
-    // Test what actually happens vs what jsonic does
     let null_char_result = parse("\"\x00\"");
     if null_char_result.is_ok() {
-        // If vexy_json allows it, that's different from jsonic but valid
+        // If vexy_json allows it, that's valid
         assert!(true, "vexy_json allows null character in string");
     } else {
         assert!(null_char_result.is_err(), "Null character should error");

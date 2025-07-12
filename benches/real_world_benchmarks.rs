@@ -75,7 +75,7 @@ fn bench_real_world_parsing(c: &mut Criterion) {
         ];
 
         for (category, filename, content) in fallback_files {
-            let mut group = c.benchmark_group(format!("real_world_{}", category));
+            let mut group = c.benchmark_group(format!("real_world_{category}"));
             group.bench_with_input(BenchmarkId::new("parse", filename), &content, |b, json| {
                 b.iter(|| parse(black_box(json)))
             });
@@ -187,7 +187,7 @@ fn bench_parser_options_on_real_data(c: &mut Criterion) {
     for (category, filename, content) in test_files {
         for (option_name, options) in &parser_options {
             group.bench_with_input(
-                BenchmarkId::new(format!("{}_{}", category, option_name), filename.clone()),
+                BenchmarkId::new(format!("{category}_{option_name}"), filename.clone()),
                 &content,
                 |b, json| b.iter(|| parse_with_options(black_box(json), options.clone())),
             );
@@ -214,7 +214,7 @@ fn bench_file_size_scaling(c: &mut Criterion) {
         let json = format!(
             "{{\"items\": [{}]}}",
             (0..num_items)
-                .map(|i| format!(r#"{{"id": {}, "name": "item{}", "data": "content{}", "timestamp": "2023-12-01T12:00:00Z"}}"#, i, i, i))
+                .map(|i| format!(r#"{{"id": {i}, "name": "item{i}", "data": "content{i}", "timestamp": "2023-12-01T12:00:00Z"}}"#))
                 .collect::<Vec<_>>()
                 .join(", ")
         );
@@ -250,7 +250,7 @@ fn bench_data_type_distribution(c: &mut Criterion) {
 
 fn generate_mostly_strings_json(count: usize) -> String {
     let items: Vec<String> = (0..count)
-        .map(|i| format!(r#""string_{}_content_with_some_length""#, i))
+        .map(|i| format!(r#""string_{i}_content_with_some_length""#))
         .collect();
     format!("[{}]", items.join(", "))
 }
@@ -285,11 +285,11 @@ fn generate_mostly_arrays_json(count: usize) -> String {
 fn generate_mixed_types_json(count: usize) -> String {
     let items: Vec<String> = (0..count)
         .map(|i| match i % 5 {
-            0 => format!(r#""string_{}""#, i),
-            1 => format!("{}", i),
+            0 => format!(r#""string_{i}""#),
+            1 => format!("{i}"),
             2 => format!("{}", i % 2 == 0),
             3 => "null".to_string(),
-            _ => format!(r#"{{"nested": {}}}"#, i),
+            _ => format!(r#"{{"nested": {i}}}"#),
         })
         .collect();
     format!("[{}]", items.join(", "))

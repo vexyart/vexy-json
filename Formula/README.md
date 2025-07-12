@@ -37,7 +37,7 @@ When releasing a new version:
 1. Update the `url` to point to the new release tag
 2. Update the SHA256 checksum:
    ```bash
-   curl -sL https://github.com/twardoch/vexy_json/archive/refs/tags/vX.Y.Z.tar.gz | shasum -a 256
+   curl -sL https://github.com/vexyart/vexy-json/archive/refs/tags/vX.Y.Z.tar.gz | shasum -a 256
    ```
 3. Test the formula thoroughly
 4. Submit to Homebrew or update your tap

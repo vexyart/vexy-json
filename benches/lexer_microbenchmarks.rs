@@ -154,7 +154,7 @@ fn bench_tokenize_strings(c: &mut Criterion) {
     let long_strings = format!(
         r#"[{}]"#,
         (0..100)
-            .map(|i| format!(r#""string_{}""#, i))
+            .map(|i| format!(r#""string_{i}""#))
             .collect::<Vec<_>>()
             .join(", ")
     );
@@ -285,19 +285,19 @@ fn bench_lexer_performance_characteristics(c: &mut Criterion) {
         let json = format!(
             "{{{}}}",
             (0..size)
-                .map(|i| format!(r#""key{}": "value{}""#, i, i))
+                .map(|i| format!(r#""key{i}": "value{i}""#))
                 .collect::<Vec<_>>()
                 .join(", ")
         );
 
         group.bench_with_input(
-            BenchmarkId::new("size", format!("{}_keys", size)),
+            BenchmarkId::new("size", format!("{size}_keys")),
             &json,
             |b, json| {
                 b.iter(|| {
                     let mut lexer = FastLexer::new(black_box(json), LexerConfig::default());
                     let mut token_count = 0;
-                    while let Ok(_) = lexer.next_token() {
+                    while lexer.next_token().is_ok() {
                         token_count += 1;
                         if lexer.is_eof() {
                             break;

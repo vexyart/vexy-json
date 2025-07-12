@@ -15,19 +15,19 @@ fn main() {
     ];
 
     for (input, expected_type) in test_cases {
-        print!("Testing {:?} (expecting {}): ", input, expected_type);
+        print!("Testing {input:?} (expecting {expected_type}): ");
         match parse(input) {
             Ok(Value::Number(vexy_json::Number::Integer(i))) => {
-                println!("Integer({})", i);
+                println!("Integer({i})");
             }
             Ok(Value::Number(vexy_json::Number::Float(f))) => {
-                println!("Float({})", f);
+                println!("Float({f})");
             }
             Ok(other) => {
-                println!("Unexpected type: {:?}", other);
+                println!("Unexpected type: {other:?}");
             }
             Err(e) => {
-                println!("Error: {:?}", e);
+                println!("Error: {e:?}");
             }
         }
     }

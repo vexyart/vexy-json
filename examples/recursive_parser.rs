@@ -15,19 +15,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("---------------");
 
     let result = parse_recursive("null", ParserOptions::default())?;
-    println!("null -> {:?}", result);
+    println!("null -> {result:?}");
     assert_eq!(result, Value::Null);
 
     let result = parse_recursive("true", ParserOptions::default())?;
-    println!("true -> {:?}", result);
+    println!("true -> {result:?}");
     assert_eq!(result, Value::Bool(true));
 
     let result = parse_recursive("42", ParserOptions::default())?;
-    println!("42 -> {:?}", result);
+    println!("42 -> {result:?}");
     assert_eq!(result, Value::Number(Number::Integer(42)));
 
     let result = parse_recursive(r#""hello""#, ParserOptions::default())?;
-    println!(r#""hello" -> {:?}"#, result);
+    println!(r#""hello" -> {result:?}"#);
     assert_eq!(result, Value::String("hello".to_string()));
 
     // Test collections
@@ -35,10 +35,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("--------------");
 
     let result = parse_recursive("[1, 2, 3]", ParserOptions::default())?;
-    println!("[1, 2, 3] -> {:?}", result);
+    println!("[1, 2, 3] -> {result:?}");
 
     let result = parse_recursive(r#"{"key": "value"}"#, ParserOptions::default())?;
-    println!(r#"{{"key": "value"}} -> {:?}"#, result);
+    println!(r#"{{"key": "value"}} -> {result:?}"#);
 
     // Test nested structures
     println!("\n3. Nested Structures");
@@ -82,7 +82,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match parse_recursive(r#"{"key": "value"#, ParserOptions::default()) {
         Ok(_) => println!("Should have failed!"),
-        Err(e) => println!("Correctly caught error: {}", e),
+        Err(e) => println!("Correctly caught error: {e}"),
     }
 
     println!("\n🎉 All tests passed! The recursive descent parser is working correctly.");

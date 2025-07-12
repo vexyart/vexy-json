@@ -39,9 +39,9 @@ text = "MIT OR Apache-2.0"
 
 
 [project.urls]
-Homepage = "https://github.com/twardoch/vexy_json"
-Repository = "https://github.com/twardoch/vexy_json.git"
-Issues = "https://github.com/twardoch/vexy_json/issues"
+Homepage = "https://github.com/vexyart/vexy-json"
+Repository = "https://github.com/vexyart/vexy-json.git"
+Issues = "https://github.com/vexyart/vexy-json/issues"
 Documentation = "https://twardoch.github.io/vexy_json/"
 
 

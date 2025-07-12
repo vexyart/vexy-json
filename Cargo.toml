@@ -13,29 +13,29 @@ exclude = [ "bindings/python", "fuzz" ]
 
 
 [package]
-name = "vexy_json"
-version = "1.0.4"
+name = "vexy-json"
+version = "1.0.5"
 edition = "2021"
 description = "A forgiving JSON parser that accepts non-standard JSON formats"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/twardoch/pub/vexy_json"
-homepage = "https://github.com/twardoch/pub/vexy_json"
+repository = "https://github.com/vexyart/vexy-json"
+homepage = "https://github.com/vexyart/vexy-json"
 keywords = [ "json", "parser", "forgiving", "relaxed", "lenient" ]
 categories = [ "parsing", "data-structures", "web-programming" ]
 
 
-[dependencies.vexy_json-core]
+[dependencies.vexy-json-core]
 path = "crates/core"
 
 
-[dependencies.vexy_json-serde]
+[dependencies.vexy-json-serde]
 path = "crates/serde"
 optional = true
 
 
 [features]
 default = [ "serde" ]
-serde = [ "vexy_json-serde" ]
+serde = [ "vexy-json-serde" ]
 
 
 [dev-dependencies]

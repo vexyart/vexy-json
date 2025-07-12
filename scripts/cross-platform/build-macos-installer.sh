@@ -218,7 +218,7 @@ Features:
 • Enhanced error recovery with suggestions
 
 For more information:
-  Website: https://github.com/twardoch/vexy_json
+  Website: https://github.com/vexyart/vexy-json
   Documentation: https://twardoch.github.io/vexy_json/
 
 License: MIT OR Apache-2.0

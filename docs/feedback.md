@@ -43,11 +43,11 @@ To prevent spam, the feedback system limits submissions to **5 per day** per bro
 
 ## 📋 GitHub Issues
 
-For detailed bug reports and feature requests, use our [GitHub Issues](https://github.com/twardoch/vexy_json/issues):
+For detailed bug reports and feature requests, use our [GitHub Issues](https://github.com/vexyart/vexy-json/issues):
 
 ### Bug Reports
 
-Use the [Bug Report Template](https://github.com/twardoch/vexy_json/issues/new?template=bug_report.md) and include:
+Use the [Bug Report Template](https://github.com/vexyart/vexy-json/issues/new?template=bug_report.md) and include:
 
 - **Clear description** of the bug
 - **Steps to reproduce** the issue
@@ -59,7 +59,7 @@ Use the [Bug Report Template](https://github.com/twardoch/vexy_json/issues/new?t
 
 ### Feature Requests
 
-Use the [Feature Request Template](https://github.com/twardoch/vexy_json/issues/new?template=feature_request.md) and include:
+Use the [Feature Request Template](https://github.com/vexyart/vexy-json/issues/new?template=feature_request.md) and include:
 
 - **Problem description** - What need does this address?
 - **Proposed solution** - What would you like to see?
@@ -69,7 +69,7 @@ Use the [Feature Request Template](https://github.com/twardoch/vexy_json/issues/
 
 ### Performance Issues
 
-Use the [Performance Issue Template](https://github.com/twardoch/vexy_json/issues/new?template=performance_issue.md) and include:
+Use the [Performance Issue Template](https://github.com/vexyart/vexy-json/issues/new?template=performance_issue.md) and include:
 
 - **Performance problem** description
 - **Input characteristics** (size, complexity)
@@ -79,7 +79,7 @@ Use the [Performance Issue Template](https://github.com/twardoch/vexy_json/issue
 
 ## 💬 Community Discussion
 
-For questions, ideas, and general discussion, use [GitHub Discussions](https://github.com/twardoch/vexy_json/discussions):
+For questions, ideas, and general discussion, use [GitHub Discussions](https://github.com/vexyart/vexy-json/discussions):
 
 - **Q&A** - Ask questions about usage
 - **Ideas** - Share feature ideas and get feedback
@@ -90,7 +90,7 @@ For questions, ideas, and general discussion, use [GitHub Discussions](https://g
 
 For security issues or private matters, you can contact the maintainer directly:
 
-- **Email**: adam+vexy_json@twardoch.com
+- **Email**: adam+vexy-json@twardoch.com
 - **Security**: Please use responsible disclosure for security issues
 
 ## 🎯 What Makes Good Feedback

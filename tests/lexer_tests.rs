@@ -2,7 +2,6 @@
 
 use vexy_json::{parse, Value};
 
-/// Lexer-specific tests ported from ref/jsonic/test/lex.test.js
 ///
 /// These tests focus on the tokenization and lexing behavior of vexy_json,
 /// exploring how the parser handles various input patterns at the lexer level.
@@ -31,19 +30,18 @@ fn test_basic_specials() {
         Ok(val) => {
             assert!(
                 val.as_f64() == Some(123.0),
-                "Expected number 123, got: {:?}",
-                val
+                "Expected number 123, got: {val:?}"
             );
             println!("✓ vexy_json parses single number: 123");
         }
-        Err(e) => panic!("Failed to parse single number: {}", e),
+        Err(e) => panic!("Failed to parse single number: {e}"),
     }
 
     // Test number with trailing content that should be treated as text
     match parse("123%") {
         Ok(val) => {
             // Could be parsed as text or cause an error
-            println!("ℹ vexy_json parsed '123%' as: {:?}", val);
+            println!("ℹ vexy_json parsed '123%' as: {val:?}");
         }
         Err(_) => {
             println!("ℹ vexy_json treats '123%' as invalid input");
@@ -108,13 +106,13 @@ fn test_brace_handling() {
             // Should be empty object
             match &val {
                 Value::Object(obj) => {
-                    assert!(obj.is_empty(), "Expected empty object, got: {:?}", obj);
+                    assert!(obj.is_empty(), "Expected empty object, got: {obj:?}");
                     println!("✓ vexy_json parses empty object correctly");
                 }
-                _ => panic!("Expected object, got: {:?}", val),
+                _ => panic!("Expected object, got: {val:?}"),
             }
         }
-        Err(e) => panic!("Failed to parse empty object: {}", e),
+        Err(e) => panic!("Failed to parse empty object: {e}"),
     }
 }
 
@@ -142,13 +140,13 @@ fn test_square_bracket_handling() {
             // Should be empty array
             match &val {
                 Value::Array(arr) => {
-                    assert!(arr.is_empty(), "Expected empty array, got: {:?}", arr);
+                    assert!(arr.is_empty(), "Expected empty array, got: {arr:?}");
                     println!("✓ vexy_json parses empty array correctly");
                 }
-                _ => panic!("Expected array, got: {:?}", val),
+                _ => panic!("Expected array, got: {val:?}"),
             }
         }
-        Err(e) => panic!("Failed to parse empty array: {}", e),
+        Err(e) => panic!("Failed to parse empty array: {e}"),
     }
 }
 
@@ -195,10 +193,10 @@ fn test_comment_lexer_behavior() {
             // Should parse 'a' and ignore '#b'
             match &val {
                 Value::String(s) => {
-                    assert_eq!(s, "a", "Expected 'a', got: {}", s);
+                    assert_eq!(s, "a", "Expected 'a', got: {s}");
                     println!("✓ vexy_json supports # comments in lexer");
                 }
-                _ => println!("ℹ vexy_json parsed 'a#b' as: {:?}", val),
+                _ => println!("ℹ vexy_json parsed 'a#b' as: {val:?}"),
             }
         }
         Err(_) => println!("ℹ vexy_json doesn't support # comments or treats as error"),
@@ -207,7 +205,7 @@ fn test_comment_lexer_behavior() {
     // Block comment
     match parse("a/*x*/b") {
         Ok(val) => {
-            println!("ℹ vexy_json parsed 'a/*x*/b' as: {:?}", val);
+            println!("ℹ vexy_json parsed 'a/*x*/b' as: {val:?}");
         }
         Err(_) => println!("ℹ vexy_json doesn't support /* */ comments or treats as error"),
     }
@@ -215,7 +213,7 @@ fn test_comment_lexer_behavior() {
     // Comment with newline
     match parse("a#b\nc") {
         Ok(val) => {
-            println!("ℹ vexy_json parsed 'a#b\\nc' as: {:?}", val);
+            println!("ℹ vexy_json parsed 'a#b\\nc' as: {val:?}");
         }
         Err(_) => println!("ℹ vexy_json has issues with comments and newlines"),
     }
@@ -229,27 +227,27 @@ fn test_boolean_null_lexing() {
     match parse("true") {
         Ok(val) => match &val {
             Value::Bool(true) => println!("✓ vexy_json lexer handles 'true' correctly"),
-            _ => panic!("Expected true boolean, got: {:?}", val),
+            _ => panic!("Expected true boolean, got: {val:?}"),
         },
-        Err(e) => panic!("Failed to parse 'true': {}", e),
+        Err(e) => panic!("Failed to parse 'true': {e}"),
     }
 
     // False value
     match parse("false") {
         Ok(val) => match &val {
             Value::Bool(false) => println!("✓ vexy_json lexer handles 'false' correctly"),
-            _ => panic!("Expected false boolean, got: {:?}", val),
+            _ => panic!("Expected false boolean, got: {val:?}"),
         },
-        Err(e) => panic!("Failed to parse 'false': {}", e),
+        Err(e) => panic!("Failed to parse 'false': {e}"),
     }
 
     // Null value
     match parse("null") {
         Ok(val) => match &val {
             Value::Null => println!("✓ vexy_json lexer handles 'null' correctly"),
-            _ => panic!("Expected null, got: {:?}", val),
+            _ => panic!("Expected null, got: {val:?}"),
         },
-        Err(e) => panic!("Failed to parse 'null': {}", e),
+        Err(e) => panic!("Failed to parse 'null': {e}"),
     }
 
     // Test with extra characters that should make it text
@@ -258,10 +256,10 @@ fn test_boolean_null_lexing() {
             // Should be treated as text, not boolean
             match &val {
                 Value::String(s) => {
-                    assert_eq!(s, "truex", "Expected text 'truex', got: {}", s);
+                    assert_eq!(s, "truex", "Expected text 'truex', got: {s}");
                     println!("✓ vexy_json lexer treats 'truex' as text, not boolean");
                 }
-                _ => println!("ℹ vexy_json lexer parsed 'truex' as: {:?}", val),
+                _ => println!("ℹ vexy_json lexer parsed 'truex' as: {val:?}"),
             }
         }
         Err(_) => println!("ℹ vexy_json lexer rejects 'truex'"),
@@ -275,43 +273,43 @@ fn test_number_lexing() {
     // Basic integer
     match parse("321") {
         Ok(val) => {
-            assert!(val.as_f64() == Some(321.0), "Expected 321, got: {:?}", val);
+            assert!(val.as_f64() == Some(321.0), "Expected 321, got: {val:?}");
             println!("✓ vexy_json lexer handles integers correctly");
         }
-        Err(e) => panic!("Failed to parse integer: {}", e),
+        Err(e) => panic!("Failed to parse integer: {e}"),
     }
 
     // Zero
     match parse("0") {
         Ok(val) => {
-            assert!(val.as_f64() == Some(0.0), "Expected 0, got: {:?}", val);
+            assert!(val.as_f64() == Some(0.0), "Expected 0, got: {val:?}");
             println!("✓ vexy_json lexer handles zero correctly");
         }
-        Err(e) => panic!("Failed to parse zero: {}", e),
+        Err(e) => panic!("Failed to parse zero: {e}"),
     }
 
     // Decimal number
     match parse("1.2") {
         Ok(val) => {
-            assert!(val.as_f64() == Some(1.2), "Expected 1.2, got: {:?}", val);
+            assert!(val.as_f64() == Some(1.2), "Expected 1.2, got: {val:?}");
             println!("✓ vexy_json lexer handles decimal numbers correctly");
         }
-        Err(e) => panic!("Failed to parse decimal: {}", e),
+        Err(e) => panic!("Failed to parse decimal: {e}"),
     }
 
     // Negative number
     match parse("-1.2") {
         Ok(val) => {
-            assert!(val.as_f64() == Some(-1.2), "Expected -1.2, got: {:?}", val);
+            assert!(val.as_f64() == Some(-1.2), "Expected -1.2, got: {val:?}");
             println!("✓ vexy_json lexer handles negative numbers correctly");
         }
-        Err(e) => panic!("Failed to parse negative number: {}", e),
+        Err(e) => panic!("Failed to parse negative number: {e}"),
     }
 
     // Scientific notation
     match parse("1e2") {
         Ok(val) => {
-            assert!(val.as_f64() == Some(100.0), "Expected 100, got: {:?}", val);
+            assert!(val.as_f64() == Some(100.0), "Expected 100, got: {val:?}");
             println!("✓ vexy_json lexer handles scientific notation");
         }
         Err(_) => println!("ℹ vexy_json lexer doesn't support scientific notation"),
@@ -320,7 +318,7 @@ fn test_number_lexing() {
     // Hexadecimal
     match parse("0xA") {
         Ok(val) => {
-            assert!(val.as_f64() == Some(10.0), "Expected 10, got: {:?}", val);
+            assert!(val.as_f64() == Some(10.0), "Expected 10, got: {val:?}");
             println!("✓ vexy_json lexer handles hexadecimal numbers");
         }
         Err(_) => println!("ℹ vexy_json lexer doesn't support hexadecimal"),
@@ -332,10 +330,10 @@ fn test_number_lexing() {
             // Should be treated as text
             match &val {
                 Value::String(s) => {
-                    assert_eq!(s, "1x", "Expected text '1x', got: {}", s);
+                    assert_eq!(s, "1x", "Expected text '1x', got: {s}");
                     println!("✓ vexy_json lexer treats '1x' as text");
                 }
-                _ => println!("ℹ vexy_json lexer parsed '1x' as: {:?}", val),
+                _ => println!("ℹ vexy_json lexer parsed '1x' as: {val:?}"),
             }
         }
         Err(_) => println!("ℹ vexy_json lexer rejects '1x'"),
@@ -350,34 +348,34 @@ fn test_string_lexing() {
     match parse("\"\"") {
         Ok(val) => match &val {
             Value::String(s) => {
-                assert!(s.is_empty(), "Expected empty string, got: '{}'", s);
+                assert!(s.is_empty(), "Expected empty string, got: '{s}'");
                 println!("✓ vexy_json lexer handles empty double-quoted strings");
             }
-            _ => panic!("Expected string, got: {:?}", val),
+            _ => panic!("Expected string, got: {val:?}"),
         },
-        Err(e) => panic!("Failed to parse empty double-quoted string: {}", e),
+        Err(e) => panic!("Failed to parse empty double-quoted string: {e}"),
     }
 
     // Double quotes with content
     match parse("\"abc\"") {
         Ok(val) => match &val {
             Value::String(s) => {
-                assert_eq!(s, "abc", "Expected 'abc', got: '{}'", s);
+                assert_eq!(s, "abc", "Expected 'abc', got: '{s}'");
                 println!("✓ vexy_json lexer handles double-quoted strings with content");
             }
-            _ => panic!("Expected string, got: {:?}", val),
+            _ => panic!("Expected string, got: {val:?}"),
         },
-        Err(e) => panic!("Failed to parse double-quoted string: {}", e),
+        Err(e) => panic!("Failed to parse double-quoted string: {e}"),
     }
 
     // Single quotes
     match parse("'abc'") {
         Ok(val) => match &val {
             Value::String(s) => {
-                assert_eq!(s, "abc", "Expected 'abc', got: '{}'", s);
+                assert_eq!(s, "abc", "Expected 'abc', got: '{s}'");
                 println!("✓ vexy_json lexer handles single-quoted strings");
             }
-            _ => panic!("Expected string, got: {:?}", val),
+            _ => panic!("Expected string, got: {val:?}"),
         },
         Err(_) => println!("ℹ vexy_json lexer doesn't support single-quoted strings"),
     }
@@ -393,22 +391,22 @@ fn test_string_lexing() {
     match parse("\"\\t\"") {
         Ok(val) => match &val {
             Value::String(s) => {
-                assert_eq!(s, "\t", "Expected tab character, got: '{:?}'", s);
+                assert_eq!(s, "\t", "Expected tab character, got: '{s:?}'");
                 println!("✓ vexy_json lexer handles escape sequences");
             }
-            _ => panic!("Expected string, got: {:?}", val),
+            _ => panic!("Expected string, got: {val:?}"),
         },
-        Err(e) => panic!("Failed to parse string with escape: {}", e),
+        Err(e) => panic!("Failed to parse string with escape: {e}"),
     }
 
     // String with unicode escape
     match parse("\"\\u0040\"") {
         Ok(val) => match &val {
             Value::String(s) => {
-                assert_eq!(s, "@", "Expected '@', got: '{}'", s);
+                assert_eq!(s, "@", "Expected '@', got: '{s}'");
                 println!("✓ vexy_json lexer handles unicode escapes");
             }
-            _ => panic!("Expected string, got: {:?}", val),
+            _ => panic!("Expected string, got: {val:?}"),
         },
         Err(_) => println!("ℹ vexy_json lexer doesn't support unicode escapes"),
     }
@@ -422,10 +420,10 @@ fn test_text_lexing() {
     match parse("a-b") {
         Ok(val) => match &val {
             Value::String(s) => {
-                assert_eq!(s, "a-b", "Expected 'a-b', got: '{}'", s);
+                assert_eq!(s, "a-b", "Expected 'a-b', got: '{s}'");
                 println!("✓ vexy_json lexer handles text with hyphens");
             }
-            _ => println!("ℹ vexy_json lexer parsed 'a-b' as: {:?}", val),
+            _ => println!("ℹ vexy_json lexer parsed 'a-b' as: {val:?}"),
         },
         Err(_) => println!("ℹ vexy_json lexer rejects 'a-b'"),
     }
@@ -434,10 +432,10 @@ fn test_text_lexing() {
     match parse("$a_") {
         Ok(val) => match &val {
             Value::String(s) => {
-                assert_eq!(s, "$a_", "Expected '$a_', got: '{}'", s);
+                assert_eq!(s, "$a_", "Expected '$a_', got: '{s}'");
                 println!("✓ vexy_json lexer handles text with $ and _");
             }
-            _ => println!("ℹ vexy_json lexer parsed '$a_' as: {:?}", val),
+            _ => println!("ℹ vexy_json lexer parsed '$a_' as: {val:?}"),
         },
         Err(_) => println!("ℹ vexy_json lexer rejects '$a_'"),
     }
@@ -446,10 +444,10 @@ fn test_text_lexing() {
     match parse("!%~") {
         Ok(val) => match &val {
             Value::String(s) => {
-                assert_eq!(s, "!%~", "Expected '!%~', got: '{}'", s);
+                assert_eq!(s, "!%~", "Expected '!%~', got: '{s}'");
                 println!("✓ vexy_json lexer handles punctuation text");
             }
-            _ => println!("ℹ vexy_json lexer parsed '!%~' as: {:?}", val),
+            _ => println!("ℹ vexy_json lexer parsed '!%~' as: {val:?}"),
         },
         Err(_) => println!("ℹ vexy_json lexer rejects '!%~'"),
     }
@@ -474,15 +472,15 @@ fn test_line_handling() {
                 );
                 println!("✓ vexy_json lexer handles newlines in objects correctly");
             }
-            _ => panic!("Expected object, got: {:?}", val),
+            _ => panic!("Expected object, got: {val:?}"),
         },
-        Err(e) => panic!("Failed to parse object with newline: {}", e),
+        Err(e) => panic!("Failed to parse object with newline: {e}"),
     }
 
     // Test if newlines can act as separators
     match parse("a\nb") {
         Ok(val) => {
-            println!("ℹ vexy_json lexer parsed 'a\\nb' as: {:?}", val);
+            println!("ℹ vexy_json lexer parsed 'a\\nb' as: {val:?}");
         }
         Err(_) => println!("ℹ vexy_json lexer rejects 'a\\nb'"),
     }
@@ -496,19 +494,19 @@ fn test_complex_lexer_scenarios() {
     match parse("\"[{}]:,\"") {
         Ok(val) => match &val {
             Value::String(s) => {
-                assert_eq!(s, "[{}]:,", "Expected '[{{}}]:,', got: '{}'", s);
+                assert_eq!(s, "[{}]:,", "Expected '[{{}}]:,', got: '{s}'");
                 println!("✓ vexy_json lexer handles special chars in strings");
             }
-            _ => panic!("Expected string, got: {:?}", val),
+            _ => panic!("Expected string, got: {val:?}"),
         },
-        Err(e) => panic!("Failed to parse string with special chars: {}", e),
+        Err(e) => panic!("Failed to parse string with special chars: {e}"),
     }
 
     // Number followed by special character
     match parse("1%") {
         Ok(val) => {
             // Could be treated as text or cause error
-            println!("ℹ vexy_json lexer parsed '1%' as: {:?}", val);
+            println!("ℹ vexy_json lexer parsed '1%' as: {val:?}");
         }
         Err(_) => println!("ℹ vexy_json lexer rejects '1%'"),
     }
@@ -516,7 +514,7 @@ fn test_complex_lexer_scenarios() {
     // Object key followed by colon
     match parse("a:") {
         Ok(val) => {
-            println!("ℹ vexy_json lexer parsed 'a:' as: {:?}", val);
+            println!("ℹ vexy_json lexer parsed 'a:' as: {val:?}");
         }
         Err(_) => println!("ℹ vexy_json lexer rejects incomplete key-value pair"),
     }
@@ -566,18 +564,18 @@ fn test_lexer_comprehensive_diagnostic() {
         match parse(input) {
             Ok(val) => {
                 parsed_count += 1;
-                println!("  ✓ {}: {:?}", name, val);
+                println!("  ✓ {name}: {val:?}");
             }
             Err(_) => {
                 error_count += 1;
-                println!("  ✗ {}: parse error", name);
+                println!("  ✗ {name}: parse error");
             }
         }
     }
 
     println!("\nLEXER ANALYSIS SUMMARY:");
-    println!("  Successful parses: {}", parsed_count);
-    println!("  Parse errors: {}", error_count);
+    println!("  Successful parses: {parsed_count}");
+    println!("  Parse errors: {error_count}");
     println!("  Total test cases: {}", parsed_count + error_count);
 
     // Ensure we have some basic functionality

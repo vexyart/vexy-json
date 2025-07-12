@@ -2,7 +2,7 @@
 
 use vexy_json::{parse, Value};
 
-/// Comma handling tests ported from jsonic comma.test.js
+/// Comma handling tests based on reference implementation tests from comma.test.js
 /// Tests implicit commas (newlines as separators), optional commas, trailing commas, and edge cases
 /// Reference: ref/jsonic/test/comma.test.js
 
@@ -37,12 +37,11 @@ fn test_newline_as_comma_separator() {
             assert_eq!(obj.get("b").and_then(|v| v.as_f64()), Some(2.0));
         }
         Ok(other) => {
-            println!("vexy_json parsed object newline as: {:?}", other);
+            println!("vexy_json parsed object newline as: {other:?}");
         }
         Err(e) => {
             println!(
-                "vexy_json doesn't support newlines as separators in objects: {:?}",
-                e
+                "vexy_json doesn't support newlines as separators in objects: {e:?}"
             );
         }
     }
@@ -56,12 +55,11 @@ fn test_newline_as_comma_separator() {
             assert_eq!(arr[1].as_f64(), Some(2.0));
         }
         Ok(other) => {
-            println!("vexy_json parsed array newline as: {:?}", other);
+            println!("vexy_json parsed array newline as: {other:?}");
         }
         Err(e) => {
             println!(
-                "vexy_json doesn't support newlines as separators in arrays: {:?}",
-                e
+                "vexy_json doesn't support newlines as separators in arrays: {e:?}"
             );
         }
     }
@@ -80,10 +78,10 @@ fn test_implicit_top_level_structures() {
             assert_eq!(obj.get("b").and_then(|v| v.as_f64()), Some(2.0));
         }
         Ok(other) => {
-            println!("vexy_json parsed implicit object as: {:?}", other);
+            println!("vexy_json parsed implicit object as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json doesn't support implicit objects: {:?}", e);
+            println!("vexy_json doesn't support implicit objects: {e:?}");
         }
     }
 
@@ -97,10 +95,10 @@ fn test_implicit_top_level_structures() {
             assert_eq!(arr[2].as_f64(), Some(3.0));
         }
         Ok(other) => {
-            println!("vexy_json parsed implicit array as: {:?}", other);
+            println!("vexy_json parsed implicit array as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json doesn't support implicit arrays: {:?}", e);
+            println!("vexy_json doesn't support implicit arrays: {e:?}");
         }
     }
 }
@@ -119,14 +117,12 @@ fn test_implicit_structures_with_newlines() {
         }
         Ok(other) => {
             println!(
-                "vexy_json parsed implicit object with newlines as: {:?}",
-                other
+                "vexy_json parsed implicit object with newlines as: {other:?}"
             );
         }
         Err(e) => {
             println!(
-                "vexy_json doesn't support implicit objects with newlines: {:?}",
-                e
+                "vexy_json doesn't support implicit objects with newlines: {e:?}"
             );
         }
     }
@@ -142,14 +138,12 @@ fn test_implicit_structures_with_newlines() {
         }
         Ok(other) => {
             println!(
-                "vexy_json parsed implicit array with newlines as: {:?}",
-                other
+                "vexy_json parsed implicit array with newlines as: {other:?}"
             );
         }
         Err(e) => {
             println!(
-                "vexy_json doesn't support implicit arrays with newlines: {:?}",
-                e
+                "vexy_json doesn't support implicit arrays with newlines: {e:?}"
             );
         }
     }
@@ -160,7 +154,7 @@ fn test_implicit_structures_with_newlines() {
         Ok(Value::Array(arr)) if arr.len() == 3 => {
             println!("✓ vexy_json supports implicit string arrays with newlines");
             if let (Some(Value::String(s1)), Some(Value::String(s2)), Some(Value::String(s3))) =
-                (arr.get(0), arr.get(1), arr.get(2))
+                (arr.first(), arr.get(1), arr.get(2))
             {
                 assert_eq!(s1, "a");
                 assert_eq!(s2, "b");
@@ -168,12 +162,11 @@ fn test_implicit_structures_with_newlines() {
             }
         }
         Ok(other) => {
-            println!("vexy_json parsed string sequence as: {:?}", other);
+            println!("vexy_json parsed string sequence as: {other:?}");
         }
         Err(e) => {
             println!(
-                "vexy_json doesn't support string sequences with newlines: {:?}",
-                e
+                "vexy_json doesn't support string sequences with newlines: {e:?}"
             );
         }
     }
@@ -191,12 +184,11 @@ fn test_trailing_commas() {
             assert_eq!(arr[0].as_f64(), Some(1.0));
         }
         Ok(other) => {
-            println!("vexy_json parsed trailing comma array as: {:?}", other);
+            println!("vexy_json parsed trailing comma array as: {other:?}");
         }
         Err(e) => {
             println!(
-                "vexy_json doesn't support trailing commas in arrays: {:?}",
-                e
+                "vexy_json doesn't support trailing commas in arrays: {e:?}"
             );
         }
     }
@@ -209,12 +201,11 @@ fn test_trailing_commas() {
             assert_eq!(obj.get("a").and_then(|v| v.as_f64()), Some(1.0));
         }
         Ok(other) => {
-            println!("vexy_json parsed trailing comma object as: {:?}", other);
+            println!("vexy_json parsed trailing comma object as: {other:?}");
         }
         Err(e) => {
             println!(
-                "vexy_json doesn't support trailing commas in objects: {:?}",
-                e
+                "vexy_json doesn't support trailing commas in objects: {e:?}"
             );
         }
     }
@@ -236,10 +227,10 @@ fn test_multiple_consecutive_commas() {
             // This tests if vexy_json supports jsonic-style null insertion for empty comma positions
         }
         Ok(other) => {
-            println!("vexy_json parsed [,,] as: {:?}", other);
+            println!("vexy_json parsed [,,] as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on multiple commas [,,]: {:?}", e);
+            println!("vexy_json error on multiple commas [,,]: {e:?}");
         }
     }
 
@@ -254,10 +245,10 @@ fn test_multiple_consecutive_commas() {
             );
         }
         Ok(other) => {
-            println!("vexy_json parsed [1,,3] as: {:?}", other);
+            println!("vexy_json parsed [1,,3] as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on [1,,3]: {:?}", e);
+            println!("vexy_json error on [1,,3]: {e:?}");
         }
     }
 
@@ -272,10 +263,10 @@ fn test_multiple_consecutive_commas() {
             );
         }
         Ok(other) => {
-            println!("vexy_json parsed [,1] as: {:?}", other);
+            println!("vexy_json parsed [,1] as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on leading comma [,1]: {:?}", e);
+            println!("vexy_json error on leading comma [,1]: {e:?}");
         }
     }
 }
@@ -295,10 +286,10 @@ fn test_object_comma_variations() {
             );
         }
         Ok(other) => {
-            println!("vexy_json parsed {{,,}} as: {:?}", other);
+            println!("vexy_json parsed {{,,}} as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on {{,,}}: {:?}", e);
+            println!("vexy_json error on {{,,}}: {e:?}");
         }
     }
 
@@ -316,10 +307,10 @@ fn test_object_comma_variations() {
             }
         }
         Ok(other) => {
-            println!("vexy_json parsed {{,a:1}} as: {:?}", other);
+            println!("vexy_json parsed {{,a:1}} as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on {{,a:1}}: {:?}", e);
+            println!("vexy_json error on {{,a:1}}: {e:?}");
         }
     }
 
@@ -337,10 +328,10 @@ fn test_object_comma_variations() {
             }
         }
         Ok(other) => {
-            println!("vexy_json parsed {{,a:1,}} as: {:?}", other);
+            println!("vexy_json parsed {{,a:1,}} as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on {{,a:1,}}: {:?}", e);
+            println!("vexy_json error on {{,a:1,}}: {e:?}");
         }
     }
 }
@@ -353,11 +344,11 @@ fn test_complex_nested_structures() {
     let result = parse("[[a],]");
     match result {
         Ok(Value::Array(arr)) => {
-            println!("vexy_json parsed [[a],] as: {:?}", arr);
+            println!("vexy_json parsed [[a],] as: {arr:?}");
             if arr.len() == 1 {
-                if let Some(Value::Array(inner)) = arr.get(0) {
+                if let Some(Value::Array(inner)) = arr.first() {
                     if inner.len() == 1 {
-                        if let Some(Value::String(s)) = inner.get(0) {
+                        if let Some(Value::String(s)) = inner.first() {
                             assert_eq!(s, "a");
                         }
                     }
@@ -365,10 +356,10 @@ fn test_complex_nested_structures() {
             }
         }
         Ok(other) => {
-            println!("vexy_json parsed nested array as: {:?}", other);
+            println!("vexy_json parsed nested array as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on nested arrays: {:?}", e);
+            println!("vexy_json error on nested arrays: {e:?}");
         }
     }
 
@@ -376,14 +367,14 @@ fn test_complex_nested_structures() {
     let result = parse("[[a][b]]");
     match result {
         Ok(Value::Array(arr)) => {
-            println!("vexy_json parsed [[a][b]] as: {:?}", arr);
+            println!("vexy_json parsed [[a][b]] as: {arr:?}");
             // Test if vexy_json supports implicit comma between adjacent arrays
         }
         Ok(other) => {
-            println!("vexy_json parsed [[a][b]] as: {:?}", other);
+            println!("vexy_json parsed [[a][b]] as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on [[a][b]]: {:?}", e);
+            println!("vexy_json error on [[a][b]]: {e:?}");
         }
     }
 
@@ -391,18 +382,18 @@ fn test_complex_nested_structures() {
     let result = parse("[{a:1},]");
     match result {
         Ok(Value::Array(arr)) => {
-            println!("vexy_json parsed [{{a:1}},] as: {:?}", arr);
+            println!("vexy_json parsed [{{a:1}},] as: {arr:?}");
             if arr.len() == 1 {
-                if let Some(Value::Object(obj)) = arr.get(0) {
+                if let Some(Value::Object(obj)) = arr.first() {
                     assert_eq!(obj.get("a").and_then(|v| v.as_f64()), Some(1.0));
                 }
             }
         }
         Ok(other) => {
-            println!("vexy_json parsed object in array as: {:?}", other);
+            println!("vexy_json parsed object in array as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on object in array: {:?}", e);
+            println!("vexy_json error on object in array: {e:?}");
         }
     }
 }
@@ -415,19 +406,18 @@ fn test_special_cases() {
     let result = parse("{a:1},");
     match result {
         Ok(Value::Array(arr)) => {
-            println!("vexy_json parsed {{a:1}}, as implicit array: {:?}", arr);
+            println!("vexy_json parsed {{a:1}}, as implicit array: {arr:?}");
         }
         Ok(Value::Object(obj)) => {
             println!(
-                "vexy_json parsed {{a:1}}, as object (ignored trailing comma): {:?}",
-                obj
+                "vexy_json parsed {{a:1}}, as object (ignored trailing comma): {obj:?}"
             );
         }
         Ok(other) => {
-            println!("vexy_json parsed {{a:1}}, as: {:?}", other);
+            println!("vexy_json parsed {{a:1}}, as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on {{a:1}},: {:?}", e);
+            println!("vexy_json error on {{a:1}},: {e:?}");
         }
     }
 
@@ -440,12 +430,11 @@ fn test_special_cases() {
             assert_eq!(obj.get("b").and_then(|v| v.as_f64()), Some(2.0));
         }
         Ok(other) => {
-            println!("vexy_json parsed space-separated as: {:?}", other);
+            println!("vexy_json parsed space-separated as: {other:?}");
         }
         Err(e) => {
             println!(
-                "vexy_json doesn't support space-separated properties: {:?}",
-                e
+                "vexy_json doesn't support space-separated properties: {e:?}"
             );
         }
     }
@@ -460,10 +449,10 @@ fn test_special_cases() {
             assert!(matches!(arr[2], Value::Null));
         }
         Ok(other) => {
-            println!("vexy_json parsed mixed types as: {:?}", other);
+            println!("vexy_json parsed mixed types as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on mixed types: {:?}", e);
+            println!("vexy_json error on mixed types: {e:?}");
         }
     }
 }

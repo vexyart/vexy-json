@@ -8,7 +8,7 @@ nav_order: 2
 
 # @twardoch/vexy_json-wasm
 
-WebAssembly bindings for [vexy_json](https://github.com/twardoch/vexy_json), a forgiving JSON parser that's a Rust port of [jsonic](https://github.com/jsonicjs/jsonic).
+WebAssembly bindings for [vexy_json](https://github.com/vexyart/vexy-json), a forgiving JSON parser that's a Rust port of [the reference implementation](https://github.com/jsonicjs/jsonic).
 
 ## Installation
 

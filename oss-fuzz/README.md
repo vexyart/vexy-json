@@ -14,8 +14,8 @@ This directory contains the configuration files for integrating Vexy JSON with O
 To set up OSS-Fuzz integration:
 
 1. Fork the [OSS-Fuzz repository](https://github.com/google/oss-fuzz)
-2. Create a new directory under `projects/vexy_json/`
-3. Copy the files from this directory to `projects/vexy_json/`
+2. Create a new directory under `projects/vexy-json/`
+3. Copy the files from this directory to `projects/vexy-json/`
 4. Submit a pull request to the OSS-Fuzz repository
 
 ## Testing Locally
@@ -28,7 +28,7 @@ git clone https://github.com/google/oss-fuzz.git
 cd oss-fuzz
 
 # Copy project files
-cp -r /path/to/vexy_json/oss-fuzz projects/vexy_json/
+cp -r /path/to/vexy_json/oss-fuzz projects/vexy-json/
 
 # Build the project
 python infra/helper.py build_image vexy_json

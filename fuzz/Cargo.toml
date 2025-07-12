@@ -1,5 +1,5 @@
 [package]
-name = "vexy_json-core-fuzz"
+name = "vexy-json-core-fuzz"
 version = "0.0.0"
 publish = false
 edition = "2021"
@@ -13,11 +13,11 @@ cargo-fuzz = true
 libfuzzer-sys = "0.4"
 
 
-[dependencies.vexy_json-core]
+[dependencies.vexy-json-core]
 path = "../crates/core"
 
 
-[dependencies.vexy_json]
+[dependencies.vexy-json]
 path = ".."
 
 

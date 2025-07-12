@@ -18,7 +18,7 @@ fn test_basic_json_compliance() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!("✓ Basic JSON {} parsed: {:?}", description, val);
+                println!("✓ Basic JSON {description} parsed: {val:?}");
                 assert!(match description {
                     "standard object" => matches!(val, Value::Object(_)),
                     "standard array" => matches!(val, Value::Array(_)),
@@ -31,7 +31,7 @@ fn test_basic_json_compliance() {
                 });
             }
             Err(err) => {
-                panic!("Basic JSON {} should parse correctly: {}", description, err);
+                panic!("Basic JSON {description} should parse correctly: {err}");
             }
         }
     }
@@ -50,13 +50,13 @@ fn test_unquoted_keys() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!("✓ Unquoted key {} parsed: {:?}", description, val);
+                println!("✓ Unquoted key {description} parsed: {val:?}");
                 if let Value::Object(obj) = &val {
                     assert!(!obj.is_empty(), "Object should not be empty");
                 }
             }
             Err(err) => {
-                println!("⚠ Unquoted key {} failed: {}", description, err);
+                println!("⚠ Unquoted key {description} failed: {err}");
                 // Some unquoted patterns might not be supported
             }
         }
@@ -76,7 +76,7 @@ fn test_trailing_commas() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!("✓ Trailing comma {} parsed: {:?}", description, val);
+                println!("✓ Trailing comma {description} parsed: {val:?}");
                 match &val {
                     Value::Object(obj) => assert!(!obj.is_empty()),
                     Value::Array(arr) => assert!(!arr.is_empty()),
@@ -84,7 +84,7 @@ fn test_trailing_commas() {
                 }
             }
             Err(err) => {
-                println!("⚠ Trailing comma {} failed: {}", description, err);
+                println!("⚠ Trailing comma {description} failed: {err}");
                 // Trailing commas might not be supported in all contexts
             }
         }
@@ -107,7 +107,7 @@ fn test_implicit_structures() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!("✓ Implicit {} parsed: {:?}", description, val);
+                println!("✓ Implicit {description} parsed: {val:?}");
                 match &val {
                     Value::Object(obj) => {
                         if description.contains("object") {
@@ -120,12 +120,12 @@ fn test_implicit_structures() {
                         }
                     }
                     _ => {
-                        println!("  Parsed as: {:?}", val);
+                        println!("  Parsed as: {val:?}");
                     }
                 }
             }
             Err(err) => {
-                println!("⚠ Implicit {} failed: {}", description, err);
+                println!("⚠ Implicit {description} failed: {err}");
                 // Implicit structures might not be supported
             }
         }
@@ -146,7 +146,7 @@ fn test_comment_features() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!("✓ Comment {} parsed: {:?}", description, val);
+                println!("✓ Comment {description} parsed: {val:?}");
                 if let Value::Object(obj) = &val {
                     assert!(
                         obj.contains_key("key"),
@@ -155,7 +155,7 @@ fn test_comment_features() {
                 }
             }
             Err(err) => {
-                println!("⚠ Comment {} failed: {}", description, err);
+                println!("⚠ Comment {description} failed: {err}");
                 // Some comment types might not be supported
             }
         }
@@ -175,7 +175,7 @@ fn test_string_variations() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!("✓ String variation {} parsed: {:?}", description, val);
+                println!("✓ String variation {description} parsed: {val:?}");
                 match &val {
                     Value::String(s) => {
                         assert!(!s.is_empty(), "String should not be empty");
@@ -187,7 +187,7 @@ fn test_string_variations() {
                 }
             }
             Err(err) => {
-                println!("⚠ String variation {} failed: {}", description, err);
+                println!("⚠ String variation {description} failed: {err}");
                 // Some string variations might not be supported
             }
         }
@@ -208,11 +208,11 @@ fn test_number_features() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!("✓ Number feature {} parsed: {:?}", description, val);
+                println!("✓ Number feature {description} parsed: {val:?}");
                 assert!(matches!(val, Value::Number(_)), "Should parse as number");
             }
             Err(err) => {
-                println!("⚠ Number feature {} failed: {}", description, err);
+                println!("⚠ Number feature {description} failed: {err}");
                 // Some number formats might not be supported
             }
         }
@@ -232,7 +232,7 @@ fn test_whitespace_handling() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!("✓ Whitespace {} parsed: {:?}", description, val);
+                println!("✓ Whitespace {description} parsed: {val:?}");
                 if let Value::Object(obj) = &val {
                     assert!(
                         obj.contains_key("key"),
@@ -241,7 +241,7 @@ fn test_whitespace_handling() {
                 }
             }
             Err(err) => {
-                println!("⚠ Whitespace {} failed: {}", description, err);
+                println!("⚠ Whitespace {description} failed: {err}");
                 panic!("Basic whitespace handling should work");
             }
         }
@@ -260,23 +260,23 @@ fn test_newline_separators() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!("✓ Newline separator {} parsed: {:?}", description, val);
+                println!("✓ Newline separator {description} parsed: {val:?}");
                 match &val {
                     Value::Object(obj) => {
                         if description.contains("object") {
-                            assert!(obj.len() >= 1, "Should have multiple elements");
+                            assert!(!obj.is_empty(), "Should have multiple elements");
                         }
                     }
                     Value::Array(arr) => {
                         if description.contains("array") {
-                            assert!(arr.len() >= 1, "Should have multiple elements");
+                            assert!(!arr.is_empty(), "Should have multiple elements");
                         }
                     }
                     _ => {}
                 }
             }
             Err(err) => {
-                println!("⚠ Newline separator {} failed: {}", description, err);
+                println!("⚠ Newline separator {description} failed: {err}");
                 // Newline separators might not be supported
             }
         }
@@ -299,7 +299,7 @@ fn test_edge_cases() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(val) => {
-                println!("✓ Edge case {} parsed: {:?}", description, val);
+                println!("✓ Edge case {description} parsed: {val:?}");
                 match &val {
                     Value::Object(obj) => {
                         if description == "empty object" {
@@ -315,7 +315,7 @@ fn test_edge_cases() {
                 }
             }
             Err(err) => {
-                println!("⚠ Edge case {} failed: {}", description, err);
+                println!("⚠ Edge case {description} failed: {err}");
                 // Some edge cases might legitimately fail
             }
         }
@@ -337,13 +337,12 @@ fn test_error_recovery() {
         match parse(input) {
             Ok(val) => {
                 println!(
-                    "⚠ Error case {} unexpectedly succeeded: {:?}",
-                    description, val
+                    "⚠ Error case {description} unexpectedly succeeded: {val:?}"
                 );
                 // Some malformed input might be handled gracefully
             }
             Err(err) => {
-                println!("✓ Error case {} correctly failed: {}", description, err);
+                println!("✓ Error case {description} correctly failed: {err}");
                 // Error cases should generally fail
                 assert!(
                     !err.to_string().is_empty(),
@@ -383,11 +382,11 @@ fn test_comprehensive_diagnostic() {
     for (input, feature_name) in features {
         match parse(input) {
             Ok(_) => {
-                println!("✓ {}: SUPPORTED", feature_name);
+                println!("✓ {feature_name}: SUPPORTED");
                 supported += 1;
             }
             Err(_) => {
-                println!("⚠ {}: NOT SUPPORTED", feature_name);
+                println!("⚠ {feature_name}: NOT SUPPORTED");
             }
         }
     }

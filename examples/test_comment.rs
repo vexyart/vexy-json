@@ -3,7 +3,7 @@ use vexy_json_core::lexer::JsonLexer;
 
 fn main() {
     let input = "a#b";
-    println!("Parsing input: {:?}", input);
+    println!("Parsing input: {input:?}");
     println!();
 
     // First, let's see what tokens the lexer produces
@@ -21,7 +21,7 @@ fn main() {
                 tokens.push((token, lexer.position()));
             }
             Err(e) => {
-                println!("Lexer error: {:?}", e);
+                println!("Lexer error: {e:?}");
                 break;
             }
         }
@@ -33,10 +33,10 @@ fn main() {
     // Try parsing with default options
     match parse(input) {
         Ok(value) => {
-            println!("Successfully parsed: {:?}", value);
+            println!("Successfully parsed: {value:?}");
         }
         Err(e) => {
-            println!("Parser error: {:?}", e);
+            println!("Parser error: {e:?}");
             if let Error::Expected {
                 expected,
                 found,
@@ -44,9 +44,9 @@ fn main() {
             } = &e
             {
                 println!("Error details:");
-                println!("  - expected: {:?}", expected);
-                println!("  - found: {:?}", found);
-                println!("  - position: {:?}", position);
+                println!("  - expected: {expected:?}");
+                println!("  - found: {found:?}");
+                println!("  - position: {position:?}");
             }
             println!("  - error position: {:?}", e.position());
         }
@@ -63,10 +63,10 @@ fn main() {
 
     match parse_with_options(input, options) {
         Ok(value) => {
-            println!("Successfully parsed: {:?}", value);
+            println!("Successfully parsed: {value:?}");
         }
         Err(e) => {
-            println!("Parser error: {:?}", e);
+            println!("Parser error: {e:?}");
             if let Error::Expected {
                 expected,
                 found,
@@ -74,9 +74,9 @@ fn main() {
             } = &e
             {
                 println!("Error details:");
-                println!("  - expected: {:?}", expected);
-                println!("  - found: {:?}", found);
-                println!("  - position: {:?}", position);
+                println!("  - expected: {expected:?}");
+                println!("  - found: {found:?}");
+                println!("  - position: {position:?}");
             }
         }
     }
@@ -88,7 +88,7 @@ fn main() {
     // Create a new lexer to see step by step
     let mut lexer = Lexer::new(input);
     println!("Initial state:");
-    println!("  - input: {:?}", input);
+    println!("  - input: {input:?}");
     println!("  - position: {}", lexer.position());
 
     // Get first token
@@ -99,9 +99,9 @@ fn main() {
             // Peek at what's next
             if lexer.position() < input.len() {
                 let remaining = &input[lexer.position()..];
-                println!("Remaining input: {:?}", remaining);
+                println!("Remaining input: {remaining:?}");
                 let next_char = remaining.chars().next();
-                println!("Next character: {:?}", next_char);
+                println!("Next character: {next_char:?}");
 
                 // Check if it's a comment character
                 if next_char == Some('#') {
@@ -120,14 +120,14 @@ fn main() {
                         }
                     }
                     Err(e) => {
-                        println!("Lexer error: {:?}", e);
+                        println!("Lexer error: {e:?}");
                         break;
                     }
                 }
             }
         }
         Err(e) => {
-            println!("Error getting first token: {:?}", e);
+            println!("Error getting first token: {e:?}");
         }
     }
 
@@ -135,7 +135,7 @@ fn main() {
     println!();
     println!("=== Control test: parsing just 'a' ===");
     match parse("a") {
-        Ok(value) => println!("'a' parsed as: {:?}", value),
-        Err(e) => println!("'a' failed: {:?}", e),
+        Ok(value) => println!("'a' parsed as: {value:?}"),
+        Err(e) => println!("'a' failed: {e:?}"),
     }
 }

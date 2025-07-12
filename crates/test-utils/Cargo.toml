@@ -1,6 +1,6 @@
 [package]
-name = "test-utils"
-version = "1.0.4"
+name = "vexy-json-test-utils"
+version = "1.0.5"
 edition = "2021"
 
 
@@ -8,5 +8,5 @@ edition = "2021"
 path = "src/lib.rs"
 
 
-[dependencies.vexy_json-core]
+[dependencies.vexy-json-core]
 path = "../core"

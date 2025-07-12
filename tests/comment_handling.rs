@@ -2,7 +2,7 @@
 
 use vexy_json::{parse, Value};
 
-/// Comment handling tests ported from jsonic comment.test.js
+/// Comment handling tests based on reference implementation tests from comment.test.js
 /// Tests single-line, multi-line comments, hash behavior, and edge cases
 /// Reference: ref/vexy_json/test/comment.test.js
 
@@ -14,10 +14,10 @@ fn test_double_slash_comments() {
             println!("vexy_json supports // comments");
         }
         Ok(other) => {
-            println!("vexy_json parsed as: {:?}", other);
+            println!("vexy_json parsed as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on // comments: {:?}", e);
+            println!("vexy_json error on // comments: {e:?}");
         }
     }
 }
@@ -30,10 +30,10 @@ fn test_block_comments() {
             println!("vexy_json supports /* */ comments");
         }
         Ok(other) => {
-            println!("vexy_json parsed as: {:?}", other);
+            println!("vexy_json parsed as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on /* */ comments: {:?}", e);
+            println!("vexy_json error on /* */ comments: {e:?}");
         }
     }
 }
@@ -46,13 +46,13 @@ fn test_hash_character() {
             println!("vexy_json treats # as comment");
         }
         Ok(Value::String(s)) if s.contains('#') => {
-            println!("vexy_json treats # as literal: {:?}", s);
+            println!("vexy_json treats # as literal: {s:?}");
         }
         Ok(other) => {
-            println!("vexy_json parsed a#b as: {:?}", other);
+            println!("vexy_json parsed a#b as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on #: {:?}", e);
+            println!("vexy_json error on #: {e:?}");
         }
     }
 }
@@ -84,7 +84,7 @@ fn test_comments_in_arrays() {
             println!("vexy_json supports comments in arrays");
         }
         Ok(other) => {
-            println!("vexy_json parsed array comment as: {:?}", other);
+            println!("vexy_json parsed array comment as: {other:?}");
         }
         Err(_) => {
             println!("vexy_json doesn't support comments in arrays");
@@ -102,10 +102,10 @@ fn test_empty_comment() {
             println!("vexy_json supports empty // comments");
         }
         Ok(other) => {
-            println!("vexy_json parsed 42// as: {:?}", other);
+            println!("vexy_json parsed 42// as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on empty //: {:?}", e);
+            println!("vexy_json error on empty //: {e:?}");
         }
     }
 }
@@ -122,10 +122,10 @@ fn test_comment_at_eof() {
             }
         }
         Ok(other) => {
-            println!("vexy_json parsed EOF comment as: {:?}", other);
+            println!("vexy_json parsed EOF comment as: {other:?}");
         }
         Err(e) => {
-            println!("vexy_json error on EOF comment: {:?}", e);
+            println!("vexy_json error on EOF comment: {e:?}");
         }
     }
 }

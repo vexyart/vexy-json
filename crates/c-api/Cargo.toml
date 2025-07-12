@@ -1,11 +1,11 @@
 [package]
-name = "vexy_json-c-api"
-version = "1.0.4"
+name = "vexy-json-c-api"
+version = "1.0.5"
 authors = [ "Vexy JSON Contributors" ]
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "C API for the vexy_json JSON parser"
-repository = "https://github.com/twardoch/pub-vexy_json"
+repository = "https://github.com/vexyart/vexy-json"
 
 
 [lib]
@@ -18,7 +18,7 @@ libc = "0.2"
 serde_json = "1.0"
 
 
-[dependencies.vexy_json-core]
+[dependencies.vexy-json-core]
 path = "../core"
 features = [ "serde" ]
 

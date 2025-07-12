@@ -35,8 +35,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("=========================");
 
     for (name, json) in &test_cases {
-        println!("\n🔍 Testing: {}", name);
-        println!("JSON: {}", json);
+        println!("\n🔍 Testing: {name}");
+        println!("JSON: {json}");
 
         // Test all parsers
         let parsers: Vec<(
@@ -70,10 +70,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 match value {
                     Value::Object(obj) => println!("    → Object with {} keys", obj.len()),
                     Value::Array(arr) => println!("    → Array with {} elements", arr.len()),
-                    Value::String(s) => println!("    → String: \"{}\"", s),
-                    Value::Number(Number::Integer(i)) => println!("    → Integer: {}", i),
-                    Value::Number(Number::Float(f)) => println!("    → Float: {}", f),
-                    Value::Bool(b) => println!("    → Boolean: {}", b),
+                    Value::String(s) => println!("    → String: \"{s}\""),
+                    Value::Number(Number::Integer(i)) => println!("    → Integer: {i}"),
+                    Value::Number(Number::Float(f)) => println!("    → Float: {f}"),
+                    Value::Bool(b) => println!("    → Boolean: {b}"),
                     Value::Null => println!("    → Null"),
                 }
             }
@@ -87,7 +87,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let depths = vec![10, 50, 100, 200];
 
     for depth in depths {
-        println!("\n🔢 Testing depth: {}", depth);
+        println!("\n🔢 Testing depth: {depth}");
 
         // Generate deep nested object
         let mut deep_json = String::new();
@@ -106,10 +106,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         match parse_recursive(&deep_json, options.clone()) {
             Ok(_) => {
                 let duration = start.elapsed();
-                println!("  Recursive parser: {:?} ✅", duration);
+                println!("  Recursive parser: {duration:?} ✅");
             }
             Err(e) => {
-                println!("  Recursive parser: Failed - {} ❌", e);
+                println!("  Recursive parser: Failed - {e} ❌");
             }
         }
 
@@ -118,10 +118,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         match parse_iterative(&deep_json, options.clone()) {
             Ok(_) => {
                 let duration = start.elapsed();
-                println!("  Iterative parser: {:?} ✅", duration);
+                println!("  Iterative parser: {duration:?} ✅");
             }
             Err(e) => {
-                println!("  Iterative parser: Failed - {} ❌", e);
+                println!("  Iterative parser: Failed - {e} ❌");
             }
         }
     }
@@ -137,8 +137,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     ];
 
     for (error_name, invalid_json) in invalid_cases {
-        println!("\n⚠️ Testing: {}", error_name);
-        println!("JSON: {}", invalid_json);
+        println!("\n⚠️ Testing: {error_name}");
+        println!("JSON: {invalid_json}");
 
         // Test error handling across parsers
         let parsers: Vec<(
@@ -152,10 +152,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         for (parser_name, parser_fn) in parsers {
             match parser_fn(invalid_json, options.clone()) {
                 Ok(_) => {
-                    println!("  {} parser: Unexpectedly succeeded! 🤔", parser_name);
+                    println!("  {parser_name} parser: Unexpectedly succeeded! 🤔");
                 }
                 Err(e) => {
-                    println!("  {} parser: Correctly failed - {} ✅", parser_name, e);
+                    println!("  {parser_name} parser: Correctly failed - {e} ✅");
                 }
             }
         }
@@ -170,7 +170,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         if i > 0 {
             large_json.push(',');
         }
-        large_json.push_str(&format!(r#""key{}": "value{}""#, i, i));
+        large_json.push_str(&format!(r#""key{i}": "value{i}""#));
     }
     large_json.push('}');
 
@@ -199,13 +199,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     );
                 } else {
                     println!(
-                        "  {} parser: {:?} - unexpected type ⚠️",
-                        parser_name, duration
+                        "  {parser_name} parser: {duration:?} - unexpected type ⚠️"
                     );
                 }
             }
             Err(e) => {
-                println!("  {} parser: Failed - {} ❌", parser_name, e);
+                println!("  {parser_name} parser: Failed - {e} ❌");
             }
         }
     }

@@ -215,8 +215,7 @@ fn bench_memory_efficiency(c: &mut Criterion) {
                 json.push(',');
             }
             json.push_str(&format!(
-                r#""key{}": {{"nested": "value{}", "number": {}}}"#,
-                i, i, i
+                r#""key{i}": {{"nested": "value{i}", "number": {i}}}"#
             ));
         }
         json.push('}');
@@ -261,8 +260,7 @@ fn bench_memory_efficiency(c: &mut Criterion) {
                 json.push(',');
             }
             json.push_str(&format!(
-                r#""key{}": {{"nested": "value{}", "number": {}}}"#,
-                i, i, i
+                r#""key{i}": {{"nested": "value{i}", "number": {i}}}"#
             ));
         }
         json.push('}');
@@ -370,10 +368,7 @@ fn bench_pathological_cases(c: &mut Criterion) {
 
     group.bench_function("recursive_smaller_alternating", |b| {
         b.iter(|| {
-            match parse_recursive(black_box(&smaller_alternating), black_box(options.clone())) {
-                Ok(_) => {}
-                Err(_) => {}
-            }
+            if let Ok(_) = parse_recursive(black_box(&smaller_alternating), black_box(options.clone())) {}
         });
     });
 

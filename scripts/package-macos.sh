@@ -100,7 +100,7 @@ Usage:
   echo '{"foo": "bar",}' | vexy_json
 
 For more information, visit:
-https://github.com/twardoch/vexy_json
+https://github.com/vexyart/vexy-json
 
 EOF
 

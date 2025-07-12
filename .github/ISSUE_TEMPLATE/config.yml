@@ -9,7 +9,7 @@ contact_links:
     url: https://twardoch.github.io/vexy_json/tool.html
   - about: Ask questions, share ideas, and discuss vexy_json with the community
     name: � Discussions
-    url: https://github.com/twardoch/vexy_json/discussions
+    url: https://github.com/vexyart/vexy-json/discussions
   - about: View package information and installation instructions
     name: 📦 crates.io
     url: https://crates.io/crates/vexy_json

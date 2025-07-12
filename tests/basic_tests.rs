@@ -15,7 +15,7 @@ fn test_parse_bool() {
 #[test]
 fn test_parse_number() {
     let result = parse("42").unwrap();
-    eprintln!("Parsed 42 as: {:?}", result);
+    eprintln!("Parsed 42 as: {result:?}");
     assert_eq!(result.as_i64(), Some(42));
 
     let result = parse("-42").unwrap();

@@ -3,7 +3,7 @@ use vexy_json_core::lexer::JsonLexer;
 
 fn main() {
     let input = ",1";
-    println!("Testing input: {:?}", input);
+    println!("Testing input: {input:?}");
 
     let mut lexer = Lexer::new(input);
 

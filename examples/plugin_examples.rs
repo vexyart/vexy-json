@@ -44,7 +44,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let parsed = parse(json_data)?;
     match validator.validate(&parsed, "$") {
         Ok(()) => println!("✅ Schema validation passed"),
-        Err(e) => println!("❌ Schema validation failed: {}", e),
+        Err(e) => println!("❌ Schema validation failed: {e}"),
     }
 
     // Example 2: Date/Time Parsing Plugin
@@ -61,9 +61,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut parsed_datetime = parse(datetime_json)?;
     datetime_plugin.transform_value(&mut parsed_datetime, "$")?;
 
-    println!("Original JSON: {}", datetime_json);
+    println!("Original JSON: {datetime_json}");
     println!("Transformed with datetime plugin:");
-    println!("{:#}", parsed_datetime);
+    println!("{parsed_datetime:#}");
 
     // Example 3: Custom Number Format Plugin
     println!("\n3. Custom Number Format Plugin");
@@ -72,16 +72,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut number_plugin = CustomNumberFormatPlugin::new();
 
     let hex_result = number_plugin.on_number("0xFF", "$")?;
-    println!("Hex 0xFF parsed as: {:?}", hex_result);
+    println!("Hex 0xFF parsed as: {hex_result:?}");
 
     let binary_result = number_plugin.on_number("0b1010", "$")?;
-    println!("Binary 0b1010 parsed as: {:?}", binary_result);
+    println!("Binary 0b1010 parsed as: {binary_result:?}");
 
     let underscore_result = number_plugin.on_number("1_000_000", "$")?;
-    println!("Number 1_000_000 parsed as: {:?}", underscore_result);
+    println!("Number 1_000_000 parsed as: {underscore_result:?}");
 
     let infinity_result = number_plugin.on_number("Infinity", "$")?;
-    println!("Infinity parsed as: {:?}", infinity_result);
+    println!("Infinity parsed as: {infinity_result:?}");
 
     // Example 4: Comment Preservation Plugin
     println!("\n4. Comment Preservation Plugin");
@@ -103,7 +103,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     comment_plugin.add_comment("Primary phone".to_string(), "$.phone", false);
 
     let comments = comment_plugin.comments_to_value();
-    println!("Preserved comments: {:#}", comments);
+    println!("Preserved comments: {comments:#}");
 
     // Example 5: Combining Multiple Plugins
     println!("\n5. Combining Multiple Plugins");
@@ -128,7 +128,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }"#;
 
     println!("Complex JSON with multiple formats:");
-    println!("{}", complex_json);
+    println!("{complex_json}");
 
     // Parse with standard options
     let options = ParserOptions::default();
@@ -140,7 +140,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     datetime_plugin.transform_value(&mut complex_parsed, "$")?;
 
     println!("\nParsed and transformed:");
-    println!("{:#}", complex_parsed);
+    println!("{complex_parsed:#}");
 
     // Example 6: Plugin Performance Comparison
     println!("\n6. Plugin Performance Comparison");
@@ -158,8 +158,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     datetime_plugin.transform_value(&mut with_plugins, "$")?;
     let with_plugins_time = start.elapsed();
 
-    println!("Without plugins: {:?}", without_plugins_time);
-    println!("With plugins: {:?}", with_plugins_time);
+    println!("Without plugins: {without_plugins_time:?}");
+    println!("With plugins: {with_plugins_time:?}");
     println!(
         "Overhead: {:?}",
         with_plugins_time.saturating_sub(without_plugins_time)

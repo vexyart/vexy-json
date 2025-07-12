@@ -12,9 +12,9 @@ struct BenchmarkResult {
     vexy_json_time: Option<Duration>,
     vexy_json_success: bool,
     vexy_json_error: Option<String>,
-    jsonic_time: Option<Duration>,
-    jsonic_success: bool,
-    jsonic_error: Option<String>,
+    ref_impl_time: Option<Duration>,
+    ref_impl_success: bool,
+    ref_impl_error: Option<String>,
     input_size: usize,
     input_content: String,
 }
@@ -77,7 +77,7 @@ impl BenchmarkSuite {
         }
     }
 
-    fn run_jsonic_benchmark(
+    fn run_ref_impl_benchmark(
         &self,
         _name: &str,
         content: &str,
@@ -101,7 +101,7 @@ impl BenchmarkSuite {
                 if let Some(stdin) = child.stdin.take() {
                     use std::io::Write;
                     let mut stdin = stdin;
-                    if let Err(_) = stdin.write_all(content.as_bytes()) {
+                    if stdin.write_all(content.as_bytes()).is_err() {
                         return (
                             Some(start.elapsed()),
                             false,
@@ -124,17 +124,17 @@ impl BenchmarkSuite {
                     Err(e) => (Some(start.elapsed()), false, Some(e.to_string())),
                 }
             }
-            Err(e) => (None, false, Some(format!("Failed to spawn jsonic: {}", e))),
+            Err(e) => (None, false, Some(format!("Failed to spawn jsonic: {e}"))),
         }
     }
 
     fn benchmark_file(&mut self, name: &str, file_path: &str) {
-        println!("Benchmarking: {}", name);
+        println!("Benchmarking: {name}");
 
         let content = match fs::read_to_string(file_path) {
             Ok(content) => content,
             Err(e) => {
-                eprintln!("Failed to read {}: {}", file_path, e);
+                eprintln!("Failed to read {file_path}: {e}");
                 return;
             }
         };
@@ -142,16 +142,16 @@ impl BenchmarkSuite {
         // Run multiple iterations for better accuracy
         const ITERATIONS: usize = 100;
         let mut vexy_json_times = Vec::new();
-        let mut jsonic_times = Vec::new();
+        let mut ref_impl_times = Vec::new();
         let mut vexy_json_successes = 0;
-        let mut jsonic_successes = 0;
+        let mut ref_impl_successes = 0;
         let mut vexy_json_last_error = None;
         let mut jsonic_last_error = None;
 
         // Warm up
         for _ in 0..10 {
             let _ = self.run_vexy_json_benchmark(name, &content);
-            let _ = self.run_jsonic_benchmark(name, &content);
+            let _ = self.run_ref_impl_benchmark(name, &content);
         }
 
         // Benchmark vexy_json
@@ -170,12 +170,12 @@ impl BenchmarkSuite {
 
         // Benchmark jsonic
         for _ in 0..ITERATIONS {
-            let (time, success, error) = self.run_jsonic_benchmark(name, &content);
+            let (time, success, error) = self.run_ref_impl_benchmark(name, &content);
             if let Some(t) = time {
-                jsonic_times.push(t);
+                ref_impl_times.push(t);
             }
             if success {
-                jsonic_successes += 1;
+                ref_impl_successes += 1;
             }
             if let Some(e) = error {
                 jsonic_last_error = Some(e);
@@ -189,8 +189,8 @@ impl BenchmarkSuite {
             None
         };
 
-        let jsonic_avg = if !jsonic_times.is_empty() {
-            Some(jsonic_times.iter().sum::<Duration>() / jsonic_times.len() as u32)
+        let jsonic_avg = if !ref_impl_times.is_empty() {
+            Some(ref_impl_times.iter().sum::<Duration>() / ref_impl_times.len() as u32)
         } else {
             None
         };
@@ -200,9 +200,9 @@ impl BenchmarkSuite {
             vexy_json_time: vexy_json_avg,
             vexy_json_success: vexy_json_successes > ITERATIONS / 2,
             vexy_json_error: vexy_json_last_error,
-            jsonic_time: jsonic_avg,
-            jsonic_success: jsonic_successes > ITERATIONS / 2,
-            jsonic_error: jsonic_last_error,
+            ref_impl_time: jsonic_avg,
+            ref_impl_success: ref_impl_successes > ITERATIONS / 2,
+            ref_impl_error: jsonic_last_error,
             input_size: content.len(),
             input_content: if content.len() > 200 {
                 format!("{}...", &content[..200])
@@ -217,7 +217,7 @@ impl BenchmarkSuite {
         );
         println!(
             "  jsonic: {:?} (success: {})",
-            result.jsonic_time, result.jsonic_success
+            result.ref_impl_time, result.ref_impl_success
         );
 
         self.results.push(result);
@@ -250,15 +250,15 @@ impl BenchmarkSuite {
                 value
             ));
         }
-        markdown.push_str("\n");
+        markdown.push('\n');
 
         // Summary statistics
         markdown.push_str("## Summary\n\n");
         let total_tests = self.results.len();
         let vexy_json_successes = self.results.iter().filter(|r| r.vexy_json_success).count();
-        let jsonic_successes = self.results.iter().filter(|r| r.jsonic_success).count();
+        let ref_impl_successes = self.results.iter().filter(|r| r.ref_impl_success).count();
 
-        markdown.push_str(&format!("- **Total test cases**: {}\n", total_tests));
+        markdown.push_str(&format!("- **Total test cases**: {total_tests}\n"));
         markdown.push_str(&format!(
             "- **vexy_json success rate**: {:.1}% ({}/{})\n",
             (vexy_json_successes as f64 / total_tests as f64) * 100.0,
@@ -267,8 +267,8 @@ impl BenchmarkSuite {
         ));
         markdown.push_str(&format!(
             "- **jsonic success rate**: {:.1}% ({}/{})\n",
-            (jsonic_successes as f64 / total_tests as f64) * 100.0,
-            jsonic_successes,
+            (ref_impl_successes as f64 / total_tests as f64) * 100.0,
+            ref_impl_successes,
             total_tests
         ));
 
@@ -278,16 +278,16 @@ impl BenchmarkSuite {
         let mut speed_ratios = Vec::new();
 
         for result in &self.results {
-            if let (Some(vexy_json_time), Some(jsonic_time)) =
-                (result.vexy_json_time, result.jsonic_time)
+            if let (Some(vexy_json_time), Some(ref_impl_time)) =
+                (result.vexy_json_time, result.ref_impl_time)
             {
-                if vexy_json_time < jsonic_time {
+                if vexy_json_time < ref_impl_time {
                     vexy_json_faster_count += 1;
                 } else {
                     jsonic_faster_count += 1;
                 }
 
-                let ratio = jsonic_time.as_nanos() as f64 / vexy_json_time.as_nanos() as f64;
+                let ratio = ref_impl_time.as_nanos() as f64 / vexy_json_time.as_nanos() as f64;
                 speed_ratios.push(ratio);
             }
         }
@@ -295,8 +295,7 @@ impl BenchmarkSuite {
         if !speed_ratios.is_empty() {
             let avg_speedup = speed_ratios.iter().sum::<f64>() / speed_ratios.len() as f64;
             markdown.push_str(&format!(
-                "- **Average vexy_json speedup**: {:.2}x\n",
-                avg_speedup
+                "- **Average vexy_json speedup**: {avg_speedup:.2}x\n"
             ));
             markdown.push_str(&format!(
                 "- **vexy_json faster in**: {}/{} cases\n",
@@ -305,7 +304,7 @@ impl BenchmarkSuite {
             ));
         }
 
-        markdown.push_str("\n");
+        markdown.push('\n');
 
         // Detailed results table
         markdown.push_str("## Detailed Results\n\n");
@@ -318,15 +317,15 @@ impl BenchmarkSuite {
                 None => "N/A".to_string(),
             };
 
-            let jsonic_time_str = match result.jsonic_time {
+            let ref_impl_time_str = match result.ref_impl_time {
                 Some(time) => format!("{:.3}ms", time.as_secs_f64() * 1000.0),
                 None => "N/A".to_string(),
             };
 
-            let speedup_str = match (result.vexy_json_time, result.jsonic_time) {
+            let speedup_str = match (result.vexy_json_time, result.ref_impl_time) {
                 (Some(vexy_json), Some(jsonic)) => {
                     let ratio = jsonic.as_nanos() as f64 / vexy_json.as_nanos() as f64;
-                    format!("{:.2}x", ratio)
+                    format!("{ratio:.2}x")
                 }
                 _ => "N/A".to_string(),
             };
@@ -336,7 +335,7 @@ impl BenchmarkSuite {
             } else {
                 "❌"
             };
-            let jsonic_success_icon = if result.jsonic_success { "✅" } else { "❌" };
+            let ref_impl_success_icon = if result.ref_impl_success { "✅" } else { "❌" };
 
             markdown.push_str(&format!(
                 "| {} | {} bytes | {} | {} | {} | {} | {} |\n",
@@ -344,13 +343,13 @@ impl BenchmarkSuite {
                 result.input_size,
                 vexy_json_time_str,
                 vexy_json_success_icon,
-                jsonic_time_str,
-                jsonic_success_icon,
+                ref_impl_time_str,
+                ref_impl_success_icon,
                 speedup_str
             ));
         }
 
-        markdown.push_str("\n");
+        markdown.push('\n');
 
         // Error analysis
         let vexy_json_errors: Vec<_> = self
@@ -359,13 +358,13 @@ impl BenchmarkSuite {
             .filter(|r| !r.vexy_json_success && r.vexy_json_error.is_some())
             .collect();
 
-        let jsonic_errors: Vec<_> = self
+        let ref_impl_errors: Vec<_> = self
             .results
             .iter()
-            .filter(|r| !r.jsonic_success && r.jsonic_error.is_some())
+            .filter(|r| !r.ref_impl_success && r.ref_impl_error.is_some())
             .collect();
 
-        if !vexy_json_errors.is_empty() || !jsonic_errors.is_empty() {
+        if !vexy_json_errors.is_empty() || !ref_impl_errors.is_empty() {
             markdown.push_str("## Error Analysis\n\n");
 
             if !vexy_json_errors.is_empty() {
@@ -379,13 +378,13 @@ impl BenchmarkSuite {
                 }
             }
 
-            if !jsonic_errors.is_empty() {
+            if !ref_impl_errors.is_empty() {
                 markdown.push_str("### jsonic Errors\n\n");
-                for result in jsonic_errors {
+                for result in ref_impl_errors {
                     markdown.push_str(&format!(
                         "**{}**: {}\n\n",
                         result.name,
-                        result.jsonic_error.as_ref().unwrap()
+                        result.ref_impl_error.as_ref().unwrap()
                     ));
                 }
             }
@@ -410,7 +409,7 @@ impl BenchmarkSuite {
             format!("{}/.bun/bin/bun", std::env::var("HOME").unwrap_or_default()),
             "/usr/local/bin/jsonic"
         ));
-        markdown.push_str("- Speedup is calculated as `jsonic_time / vexy_json_time`\n");
+        markdown.push_str("- Speedup is calculated as `ref_impl_time / vexy_json_time`\n");
         markdown
             .push_str("- Success is determined by whether parsing completes without errors\n\n");
 
@@ -452,7 +451,7 @@ fn main() {
 
     match fs::write("docs/benchmarks.md", report) {
         Ok(_) => println!("\nBenchmark report saved to docs/benchmarks.md"),
-        Err(e) => eprintln!("Failed to write report: {}", e),
+        Err(e) => eprintln!("Failed to write report: {e}"),
     }
 
     println!("Benchmark complete!");

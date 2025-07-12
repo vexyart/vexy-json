@@ -58,7 +58,7 @@ fn bench_parse_large_array(c: &mut Criterion) {
             (0..100)
                 .map(|i| match i % 4 {
                     0 => i.to_string(),
-                    1 => format!("\"string_{}\"", i),
+                    1 => format!("\"string_{i}\""),
                     2 => "true".to_string(),
                     _ => "null".to_string(),
                 })
@@ -68,7 +68,7 @@ fn bench_parse_large_array(c: &mut Criterion) {
     ];
 
     for (name, elements) in arrays {
-        let json = format!("[{}]", elements);
+        let json = format!("[{elements}]");
         group.bench_with_input(BenchmarkId::new("parser", name), &json, |b, json| {
             b.iter(|| parse(black_box(json)))
         });
@@ -86,7 +86,7 @@ fn bench_parse_deeply_nested(c: &mut Criterion) {
         // Create nested object
         let mut nested_obj = String::new();
         for i in 0..depth {
-            nested_obj.push_str(&format!("{{\"level_{}\": ", i));
+            nested_obj.push_str(&format!("{{\"level_{i}\": "));
         }
         nested_obj.push_str("\"deep_value\"");
         for _ in 0..depth {
@@ -104,13 +104,13 @@ fn bench_parse_deeply_nested(c: &mut Criterion) {
         }
 
         group.bench_with_input(
-            BenchmarkId::new("nested_object", format!("depth_{}", depth)),
+            BenchmarkId::new("nested_object", format!("depth_{depth}")),
             &nested_obj,
             |b, json| b.iter(|| parse(black_box(json))),
         );
 
         group.bench_with_input(
-            BenchmarkId::new("nested_array", format!("depth_{}", depth)),
+            BenchmarkId::new("nested_array", format!("depth_{depth}")),
             &nested_arr,
             |b, json| b.iter(|| parse(black_box(json))),
         );
@@ -191,7 +191,7 @@ fn bench_parse_component_steps(c: &mut Criterion) {
         b.iter(|| {
             let mut lexer = FastLexer::new(black_box(json), LexerConfig::default());
             let mut token_count = 0;
-            while let Ok(_) = lexer.next_token() {
+            while lexer.next_token().is_ok() {
                 token_count += 1;
                 if lexer.is_eof() {
                     break;
@@ -217,7 +217,7 @@ fn bench_parse_error_handling(c: &mut Criterion) {
             s.push_str("{\"a\":");
             s
         });
-        s.push_str("1");
+        s.push('1');
         s.push_str(&"}".repeat(200));
         s
     };
@@ -295,7 +295,7 @@ fn bench_parse_memory_efficiency(c: &mut Criterion) {
         let json = format!(
             "{{{}}}",
             (0..num_objects)
-                .map(|i| format!(r#""key{}": "value{}", "num{}": {}"#, i, i, i, i))
+                .map(|i| format!(r#""key{i}": "value{i}", "num{i}": {i}"#))
                 .collect::<Vec<_>>()
                 .join(", ")
         );
@@ -315,7 +315,7 @@ fn bench_parse_string_heavy(c: &mut Criterion) {
         (
             "short_strings",
             (0..100)
-                .map(|i| format!(r#""str{}": "value{}""#, i, i))
+                .map(|i| format!(r#""str{i}": "value{i}""#))
                 .collect::<Vec<_>>()
                 .join(", "),
         ),
@@ -329,21 +329,21 @@ fn bench_parse_string_heavy(c: &mut Criterion) {
         (
             "unicode_strings",
             (0..50)
-                .map(|i| format!(r#""str{}": "Hello 世界 {} 🌍""#, i, i))
+                .map(|i| format!(r#""str{i}": "Hello 世界 {i} 🌍""#))
                 .collect::<Vec<_>>()
                 .join(", "),
         ),
         (
             "escaped_strings",
             (0..50)
-                .map(|i| format!(r#""str{}": "line1\nline2\ttab\"quote\\slash""#, i))
+                .map(|i| format!(r#""str{i}": "line1\nline2\ttab\"quote\\slash""#))
                 .collect::<Vec<_>>()
                 .join(", "),
         ),
     ];
 
     for (name, content) in string_types {
-        let json = format!("{{{}}}", content);
+        let json = format!("{{{content}}}");
         group.bench_with_input(BenchmarkId::new("strings", name), &json, |b, json| {
             b.iter(|| parse(black_box(json)))
         });

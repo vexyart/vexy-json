@@ -3,7 +3,7 @@
 
 //! # vexy_json
 //!
-//! A Rust port of the JavaScript library `jsonic`, a forgiving JSON parser.
+//! A forgiving JSON parser with support for relaxed JSON syntax.
 //!
 //! This crate provides a JSON parser that accepts relaxed JSON syntax including:
 //! - Comments (single-line and multi-line)

@@ -1,6 +1,6 @@
 # this_file: oss-fuzz/project.yaml
 
-homepage: "https://github.com/twardoch/pub/vexy_json"
+homepage: "https://github.com/vexyart/vexy-json"
 language: rust
 primary_contact: "adam@twardoch.com"
 auto_ccs:
@@ -25,5 +25,5 @@ build_type: "cargo"
 coverage_extra_args: "--target-dir=/tmp/coverage"
 
 # Additional configuration
-main_repo: "https://github.com/twardoch/pub/vexy_json"
+main_repo: "https://github.com/vexyart/vexy-json"
 file_github_issue: true

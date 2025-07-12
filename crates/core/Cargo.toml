@@ -1,6 +1,6 @@
 [package]
-name = "vexy_json-core"
-version = "1.0.4"
+name = "vexy-json-core"
+version = "1.0.5"
 edition = "2021"
 
 

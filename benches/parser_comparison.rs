@@ -269,7 +269,7 @@ fn bench_memory_usage(c: &mut Criterion) {
             if i > 0 {
                 json.push(',');
             }
-            json.push_str(&format!(r#""key{}": "value{}""#, i, i));
+            json.push_str(&format!(r#""key{i}": "value{i}""#));
         }
         json.push('}');
         json
@@ -281,7 +281,7 @@ fn bench_memory_usage(c: &mut Criterion) {
             if i > 0 {
                 json.push(',');
             }
-            json.push_str(&format!(r#"{{"id": {}, "value": "item{}"}}"#, i, i));
+            json.push_str(&format!(r#"{{"id": {i}, "value": "item{i}"}}"#));
         }
         json.push(']');
         json

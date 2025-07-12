@@ -641,12 +641,12 @@ Create separate crates for complex plugins:
 
 ```toml
 [package]
-name = "vexy_json-plugin-myplugin"
+name = "vexy-json-plugin-myplugin"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-vexy_json-core = "2.0"
+vexy-json-core = "2.0"
 ```
 
 ## Best Practices Summary

@@ -3,7 +3,7 @@ use vexy_json_core::lexer::JsonLexer;
 
 fn main() {
     let input = "// comment\n42";
-    println!("Input: {:?}", input);
+    println!("Input: {input:?}");
     println!();
 
     let mut lexer = Lexer::new(input);

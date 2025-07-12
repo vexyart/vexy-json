@@ -1,7 +1,7 @@
 {
-    "name": "vexy_json-testing-scripts",
+    "name": "vexy-json-testing-scripts",
     "version": "1.0.0",
-    "description": "Testing and monitoring scripts for vexy_json project",
+    "description": "Testing and monitoring scripts for vexy-json project",
     "main": "cross-browser-test.js",
     "scripts": {
         "test:browser": "node cross-browser-test.js",
@@ -23,8 +23,8 @@
         "testing",
         "cross-browser",
         "performance",
-        "vexy_json"
+        "vexy-json"
     ],
-    "author": "vexy_json team",
+    "author": "vexy-json team",
     "license": "MIT"
 }

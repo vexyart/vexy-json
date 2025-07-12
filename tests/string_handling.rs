@@ -4,7 +4,6 @@ use vexy_json::{parse, Value};
 
 /// String handling tests adapted for vexy_json's actual capabilities
 /// NOTE: vexy_json supports single and double quoted strings but NOT backtick strings
-/// Reference: ref/jsonic/test/feature.test.js lines 421-592
 
 #[test]
 fn test_basic_string_types() {
@@ -121,7 +120,7 @@ fn test_escape_edge_cases() {
     if unknown_escape_result.is_ok() {
         if let Ok(Value::String(s)) = unknown_escape_result {
             // Document whatever behavior vexy_json has
-            println!("vexy_json handles \\w as: {:?}", s);
+            println!("vexy_json handles \\w as: {s:?}");
             assert!(
                 s == "w" || s == "\\w" || s == "\\\\w",
                 "Unknown escape behavior should be consistent"
@@ -187,20 +186,18 @@ fn test_backslash_behavior() {
     for (input, description) in test_cases {
         match parse(input) {
             Ok(Value::String(s)) => {
-                println!("vexy_json handles {} as: {:?}", description, s);
+                println!("vexy_json handles {description} as: {s:?}");
                 // Just verify it's consistent behavior, whatever it is
                 assert!(!s.is_empty(), "String should not be empty");
             }
             Ok(other) => {
                 panic!(
-                    "Expected string or error for {}, got: {:?}",
-                    description, other
+                    "Expected string or error for {description}, got: {other:?}"
                 );
             }
             Err(_) => {
                 println!(
-                    "vexy_json errors on {} - that's valid behavior",
-                    description
+                    "vexy_json errors on {description} - that's valid behavior"
                 );
             }
         }

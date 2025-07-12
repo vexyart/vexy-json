@@ -15,6 +15,12 @@ use crate::{
 use rayon::prelude::*;
 use std::sync::Arc;
 
+/// Type alias for parse result with optional error
+type ParseResult = (Option<Value>, Option<(usize, Error)>);
+
+/// Type alias for merged results
+type MergedResults = (Vec<Value>, Vec<(usize, Error)>);
+
 /// Configuration for parallel chunked processing
 #[derive(Debug, Clone)]
 pub struct ChunkedConfig {
@@ -91,16 +97,18 @@ pub struct ChunkedProcessor {
     config: ChunkedConfig,
 }
 
+impl Default for ChunkedProcessor {
+    fn default() -> Self {
+        Self::new(ChunkedConfig::default())
+    }
+}
+
 impl ChunkedProcessor {
     /// Create a new chunked processor
     pub fn new(config: ChunkedConfig) -> Self {
         Self { config }
     }
 
-    /// Create with default configuration
-    pub fn default() -> Self {
-        Self::new(ChunkedConfig::default())
-    }
 
     /// Parse large JSON input using parallel chunking
     pub fn parse(&self, input: &str, options: ParserOptions) -> Result<ChunkedResult> {
@@ -292,10 +300,7 @@ impl ChunkedProcessor {
     }
 
     /// Merge results from parallel parsing
-    fn merge_results(
-        &self,
-        results: Vec<(Option<Value>, Option<(usize, Error)>)>,
-    ) -> Result<(Vec<Value>, Vec<(usize, Error)>)> {
+    fn merge_results(&self, results: Vec<ParseResult>) -> Result<MergedResults> {
         let mut values = Vec::new();
         let mut errors = Vec::new();
 

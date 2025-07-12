@@ -7,6 +7,7 @@
 
 use rustc_hash::FxHashMap;
 use vexy_json::{parse, Value};
+use vexy_json_core::{parse_with_options, ParserOptions};
 
 /// Helper functions for creating test values
 #[allow(dead_code)]
@@ -474,7 +475,7 @@ mod migration_scenarios {
     use super::*;
 
     #[test]
-    fn test_json_to_jsonic_migration() {
+    fn test_json_to_vexy_json_migration() {
         // Start with strict JSON
         let strict_json = r#"{
             "database": {
@@ -488,8 +489,8 @@ mod migration_scenarios {
             }
         }"#;
 
-        // Migrate to jsonic with comments and unquoted keys
-        let jsonic_version = r#"{
+        // Migrate with comments and unquoted keys
+        let vexy_json_version = r#"{
             // Database configuration
             database: {
                 host: "localhost",
@@ -505,7 +506,7 @@ mod migration_scenarios {
         }"#;
 
         let json_result = parse(strict_json).unwrap();
-        let jsonic_result = parse(jsonic_version).unwrap();
+        let jsonic_result = parse(vexy_json_version).unwrap();
 
         // Both should parse to equivalent structures
         assert_eq!(
@@ -522,28 +523,36 @@ mod migration_scenarios {
 
     #[test]
     fn test_yaml_like_syntax() {
-        // YAML-inspired syntax using jsonic
-        let input = r#"
+        // YAML-inspired syntax
+        let input = r#"{
         name: "my-app"
         version: "1.0.0"
         
-        dependencies:
-          - name: "lodash"
-            version: "^4.17.21"
-          - name: "axios" 
-            version: "^1.0.0"
+        dependencies: [
+          { name: "lodash", version: "4.17.21" },
+          { name: "axios", version: "1.0.0" }
+        ]
             
-        config:
-          database:
+        config: {
+          database: {
             host: "localhost"
             port: 5432
+          }
           
-          redis:
+          redis: {
             host: "localhost"
             port: 6379
-        "#;
+          }
+        }
+        }"#;
 
-        let result = parse(input).unwrap();
+        let options = ParserOptions {
+            allow_unquoted_keys: true,
+            implicit_top_level: true,
+            newline_as_comma: true,
+            ..Default::default()
+        };
+        let result = parse_with_options(input, options).unwrap();
 
         assert_eq!(result["name"], s("my-app"));
         assert_eq!(result["version"], s("1.0.0"));
@@ -585,7 +594,7 @@ mod error_recovery {
         let mut input = String::from("{\n");
 
         for i in 0..1000 {
-            input.push_str(&format!("  key{}: \"value{}\",\n", i, i));
+            input.push_str(&format!("  key{i}: \"value{i}\",\n"));
         }
 
         input.push_str("  final_key: \"final_value\"\n}");

@@ -216,7 +216,7 @@ fn benchmark_edge_cases(c: &mut Criterion) {
     let large_object = format!(
         "{{{}}}",
         (0..100)
-            .map(|i| format!("\"key{}\": {}", i, i))
+            .map(|i| format!("\"key{i}\": {i}"))
             .collect::<Vec<_>>()
             .join(", ")
     );

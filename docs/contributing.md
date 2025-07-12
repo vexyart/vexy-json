@@ -55,7 +55,7 @@ If you're looking to contribute specifically to the `vexy_json` web tool, please
 
 ## Reporting Bugs
 
-If you find a bug, please open an issue on the [GitHub Issues page](https://github.com/twardoch/vexy_json/issues). When reporting a bug, please include:
+If you find a bug, please open an issue on the [GitHub Issues page](https://github.com/vexyart/vexy-json/issues). When reporting a bug, please include:
 
 -   A clear and concise description of the bug.
 -   Steps to reproduce the behavior.
@@ -66,6 +66,6 @@ If you find a bug, please open an issue on the [GitHub Issues page](https://gith
 
 ## Feature Requests
 
-Have an idea for a new feature? Open an issue on the [GitHub Issues page](https://github.com/twardoch/vexy_json/issues) to discuss it. Describe the feature, why you think it would be valuable, and any potential implementation details.
+Have an idea for a new feature? Open an issue on the [GitHub Issues page](https://github.com/vexyart/vexy-json/issues) to discuss it. Describe the feature, why you think it would be valuable, and any potential implementation details.
 
 Thank you for contributing to `vexy_json`!

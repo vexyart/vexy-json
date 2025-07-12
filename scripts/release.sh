@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
 
 echo "Running release script from: $(pwd)"
 
@@ -282,7 +282,7 @@ build_rust_artifacts() {
     run_cmd "mkdir -p '$BUILD_DIR'" "Create build directory"
 
     # Build release binary
-    run_cmd "cargo build --release --bin vexy_json" "Build release CLI binary"
+    run_cmd "cargo build --release --bin vexy-json" "Build release CLI binary"
 
     # Build library
     run_cmd "cargo build --release --lib" "Build release library"
@@ -292,10 +292,10 @@ build_rust_artifacts() {
 
     # Copy artifacts
     if [ "$DRY_RUN" = false ]; then
-        if [[ -f "target/release/vexy_json" ]]; then
-            cp "target/release/vexy_json" "$BUILD_DIR/vexy_json-$VERSION-$(uname -m)-$(uname -s | tr '[:upper:]' '[:lower:]')"
+        if [[ -f "target/release/vexy-json" ]]; then
+            cp "target/release/vexy-json" "$BUILD_DIR/vexy-json-$VERSION-$(uname -m)-$(uname -s | tr '[:upper:]' '[:lower:]')"
         else
-            warning "Release binary not found at target/release/vexy_json"
+            warning "Release binary not found at target/release/vexy-json"
         fi
     fi
 
@@ -340,19 +340,19 @@ build_macos_installer() {
 
     log "Building macOS installer..."
 
-    local app_name="vexy_json"
+    local app_name="vexy-json"
     local installer_dir="$BUILD_DIR/macos-installer"
-    local dmg_name="vexy_json-$VERSION-macos.dmg"
+    local dmg_name="vexy-json-$VERSION-macos.dmg"
 
     run_cmd "mkdir -p '$installer_dir/pkg-root/usr/local/bin'" "Create installer structure"
 
     # Copy binary
     if [ "$DRY_RUN" = false ]; then
-        cp "target/release/vexy_json" "$installer_dir/pkg-root/usr/local/bin/"
+        cp "target/release/vexy-json" "$installer_dir/pkg-root/usr/local/bin/"
     fi
 
     # Create package
-    run_cmd "pkgbuild --root '$installer_dir/pkg-root' --identifier 'com.twardoch.vexy_json' --version '$VERSION' --install-location '/' '$installer_dir/$app_name.pkg'" "Create pkg installer"
+    run_cmd "pkgbuild --root '$installer_dir/pkg-root' --identifier 'com.twardoch.vexy-json' --version '$VERSION' --install-location '/' '$installer_dir/$app_name.pkg'" "Create pkg installer"
 
     # Create DMG
     local dmg_temp_dir="$installer_dir/dmg-temp"
@@ -365,12 +365,12 @@ build_macos_installer() {
         cat >"$dmg_temp_dir/README.txt" <<EOF
 VEXY_JSON v$VERSION
 
-This package will install the vexy_json command-line tool to /usr/local/bin.
+This package will install the vexy-json command-line tool to /usr/local/bin.
 
-After installation, you can use vexy_json from the command line:
-  echo '{"key": "value"}' | vexy_json
+After installation, you can use vexy-json from the command line:
+  echo '{"key": "value"}' | vexy-json
 
-For more information, visit: https://github.com/twardoch/vexy_json
+For more information, visit: https://github.com/vexyart/vexy-json
 EOF
     fi
 
@@ -385,10 +385,10 @@ build_linux_packages() {
 
     # Build static binary for Linux
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        run_cmd "cargo build --release --target x86_64-unknown-linux-musl --bin vexy_json" "Build static Linux binary"
+        run_cmd "cargo build --release --target x86_64-unknown-linux-musl --bin vexy-json" "Build static Linux binary"
 
         if [ "$DRY_RUN" = false ]; then
-            cp "target/x86_64-unknown-linux-musl/release/vexy_json" "$BUILD_DIR/vexy_json-$VERSION-x86_64-linux-musl"
+            cp "target/x86_64-unknown-linux-musl/release/vexy-json" "$BUILD_DIR/vexy-json-$VERSION-x86_64-linux-musl"
         fi
     else
         warning "Skipping Linux builds (not on Linux)"
@@ -400,7 +400,7 @@ build_linux_packages() {
 create_release_archive() {
     log "Creating release archives..."
 
-    local archive_dir="$BUILD_DIR/vexy_json-$VERSION"
+    local archive_dir="$BUILD_DIR/vexy-json-$VERSION"
     run_cmd "mkdir -p '$archive_dir'" "Create archive directory"
 
     if [ "$DRY_RUN" = false ]; then
@@ -412,21 +412,21 @@ create_release_archive() {
         done
 
         # Copy built artifacts
-        if [[ -f "target/release/vexy_json" ]]; then
-            cp "target/release/vexy_json" "$archive_dir/" || warning "Failed to copy binary"
+        if [[ -f "target/release/vexy-json" ]]; then
+            cp "target/release/vexy-json" "$archive_dir/" || warning "Failed to copy binary"
         else
             warning "No release binary found to include in archive"
         fi
 
         # Create source archive
-        git archive --format=tar.gz --prefix="vexy_json-$VERSION-src/" HEAD >"$BUILD_DIR/vexy_json-$VERSION-src.tar.gz" || {
+        git archive --format=tar.gz --prefix="vexy-json-$VERSION-src/" HEAD >"$BUILD_DIR/vexy-json-$VERSION-src.tar.gz" || {
             warning "Failed to create source archive"
         }
 
         # Create binary archive if we have files
         if [[ -d "$archive_dir" ]] && [[ -n $(ls -A "$archive_dir") ]]; then
             cd "$BUILD_DIR"
-            tar -czf "vexy_json-$VERSION-$(uname -m)-$(uname -s | tr '[:upper:]' '[:lower:]').tar.gz" "vexy_json-$VERSION" || {
+            tar -czf "vexy-json-$VERSION-$(uname -m)-$(uname -s | tr '[:upper:]' '[:lower:]').tar.gz" "vexy-json-$VERSION" || {
                 warning "Failed to create binary archive"
             }
             cd "$PROJECT_ROOT"
@@ -447,9 +447,7 @@ commit_and_tag() {
     run_cmd "git add -A" "Stage all changes for release"
 
     # Commit changes
-    local commit_msg="Release v$VERSION
-
-This commit updates all version numbers and prepares the release."
+    local commit_msg="Release v$VERSION\n\nThis commit updates all version numbers and prepares the release."
 
     if [ "$DRY_RUN" = false ]; then
         if git diff --cached --quiet; then
@@ -466,9 +464,7 @@ This commit updates all version numbers and prepares the release."
     fi
 
     # Create annotated tag
-    run_cmd "git tag -a '$tag' -m 'Release VEXY_JSON v$VERSION
-
-See CHANGELOG.md for detailed release notes.'" "Create release tag"
+    run_cmd "git tag -a '$tag' -m 'Release VEXY_JSON v$VERSION\n\nSee CHANGELOG.md for detailed release notes.'" "Create release tag"
 
     success "Git tag $tag created"
 
@@ -484,7 +480,7 @@ run_github_release() {
 
     if ! command -v gh &>/dev/null; then
         warning "GitHub CLI not found, skipping automated release creation"
-        info "Manually create release at: https://github.com/twardoch/vexy_json/releases/new?tag=v$VERSION"
+        info "Manually create release at: https://github.com/vexyart/vexy-json/releases/new?tag=v$VERSION"
         return 0
     fi
 
@@ -542,21 +538,21 @@ run_github_release() {
 ## 📦 Installation
 
 ```bash
-cargo install vexy_json --version 2.0.0
+cargo install vexy-json --version 2.0.0
 ```
 
 Or download pre-built binaries from the assets below.
 
 ---
 
-**Full Changelog**: https://github.com/twardoch/vexy_json/compare/v1.5.27...v2.0.0
+**Full Changelog**: https://github.com/vexyart/vexy-json/compare/v1.5.27...v2.0.0
 EOF
     fi
 
     # Collect assets
     local assets=()
-    if [[ -f "$BUILD_DIR/vexy_json-$VERSION-macos.dmg" ]]; then
-        assets+=("$BUILD_DIR/vexy_json-$VERSION-macos.dmg")
+    if [[ -f "$BUILD_DIR/vexy-json-$VERSION-macos.dmg" ]]; then
+        assets+=("$BUILD_DIR/vexy-json-$VERSION-macos.dmg")
     fi
 
     # Find all tar.gz files
@@ -584,32 +580,32 @@ publish_crates() {
 
     warning "Crates.io publishing requires manual intervention"
     info "Run the following commands to publish:"
-    info "  cargo publish -p vexy_json-test-utils"
-    info "  cargo publish -p vexy_json-core"
-    info "  cargo publish -p vexy_json-serde"
-    info "  cargo publish -p vexy_json-cli"
-    info "  cargo publish -p vexy_json-wasm"
-    info "  cargo publish -p vexy_json-c-api"
-    info "  cargo publish -p vexy_json"
+    info "  cargo publish -p vexy-json-test-utils"
+    info "  cargo publish -p vexy-json-core"
+    info "  cargo publish -p vexy-json-serde"
+    info "  cargo publish -p vexy-json-cli"
+    info "  cargo publish -p vexy-json-wasm"
+    info "  cargo publish -p vexy-json-c-api"
+    info "  cargo publish -p vexy-json"
 
     if [ "$DRY_RUN" = false ]; then
         read -p "Publish to crates.io now? (y/N): " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             # Publish in dependency order
-            run_cmd "cargo publish -p vexy_json-test-utils" "Publish vexy_json-test-utils"
+            run_cmd "cargo publish -p vexy-json-test-utils" "Publish vexy-json-test-utils"
             sleep 10 # Wait for crates.io to process
-            run_cmd "cargo publish -p vexy_json-core" "Publish vexy_json-core"
+            run_cmd "cargo publish -p vexy-json-core" "Publish vexy-json-core"
             sleep 10
-            run_cmd "cargo publish -p vexy_json-serde" "Publish vexy_json-serde"
+            run_cmd "cargo publish -p vexy-json-serde" "Publish vexy-json-serde"
             sleep 10
-            run_cmd "cargo publish -p vexy_json-cli" "Publish vexy_json-cli"
+            run_cmd "cargo publish -p vexy-json-cli" "Publish vexy-json-cli"
             sleep 10
-            run_cmd "cargo publish -p vexy_json-wasm" "Publish vexy_json-wasm"
+            run_cmd "cargo publish -p vexy-json-wasm" "Publish vexy-json-wasm"
             sleep 10
-            run_cmd "cargo publish -p vexy_json-c-api" "Publish vexy_json-c-api"
+            run_cmd "cargo publish -p vexy-json-c-api" "Publish vexy-json-c-api"
             sleep 10
-            run_cmd "cargo publish -p vexy_json" "Publish main vexy_json crate"
+            run_cmd "cargo publish -p vexy-json" "Publish main vexy-json crate"
 
             success "All crates published to crates.io"
         fi
@@ -625,7 +621,8 @@ push_to_remote() {
     local branch=$(git branch --show-current)
 
     # Check if we have a remote named 'origin'
-    if ! git remote | grep -q '^origin$'; then
+    if ! git remote | grep -q '^origin
+; then
         error "No 'origin' remote found. Please add a remote repository."
         exit 1
     fi
@@ -665,13 +662,7 @@ cleanup() {
 }
 
 main() {
-    echo -e "${PURPLE}
-████████ ████████ ████████  ██████  ███    ██ 
-   ███      ███   ██       ██    ██ ████   ██ 
-  ███      ███   ██████   ██    ██ ██ ██  ██ 
- ███      ███         ██  ██    ██ ██  ██ ██ 
-████████ ███    ██████    ██████  ██   ████ 
-${NC}"
+    echo -e "${PURPLE}\n████████ ████████ ████████  ██████  ███    ██ \n   ███      ███   ██       ██    ██ ████   ██ \n  ███      ███   ██████   ██    ██ ██ ██  ██ \n ███      ███         ██  ██    ██ ██  ██ ██ \n████████ ███    ██████    ██████  ██   ████ \n${NC}"
 
     echo -e "${CYAN}Vexy JSON v$VERSION Release Automation Script${NC}"
     echo -e "${CYAN}=========================================${NC}"
@@ -727,7 +718,7 @@ ${NC}"
     echo -e "${BLUE}Release artifacts created in: $BUILD_DIR${NC}"
     echo -e "${BLUE}Git tag created and pushed: v$VERSION${NC}"
     echo -e "${BLUE}Next steps:${NC}"
-    echo "  1. Verify GitHub release: https://github.com/twardoch/vexy_json/releases"
+    echo "  1. Verify GitHub release: https://github.com/vexyart/vexy-json/releases"
     echo "  2. Update documentation websites"
     echo "  3. Announce the release"
     echo

@@ -38,4 +38,4 @@ print(type(arr))  # <class 'numpy.ndarray'>
 - pandas DataFrame integration
 - JSON repair functionality
 
-For more information, see the [main vexy_json documentation](https://github.com/twardoch/vexy_json).
+For more information, see the [main vexy_json documentation](https://github.com/vexyart/vexy-json).

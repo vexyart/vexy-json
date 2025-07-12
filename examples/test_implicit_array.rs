@@ -9,10 +9,10 @@ fn main() {
     ];
 
     for input in test_cases {
-        println!("Input: {}", input);
+        println!("Input: {input}");
         match parse(input) {
-            Ok(value) => println!("  Result: {:?}\n", value),
-            Err(e) => println!("  Error: {:?}\n", e),
+            Ok(value) => println!("  Result: {value:?}\n"),
+            Err(e) => println!("  Error: {e:?}\n"),
         }
     }
 }

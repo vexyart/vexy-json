@@ -4,7 +4,7 @@ use vexy_json::Number;
 use vexy_json::{parse, Value};
 
 /// Tests for extended number format support including hex, octal, binary, and underscore separators.
-/// These formats are commonly used in configuration files and match jsonic compatibility.
+/// These formats are commonly used in configuration files 
 
 #[test]
 fn test_underscore_separators() {
@@ -217,9 +217,9 @@ fn test_edge_cases() {
     // ); // NOT YET SUPPORTED
 
     // Test at boundaries
-    assert_eq!(parse("0x_").is_err(), true); // Invalid: no digits after underscore
-    assert_eq!(parse("0o_").is_err(), true); // Invalid: no digits after underscore
-    assert_eq!(parse("0b_").is_err(), true); // Invalid: no digits after underscore
+    assert!(parse("0x_").is_err()); // Invalid: no digits after underscore
+    assert!(parse("0o_").is_err()); // Invalid: no digits after underscore
+    assert!(parse("0b_").is_err()); // Invalid: no digits after underscore
 }
 
 #[test]

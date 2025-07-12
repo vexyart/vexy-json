@@ -103,7 +103,7 @@ fn bench_allocation_patterns(c: &mut Criterion) {
     let large_object = format!(
         "{{{}}}",
         (0..100)
-            .map(|i| format!(r#""key{}": "value{}", "num{}": {}"#, i, i, i, i))
+            .map(|i| format!(r#""key{i}": "value{i}", "num{i}": {i}"#))
             .collect::<Vec<_>>()
             .join(", ")
     );
@@ -111,7 +111,7 @@ fn bench_allocation_patterns(c: &mut Criterion) {
     let deep_nesting = {
         let mut nested = String::new();
         for i in 0..20 {
-            nested.push_str(&format!(r#"{{"level{}": "#, i));
+            nested.push_str(&format!(r#"{{"level{i}": "#));
         }
         nested.push_str(r#""deep_value""#);
         for _ in 0..20 {
@@ -157,7 +157,7 @@ fn bench_string_interning(c: &mut Criterion) {
     let unique_strings = format!(
         "{{{}}}",
         (0..50)
-            .map(|i| format!(r#""key{}": "unique_value_{}""#, i, i))
+            .map(|i| format!(r#""key{i}": "unique_value_{i}""#))
             .collect::<Vec<_>>()
             .join(", ")
     );
@@ -165,7 +165,7 @@ fn bench_string_interning(c: &mut Criterion) {
     let repeated_strings = format!(
         "{{{}}}",
         (0..50)
-            .map(|i| format!(r#""key{}": "repeated_value""#, i))
+            .map(|i| format!(r#""key{i}": "repeated_value""#))
             .collect::<Vec<_>>()
             .join(", ")
     );
@@ -179,7 +179,7 @@ fn bench_string_interning(c: &mut Criterion) {
                 } else {
                     "unique_value"
                 };
-                format!(r#""key{}": "{}""#, i, value)
+                format!(r#""key{i}": "{value}""#)
             })
             .collect::<Vec<_>>()
             .join(", ")
@@ -252,7 +252,7 @@ fn bench_allocation_by_data_type(c: &mut Criterion) {
     let strings_only = format!(
         "[{}]",
         (0..1000)
-            .map(|i| format!(r#""string_{}""#, i))
+            .map(|i| format!(r#""string_{i}""#))
             .collect::<Vec<_>>()
             .join(", ")
     );
@@ -275,7 +275,7 @@ fn bench_allocation_by_data_type(c: &mut Criterion) {
         (0..1000)
             .map(|i| match i % 4 {
                 0 => i.to_string(),
-                1 => format!(r#""string_{}""#, i),
+                1 => format!(r#""string_{i}""#),
                 2 => if i % 2 == 0 { "true" } else { "false" }.to_string(),
                 _ => "null".to_string(),
             })
@@ -408,9 +408,9 @@ fn bench_memory_fragmentation(c: &mut Criterion) {
                     json.push_str(", ");
                 }
                 if i % 2 == 0 {
-                    json.push_str(&format!(r#""small_{}""#, i));
+                    json.push_str(&format!(r#""small_{i}""#));
                 } else {
-                    json.push_str(&format!(r#""large_string_with_lots_of_content_{}""#, i));
+                    json.push_str(&format!(r#""large_string_with_lots_of_content_{i}""#));
                 }
             }
             json.push(']');
@@ -433,12 +433,12 @@ fn bench_memory_fragmentation(c: &mut Criterion) {
                 if i > 0 {
                     json.push_str(", ");
                 }
-                json.push_str(&format!(r#""level{}": {{"#, i));
+                json.push_str(&format!(r#""level{i}": {{"#));
                 for j in 0..i {
                     if j > 0 {
                         json.push_str(", ");
                     }
-                    json.push_str(&format!(r#""item{}": {}"#, j, j));
+                    json.push_str(&format!(r#""item{j}": {j}"#));
                 }
                 json.push('}');
             }

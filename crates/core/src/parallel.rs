@@ -96,7 +96,7 @@ impl ParallelParser {
             let pool = rayon::ThreadPoolBuilder::new()
                 .num_threads(self.config.max_threads)
                 .build()
-                .map_err(|e| Error::Custom(format!("Failed to create thread pool: {}", e)))?;
+                .map_err(|e| Error::Custom(format!("Failed to create thread pool: {e}")))?;
 
             pool.install(|| {
                 lines
@@ -155,7 +155,7 @@ impl ParallelParser {
             let pool = rayon::ThreadPoolBuilder::new()
                 .num_threads(self.config.max_threads)
                 .build()
-                .map_err(|e| Error::Custom(format!("Failed to create thread pool: {}", e)))?;
+                .map_err(|e| Error::Custom(format!("Failed to create thread pool: {e}")))?;
 
             pool.install(|| {
                 chunks
@@ -241,9 +241,9 @@ impl ParallelParser {
         let mut depth = 0;
         let mut in_string = false;
         let mut escape_next = false;
-        let mut chars = content.chars().peekable();
+        let chars = content.chars().peekable();
 
-        while let Some(ch) = chars.next() {
+        for ch in chars {
             if escape_next {
                 current_element.push(ch);
                 escape_next = false;

@@ -12,10 +12,10 @@ fn main() {
     ];
 
     for (input, desc) in test_cases {
-        println!("Testing: {:?} ({})", input, desc);
+        println!("Testing: {input:?} ({desc})");
         match parse(input) {
-            Ok(value) => println!("  ✓ Parsed as: {:?}", value),
-            Err(e) => println!("  ✗ Error: {:?}", e),
+            Ok(value) => println!("  ✓ Parsed as: {value:?}"),
+            Err(e) => println!("  ✗ Error: {e:?}"),
         }
         println!();
     }

@@ -637,7 +637,7 @@ mod error_handling {
 
         for input in invalid_inputs {
             let result = parse(input);
-            assert!(result.is_err(), "Input should have failed: {}", input);
+            assert!(result.is_err(), "Input should have failed: {input}");
         }
     }
 
@@ -659,7 +659,7 @@ mod error_handling {
             let result = parse(input);
             // Some may parse as identifiers, but should not parse as numbers
             if let Ok(Value::Number(_)) = result {
-                panic!("Invalid number should not parse as number: {}", input);
+                panic!("Invalid number should not parse as number: {input}");
             }
         }
     }
@@ -676,7 +676,7 @@ mod error_handling {
 
         for input in invalid_unicode {
             let result = parse(input);
-            assert!(result.is_err(), "Invalid unicode should fail: {}", input);
+            assert!(result.is_err(), "Invalid unicode should fail: {input}");
         }
     }
 }

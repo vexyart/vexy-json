@@ -8,9 +8,9 @@ This page provides an overview of the current build status and health metrics fo
 
 | Workflow | Status | Description |
 |----------|--------|-------------|
-| WASM Build | [![Build Status](https://github.com/twardoch/vexy_json/workflows/Build%20and%20Deploy%20WASM/badge.svg)](https://github.com/twardoch/vexy_json/actions/workflows/wasm-build.yml) | Builds WebAssembly module and deploys to GitHub Pages |
-| Security Audit | [![Security Audit](https://github.com/twardoch/vexy_json/workflows/Security%20Audit/badge.svg)](https://github.com/twardoch/vexy_json/actions/workflows/security.yml) | Checks for security vulnerabilities in dependencies |
-| Release | [![Release](https://github.com/twardoch/vexy_json/workflows/Release/badge.svg)](https://github.com/twardoch/vexy_json/actions/workflows/release.yml) | Automated release process for tagged versions |
+| WASM Build | [![Build Status](https://github.com/vexyart/vexy-json/workflows/Build%20and%20Deploy%20WASM/badge.svg)](https://github.com/vexyart/vexy-json/actions/workflows/wasm-build.yml) | Builds WebAssembly module and deploys to GitHub Pages |
+| Security Audit | [![Security Audit](https://github.com/vexyart/vexy-json/workflows/Security%20Audit/badge.svg)](https://github.com/vexyart/vexy-json/actions/workflows/security.yml) | Checks for security vulnerabilities in dependencies |
+| Release | [![Release](https://github.com/vexyart/vexy-json/workflows/Release/badge.svg)](https://github.com/vexyart/vexy-json/actions/workflows/release.yml) | Automated release process for tagged versions |
 
 ### Package Registries
 
@@ -52,7 +52,7 @@ This page provides an overview of the current build status and health metrics fo
 
 ### Live Deployments
 - **Vexy JSON Tool**: [https://twardoch.github.io/vexy_json/vexy_json-tool/](https://twardoch.github.io/vexy_json/vexy_json-tool/)
-- **Jsonic Tool**: [https://twardoch.github.io/vexy_json/jsonic-tool/](https://twardoch.github.io/vexy_json/jsonic-tool/)
+- **Vexy JSON Tool**: [https://twardoch.github.io/vexy_json/vexy-json-tool/](https://twardoch.github.io/vexy_json/vexy-json-tool/)
 - **Tools Overview**: [https://twardoch.github.io/vexy_json/tools/](https://twardoch.github.io/vexy_json/tools/)
 - **Documentation**: [https://docs.rs/vexy_json](https://docs.rs/vexy_json)
 - **GitHub Pages**: Automatically deployed on main branch updates
@@ -86,4 +86,4 @@ This page provides an overview of the current build status and health metrics fo
 - **As Needed**: Bug fixes and feature updates
 
 ### Contact
-For build failures or urgent issues, please [create an issue](https://github.com/twardoch/vexy_json/issues/new) on GitHub.
+For build failures or urgent issues, please [create an issue](https://github.com/vexyart/vexy-json/issues/new) on GitHub.

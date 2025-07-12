@@ -4,7 +4,7 @@ use std::hint::black_box;
 use vexy_json::parse;
 
 fn get_json_data(name: &str) -> String {
-    fs::read_to_string(format!("benches/data/{}.json", name)).expect("Unable to read file")
+    fs::read_to_string(format!("benches/data/{name}.json")).expect("Unable to read file")
 }
 
 fn comparison_benchmarks(c: &mut Criterion) {
