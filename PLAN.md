@@ -1,10 +1,10 @@
 # this_file: docs/internal/PLAN.md
 
-# Vexy JSON Improvement Plan - v2.3.4 Completion
+# Vexy JSON Improvement Plan - v1.5.2 Post-Release Fixes
 
 ## Executive Summary
 
-Following the successful project renaming to Vexy JSON and multiple rounds of improvements, this plan addresses the remaining tasks for a clean, production-ready release.
+Following the v1.5.2 release, critical issues were identified during the build and release process that need immediate attention. This plan addresses compilation failures, test failures, and build system issues.
 
 ### Completed (v2.3.3)
 
@@ -30,53 +30,67 @@ Following the successful project renaming to Vexy JSON and multiple rounds of im
 2. ✅ **Critical compilation errors fixed** - Added missing struct fields and enum variants
 3. ✅ **README.md updated** - Removed migration tool references
 
-### Current Status (v2.3.4) - UPDATED
+### Current Issues Discovered (v1.5.2 Release)
 
-1. **jsonic references** - ✅ COMPLETED - All code references removed, only historical docs remain
-2. **Clippy warnings** - ✅ PARTIALLY FIXED - uninlined-format-args fixed, other warnings remain
-3. **Naming unification** - Standards documented but not fully implemented
-4. **Build deliverables** - ✅ COMPLETED - Scripts fixed, macOS/Linux builds working
-5. **Documentation** - Two ZZSON references remain (PLAN.md and issue 610.txt)
+1. **Build Failures** - ❌ CRITICAL - ./build.sh fails with 143 clippy errors preventing compilation
+2. **Test Failures** - ❌ CRITICAL - 20 tests failed but release continued anyway
+3. **Fuzzing Issues** - ⚠️ WARNING - Fuzz tests require nightly compiler but using stable
+4. **Code Formatting** - ⚠️ WARNING - rustfmt check failed due to deprecated option
+5. **Release Process** - ⚠️ WARNING - Release succeeded despite build/test failures
 
-## Post-Migration Findings
+## Critical Issues Analysis
 
-### Naming Analysis Results
+### 1. Build Failures (143 Clippy Errors)
+- **93 errors**: `format!` strings can use inline variables
+- **7 errors**: Identical if-else blocks
+- **4 errors**: Unnecessary let bindings before return
+- **3 errors**: Iterating on map values incorrectly
+- **3 errors**: Manual prefix stripping
+- **Various**: Type complexity, Default trait implementations needed
 
-1. **Old Naming References**: Only 2 files contain "zzson" - both in documentation (PLAN.md and issue 610.txt)
-2. **Python Bindings**: Test file previously used `VexyJSONParser` but was fixed to `VexyJsonParser`
-3. **Naming Conventions**: Generally consistent across languages:
+### 2. Test Failures (20 Failed Tests)
+Failed test modules:
+- `error::recovery_v2::tests::test_bracket_matching`
+- `lazy::tests` (multiple failures)
+- `lexer::debug_lexer::tests`
+- `optimization::memory_pool_v2::tests`
+- `parser::iterative::tests` (multiple failures)
+- `streaming::` tests (multiple failures)
+- `plugin::plugins::datetime::tests`
 
-- [ ] Rust: `vexy-json-*` (crate names), `VexyJson*` (types)
-- [ ] C/C++: `VexyJson*` (types)
-- [ ] Python: `vexy_json` (package), `VexyJson*` (classes)
-- [ ] JavaScript: `VexyJson*` (classes)
-- [ ] Documentation: "Vexy JSON" (with space)
+### 3. Build System Issues
+- Fuzzing requires nightly Rust but build uses stable
+- rustfmt has deprecated `fn_args_layout` option
+- Release script ignores test failures
 
 ## Priority Groups
 
-### Group 0: IMMEDIATE - Critical Fixes
+### Group 0: IMMEDIATE - Critical Build & Test Fixes
 
-#### 0.1 Complete jsonic References Removal (31 files, 382 references)
+#### 0.1 Fix Clippy Errors Blocking Compilation (143 errors)
 
-- [ ] **High Priority**: Complete removal of remaining "jsonic" references from codebase
-- [ ] **Status**: Scripts partially executed - reduced from 1800 to 382 references
-- [ ] **Files affected**: 31 files with 382 references remaining
-- [ ] **Progress**: 79% complete (1418 references removed)
-- [ ] **Remaining categories to clean**:
-- [ ] Test files: comments and variable names
-- [ ] Documentation: HTML files, markdown files, tool descriptions
-- [ ] JavaScript assets: tool.js references
-- [ ] Build scripts: scattered references
+- [ ] **CRITICAL**: Fix format string errors - use inline variables `{var}` instead of `{}`, var
+- [ ] **CRITICAL**: Remove identical if-else blocks (7 occurrences)
+- [ ] **CRITICAL**: Fix unnecessary let bindings before return (4 occurrences)
+- [ ] **CRITICAL**: Fix map iterator usage (use `.values()` instead of `.iter()`)
+- [ ] **CRITICAL**: Implement Default trait for required types
+- [ ] **Action**: Run `cargo clippy --fix` where safe, manually fix remaining
 
-#### 0.2 Build Deliverables Testing (issues/620.txt)
+#### 0.2 Fix Failing Tests (20 test failures)
 
-- [ ] **Medium Priority**: Test build deliverables on all platforms
-- [ ] **Status**: Script created, builds working, binary name corrected (vexy-json not vexy_json)
-- [ ] **Progress**: Core build functional, WASM builds successfully
-- [ ] **Actions needed**:
-- [ ] Read and implement issues/620.txt
-- [ ] Test packages on Windows, macOS, Linux
-- [ ] Fix macOS packaging script path issue
+- [ ] **CRITICAL**: Fix bracket matching test in error recovery v2
+- [ ] **CRITICAL**: Fix lazy parser tests (array, object parsing)
+- [ ] **CRITICAL**: Fix iterative parser tests
+- [ ] **CRITICAL**: Fix streaming/NDJSON parser tests
+- [ ] **CRITICAL**: Fix memory pool allocation tests
+- [ ] **Action**: Debug each failing test and fix root causes
+
+#### 0.3 Fix Build System Issues
+
+- [ ] **HIGH**: Update rustfmt.toml - change `fn_args_layout` to `fn_params_layout`
+- [ ] **HIGH**: Make fuzzing optional or add nightly toolchain detection
+- [ ] **HIGH**: Fix release script to fail on test failures
+- [ ] **Action**: Update configuration files and scripts
 
 ### Group 1: HIGH Priority - Clean Up Remaining Warnings
 
@@ -134,71 +148,64 @@ Following the successful project renaming to Vexy JSON and multiple rounds of im
 
 ## Implementation Plan
 
-### Phase 1: Complete jsonic References Removal (Immediate)
+### Phase 1: Fix Critical Build Errors (Immediate)
 
-1. **Execute remaining removal scripts**: Complete removal of final 382 references from 31 files
-2. **Clean test files**: Update comments and variable names in test files
-3. **Update documentation**: Remove "jsonic" from HTML, markdown, and tool descriptions
-4. **Clean JavaScript assets**: Update vexy-json-tool.js references
-5. **Update build scripts**: Clean remaining scattered references
-6. **Verify completeness**: Re-run grep to ensure no "jsonic" references remain
+1. **Fix rustfmt configuration**: Update rustfmt.toml to use `fn_params_layout`
+2. **Run cargo clippy --fix**: Apply automatic fixes where safe
+3. **Fix format strings manually**: Replace `format!("{}", var)` with `format!("{var}")`
+4. **Fix identical if-else blocks**: Refactor or remove duplicate code
+5. **Fix map iterations**: Use `.values()` instead of `.iter().map(|(_, v)| v)`
+6. **Implement Default traits**: Add Default implementations for required types
 
-### Phase 2: Build and Deliverables (Medium Priority)
+### Phase 2: Fix Failing Tests (High Priority)
 
-1. **Read issues/620.txt**: Understand build deliverables requirements
-2. **Fix macOS packaging**: Correct binary path in packaging script (vexy-json not vexy_json)
-3. **Test build deliverables**: Run build-deliverables.sh and test on all platforms
-4. **Run full release script**: Execute `./scripts/release.sh 1.0.6` to verify complete build
+1. **Debug bracket matching test**: Fix error recovery v2 bracket detection
+2. **Fix lazy parser**: Resolve EOF and parsing issues in lazy module
+3. **Fix iterative parser**: Address array/object parsing state machine
+4. **Fix streaming tests**: Resolve NDJSON and event parser issues
+5. **Fix memory pool tests**: Ensure proper allocation tracking
+6. **Run test suite**: Verify all tests pass
 
-### Phase 3: Clippy Warnings Cleanup
+### Phase 3: Fix Build System (High Priority)
 
-1. **Fix uninlined-format-args**: Address 100+ occurrences throughout codebase
-2. **Fix for-kv-map warnings**: Improve iterator usage patterns
-3. **Fix should_implement_trait**: Implement standard traits where appropriate
-4. **Apply other clippy fixes**: Address remaining minor suggestions
+1. **Update build.sh**: Remove strict clippy deny warnings for now
+2. **Fix fuzzing**: Make fuzz tests conditional on nightly toolchain
+3. **Update release.sh**: Add test failure check that stops release
+4. **Test build process**: Run full build and verify success
 
-### Phase 4: Naming Unification
+### Phase 4: Prepare Clean Release (v1.5.3)
 
-1. **Standardize URLs**: Update all web tool URLs to consistent pattern
-2. **Update JavaScript assets**: Rename to use `vexy-json-*` pattern
-3. **Fix documentation**: Ensure "Vexy JSON" (with space) in prose
-4. **Update package metadata**: Ensure consistent naming across all packages
-5. **Create naming lint script**: Automate checking for violations
-
-### Phase 5: Final Verification and Release
-
-1. Run full test suite on all platforms
-2. Check build output for warnings
-3. Verify all jsonic references are removed
-4. Update version in all Cargo.toml files
-5. Update CHANGELOG.md with all fixes
-6. Create git tag
-7. Publish to crates.io
+1. **Run full test suite**: Ensure all tests pass
+2. **Run clippy with warnings**: Check remaining non-critical issues
+3. **Update version**: Bump to 1.5.3 in all Cargo.toml files
+4. **Update CHANGELOG.md**: Document all fixes
+5. **Create release**: Run release script with proper checks
+6. **Publish to crates.io**: Complete the release process
 
 ## Success Metrics
 
-- [ ] ✅ Zero references to ZZSON in code (except 2 in documentation)
-- [ ] ✅ Successful build of core and CLI
-- [ ] ✅ All critical tests passing
-- [ ] 🔄 Zero jsonic references (382 remaining, 79% complete)
-- [ ] ⬜ Reduced clippy warnings to < 10 (currently 100+)
-- [ ] ⬜ Complete naming unification
-- [ ] 🔄 All build deliverables tested on all platforms (core builds working)
+- [ ] ❌ Build completes without errors (currently 143 clippy errors)
+- [ ] ❌ All tests pass (currently 20 failures)
+- [ ] ⬜ Fuzzing works or is properly disabled
+- [ ] ⬜ Release script validates test success
+- [ ] ⬜ Clean release v1.5.3 published
 
 ## Current State Summary
 
-The Vexy JSON project has successfully completed major milestones:
+The v1.5.2 release exposed critical issues:
 
-- [ ] **Core functionality** - Builds and runs successfully
-- [ ] **Critical issues resolved** - All blocking errors and test failures fixed
-- [ ] **Nearly complete** - Only cleanup and polish tasks remain
+- **Build System**: Too strict clippy settings prevent compilation
+- **Test Suite**: 20 tests failing but ignored by release process
+- **Quality Control**: Release proceeded despite failures
+- **Configuration**: Outdated rustfmt options and fuzzing requirements
 
-## Next Steps
+## Immediate Next Steps
 
-1. Complete jsonic removal (382 references remaining, 79% done)
-2. Fix macOS packaging binary path issue
-3. Fix remaining clippy warnings
-4. Implement naming unification standards
-5. Release version 1.0.6 as production-ready release
+1. Fix rustfmt.toml configuration
+2. Apply cargo clippy --fix for automatic fixes
+3. Manually fix remaining clippy errors
+4. Debug and fix all 20 failing tests
+5. Update build and release scripts
+6. Prepare and release v1.5.3 with all fixes
 
-The project is very close to completion with significant progress made on all fronts.
+This is a critical situation that needs immediate attention before any further development.
