@@ -4,7 +4,7 @@ use vexy_json::{parse, Value};
 
 /// Comma handling tests based on reference implementation tests from comma.test.js
 /// Tests implicit commas (newlines as separators), optional commas, trailing commas, and edge cases
-/// Reference: ref/jsonic/test/comma.test.js
+/// Reference: ref/the reference implementation/test/comma.test.js
 
 #[test]
 fn test_basic_comma_usage() {
@@ -213,7 +213,7 @@ fn test_trailing_commas() {
 
 #[test]
 fn test_multiple_consecutive_commas() {
-    // Test multiple consecutive commas creating null values (jsonic feature)
+    // Test multiple consecutive commas creating null values (forgiving JSON feature)
 
     // Multiple commas in arrays
     let result = parse("[,,]");
@@ -224,7 +224,7 @@ fn test_multiple_consecutive_commas() {
                 arr.len(),
                 arr
             );
-            // This tests if vexy_json supports jsonic-style null insertion for empty comma positions
+            // This tests if vexy_json supports forgiving JSON-style null insertion for empty comma positions
         }
         Ok(other) => {
             println!("vexy_json parsed [,,] as: {other:?}");
@@ -402,7 +402,7 @@ fn test_complex_nested_structures() {
 fn test_special_cases() {
     // Test special comma edge cases
 
-    // Single object followed by comma (creates implicit array in jsonic)
+    // Single object followed by comma (creates implicit array in forgiving JSON)
     let result = parse("{a:1},");
     match result {
         Ok(Value::Array(arr)) => {

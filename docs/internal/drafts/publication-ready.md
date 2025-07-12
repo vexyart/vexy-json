@@ -25,7 +25,7 @@ All preparation work is complete. The package is ready for immediate publication
 - **Description**: A forgiving JSON parser - Rust forgiving JSON parser
 - **Repository**: https://github.com/vexyart/vexy-json
 - **License**: MIT OR Apache-2.0
-- **Keywords**: json, parser, forgiving, jsonic
+- **Keywords**: json, parser, forgiving, the reference implementation
 - **Categories**: parser-implementations, encoding
 
 ## 📊 What's Included

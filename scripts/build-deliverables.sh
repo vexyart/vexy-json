@@ -17,7 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 VERSION=$(grep '^version' "$PROJECT_ROOT/Cargo.toml" | head -1 | cut -d'"' -f2)
 DIST_DIR="$PROJECT_ROOT/dist"
-BINARY_NAME="vexy_json"
+BINARY_NAME="vexy-json"
 
 # Function to print messages
 log() {
@@ -47,7 +47,7 @@ build_macos() {
     local MACOS_DIR="$DIST_DIR/macos"
     
     # Build native binary for current macOS architecture
-    cargo build --release --bin "$BINARY_NAME"
+    cargo build --release -p vexy-json-cli --bin "$BINARY_NAME"
     
     # Copy binary
     cp "target/release/$BINARY_NAME" "$MACOS_DIR/"
@@ -83,13 +83,13 @@ build_windows() {
     # Check if we can cross-compile to Windows
     if command -v cross &> /dev/null; then
         log "Cross-compiling for Windows..."
-        cross build --release --bin "$BINARY_NAME" --target x86_64-pc-windows-msvc
+        cross build --release -p vexy-json-cli --bin "$BINARY_NAME" --target x86_64-pc-windows-msvc
         cp "target/x86_64-pc-windows-msvc/release/${BINARY_NAME}.exe" "$WINDOWS_DIR/"
     else
         # Check if we have the Windows target installed
         if rustup target list --installed | grep -q "x86_64-pc-windows-gnu"; then
             log "Building for Windows using cargo..."
-            cargo build --release --bin "$BINARY_NAME" --target x86_64-pc-windows-gnu
+            cargo build --release -p vexy-json-cli --bin "$BINARY_NAME" --target x86_64-pc-windows-gnu
             cp "target/x86_64-pc-windows-gnu/release/${BINARY_NAME}.exe" "$WINDOWS_DIR/"
         else
             error "Cannot build for Windows. Install cross or add Windows target."
@@ -113,11 +113,11 @@ build_linux() {
     # Build static binary using musl if possible
     if rustup target list --installed | grep -q "x86_64-unknown-linux-musl"; then
         log "Building static Linux binary with musl..."
-        cargo build --release --bin "$BINARY_NAME" --target x86_64-unknown-linux-musl
+        cargo build --release -p vexy-json-cli --bin "$BINARY_NAME" --target x86_64-unknown-linux-musl
         cp "target/x86_64-unknown-linux-musl/release/$BINARY_NAME" "$LINUX_DIR/"
     else
         log "Building Linux binary..."
-        cargo build --release --bin "$BINARY_NAME"
+        cargo build --release -p vexy-json-cli --bin "$BINARY_NAME"
         cp "target/release/$BINARY_NAME" "$LINUX_DIR/"
     fi
     

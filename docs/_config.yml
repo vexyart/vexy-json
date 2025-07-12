@@ -1,15 +1,20 @@
 ---
 # Site metadata for SEO
 author:
-  name: Adam Twardoch
-  url: https://github.com/twardoch
-baseurl: /vexy_json
+  name: Fontlab Ltd. dba Vexy Co
+  url: https://vexy.art/
+aux_links:
+  View on GitHub:
+    - https://github.com/vexyart/vexy-json
+back_to_top: true
+back_to_top_text: Back to top
+baseurl: /vexy-json
 # Collections
 collections:
   pages:
     output: true
     permalink: /:name/
-# Default front matter
+color_scheme: dark
 defaults:
   - scope:
       path: ''
@@ -20,8 +25,8 @@ defaults:
       path: pkg
     values:
       layout: none
-description: A Rust library for parsing forgiving JSON with comments, trailing commas, and unquoted keys
-# Exclude development files
+description: Lenieng and tolerant JSON parser in Rust
+enable_copy_code_button: true
 exclude:
   - Gemfile
   - Gemfile.lock
@@ -34,15 +39,24 @@ exclude:
   - '*.sh'
   - '*.gemspec'
   - '*.erb'
-  - '_posts/0000-00-00-welcome-to-jekyll.markdown.erb'
-  - 'vendor/bundle/**/*'
-  - 'vendor/bundle/ruby/**/*'
-  - 'vendor/bundle/ruby/*/gems/**/*'
-  - 'vendor/bundle/ruby/*/gems/jekyll-*/lib/site_template/**/*'
+  - vendor/bundle/**/*
+  - vendor/bundle/ruby/**/*
+  - vendor/bundle/ruby/*/gems/**/*
+  - vendor/bundle/ruby/*/gems/jekyll-*/lib/site_template/**/*
   - '**/site_template/**/*'
   - '**/gems/jekyll-*/lib/site_template/_posts/*'
-  - 'internal/**/*'
-  - 'dev/**/*'
+  - internal/**/*
+  - dev/**/*
+  - node_modules/
+  - package.json
+  - package-lock.json
+  - tailwind.config.js
+  - postcss.config.js
+  - assets/css/input.css
+  - _build.sh
+  - _serve.sh
+  - '*.orig'
+footer_content: Copyright &copy; 2025 Vexy Co. MIT License.
 github:
   repository_url: https://github.com/vexyart/vexy-json
 highlighter: rouge
@@ -57,35 +71,29 @@ incremental: false
 livereload: true
 # Build settings
 markdown: kramdown
-# Just-the-docs theme configuration
-search_enabled: true
-search:
-  heading_level: 2
-  previews: 2
-  preview_words_before: 3
-  preview_words_after: 3
-  tokenizer_separator: /[\s\-/]+/
-  rel_url: true
-  button: false
-
-# Back to top link
-back_to_top: true
-back_to_top_text: "Back to top"
-
-# Footer content
-footer_content: "Copyright &copy; 2025 Adam Twardoch. Distributed by an <a href=\"https://github.com/vexyart/vexy-json/tree/main/LICENSE\">MIT license.</a>"
-
 # External navigation links will be removed from here as just-the-docs handles them in the content
 # Plugin configuration
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-optional-front-matter
+  - jekyll-remote-theme
+remote_theme: just-the-docs/just-the-docs
 # Repository information
-repository: twardoch/vexy_json
+repository: vexyart/vexy-json 
 # Performance and caching
 sass:
   style: compressed
+search:
+  button: false
+  heading_level: 2
+  preview_words_after: 3
+  preview_words_before: 3
+  previews: 2
+  rel_url: true
+  tokenizer_separator: /[\s\-/]+/
+# Just-the-docs theme configuration
+search_enabled: true
 # Social and sharing
 social:
   - icon: github
@@ -97,13 +105,8 @@ static_files:
   - /pkg/*.wasm
   - /pkg/*.js
   - /assets/**/*
-remote_theme: just-the-docs/just-the-docs
 # Site configuration for vexy_json documentation
-title: vexy_json - Forgiving JSON Parser
-url: https://twardoch.github.io
+title: Vexy JSON
+url: https://vexyart.github.io/vexy-json
 # MIME type handling for GitHub Pages
 # Note: GitHub Pages automatically serves .wasm files with application/wasm MIME type
-webrick:
-  headers:
-    pkg:
-      Cache-Control: public, max-age=2592000

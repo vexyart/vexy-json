@@ -6,7 +6,7 @@ Update REFACTOR.md so that it becomes a very detailed plan of refactoring the co
 
 
 1. **Production-grade Quality** – Aim for clean, idiomatic, _boring_ Rust. No clever macros where straightforward code is clearer.
-2. **Parity With Reference Implementation** – Behaviour must remain 100 % compatible with the original JavaScript `jsonic` test-suite unless a conscious deviation is documented.
+2. **Parity With Reference Implementation** – Behaviour must remain 100 % compatible with the original JavaScript `the reference implementation` test-suite unless a conscious deviation is documented.
 3. **Incremental, Review-friendly Commits** – Small, atomic commits that each compile and keep the test-suite green.
 4. **Minimal Public-API Breakage** – The current crate is already used in downstream code and WASM builds; any unavoidable breaking change must be sign-posted in the CHANGELOG and guarded by a semver bump.
 5. **Performance Awareness** – Never regress the existing Criterion benchmarks by more than 3 % unless the change gives a functional or maintainability win that clearly outweighs the cost.
@@ -73,7 +73,7 @@ The current lexer contains duplicated state machines and ad-hoc look-ahead logic
 
 3.4 **Config Validation** – Add `ParserOptions::validate()` that returns `Result<(), ConfigError>`; e.g. `newline_as_comma=false` + `implicit_top_level=true` is ambiguously specified – decide policy and enforce.
 
-3.5 **Property-based tests** – Port `jsonic` round-trip tests; generate random forgiving JSON, parse, serialise back to canonical JSON, compare using serde_json Value.
+3.5 **Property-based tests** – Port `the reference implementation` round-trip tests; generate random forgiving JSON, parse, serialise back to canonical JSON, compare using serde_json Value.
 
 ## 5. Error & Result Type Revamp (1 day)
 

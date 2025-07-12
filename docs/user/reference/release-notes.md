@@ -28,7 +28,7 @@ We're thrilled to announce **vexy_json v2.0.0**, a groundbreaking release that t
 
 **🚀 Stable Release - January 7, 2025**
 
-We're excited to announce the stable release of **vexy_json v1.0.0**, a production-ready forgiving JSON parser for Rust. This is a complete port of the JavaScript library [the reference implementation](https://github.com/jsonicjs/jsonic), bringing powerful and flexible JSON parsing capabilities to the Rust ecosystem.
+We're excited to announce the stable release of **vexy_json v1.0.0**, a production-ready forgiving JSON parser for Rust. This is a complete port of the JavaScript library [the reference implementation](https://github.com/the reference implementationjs/the reference implementation), bringing powerful and flexible JSON parsing capabilities to the Rust ecosystem.
 
 ## 🎉 What is vexy_json?
 
@@ -155,7 +155,7 @@ Based on comprehensive benchmark testing:
 - ✅ Jsonic compatibility: 17/17 passing
 - ✅ Newline-as-comma: 8/8 passing
 - ✅ Number formats: 8/8 passing
-- ✅ Supported jsonic: 17/17 passing
+- ✅ Supported the reference implementation: 17/17 passing
 - ✅ Doc tests: 4/4 passing
 
 **Quality Standards**:
@@ -166,14 +166,14 @@ Based on comprehensive benchmark testing:
 - Comprehensive error handling
 - Full rustdoc documentation
 
-## 🔄 jsonic Compatibility
+## 🔄 the reference implementation Compatibility
 
-vexy_json achieves **complete compatibility** with the jsonic JavaScript library:
+vexy_json achieves **complete compatibility** with the the reference implementation JavaScript library:
 
-- All 17 jsonic compatibility tests pass
+- All 17 the reference implementation compatibility tests pass
 - Identical parsing behavior for all supported features
 - Same error handling and edge case behavior
-- Seamless migration path from jsonic.js projects
+- Seamless migration path from the reference implementation.js projects
 
 ## 🛠️ Configuration Options
 
@@ -229,7 +229,7 @@ at your option.
 
 ## 🙏 Acknowledgments
 
-Special thanks to the [jsonic.js](https://github.com/jsonicjs/jsonic) project for the original implementation and design patterns that made this Rust port possible.
+Special thanks to the [the reference implementation.js](https://github.com/the reference implementationjs/the reference implementation) project for the original implementation and design patterns that made this Rust port possible.
 
 ---
 
@@ -374,7 +374,7 @@ While we've maintained backward compatibility for most APIs, some changes were n
 
 Special thanks to all contributors who made this release possible, especially:
 - The Rust community for invaluable feedback
-- jsonic.js maintainers for the original inspiration
+- the reference implementation.js maintainers for the original inspiration
 - Our beta testers who helped identify edge cases
 
 ---

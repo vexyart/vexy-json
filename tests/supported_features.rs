@@ -71,7 +71,7 @@ fn test_numbers() {
     assert_eq!(parse("-1").unwrap(), n(-1));
     assert_eq!(parse("0").unwrap(), n(0));
 
-    assert_eq!(parse("1.0").unwrap(), f(1.0)); // Keep as float - jsonic doesn't optimize
+    assert_eq!(parse("1.0").unwrap(), f(1.0)); // Keep as float - reference implementation doesn't optimize
     assert_eq!(parse("-1.0").unwrap(), f(-1.0)); // Keep as float
     assert_eq!(parse("0.0").unwrap(), f(0.0)); // Keep as float
 

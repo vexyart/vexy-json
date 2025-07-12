@@ -11,11 +11,11 @@ This document provides guidance for AI agents (Claude Code, etc.) when working w
 
 ## 1. Project Overview
 
-`vexy_json` is a Rust port of the JavaScript library `jsonic`, a forgiving JSON parser. The reference JavaScript implementation is located in the `ref/jsonic/` directory.
+`vexy_json` is a Rust port of the JavaScript library `the reference implementation`, a forgiving JSON parser. The reference JavaScript implementation is located in the `ref/the reference implementation/` directory.
 
 ## 2. Development Status
 
-This project is in an active development phase. The core parsing engine is implemented, along with a comprehensive test suite, benchmarks, and WASM support. The focus is on achieving full API compatibility with `jsonic`, refining the idiomatic Rust API, and improving performance.
+This project is in an active development phase. The core parsing engine is implemented, along with a comprehensive test suite, benchmarks, and WASM support. The focus is on achieving full API compatibility with `the reference implementation`, refining the idiomatic Rust API, and improving performance.
 
 ## 3. Rust Implementation
 
@@ -38,7 +38,7 @@ The Rust implementation is a cargo workspace organized into several crates:
 ### 3.2. Core Features
 
 -   **Standard JSON Parsing (RFC 8259):** Full support for the official JSON specification.
--   **Forgiving Features:** Compatibility with `jsonic`'s non-standard features is a primary goal:
+-   **Forgiving Features:** Compatibility with `the reference implementation`'s non-standard features is a primary goal:
     -   Single-line (`//`) and multi-line (`/* */`) comments.
     -   Trailing commas in objects and arrays.
     -   Unquoted object keys (where unambiguous).
@@ -50,11 +50,11 @@ The Rust implementation is a cargo workspace organized into several crates:
 
 -   **Error Handling:** Uses `Result<T, E>` and a custom `Error` enum (`src/error.rs`) for robust error handling with location information.
 -   **Testing:**
-    -   Unit and integration tests are located in the `tests/` directory, ported from `jsonic`'s test suite.
+    -   Unit and integration tests are located in the `tests/` directory, ported from `the reference implementation`'s test suite.
     -   The `examples/` directory contains numerous small, runnable programs for debugging specific features.
     -   Benchmarking is performed using `criterion.rs`, with benchmarks defined in the `benches/` directory.
 -   **Extensibility:** The architecture uses Rust's traits and pattern matching for clarity and maintainability, avoiding a direct port of the JavaScript plugin system in favor of a more idiomatic approach.
--   **Performance:** The implementation aims for high performance, with ongoing benchmarking to compare against `serde_json` and `jsonic`.
+-   **Performance:** The implementation aims for high performance, with ongoing benchmarking to compare against `serde_json` and `the reference implementation`.
 -   **WASM Target:** A key feature is the ability to compile to WebAssembly, providing a performant `vexy_json` parser for web browsers and Node.js. The `wasm-pack` tool is used for building the WASM package.
 
 ## 4. Development Workflow
@@ -75,12 +75,12 @@ After running the script, always review the output log to check for errors or wa
 cat ./build.log.txt
 ```
 
-### 4.2. Reference Implementation (jsonic)
+### 4.2. Reference Implementation (the reference implementation)
 
-When working with the reference JavaScript implementation in `ref/jsonic/`:
+When working with the reference JavaScript implementation in `ref/the reference implementation/`:
 
 ```bash
-cd ref/jsonic
+cd ref/the reference implementation
 
 # Build the TypeScript code
 npm run build

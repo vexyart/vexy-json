@@ -1,4 +1,4 @@
-// this_file: docs/assets/js/jsonic-tool.js
+// this_file: docs/assets/js/vexy-json-tool.js
 
 /**
  * Jsonic Tool - Interactive web interface for Jsonic JSON parser
@@ -11,7 +11,7 @@ class JsonicTool {
         this.isLoaded = false;
         this.examples = {
             'Basic': {
-                input: `// Jsonic flexible syntax\nname: "jsonic-demo"\nversion: 1.0\nfeatures: [comments, "unquoted keys", 'mixed quotes']`,
+                input: `// Vexy JSON flexible syntax\nname: "vexy-json-demo"\nversion: 1.0\nfeatures: [comments, "unquoted keys", 'mixed quotes']`,
                 description: "Basic Jsonic syntax with mixed quotes"
             },
             'Object Merging': {
@@ -178,7 +178,7 @@ class JsonicTool {
 
         // Note: Jsonic doesn't have as many granular options as vexy_json
         // Most features are enabled by default
-        const strictMode = document.getElementById('jsonic-strict')?.checked || false;
+        const strictMode = document.getElementById('vexy-json-strict')?.checked || false;
 
         if (strictMode) {
             // In strict mode, disable flexible features
@@ -256,7 +256,7 @@ class JsonicTool {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'jsonic-output.json';
+            a.download = 'vexy-json-output.json';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

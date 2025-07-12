@@ -51,7 +51,7 @@ This page provides an overview of the current build status and health metrics fo
 ## Deployment Status
 
 ### Live Deployments
-- **Vexy JSON Tool**: [https://twardoch.github.io/vexy_json/vexy_json-tool/](https://twardoch.github.io/vexy_json/vexy_json-tool/)
+- **Vexy JSON Tool**: [https://twardoch.github.io/vexy-json/vexy-json-tool/](https://twardoch.github.io/vexy-json/vexy-json-tool/)
 - **Vexy JSON Tool**: [https://twardoch.github.io/vexy_json/vexy-json-tool/](https://twardoch.github.io/vexy_json/vexy-json-tool/)
 - **Tools Overview**: [https://twardoch.github.io/vexy_json/tools/](https://twardoch.github.io/vexy_json/tools/)
 - **Documentation**: [https://docs.rs/vexy_json](https://docs.rs/vexy_json)

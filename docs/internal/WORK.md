@@ -14,9 +14,9 @@
 
 2. ✅ Verified test_number_features is now passing
 
-3. ✅ Created scripts for jsonic reference removal:
-   - remove_jsonic_refs.sh (general replacement)
-   - remove_jsonic_refs_targeted.sh (careful targeted replacement)
+3. ✅ Created scripts for the reference implementation reference removal:
+   - remove_the reference implementation_refs.sh (general replacement)
+   - remove_the reference implementation_refs_targeted.sh (careful targeted replacement)
    - Partially executed targeted removal (reduced references but many remain)
 
 ### Build Status
@@ -26,10 +26,10 @@
 
 ## Next Steps
 
-1. **Complete jsonic reference removal** - Still ~1800 references across 41 files
+1. **Complete the reference implementation reference removal** - Still ~1800 references across 41 files
    - Focus on test files and documentation
    - Preserve important compatibility notes
-   - Update web assets (rename jsonic-tool.js)
+   - Update web assets (rename the reference implementation-tool.js)
 
 2. **Fix remaining clippy warnings** - 100+ uninlined-format-args warnings
    - Can use `cargo fix` for automatic fixing

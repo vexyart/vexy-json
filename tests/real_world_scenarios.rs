@@ -506,19 +506,19 @@ mod migration_scenarios {
         }"#;
 
         let json_result = parse(strict_json).unwrap();
-        let jsonic_result = parse(vexy_json_version).unwrap();
+        let vexy_result = parse(vexy_json_version).unwrap();
 
         // Both should parse to equivalent structures
         assert_eq!(
             json_result["database"]["host"],
-            jsonic_result["database"]["host"]
+            vexy_result["database"]["host"]
         );
         assert_eq!(
             json_result["database"]["port"],
-            jsonic_result["database"]["port"]
+            vexy_result["database"]["port"]
         );
-        assert_eq!(json_result["cache"]["type"], jsonic_result["cache"]["type"]);
-        assert_eq!(json_result["cache"]["ttl"], jsonic_result["cache"]["ttl"]);
+        assert_eq!(json_result["cache"]["type"], vexy_result["cache"]["type"]);
+        assert_eq!(json_result["cache"]["ttl"], vexy_result["cache"]["ttl"]);
     }
 
     #[test]

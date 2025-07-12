@@ -3,14 +3,14 @@
 Now /report and mark completed items as done in <!-- Imported from: PLAN.md -->
 # this_file: docs/internal/PLAN.md
 
-# Vexy JSON Improvement Plan - v2.3.2 jsonic Removal & Build Fixes
+# Vexy JSON Improvement Plan - v2.3.2 the reference implementation Removal & Build Fixes
 
 ## Executive Summary
 
 Following the successful project renaming to Vexy JSON, this plan addresses critical remaining issues:
 
 ### New Critical Issues Found (v2.3.2)
-1. **jsonic references removal** - Found 50 files containing "jsonic" references that need cleanup
+1. **the reference implementation references removal** - Found 50 files containing "the reference implementation" references that need cleanup
 2. **Test failure** - test_number_features failing due to number format parsing issues
 3. **Build warnings** - 3 unused variable warnings in examples/recursive_parser.rs
 4. **Build status** - Build succeeds but with warnings and 1 test failure
@@ -43,12 +43,12 @@ Following the successful project renaming to Vexy JSON, this plan addresses crit
 
 ### Group 0: IMMEDIATE - Critical Fixes
 
-#### 0.1 Remove jsonic References (50 files)
-- **High Priority**: Remove all "jsonic" references from codebase
+#### 0.1 Remove the reference implementation References (50 files)
+- **High Priority**: Remove all "the reference implementation" references from codebase
 - **Files affected**: 50 files including tests, documentation, and code
 - **Impact**: Legacy naming that confuses project identity
 - **Categories to clean**:
-  - Test files: `jsonic_*.rs`, `supported_jsonic.rs`
+  - Test files: `the reference implementation_*.rs`, `supported_the reference implementation.rs`
   - Documentation: HTML files, markdown files, tool descriptions
   - Code references: Comments, variable names, function names
   - Configuration: pyproject.toml, Cargo.toml references
@@ -109,12 +109,12 @@ Following the successful project renaming to Vexy JSON, this plan addresses crit
 
 ## Implementation Plan
 
-### Phase 1: jsonic References Removal (Immediate - 2-3 hours)
-1. **Rename test files**: `jsonic_*.rs` → `vexy_json_*.rs` or `compat_*.rs`
-2. **Update documentation**: Remove "jsonic" from HTML, markdown, and tool descriptions
-3. **Clean code references**: Replace "jsonic" with "vexy_json" in comments and variable names
+### Phase 1: the reference implementation References Removal (Immediate - 2-3 hours)
+1. **Rename test files**: `the reference implementation_*.rs` → `vexy_json_*.rs` or `compat_*.rs`
+2. **Update documentation**: Remove "the reference implementation" from HTML, markdown, and tool descriptions
+3. **Clean code references**: Replace "the reference implementation" with "vexy_json" in comments and variable names
 4. **Update configurations**: Clean pyproject.toml and Cargo.toml references
-5. **Verify completeness**: Re-run grep to ensure no "jsonic" references remain
+5. **Verify completeness**: Re-run grep to ensure no "the reference implementation" references remain
 
 ### Phase 2: Build Fixes (30 minutes)
 1. **Fix unused variables**: Prefix with underscore in examples/recursive_parser.rs
@@ -125,7 +125,7 @@ Following the successful project renaming to Vexy JSON, this plan addresses crit
 ### Phase 3: Final Verification (30 minutes)
 1. Run full test suite to ensure no regressions
 2. Check build output for warnings
-3. Verify all jsonic references are removed
+3. Verify all the reference implementation references are removed
 
 ### Phase 4: Release Preparation (1 day)
 1. Run full test suite on all platforms.

@@ -1,6 +1,6 @@
 [package]
 name = "vexy-json-python"
-version = "1.0.5"
+version = "1.0.9"
 edition = "2021"
 description = "Python bindings for vexy_json - a forgiving JSON parser"
 repository = "https://github.com/vexyart/vexy-json"

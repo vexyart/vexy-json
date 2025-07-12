@@ -4,12 +4,12 @@ use vexy_json::{parse, parse_with_options, ParserOptions};
 
 /// Comprehensive error handling tests based on reference implementation tests from error.test.js
 /// These tests ensure vexy_json properly handles malformed input and provides meaningful error messages.
-/// Reference: ref/jsonic/test/error.test.js
+/// Reference: ref/the reference implementation/test/error.test.js
 
 #[test]
 fn test_unterminated_strings() {
     // Test unterminated double quote strings
-    // Reference: jsonic error.test.js line 125
+    // Reference: the reference implementation error.test.js line 125
     assert!(
         parse("\"a").is_err(),
         "Unterminated double quote should error"
@@ -37,7 +37,7 @@ fn test_unterminated_strings() {
 #[test]
 fn test_unexpected_closing_tokens() {
     // Test unexpected closing brackets and braces at start
-    // Reference: jsonic error.test.js line 192-195
+    // Reference: the reference implementation error.test.js line 192-195
     assert!(parse("]").is_err(), "Unexpected ] at start should error");
     assert!(parse("}").is_err(), "Unexpected }} at start should error");
     assert!(
@@ -57,7 +57,7 @@ fn test_unexpected_closing_tokens() {
 #[test]
 fn test_unexpected_tokens_in_context() {
     // Test unexpected tokens in various contexts
-    // Reference: jsonic error.test.js line 197-202
+    // Reference: the reference implementation error.test.js line 197-202
     assert!(
         parse("a]").is_err(),
         "Unexpected ] after identifier should error"
@@ -81,7 +81,7 @@ fn test_unexpected_tokens_in_context() {
 #[test]
 fn test_invalid_colon_usage() {
     // Test invalid colon usage patterns
-    // Reference: jsonic error.test.js line 181-189
+    // Reference: the reference implementation error.test.js line 181-189
     assert!(parse(":").is_err(), "Standalone colon should error");
     assert!(parse(":a").is_err(), "Colon before value should error");
     assert!(

@@ -38,7 +38,7 @@ Upon completion, vexy_json will be a lean, maintainable, and extensible parser s
 
 ### 2.2. Parity With Reference Implementation
 
-- Maintain 100% compatibility with the JavaScript `jsonic` test suite unless deviations are documented.
+- Maintain 100% compatibility with the JavaScript `the reference implementation` test suite unless deviations are documented.
 
 ### 2.3. Incremental, Review-friendly Commits
 

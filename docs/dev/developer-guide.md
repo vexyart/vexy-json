@@ -27,8 +27,8 @@ The `vexy_json` project uses a multi-crate Cargo workspace structure with Jekyll
 *   `docs/`: The root directory for the GitHub Pages site.
     *   `_config.yml`: Jekyll configuration file.
     *   `tool.html`: Vexy JSON interactive tool (WebAssembly-powered)
-    *   `jsonic.html`: Jsonic interactive tool (CDN-powered)
-    *   `vexy_json-tool.md`: Jekyll wrapper for Vexy JSON tool
+    *   `the reference implementation.html`: Jsonic interactive tool (CDN-powered)
+    *   `vexy-json-tool.md`: Jekyll wrapper for Vexy JSON tool
     *   `vexy-json-tool.md`: Jekyll wrapper for Jsonic tool
     *   `tool.md`: Tools overview page
     *   `assets/`: Static assets for the web tools.
