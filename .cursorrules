@@ -1,5 +1,5 @@
 
-IMPORTANT: After each change review reflect refine revise, then /report , and then /work on PLAN.md and TODO.md , then review reflect refine revise, and then continue to /work on PLAN.md and TODO.md until every single item and issue has been fixed. Do not stop, do not ask for confirmation. Work!
+After every iteration, /report and mark completed items as done in @PLAN.md and @TODO.md. Then run `./build.sh` and then check the `./build_logs`. If needed read the @llms.txt code snapshot. Then /work on items from @TODO.md consulting on @PLAN.md. Then review reflect refine revise, and then continue to /work on @PLAN.md and @TODO.md until every single item and issue has been fixed. Iterate iterate iterate! Do not stop, do not ask for confirmation. Work! When you're finishing one task or item, say "Wait, but..." and go on to the next task/item. It’s CRUCIAL that we get to a solution that BUILDS everything correctly!
 
 ## 1. Project Overview
 
@@ -264,11 +264,11 @@ When I say "/report", you must: Read all `./TODO.md` and `./PLAN.md` files and a
 
 When I say "/work", you must work in iterations like so: Read all `./TODO.md` and `./PLAN.md` files and reflect. Write down the immediate items in this iteration into `./WORK.md` and work on these items. Think, contemplate, research, reflect, refine, revise. Be careful, curious, vigilant, energetic. Verify your changes. Think aloud. Consult, research, reflect. Periodically remove completed items from `./WORK.md` and tick off completed items from `./TODO.md` and `./PLAN.md`. Update `./WORK.md` with items that will lead to improving the work you’ve just done, and /work on these. When you’re happy with your implementation of the most recent item, '/report', and consult `./PLAN.md` and `./TODO.md`, and /work on implementing the next item, and so on and so on. Work tirelessly without informing me. Only let me know when you’ve completed the task of implementing all `./PLAN.md` and `./TODO.md` items. You may also say "/report" to yourself and that will prompt you to perform the above-described task autonomously.
 
-### 4. Development Workflow
+### 14.1. Development Workflow
 
 This project uses a specific workflow for development and testing. Adhere to the following commands.
 
-### 4.1. Build and Test
+### 14.2. Build and Test
 
 **DO NOT** run `cargo build`, `cargo test`, or `cargo clippy` directly. Instead, use the provided build script, which handles all necessary steps, including formatting, linting, building, and testing.
 
@@ -282,7 +282,7 @@ After running the script, always review the output log to check for errors or wa
 cat ./build.log.txt
 ```
 
-### 4.2. Reference Implementation (jsonic)
+### 14.3. Reference Implementation (jsonic)
 
 When working with the reference JavaScript implementation in `ref/jsonic/`:
 
@@ -304,25 +304,25 @@ npm run test-some -- <test-pattern>
 
 # Consolidated Software Development Rules
 
-## 5. Pre-Work Preparation
+## 15. Pre-Work Preparation
 
-### 5.1. Before Starting Any Work
+### 15.1. Before Starting Any Work
 - Read `docs/internal/WORK.md` for work progress
 - Read `README.md` to understand the project
 - STEP BACK and THINK HEAVILY STEP BY STEP about the task
 - Consider alternatives and carefully choose the best option
 - Check for existing solutions in the codebase before starting
 
-### 5.2. Project Documentation to Maintain
+### 15.2. Project Documentation to Maintain
 - `README.md` - purpose and functionality
 - `CHANGELOG.md` - past change release notes (accumulative)
 - `PLAN.md` - detailed future goals, clear plan that discusses specifics
 - `TODO.md` - flat simplified itemized `- [ ]`-prefixed representation of `PLAN.md`
 - `WORK.md` - work progress updates
 
-## 6. General Coding Principles
+## 16. General Coding Principles
 
-### 6.1. Core Development Approach
+### 16.1. Core Development Approach
 - Iterate gradually, avoiding major changes
 - Focus on minimal viable increments and ship early
 - Minimize confirmations and checks
@@ -330,7 +330,7 @@ npm run test-some -- <test-pattern>
 - Check often the coherence of the code you're writing with the rest of the code
 - Analyze code line-by-line
 
-### 6.2. Code Quality Standards
+### 16.2. Code Quality Standards
 - Use constants over magic numbers
 - Write explanatory docstrings/comments that explain what and WHY
 - Explain where and how the code is used/referred to elsewhere
@@ -341,22 +341,22 @@ npm run test-some -- <test-pattern>
 - Modularize repeated logic into concise, single-purpose functions
 - Favor flat over nested structures
 
-## 7. Tool Usage (When Available)
+## 17. Tool Usage (When Available)
 
-### 7.1. MCP Tools to Consult
+### 17.1. MCP Tools to Consult
 - `codex` tool - for additional reasoning, summarization of files and second opinion
 - `context7` tool - for most up-to-date software package documentation
 - `sequentialthinking` tool - to think about the best way to solve tasks
 - `perplexity_ask` - for up-to-date information or context
 
-### 7.2. Additional Tools
+### 17.2. Additional Tools
 - Use `tree` CLI app if available to verify file locations
 - Check existing code with `.venv` folder to scan and consult dependency source code
 - Run `DIR="."; uvx codetoprompt --compress --output "$DIR/llms.txt"  --respect-gitignore --cxml --exclude "*.svg,.specstory,*.md,*.txt,ref,testdata,*.lock,*.svg" "$DIR"` to get a condensed snapshot of the codebase into `llms.txt`
 
-## 8. File Management
+## 18. File Management
 
-### 8.1. File Path Tracking
+### 18.1. File Path Tracking
 - **MANDATORY**: In every source file, maintain a `this_file` record showing the path relative to project root
 - Place `this_file` record near the top:
   - As a comment after shebangs in code files
@@ -365,22 +365,22 @@ npm run test-some -- <test-pattern>
 - Omit leading `./`
 - Check `this_file` to confirm you're editing the right file
 
-## 9. Python-Specific Guidelines
+## 19. Python-Specific Guidelines
 
-### 9.1. PEP Standards
+### 19.1. PEP Standards
 - PEP 8: Use consistent formatting and naming, clear descriptive names
 - PEP 20: Keep code simple and explicit, prioritize readability over cleverness
 - PEP 257: Write clear, imperative docstrings
 - Use type hints in their simplest form (list, dict, | for unions)
 
-### 9.2. Modern Python Practices
+### 19.2. Modern Python Practices
 - Use f-strings and structural pattern matching where appropriate
 - Write modern code with `pathlib`
 - ALWAYS add "verbose" mode loguru-based logging & debug-log
 - Use `uv pip install` instead of `pip install`
 - Prefix Python CLI tools with `python -m` (e.g., `python -m pytest`)
 
-### 9.3. CLI Scripts Setup
+### 19.3. CLI Scripts Setup
 For CLI Python scripts, use `fire` & `rich`, and start with:
 ```python
 #!/usr/bin/env -S uv run -s
@@ -390,43 +390,43 @@ For CLI Python scripts, use `fire` & `rich`, and start with:
 # this_file: PATH_TO_CURRENT_FILE
 ```
 
-### 9.4. Post-Edit Python Commands
+### 19.4. Post-Edit Python Commands
 ```bash
 fd -e py -x uvx autoflake -i {}; fd -e py -x uvx pyupgrade --py312-plus {}; fd -e py -x uvx ruff check --output-format=github --fix --unsafe-fixes {}; fd -e py -x uvx ruff format --respect-gitignore --target-version py312 {}; python -m pytest;
 ```
 
-## 10. Post-Work Activities
+## 20. Post-Work Activities
 
-### 10.1. Critical Reflection
+### 20.1. Critical Reflection
 - After completing a step, say "Wait, but" and do additional careful critical reasoning
 - Go back, think & reflect, revise & improve what you've done
 - Don't invent functionality freely
 - Stick to the goal of "minimal viable next version"
 
-### 10.2. Documentation Updates
+### 20.2. Documentation Updates
 - Update `WORK.md` with what you've done and what needs to be done next
 - Document all changes in `CHANGELOG.md`
 - Update `TODO.md` and `docs/internal/PLAN.md` accordingly
 
-## 11. Work Methodology
+## 21. Work Methodology
 
-### 11.1. Virtual Team Approach
+### 21.1. Virtual Team Approach
 Be creative, diligent, critical, relentless & funny! Lead two experts:
 - **"Ideot"** - for creative, unorthodox ideas
 - **"Critin"** - to critique flawed thinking and moderate for balanced discussions
 
 Collaborate step-by-step, sharing thoughts and adapting. If errors are found, step back and focus on accuracy and progress.
 
-### 11.2. Continuous Work Mode
+### 21.2. Continuous Work Mode
 - Treat all items in `docs/internal/PLAN.md` and `TODO.md` as one huge TASK
 - Work on implementing the next item
 - Review, reflect, refine, revise your implementation
 - Periodically check off completed issues
 - Continue to the next item without interruption
 
-## 12. Special Commands
+## 22. Special Commands
 
-### 12.1. `/report` Command
+### 22.1. `/report` Command
 1. Read all `./TODO.md` and `./docs/internal/PLAN.md` files
 2. Analyze recent changes
 3. Document all changes in `./CHANGELOG.md`
@@ -434,7 +434,7 @@ Collaborate step-by-step, sharing thoughts and adapting. If errors are found, st
 5. Ensure `./docs/internal/PLAN.md` contains detailed, clear plans with specifics
 6. Ensure `./TODO.md` is a flat simplified itemized representation
 
-### 12.2. `/work` Command
+### 22.2. `/work` Command
 1. Read all `./TODO.md` and `./docs/internal/PLAN.md` files and reflect
 2. Work on the tasks
 3. Think, contemplate, research, reflect, refine, revise
@@ -445,13 +445,13 @@ Collaborate step-by-step, sharing thoughts and adapting. If errors are found, st
 8. Execute `/report`
 9. Iterate again
 
-## 13. Additional Guidelines
+## 23. Additional Guidelines
 
 - Ask before extending/refactoring existing code that may add complexity or break things
 - Work tirelessly without constant updates when in continuous work mode
 - Only notify when you've completed all `docs/internal/PLAN.md` and `TODO.md` items
 
-## 14. Custom commands: 
+## 24. Custom commands: 
 
 When I say "/report", you must: Read all `./TODO.md` and `./docs/internal/PLAN.md` files and analyze recent changes. Document all changes in `./CHANGELOG.md`. From `./TODO.md` and `./docs/internal/PLAN.md` remove things that are done. Make sure that `./PLAN.md` contains a detailed, clear plan that discusses specifics, while `./TODO.md` is its flat simplified itemized `- [ ]`-prefixed representation. You may also say "/report" to yourself and that will prompt you to perform the above-described task autonomously. 
 

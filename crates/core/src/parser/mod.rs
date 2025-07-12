@@ -242,12 +242,52 @@ impl<'a> Parser<'a> {
         match self.current_token.as_ref().map(|(t, _)| t) {
             Some(&Token::Eof) => Ok(first_value),
             _ if is_explicit_structure => {
-                // For explicit JSON structures (arrays/objects), require end of input
-                Err(Error::Expected {
-                    expected: "end of input".to_string(),
-                    found: format!("{:?}", self.current_token.as_ref().map(|(t, _)| t)),
-                    position: self.lexer.position(),
-                })
+                // For explicit JSON structures (arrays/objects), check if there's a trailing comma
+                // that should start an implicit array
+                if self.options.implicit_top_level 
+                    && matches!(self.current_token.as_ref().map(|(t, _)| t), Some(&Token::Comma)) {
+                    // Treat the explicit structure as the first element of an implicit array
+                    let mut array = vec![first_value];
+                    self.advance()?;
+
+                    loop {
+                        self.skip_comments_and_newlines()?;
+                        if self.current_token.as_ref().map(|(t, _)| t) == Some(&Token::Eof) {
+                            break;
+                        }
+
+                        // Check for consecutive separators (which mean null values)
+                        if self.is_separator() {
+                            array.push(Value::Null);
+                            self.advance()?;
+                            continue;
+                        }
+
+                        array.push(self.parse_value()?);
+
+                        self.skip_comments_and_newlines()?;
+                        if self.is_separator() {
+                            self.advance()?;
+                        } else if self.current_token.as_ref().map(|(t, _)| t) == Some(&Token::Eof) {
+                            break;
+                        } else {
+                            return Err(Error::Expected {
+                                expected: ", or newline or end of input".to_string(),
+                                found: format!("{:?}", self.current_token.as_ref().map(|(t, _)| t)),
+                                position: self.lexer.position(),
+                            });
+                        }
+                    }
+
+                    Ok(Value::Array(array))
+                } else {
+                    // For explicit JSON structures (arrays/objects), require end of input
+                    Err(Error::Expected {
+                        expected: "end of input".to_string(),
+                        found: format!("{:?}", self.current_token.as_ref().map(|(t, _)| t)),
+                        position: self.lexer.position(),
+                    })
+                }
             }
             Some(&Token::Comma) | Some(&Token::Newline)
                 if matches!(
@@ -442,6 +482,7 @@ impl<'a> Parser<'a> {
         )
     }
 
+
     /// Skips comments and optionally newlines if newline_as_comma is enabled.
     pub(super) fn skip_comments_and_newlines(&mut self) -> Result<()> {
         let mut just_had_single_line_comment = false;
@@ -465,7 +506,6 @@ impl<'a> Parser<'a> {
         }
         Ok(())
     }
-
 
     /// Checks if the current token is a separator (comma or newline when newline_as_comma is enabled).
     pub(super) fn is_separator(&self) -> bool {

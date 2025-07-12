@@ -1,10 +1,8 @@
-use vexy_json_core::parse;
+use vexy_json::*;
 
 fn main() {
-    let input = r#"{"a": 1
-"b": 2}"#;
-    
-    println!("Testing input: {:?}", input);
+    let input = "a:#comment\nb:2";
+    println!("Testing: {:?}", input);
     match parse(input) {
         Ok(value) => println!("Success: {:?}", value),
         Err(e) => println!("Error: {:?}", e),

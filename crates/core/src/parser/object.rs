@@ -173,7 +173,9 @@ impl<'a> Parser<'a> {
             object.insert(key, value);
 
             // Check for separator or end
+            // Skip comments first, but don't skip newlines yet - we need to check if newlines are separators
             self.skip_comments()?;
+
             match self.current_token {
                 Some((Token::Comma, _)) => {
                     self.advance()?;
@@ -197,14 +199,52 @@ impl<'a> Parser<'a> {
                 }
                 Some((Token::RightBrace, _)) => continue,
                 _ => {
-                    return Err(Error::Expected {
-                        expected: ", or } or newline".to_string(),
-                        found: match &self.current_token {
-                    Some((token, _)) => format!("{:?}", token),
-                    None => "EOF".to_string(),
-                },
-                        position: self.lexer.position(),
-                    });
+                    // If we have newline_as_comma enabled, try skipping comments and newlines
+                    // to see if we find a separator or end token after comments
+                    if self.options.newline_as_comma {
+                        // Save the current state in case we need to restore
+                        let _saved_pos = self.lexer.position();
+                        let saved_token = self.current_token;
+
+                        // Skip any additional comments and newlines
+                        self.skip_comments_and_newlines()?;
+
+                        match self.current_token {
+                            Some((Token::RightBrace, _)) => {
+                                // Found the end after skipping comments/newlines
+                                continue;
+                            }
+                            Some((Token::String, _))
+                            | Some((Token::UnquotedString, _))
+                            | Some((Token::Number, _)) => {
+                                // Found a key after comments/newlines, which means the newlines were separators
+                                // Continue to next iteration to parse this key-value pair
+                                continue;
+                            }
+                            _ => {
+                                // TODO: Restore state and return error with the original token
+                                // self.lexer.set_position(saved_pos);
+                                self.current_token = saved_token;
+                                return Err(Error::Expected {
+                                    expected: ", or } or newline".to_string(),
+                                    found: match &self.current_token {
+                                        Some((token, _)) => format!("{:?}", token),
+                                        None => "EOF".to_string(),
+                                    },
+                                    position: self.lexer.position(),
+                                });
+                            }
+                        }
+                    } else {
+                        return Err(Error::Expected {
+                            expected: ", or } or newline".to_string(),
+                            found: match &self.current_token {
+                                Some((token, _)) => format!("{:?}", token),
+                                None => "EOF".to_string(),
+                            },
+                            position: self.lexer.position(),
+                        });
+                    }
                 }
             }
         }

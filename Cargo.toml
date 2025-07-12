@@ -16,11 +16,11 @@ exclude = [ "bindings/python", "fuzz" ]
 name = "vexy_json"
 version = "2.2.3"
 edition = "2021"
-description = "A Rust port of the JavaScript library jsonic, a forgiving JSON parser"
+description = "A forgiving JSON parser that accepts non-standard JSON formats"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/twardoch/pub/vexy_json"
 homepage = "https://github.com/twardoch/pub/vexy_json"
-keywords = [ "json", "parser", "jsonic", "forgiving", "relaxed" ]
+keywords = [ "json", "parser", "forgiving", "relaxed", "lenient" ]
 categories = [ "parsing", "data-structures", "web-programming" ]
 
 

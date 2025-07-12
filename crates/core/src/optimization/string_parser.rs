@@ -65,8 +65,8 @@ fn parse_unicode_escape(chars: &mut std::str::Chars<'_>) -> Result<char> {
 
     // Check if there's an additional hex digit immediately following
     // In strict JSON, \uXXXX should be exactly 4 hex digits
-    if let Some(&next_char) = chars.as_str().as_bytes().get(0) {
-        if (next_char as char).is_ascii_hexdigit() {
+    if let Some(next_char) = chars.clone().next() {
+        if next_char.is_ascii_hexdigit() {
             return Err(Error::InvalidEscape(0));
         }
     }

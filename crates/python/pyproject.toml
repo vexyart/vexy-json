@@ -25,7 +25,7 @@ classifiers = [
 "Topic :: Text Processing",
 "Topic :: Internet :: WWW/HTTP :: Dynamic Content"
 ]
-keywords = [ "json", "parser", "forgiving", "jsonic", "rust" ]
+keywords = [ "json", "parser", "forgiving", "lenient", "rust" ]
 dynamic = [ "version" ]
 
 

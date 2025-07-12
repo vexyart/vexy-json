@@ -1,9 +1,9 @@
 """
 vexy_json - A forgiving JSON parser for Python.
 
-This module provides Python bindings for the vexy_json library, which is a Rust port
-of the JavaScript jsonic library. It allows parsing of "forgiving" JSON that includes
-features like comments, trailing commas, unquoted keys, and more.
+This module provides Python bindings for the vexy_json library, a forgiving JSON parser.
+It allows parsing of "forgiving" JSON that includes features like comments, trailing 
+commas, unquoted keys, and more.
 
 Features:
 - Standard JSON parsing with forgiving extensions
