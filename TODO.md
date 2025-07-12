@@ -1,39 +1,48 @@
 # this_file: TODO.md
 
-## Completed Tasks (v2.3.4)
+## CRITICAL: v1.5.2 Release Issues - Immediate Fixes Required
 
-- [x] Successfully migrated documentation from Jekyll to MkDocs Material
-- [x] Fixed missing comprehensive_comparison benchmark reference in Cargo.toml
-- [x] Complete jsonic References Removal - Removed all code references (only docs remain)
-- [x] Build and Deliverables - Fixed binary naming and packaging scripts
-- [x] Test build deliverables - Successfully built for macOS and Linux
-- [x] Fix clippy::uninlined-format-args warnings - Applied cargo clippy --fix
+### Phase 1: Fix Critical Build Errors (IMMEDIATE)
+- [ ] Fix rustfmt.toml - change `fn_args_layout` to `fn_params_layout`
+- [ ] Run `cargo clippy --fix --allow-dirty --allow-staged` to apply automatic fixes
+- [ ] Fix format string errors - replace `format!("{}", var)` with `format!("{var}")` (93 occurrences)
+- [ ] Fix identical if-else blocks (7 occurrences)
+- [ ] Fix unnecessary let bindings before return (4 occurrences)
+- [ ] Fix map iterator usage - use `.values()` instead of `.iter().map(|(_, v)| v)`
+- [ ] Implement Default trait for: TypedArena, StreamingParser, SmallVec, ScopedMemoryPoolV3, PerformanceMonitor, MLPatternRecognizer, MemoryPoolV3, ErrorRecoveryEngineV2
+- [ ] Fix type complexity warnings - extract type aliases
+- [ ] Fix remaining manual implementations
 
-## Phase 3: Remaining Clippy Warnings Cleanup
-- [ ] Fix clippy::for-kv-map warnings in iterator usage
-- [ ] Fix clippy::should_implement_trait warnings for type conversions
-- [ ] Apply other minor clippy fixes and suggestions
+### Phase 2: Fix Failing Tests (HIGH PRIORITY)
+- [ ] Fix `error::recovery_v2::tests::test_bracket_matching` - bracket type detection
+- [ ] Fix `lazy::tests::test_lazy_array` - UnexpectedChar error
+- [ ] Fix `lazy::tests::test_lazy_parser_small_object` - Expected string key EOF error
+- [ ] Fix `lazy::tests::test_lazy_parser_with_threshold` - value parsing
+- [ ] Fix `lexer::debug_lexer::tests::test_debug_lexer_error_logging` - error detection
+- [ ] Fix `lexer::fast_lexer::tests::test_fast_lexer_stats` - token count mismatch
+- [ ] Fix `optimization::memory_pool_v2::tests::test_scoped_pool` - allocation tracking
+- [ ] Fix `parser::iterative::tests` - array/object parsing state machine
+- [ ] Fix `parallel_chunked::tests::test_chunked_ndjson` - empty values
+- [ ] Fix `parser::optimized_v2::tests` - memory stats tracking
+- [ ] Fix `plugin::plugins::datetime::tests::test_custom_format` - object type error
+- [ ] Fix `streaming::event_parser::tests` - incomplete JSON handling
+- [ ] Fix `streaming::ndjson::tests` - line counting and parsing
 
-## Phase 4: Naming Unification
+### Phase 3: Fix Build System (HIGH PRIORITY)
+- [ ] Update build.sh - temporarily remove `-D warnings` from RUSTFLAGS
+- [ ] Make fuzzing conditional - check for nightly toolchain before running fuzz tests
+- [ ] Update release.sh - add `set -e` and proper test failure checking
+- [ ] Test full build process after fixes
 
-- [ ] Standardize Web Tool URLs: `/vexy_json-tool/` → `/vexy-json-tool/`
-- [ ] Unify JavaScript asset names to use `vexy-json-*` pattern
-- [ ] Fix mixed URL references in documentation
-- [ ] Ensure "Vexy JSON" (with space) in all prose documentation
-- [ ] Use backticks for code references: `vexy_json`
-- [ ] Update all package metadata for consistent naming
-- [ ] Create naming lint script to check violations
-- [ ] Add URL redirects for backward compatibility
-
-## Phase 5: Final Verification and Release
-
-- [ ] Run full test suite on all platforms
-- [ ] Check build output for warnings
-- [ ] Verify all jsonic references are removed
-- [ ] Update version in all Cargo.toml files
+### Phase 4: Prepare Clean Release (v1.5.3)
+- [ ] Run full test suite and ensure all pass
+- [ ] Run clippy with warnings only (not deny)
+- [ ] Update version to 1.5.3 in all Cargo.toml files
 - [ ] Update CHANGELOG.md with all fixes
-- [ ] Create git tag
+- [ ] Run release script with proper validation
 - [ ] Publish to crates.io
+
+## Future Tasks (Post-v1.5.3)
 
 ## Future Development (Post-Release)
 
