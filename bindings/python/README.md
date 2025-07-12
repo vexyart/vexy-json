@@ -1,4 +1,4 @@
-# vexy_json Python Bindings
+# Vexy JSON Python Bindings
 
 Fast, forgiving JSON parser for Python - a port of the JavaScript library jsonic.
 

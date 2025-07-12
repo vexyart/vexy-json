@@ -1,6 +1,6 @@
-# vexy_json Documentation & Web Tool
+# Vexy JSON Documentation & Web Tool
 
-This directory contains the documentation website and interactive web tool for vexy_json.
+This directory contains the documentation website and interactive web tool for Vexy JSON.
 
 ## Recent Updates
 
@@ -58,7 +58,7 @@ The interactive tool (`/tool.html`) provides:
 - **Real-time parsing** with debounced input
 - **Syntax highlighting** for JSON input
 - **Error highlighting** with position indicators
-- **Example library** showcasing vexy_json features
+- **Example library** showcasing Vexy JSON features
 - **Download functionality** for parsed results
 - **Share URLs** for collaboration
 - **Performance metrics** display

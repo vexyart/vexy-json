@@ -1,6 +1,6 @@
-# vexy_json C++ Header-Only Wrapper
+# Vexy JSON C++ Header-Only Wrapper
 
-This directory contains a modern C++ header-only wrapper for the vexy_json JSON parser, providing an idiomatic C++ interface with RAII, exceptions, and STL integration.
+This directory contains a modern C++ header-only wrapper for the Vexy JSON parser, providing an idiomatic C++ interface with RAII, exceptions, and STL integration.
 
 ## Features
 
@@ -53,7 +53,7 @@ for (const auto& repair : detailed.repairs()) {
 
 ### Namespace `vexy_json`
 
-All C++ wrapper functionality is in the `vexy_json` namespace.
+All C++ wrapper functionality is in the `vexy_json` namespace. This is consistent with the `vexy_json` Rust crate name.
 
 ### Classes
 

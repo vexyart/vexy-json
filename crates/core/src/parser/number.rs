@@ -15,8 +15,8 @@ pub(super) fn parse_number_token(original_input: &str, span: Span) -> Result<Val
     let has_trailing_decimal = number_slice.ends_with('.');
     
     // Check for alternative number formats (hex, octal, binary)
-    if let Some(parsed_value) = parse_alternative_number_format(number_slice)? {
-        return Ok(Value::Number(parsed_value));
+    if let Some(parsed_int) = parse_alternative_number_format(number_slice, span)? {
+        return Ok(Value::Number(Number::Integer(parsed_int)));
     }
     
     // Normalize number format for Rust's parser
@@ -73,8 +73,8 @@ pub(super) fn parse_number_token(original_input: &str, span: Span) -> Result<Val
 }
 
 /// Parse alternative number formats (hex, octal, binary, underscore separators)
-/// Returns None if not an alternative format, Some(Number) if parsed successfully
-fn parse_alternative_number_format(input: &str) -> Result<Option<Number>> {
+/// Returns None if not an alternative integer format, Some(i64) if parsed successfully as an integer.
+fn parse_alternative_number_format(input: &str, span: Span) -> Result<Option<i64>> {
     // Remove underscore separators first
     let cleaned = input.replace('_', "");
     
@@ -92,43 +92,38 @@ fn parse_alternative_number_format(input: &str) -> Result<Option<Number>> {
         // Hexadecimal
         let hex_str = &number_str[2..];
         if hex_str.is_empty() {
-            return Err(Error::InvalidNumber(0));
+            return Err(Error::InvalidNumber(span.start));
         }
         match i64::from_str_radix(hex_str, 16) {
             Ok(val) => val,
-            Err(_) => return Err(Error::InvalidNumber(0)),
+            Err(_) => return Err(Error::InvalidNumber(span.start)),
         }
     } else if number_str.starts_with("0o") || number_str.starts_with("0O") {
         // Octal
         let octal_str = &number_str[2..];
         if octal_str.is_empty() {
-            return Err(Error::InvalidNumber(0));
+            return Err(Error::InvalidNumber(span.start));
         }
         match i64::from_str_radix(octal_str, 8) {
             Ok(val) => val,
-            Err(_) => return Err(Error::InvalidNumber(0)),
+            Err(_) => return Err(Error::InvalidNumber(span.start)),
         }
     } else if number_str.starts_with("0b") || number_str.starts_with("0B") {
         // Binary
         let binary_str = &number_str[2..];
         if binary_str.is_empty() {
-            return Err(Error::InvalidNumber(0));
+            return Err(Error::InvalidNumber(span.start));
         }
         match i64::from_str_radix(binary_str, 2) {
             Ok(val) => val,
-            Err(_) => return Err(Error::InvalidNumber(0)),
+            Err(_) => return Err(Error::InvalidNumber(span.start)),
         }
-    } else if input.contains('_') {
-        // Number with underscore separators (decimal)
+    } else if input.contains('_') && !input.contains('.') && !input.contains('e') && !input.contains('E') {
+        // Number with underscore separators (decimal integer only)
+        // If it contains a decimal or exponent, it's not a simple integer alternative format
         match cleaned.parse::<i64>() {
             Ok(val) => val,
-            Err(_) => {
-                // Try as float
-                match cleaned.parse::<f64>() {
-                    Ok(f) => return Ok(Some(Number::Float(f * sign as f64))),
-                    Err(_) => return Err(Error::InvalidNumber(0)),
-                }
-            }
+            Err(_) => return Err(Error::InvalidNumber(span.start)),
         }
     } else {
         // Not an alternative format
@@ -137,10 +132,10 @@ fn parse_alternative_number_format(input: &str) -> Result<Option<Number>> {
     
     // Apply sign and return
     let result = if sign == -1 {
-        parsed_value.checked_neg().ok_or(Error::InvalidNumber(0))?
+        parsed_value.checked_neg().ok_or(Error::InvalidNumber(span.start))?
     } else {
         parsed_value
     };
     
-    Ok(Some(Number::Integer(result)))
+    Ok(Some(result))
 }

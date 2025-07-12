@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Build scripts and configuration files updated
 
 ### 🔧 Fixed (v2.3.2 - In Progress)
-- Began cleanup of jsonic references from codebase (50 files identified)
+- Began cleanup of legacy references from codebase (50 files identified)
 - Identified test_number_features failure for extended number formats
 - Identified 3 unused variable warnings in examples/recursive_parser.rs
 
@@ -54,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed test: `test_number_format_errors` - Added support for trailing decimal (e.g., `1.`)
 - Fixed test: `test_parser_options_error_behavior` - Strict mode now properly rejects comments
 - Fixed test: `test_comment_line_endings` - Fixed handling of `\r` line endings in comments
-- Fixed test: `test_numbers` in jsonic_compat - Added support for `+` prefix and leading decimal
+- Fixed test: `test_numbers` in compat tests - Added support for `+` prefix and leading decimal
 
 #### Code Quality
 - Fixed 48 compilation warnings including:

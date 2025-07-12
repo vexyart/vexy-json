@@ -1,8 +1,8 @@
-// this_file: tests/jsonic_advanced_features.rs
+// this_file: tests/advanced_features.rs
 
-//! Advanced jsonic feature tests
+//! Advanced forgiving JSON feature tests
 //!
-//! This module tests advanced features that are specific to jsonic's flexible parsing,
+//! This module tests advanced features that are specific to forgiving JSON parsing,
 //! including potential future features and edge cases that push the boundaries of the parser.
 
 use rustc_hash::FxHashMap;

@@ -5,7 +5,7 @@ build-backend = "maturin"
 
 [project]
 name = "vexy_json"
-version = "2.2.3"
+version = "1.0.0"
 description = "A forgiving JSON parser for Python - port of the JavaScript library jsonic"
 readme = "README.md"
 requires-python = ">=3.8"

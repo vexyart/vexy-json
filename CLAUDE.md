@@ -3,7 +3,7 @@ After every iteration, /report and mark completed items as done in @PLAN.md and 
 
 ## 1. Project Overview
 
-`vexy_json` is a Rust port of the JavaScript library `jsonic`, a forgiving JSON parser. The reference JavaScript implementation is located in the `ref/jsonic/` directory.
+`vexy_json` is a Rust port of the JavaScript library `jsonic`, a forgiving JSON parser. The project is officially named "Vexy JSON". The reference JavaScript implementation is located in the `ref/jsonic/` directory.
 
 ## 2. Development Status
 

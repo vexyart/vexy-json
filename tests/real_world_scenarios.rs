@@ -1,9 +1,9 @@
-// this_file: tests/jsonic_real_world_scenarios.rs
+// this_file: tests/real_world_scenarios.rs
 
-//! Real-world scenario tests for jsonic compatibility
+//! Real-world scenario tests for forgiving JSON compatibility
 //!
 //! This module tests realistic use cases and scenarios that users might encounter
-//! when using jsonic for configuration files, data exchange, and other practical applications.
+//! when using forgiving JSON for configuration files, data exchange, and other practical applications.
 
 use rustc_hash::FxHashMap;
 use vexy_json::{parse, Value};

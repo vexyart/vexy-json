@@ -14,7 +14,7 @@ exclude = [ "bindings/python", "fuzz" ]
 
 [package]
 name = "vexy_json"
-version = "2.2.3"
+version = "1.0.0"
 edition = "2021"
 description = "A forgiving JSON parser that accepts non-standard JSON formats"
 license = "MIT OR Apache-2.0"

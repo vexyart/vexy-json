@@ -27,11 +27,9 @@ echo -e "${BLUE}Building version: ${VERSION}${NC}"
 echo
 
 # Update version numbers if we have a git tag
-if git describe --exact-match --tags >/dev/null 2>&1; then
-    echo -e "${BLUE}📋 Updating version numbers from git tag...${NC}"
-    ./scripts/update-versions.sh
-    echo
-fi
+echo -e "${BLUE}📋 Updating version numbers...${NC}"
+./scripts/update-versions.sh
+echo
 
 # Check if required scripts exist
 if [ ! -f "scripts/build.sh" ]; then
@@ -51,7 +49,7 @@ fi
 
 # Step 1: Run main build script
 echo -e "${BLUE}📋 Step 1: Running main build process...${NC}"
-if ./scripts/build.sh; then
+if ./scripts/build.sh > build.log.txt 2>&1; then
     echo -e "${GREEN}✅ Main build completed successfully${NC}"
 else
     echo -e "${RED}❌ Main build failed${NC}"
