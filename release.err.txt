@@ -1,0 +1,1787 @@
+   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling once_cell v1.21.3
+   Compiling vexy-json v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+   Compiling vexy-json-cli v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/cli)
+   Compiling vexy-json-wasm v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/wasm)
+   Compiling tempfile v3.20.0
+   Compiling wasm-bindgen v0.2.100
+   Compiling rusty-fork v0.3.0
+   Compiling cbindgen v0.29.0
+   Compiling proptest v1.7.0
+   Compiling vexy-json-c-api v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/c-api)
+   Compiling vexy-json-serde v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
+   Compiling vexy-json-test-utils v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/test-utils)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 27.90s
+     Running unittests src/lib.rs (target/debug/deps/vexy_json-099264f25302c2e7)
+     Running tests/advanced_features.rs (target/debug/deps/advanced_features-36d88acb66f8d6d5)
+     Running tests/basic_tests.rs (target/debug/deps/basic_tests-a2707d0d22811ec5)
+     Running tests/comma_handling.rs (target/debug/deps/comma_handling-36dbea858d61f8b5)
+     Running tests/comment_handling.rs (target/debug/deps/comment_handling-b9937ffad721f15a)
+     Running tests/compat_tests.rs (target/debug/deps/compat_tests-b588750f00b620b9)
+     Running tests/comprehensive_tests.rs (target/debug/deps/comprehensive_tests-ddc0329e73594d31)
+     Running tests/error_handling.rs (target/debug/deps/error_handling-9ba7d73824f75903)
+     Running tests/feature_tests.rs (target/debug/deps/feature_tests-ec67b86390507af2)
+     Running tests/forgiving_features.rs (target/debug/deps/forgiving_features-0ae65ecda6919afa)
+     Running tests/lexer_tests.rs (target/debug/deps/lexer_tests-e42178e60165a5d1)
+     Running tests/lib_integration.rs (target/debug/deps/lib_integration-144f7525c162f495)
+     Running tests/newline_as_comma.rs (target/debug/deps/newline_as_comma-416dd5d5dcff145d)
+     Running tests/number_formats.rs (target/debug/deps/number_formats-4c075d43958f3652)
+     Running tests/property_tests.rs (target/debug/deps/property_tests-5090990100276279)
+     Running tests/real_world_scenarios.rs (target/debug/deps/real_world_scenarios-d7b1bfbbddb79440)
+     Running tests/string_handling.rs (target/debug/deps/string_handling-4eec58fc5a90b28f)
+     Running tests/supported_features.rs (target/debug/deps/supported_features-0e691a7d97051507)
+     Running tests/test_dot_numbers.rs (target/debug/deps/test_dot_numbers-ed5fd2c399363989)
+     Running tests/test_full_parse.rs (target/debug/deps/test_full_parse-0eb058162965dda0)
+     Running tests/test_implicit.rs (target/debug/deps/test_implicit-2c07bf800bf99cb8)
+     Running tests/test_parse.rs (target/debug/deps/test_parse-1ddfcbad2af9c723)
+     Running tests/test_point_zero.rs (target/debug/deps/test_point_zero-00b51f8232700ce6)
+     Running tests/test_positive_numbers.rs (target/debug/deps/test_positive_numbers-c37808473e94b043)
+     Running tests/test_rust_parse.rs (target/debug/deps/test_rust_parse-e56f4828db269e94)
+     Running tests/test_strict_comment.rs (target/debug/deps/test_strict_comment-e37d9fb204814083)
+     Running tests/test_trailing_decimal.rs (target/debug/deps/test_trailing_decimal-a03a25a6098dc0ed)
+     Running unittests src/lib.rs (target/debug/deps/vexy_json_c_api-a0793b143786976a)
+     Running unittests src/main.rs (target/debug/deps/vexy_json-b5fda047ac53c0b5)
+     Running unittests src/lib.rs (target/debug/deps/vexy_json_core-4d9862395123b01d)
+error: test failed, to rerun pass `-p vexy-json-core --lib`
+[0;31m❌ Run all Rust tests failed[0m
+   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json-cli v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/cli)
+   Compiling vexy-json v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+   Compiling vexy-json-wasm v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/wasm)
+    Checking once_cell v1.21.3
+   Compiling cbindgen v0.29.0
+    Checking wasm-bindgen v0.2.100
+   Compiling vexy-json-c-api v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/c-api)
+error: variables can be used directly in the `format!` string
+   --> crates/core/src/ast/visitor.rs:216:42
+    |
+216 |                 PathSegment::Key(key) => write!(f, ".{}", key)?,
+    |                                          ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+    = note: `-D clippy::uninlined-format-args` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::uninlined_format_args)]`
+help: change this to
+    |
+216 -                 PathSegment::Key(key) => write!(f, ".{}", key)?,
+216 +                 PathSegment::Key(key) => write!(f, ".{key}")?,
+    |
+
+error: variables can be used directly in the `format!` string
+   --> crates/core/src/ast/visitor.rs:217:44
+    |
+217 |                 PathSegment::Index(idx) => write!(f, "[{}]", idx)?,
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+help: change this to
+    |
+217 -                 PathSegment::Index(idx) => write!(f, "[{}]", idx)?,
+217 +                 PathSegment::Index(idx) => write!(f, "[{idx}]")?,
+    |
+
+error: stripping a prefix manually
+   --> crates/core/src/error/recovery/mod.rs:449:32
+    |
+449 |                 let hex_part = &unicode_escape[2..];
+    |                                ^^^^^^^^^^^^^^^^^^^^
+    |
+note: the prefix was tested here
+   --> crates/core/src/error/recovery/mod.rs:448:13
+    |
+448 |             if unicode_escape.starts_with("\\u") {
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_strip
+    = note: `-D clippy::manual-strip` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::manual_strip)]`
+help: try using the `strip_prefix` method
+    |
+448 ~             if let Some(hex_part) = unicode_escape.strip_prefix("\\u") {
+449 ~                 if hex_part.len() < 4 {
+    |
+
+error: redundant pattern matching, consider using `is_ok()`
+   --> crates/core/src/error/recovery/mod.rs:622:16
+    |
+622 |         if let Ok(_) = cleaned.replace(",", ".").parse::<f64>() {
+    |         -------^^^^^------------------------------------------- help: try: `if cleaned.replace(",", ".").parse::<f64>().is_ok()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_pattern_matching
+    = note: `-D clippy::redundant-pattern-matching` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::redundant_pattern_matching)]`
+
+error: method `default` can be confused for the standard trait method `std::default::Default::default`
+   --> crates/core/src/error/reporter.rs:116:5
+    |
+116 | /     pub fn default() -> Self {
+117 | |         Self::new(ReportConfig::default())
+118 | |     }
+    | |_____^
+    |
+    = help: consider implementing the trait `std::default::Default` or choosing a less ambiguous method name
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#should_implement_trait
+    = note: `-D clippy::should-implement-trait` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::should_implement_trait)]`
+
+error: this `if` statement can be collapsed
+   --> crates/core/src/error/reporter.rs:279:13
+    |
+279 | /             if current_line.len() + word.len() + 1 > max_width {
+280 | |                 if !current_line.is_empty() {
+281 | |                     wrapped.push_str(&current_line);
+282 | |                     wrapped.push('\n');
+...   |
+285 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+279 ~             if current_line.len() + word.len() + 1 > max_width
+280 ~                 && !current_line.is_empty() {
+281 |                     wrapped.push_str(&current_line);
+282 |                     wrapped.push('\n');
+283 |                     current_line.clear();
+284 ~                 }
+    |
+
+error: redundant closure
+   --> crates/core/src/error/types.rs:370:29
+    |
+370 |         self.position().map(|pos| Span::single(pos))
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the function itself: `Span::single`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_closure
+    = note: `-D clippy::redundant-closure` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::redundant_closure)]`
+
+error: you should consider adding a `Default` implementation for `ErrorRecoveryEngineV2`
+   --> crates/core/src/error/recovery_v2.rs:146:5
+    |
+146 | /     pub fn new() -> Self {
+147 | |         Self::with_config(RecoveryConfig::default())
+148 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+    = note: `-D clippy::new-without-default` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::new_without_default)]`
+help: try adding this
+    |
+144 + impl Default for ErrorRecoveryEngineV2 {
+145 +     fn default() -> Self {
+146 +         Self::new()
+147 +     }
+148 + }
+    |
+
+error: returning the result of a `let` binding from a block
+   --> crates/core/src/error/recovery_v2.rs:298:9
+    |
+293 |         let suggestions = Vec::new();
+    |         ----------------------------- unnecessary `let` binding
+...
+298 |         suggestions
+    |         ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#let_and_return
+    = note: `-D clippy::let-and-return` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::let_and_return)]`
+help: return the expression directly
+    |
+293 ~         
+294 |
+...
+297 |
+298 ~         Vec::new()
+    |
+
+error: you seem to use `.enumerate()` and immediately discard the index
+   --> crates/core/src/error/recovery_v2.rs:437:25
+    |
+437 |         for (_i, ch) in context.input.chars().enumerate() {
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unused_enumerate_index
+    = note: `-D clippy::unused-enumerate-index` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::unused_enumerate_index)]`
+help: remove the `.enumerate()` call
+    |
+437 -         for (_i, ch) in context.input.chars().enumerate() {
+437 +         for ch in context.input.chars() {
+    |
+
+error: returning the result of a `let` binding from a block
+   --> crates/core/src/error/recovery_v2.rs:496:9
+    |
+491 |         let suggestions = Vec::new();
+    |         ----------------------------- unnecessary `let` binding
+...
+496 |         suggestions
+    |         ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#let_and_return
+help: return the expression directly
+    |
+491 ~         
+492 |
+...
+495 |
+496 ~         Vec::new()
+    |
+
+error: returning the result of a `let` binding from a block
+   --> crates/core/src/error/recovery_v2.rs:520:9
+    |
+515 |         let suggestions = Vec::new();
+    |         ----------------------------- unnecessary `let` binding
+...
+520 |         suggestions
+    |         ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#let_and_return
+help: return the expression directly
+    |
+515 ~         
+516 |
+...
+519 |
+520 ~         Vec::new()
+    |
+
+error: returning the result of a `let` binding from a block
+   --> crates/core/src/error/recovery_v2.rs:544:9
+    |
+539 |         let suggestions = Vec::new();
+    |         ----------------------------- unnecessary `let` binding
+...
+544 |         suggestions
+    |         ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#let_and_return
+help: return the expression directly
+    |
+539 ~         
+540 |
+...
+543 |
+544 ~         Vec::new()
+    |
+
+error: you should consider adding a `Default` implementation for `MLPatternRecognizer`
+   --> crates/core/src/error/ml_patterns.rs:100:5
+    |
+100 | /     pub fn new() -> Self {
+101 | |         let mut recognizer = MLPatternRecognizer {
+102 | |             feature_extractors: Vec::new(),
+103 | |             patterns: FxHashMap::default(),
+...   |
+112 | |         recognizer
+113 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+    |
+98  + impl Default for MLPatternRecognizer {
+99  +     fn default() -> Self {
+100 +         Self::new()
+101 +     }
+102 + }
+    |
+
+error: this `if` has identical blocks
+   --> crates/core/src/parser/iterative.rs:489:71
+    |
+489 |           let content = if text.starts_with('"') && text.ends_with('"') {
+    |  _______________________________________________________________________^
+490 | |             &text[1..text.len() - 1]
+491 | |         } else if text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes
+    | |_________^
+    |
+note: same as this
+   --> crates/core/src/parser/iterative.rs:492:9
+    |
+492 | /         {
+493 | |             &text[1..text.len() - 1]
+494 | |         } else {
+    | |_________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+    = note: `-D clippy::if-same-then-else` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::if_same_then_else)]`
+
+error: this `if` has identical blocks
+   --> crates/core/src/parser/iterative.rs:576:40
+    |
+576 |           if self.parse_stack.is_empty() {
+    |  ________________________________________^
+577 | |             self.result = Some(value);
+578 | |         } else {
+    | |_________^
+    |
+note: same as this
+   --> crates/core/src/parser/iterative.rs:578:16
+    |
+578 |           } else {
+    |  ________________^
+579 | |             self.result = Some(value);
+580 | |         }
+    | |_________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: stripping a prefix manually
+  --> crates/core/src/parser/number.rs:91:17
+   |
+91 |         (-1i64, &cleaned[1..])
+   |                 ^^^^^^^^^^^^^
+   |
+note: the prefix was tested here
+  --> crates/core/src/parser/number.rs:90:30
+   |
+90 |     let (sign, number_str) = if cleaned.starts_with('-') {
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_strip
+help: try using the `strip_prefix` method
+   |
+90 ~     let (sign, number_str) = if let Some(<stripped>) = cleaned.strip_prefix('-') {
+91 ~         (-1i64, <stripped>)
+   |
+
+error: stripping a prefix manually
+  --> crates/core/src/parser/number.rs:93:16
+   |
+93 |         (1i64, &cleaned[1..])
+   |                ^^^^^^^^^^^^^
+   |
+note: the prefix was tested here
+  --> crates/core/src/parser/number.rs:92:12
+   |
+92 |     } else if cleaned.starts_with('+') {
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_strip
+help: try using the `strip_prefix` method
+   |
+92 ~     } else if let Some(<stripped>) = cleaned.strip_prefix('+') {
+93 ~         (1i64, <stripped>)
+   |
+
+error: this `if` has identical blocks
+   --> crates/core/src/parser/optimized.rs:138:19
+    |
+138 |                   ) {
+    |  ___________________^
+139 | |                     self.parse_string_pooled(token.1)
+140 | |                 } else {
+    | |_________________^
+    |
+note: same as this
+   --> crates/core/src/parser/optimized.rs:140:24
+    |
+140 |                   } else {
+    |  ________________________^
+141 | |                     self.parse_string_pooled(token.1)
+142 | |                 }
+    | |_________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: this `if` has identical blocks
+   --> crates/core/src/parser/optimized_v2.rs:164:19
+    |
+164 |                   ) {
+    |  ___________________^
+165 | |                     self.parse_string_pooled(token.1)
+166 | |                 } else {
+    | |_________________^
+    |
+note: same as this
+   --> crates/core/src/parser/optimized_v2.rs:166:24
+    |
+166 |                   } else {
+    |  ________________________^
+167 | |                     self.parse_string_pooled(token.1)
+168 | |                 }
+    | |_________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: this `if` has identical blocks
+   --> crates/core/src/parser/recursive.rs:373:71
+    |
+373 |           let content = if text.starts_with('"') && text.ends_with('"') {
+    |  _______________________________________________________________________^
+374 | |             &text[1..text.len() - 1]
+375 | |         } else if text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes
+    | |_________^
+    |
+note: same as this
+   --> crates/core/src/parser/recursive.rs:376:9
+    |
+376 | /         {
+377 | |             &text[1..text.len() - 1]
+378 | |         } else {
+    | |_________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: this `impl` can be derived
+  --> crates/core/src/streaming/buffered/state.rs:32:1
+   |
+32 | / impl Default for CommentType {
+33 | |     fn default() -> Self {
+34 | |         CommentType::None
+35 | |     }
+36 | | }
+   | |_^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#derivable_impls
+   = note: `-D clippy::derivable-impls` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::derivable_impls)]`
+help: replace the manual implementation with a derive attribute and mark the default variant
+   |
+26 + #[derive(Default)]
+27 ~ pub(super) enum CommentType {
+28 ~     #[default]
+29 ~     None,
+   |
+
+error: writing `&mut Vec` instead of `&mut [_]` involves a new object where a slice will do
+   --> crates/core/src/streaming/buffered/mod.rs:422:22
+    |
+422 |         value_stack: &mut Vec<Value>,
+    |                      ^^^^^^^^^^^^^^^ help: change this to: `&mut [Value]`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#ptr_arg
+    = note: `-D clippy::ptr-arg` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::ptr_arg)]`
+
+error: variables can be used directly in the `format!` string
+   --> crates/core/src/streaming/event_parser.rs:456:44
+    |
+456 |                 .map_err(|e| Error::Custom(format!("Async IO error: {}", e)))?;
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+help: change this to
+    |
+456 -                 .map_err(|e| Error::Custom(format!("Async IO error: {}", e)))?;
+456 +                 .map_err(|e| Error::Custom(format!("Async IO error: {e}")))?;
+    |
+
+error: variables can be used directly in the `format!` string
+   --> crates/core/src/streaming/event_parser.rs:463:44
+    |
+463 |                 .map_err(|e| Error::Custom(format!("UTF-8 error: {}", e)))?;
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+help: change this to
+    |
+463 -                 .map_err(|e| Error::Custom(format!("UTF-8 error: {}", e)))?;
+463 +                 .map_err(|e| Error::Custom(format!("UTF-8 error: {e}")))?;
+    |
+
+error: this `if` has identical blocks
+   --> crates/core/src/streaming/ndjson.rs:195:33
+    |
+195 |           } else if self.finished {
+    |  _________________________________^
+196 | |             Ok(None)
+197 | |         } else {
+    | |_________^
+    |
+note: same as this
+   --> crates/core/src/streaming/ndjson.rs:197:16
+    |
+197 |           } else {
+    |  ________________^
+198 | |             Ok(None)
+199 | |         }
+    | |_________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: you should consider adding a `Default` implementation for `StreamingParser`
+   --> crates/core/src/streaming/mod.rs:101:5
+    |
+101 | /     pub fn new() -> Self {
+102 | |         Self::with_options(crate::parser::ParserOptions::default())
+103 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+    |
+99  + impl Default for StreamingParser {
+100 +     fn default() -> Self {
+101 +         Self::new()
+102 +     }
+103 + }
+    |
+
+error: using `clone` on type `Option<(Token, Span)>` which implements the `Copy` trait
+   --> crates/core/src/streaming/mod.rs:143:40
+    |
+143 |             let Some((token, _span)) = self.current_token.clone() else {
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try removing the `clone` call: `self.current_token`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#clone_on_copy
+    = note: `-D clippy::clone-on-copy` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::clone_on_copy)]`
+
+error: this `if` has identical blocks
+   --> crates/core/src/streaming/mod.rs:308:40
+    |
+308 |           if self.state_stack.is_empty() {
+    |  ________________________________________^
+309 | |             self.current_state = ParserState::BetweenValues;
+310 | |         } else {
+    | |_________^
+    |
+note: same as this
+   --> crates/core/src/streaming/mod.rs:310:16
+    |
+310 |           } else {
+    |  ________________^
+311 | |             self.current_state = ParserState::BetweenValues;
+312 | |         }
+    | |_________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: you should consider adding a `Default` implementation for `PerformanceMonitor`
+  --> crates/core/src/optimization/benchmarks.rs:24:5
+   |
+24 | /     pub fn new() -> Self {
+25 | |         Self {
+26 | |             simd_times: Vec::new(),
+27 | |             scalar_times: Vec::new(),
+...  |
+30 | |     }
+   | |_____^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+   |
+22 + impl Default for PerformanceMonitor {
+23 +     fn default() -> Self {
+24 +         Self::new()
+25 +     }
+26 + }
+   |
+
+error: manual slice size calculation
+   --> crates/core/src/optimization/memory_pool.rs:161:20
+    |
+161 |         let size = size_of::<T>() * slice.len();
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `std::mem::size_of_val(slice)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_slice_size_calculation
+    = note: `-D clippy::manual-slice-size-calculation` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::manual_slice_size_calculation)]`
+
+error: initializer for `thread_local` value can be made `const`
+  --> crates/core/src/optimization/memory_pool_v2.rs:24:65
+   |
+24 |     static THREAD_LOCAL_POOL: RefCell<Option<FastMemoryPool>> = RefCell::new(None);
+   |                                                                 ^^^^^^^^^^^^^^^^^^ help: replace with: `const { RefCell::new(None) }`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_const_for_thread_local
+   = note: `-D clippy::missing-const-for-thread-local` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::missing_const_for_thread_local)]`
+
+error: manual `RangeInclusive::contains` implementation
+   --> crates/core/src/optimization/memory_pool_v2.rs:162:9
+    |
+162 |         size >= MIN_POOL_ALLOCATION_SIZE && size <= MAX_POOL_ALLOCATION_SIZE
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use: `(MIN_POOL_ALLOCATION_SIZE..=MAX_POOL_ALLOCATION_SIZE).contains(&size)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_range_contains
+    = note: `-D clippy::manual-range-contains` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::manual_range_contains)]`
+
+error: you should consider adding a `Default` implementation for `TypedArena<T>`
+  --> crates/core/src/optimization/memory_pool_v3.rs:40:5
+   |
+40 | /     pub fn new() -> Self {
+41 | |         Self::with_capacity(1024)
+42 | |     }
+   | |_____^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+   |
+38 + impl<T> Default for TypedArena<T> {
+39 +     fn default() -> Self {
+40 +         Self::new()
+41 +     }
+42 + }
+   |
+
+error: you should consider adding a `Default` implementation for `SmallVec<T>`
+   --> crates/core/src/optimization/memory_pool_v3.rs:153:5
+    |
+153 | /     pub fn new() -> Self {
+154 | |         SmallVec::Inline(Default::default())
+155 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+    |
+151 + impl<T> Default for SmallVec<T> {
+152 +     fn default() -> Self {
+153 +         Self::new()
+154 +     }
+155 + }
+    |
+
+error: you should consider adding a `Default` implementation for `MemoryPoolV3`
+   --> crates/core/src/optimization/memory_pool_v3.rs:187:5
+    |
+187 | /     pub fn new() -> Self {
+188 | |         let mut pool = MemoryPoolV3 {
+189 | |             string_arena: TypedArena::new(),
+190 | |             value_arena: TypedArena::new(),
+...   |
+225 | |         pool
+226 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+    |
+185 + impl Default for MemoryPoolV3 {
+186 +     fn default() -> Self {
+187 +         Self::new()
+188 +     }
+189 + }
+    |
+
+error: initializer for `thread_local` value can be made `const`
+   --> crates/core/src/optimization/memory_pool_v3.rs:303:55
+    |
+303 |     static POOL: RefCell<Option<Arc<MemoryPoolV3>>> = RefCell::new(None);
+    |                                                       ^^^^^^^^^^^^^^^^^^ help: replace with: `const { RefCell::new(None) }`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_const_for_thread_local
+
+error: usage of an `Arc` that is not `Send` and `Sync`
+   --> crates/core/src/optimization/memory_pool_v3.rs:313:51
+    |
+313 |         let pool = pool_ref.get_or_insert_with(|| Arc::new(MemoryPoolV3::new()));
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `Arc<MemoryPoolV3>` is not `Send` and `Sync` as `MemoryPoolV3` is not `Sync`
+    = help: if the `Arc` will not used be across threads replace it with an `Rc`
+    = help: otherwise make `MemoryPoolV3` `Send` and `Sync` or consider a wrapper type such as `Mutex`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#arc_with_non_send_sync
+    = note: `-D clippy::arc-with-non-send-sync` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::arc_with_non_send_sync)]`
+
+error: you should consider adding a `Default` implementation for `ScopedMemoryPoolV3`
+   --> crates/core/src/optimization/memory_pool_v3.rs:325:5
+    |
+325 | /     pub fn new() -> Self {
+326 | |         ScopedMemoryPoolV3 {
+327 | |             pool: Arc::new(MemoryPoolV3::new()),
+328 | |         }
+329 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+    |
+323 + impl Default for ScopedMemoryPoolV3 {
+324 +     fn default() -> Self {
+325 +         Self::new()
+326 +     }
+327 + }
+    |
+
+error: usage of an `Arc` that is not `Send` and `Sync`
+   --> crates/core/src/optimization/memory_pool_v3.rs:327:19
+    |
+327 |             pool: Arc::new(MemoryPoolV3::new()),
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `Arc<MemoryPoolV3>` is not `Send` and `Sync` as `MemoryPoolV3` is not `Sync`
+    = help: if the `Arc` will not used be across threads replace it with an `Rc`
+    = help: otherwise make `MemoryPoolV3` `Send` and `Sync` or consider a wrapper type such as `Mutex`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#arc_with_non_send_sync
+
+error: manual check for common ascii range
+   --> crates/core/src/optimization/simd.rs:260:13
+    |
+260 |         if !(b'0'..=b'9').contains(&byte) {
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `byte.is_ascii_digit()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_is_ascii_check
+    = note: `-D clippy::manual-is-ascii-check` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::manual_is_ascii_check)]`
+
+error: use of `or_insert_with` to construct default value
+   --> crates/core/src/plugin/mod.rs:136:18
+    |
+136 |                 .or_insert_with(Vec::new)
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `or_default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unwrap_or_default
+    = note: `-D clippy::unwrap-or-default` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::unwrap_or_default)]`
+
+error: use of `or_insert_with` to construct default value
+  --> crates/core/src/plugin/plugins/comment_preservation.rs:57:14
+   |
+57 |             .or_insert_with(Vec::new)
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `or_default()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unwrap_or_default
+
+error: parameter is only used in recursion
+  --> crates/core/src/plugin/plugins/schema_validation.rs:32:33
+   |
+32 |     fn validate_against_schema(&self, value: &Value, schema: &Value, path: &str) -> Result<()> {
+   |                                 ^^^^
+   |
+note: parameter used here
+  --> crates/core/src/plugin/plugins/schema_validation.rs:59:25
+   |
+59 |                         self.validate_against_schema(prop_value, prop_schema, &prop_path)?;
+   |                         ^^^^
+...
+77 |                     self.validate_against_schema(item, items_schema, &item_path)?;
+   |                     ^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#only_used_in_recursion
+   = note: `-D clippy::only-used-in-recursion` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::only_used_in_recursion)]`
+
+error: iterating on a map's keys
+   --> crates/core/src/transform/optimizer.rs:110:26
+    |
+110 |               saved_bytes: self
+    |  __________________________^
+111 | |                 .strings
+112 | |                 .iter()
+113 | |                 .map(|(s, _)| {
+...   |
+120 | |                 })
+    | |__________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#iter_kv_map
+    = note: `-D clippy::iter-kv-map` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::iter_kv_map)]`
+help: try
+    |
+110 ~             saved_bytes: self
+111 +                 .strings.keys().map(|s| {
+112 +                     let count = self.counts.get(s).unwrap_or(&0);
+113 +                     if *count > 1 {
+114 +                         s.len() * (*count - 1)
+115 +                     } else {
+116 +                         0
+117 +                     }
+118 +                 })
+    |
+
+error: this `map_or` can be simplified
+   --> crates/core/src/transform/optimizer.rs:357:39
+    |
+357 |                         .all(|(k, v)| b.get(k).map_or(false, |bv| self.values_equal(v, bv)))
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unnecessary_map_or
+    = note: `-D clippy::unnecessary-map-or` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::unnecessary_map_or)]`
+help: use is_some_and instead
+    |
+357 -                         .all(|(k, v)| b.get(k).map_or(false, |bv| self.values_equal(v, bv)))
+357 +                         .all(|(k, v)| b.get(k).is_some_and(|bv| self.values_equal(v, bv)))
+    |
+
+error: could not compile `vexy-json-core` (lib) due to 46 previous errors
+[0;31m❌ Run clippy linter failed[0m
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+[1;38;5;9merror[internal][0m: [1mleft behind trailing whitespace[0m
+  [1;38;5;12m-->[0m /Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core/src/optimization/benchmarks.rs:39:39:1
+[1;38;5;12m   |[0m
+[1;38;5;12m39 |[0m             
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^[0m
+[1;38;5;12m   |[0m
+
+[1;38;5;9merror[internal][0m: [1mleft behind trailing whitespace[0m
+  [1;38;5;12m-->[0m /Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core/src/optimization/benchmarks.rs:44:44:1
+[1;38;5;12m   |[0m
+[1;38;5;12m44 |[0m             
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^[0m
+[1;38;5;12m   |[0m
+
+[1;38;5;9merror[internal][0m: [1mleft behind trailing whitespace[0m
+  [1;38;5;12m-->[0m /Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core/src/optimization/benchmarks.rs:49:49:1
+[1;38;5;12m   |[0m
+[1;38;5;12m49 |[0m             
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^[0m
+[1;38;5;12m   |[0m
+
+[1;38;5;9merror[internal][0m: [1mleft behind trailing whitespace[0m
+  [1;38;5;12m-->[0m /Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core/src/optimization/benchmarks.rs:52:52:1
+[1;38;5;12m   |[0m
+[1;38;5;12m52 |[0m             
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^[0m
+[1;38;5;12m   |[0m
+
+[1;38;5;9merror[internal][0m: [1mleft behind trailing whitespace[0m
+  [1;38;5;12m-->[0m /Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core/src/optimization/benchmarks.rs:56:56:1
+[1;38;5;12m   |[0m
+[1;38;5;12m56 |[0m             
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^[0m
+[1;38;5;12m   |[0m
+
+[1;38;5;9merror[internal][0m: [1mleft behind trailing whitespace[0m
+  [1;38;5;12m-->[0m /Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core/src/optimization/benchmarks.rs:60:60:1
+[1;38;5;12m   |[0m
+[1;38;5;12m60 |[0m             
+[1;38;5;12m   |[0m[1;38;5;9m ^^^^^^^^^^^^[0m
+[1;38;5;12m   |[0m
+
+[1;38;5;11mwarning[0m: [1mrustfmt has failed to format. See previous 6 errors.[0m
+
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
+Warning: can't set `normalize_doc_attributes = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_strings = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_matchers = true`, unstable features are only available in nightly channel.
+Warning: can't set `format_macro_bodies = true`, unstable features are only available in nightly channel.
+Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
+Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
+Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
+Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
+[0;31m❌ Check code formatting failed[0m
+error: failed to run `rustc` to learn about target-specific information
+
+Caused by:
+  process didn't exit successfully: `/Users/adam/.rustup/toolchains/stable-x86_64-apple-darwin/bin/rustc - --crate-name ___ --print=file-names -Cpasses=sancov-module -Cllvm-args=-sanitizer-coverage-level=4 -Cllvm-args=-sanitizer-coverage-inline-8bit-counters -Cllvm-args=-sanitizer-coverage-pc-table -Cllvm-args=-sanitizer-coverage-trace-compares --cfg fuzzing -Cllvm-args=-simplifycfg-branch-fold-threshold=0 -Zsanitizer=address -Cdebug-assertions -Ccodegen-units=1 --target x86_64-apple-darwin --crate-type bin --crate-type rlib --crate-type dylib --crate-type cdylib --crate-type staticlib --crate-type proc-macro --print=sysroot --print=split-debuginfo --print=crate-name --print=cfg -Wwarnings` (exit status: 1)
+  --- stderr
+  error: the option `Z` is only accepted on the nightly compiler
+
+  help: consider switching to a nightly toolchain: `rustup default nightly`
+
+  note: selecting a toolchain with `+toolchain` arguments require a rustup proxy; see <https://rust-lang.github.io/rustup/concepts/index.html>
+
+  note: for more information about Rust's stability policy, see <https://doc.rust-lang.org/book/appendix-07-nightly-rust.html#unstable-features>
+
+  error: 1 nightly option were parsed
+
+Error: failed to build fuzz script: ASAN_OPTIONS="detect_odr_violation=0" RUSTFLAGS=" -Cpasses=sancov-module -Cllvm-args=-sanitizer-coverage-level=4 -Cllvm-args=-sanitizer-coverage-inline-8bit-counters -Cllvm-args=-sanitizer-coverage-pc-table -Cllvm-args=-sanitizer-coverage-trace-compares --cfg fuzzing -Cllvm-args=-simplifycfg-branch-fold-threshold=0 -Zsanitizer=address -Cdebug-assertions -Ccodegen-units=1" "cargo" "build" "--manifest-path" "/Users/adam/Developer/vcs/github.vexyart/vexy-json/fuzz/Cargo.toml" "--target" "x86_64-apple-darwin" "--release" "--config" "profile.release.debug=\"line-tables-only\"" "--bin" "comments"
+error: failed to run `rustc` to learn about target-specific information
+
+Caused by:
+  process didn't exit successfully: `/Users/adam/.rustup/toolchains/stable-x86_64-apple-darwin/bin/rustc - --crate-name ___ --print=file-names -Cpasses=sancov-module -Cllvm-args=-sanitizer-coverage-level=4 -Cllvm-args=-sanitizer-coverage-inline-8bit-counters -Cllvm-args=-sanitizer-coverage-pc-table -Cllvm-args=-sanitizer-coverage-trace-compares --cfg fuzzing -Cllvm-args=-simplifycfg-branch-fold-threshold=0 -Zsanitizer=address -Cdebug-assertions -Ccodegen-units=1 --target x86_64-apple-darwin --crate-type bin --crate-type rlib --crate-type dylib --crate-type cdylib --crate-type staticlib --crate-type proc-macro --print=sysroot --print=split-debuginfo --print=crate-name --print=cfg -Wwarnings` (exit status: 1)
+  --- stderr
+  error: the option `Z` is only accepted on the nightly compiler
+
+  help: consider switching to a nightly toolchain: `rustup default nightly`
+
+  note: selecting a toolchain with `+toolchain` arguments require a rustup proxy; see <https://rust-lang.github.io/rustup/concepts/index.html>
+
+  note: for more information about Rust's stability policy, see <https://doc.rust-lang.org/book/appendix-07-nightly-rust.html#unstable-features>
+
+  error: 1 nightly option were parsed
+
+Error: failed to build fuzz script: ASAN_OPTIONS="detect_odr_violation=0" RUSTFLAGS=" -Cpasses=sancov-module -Cllvm-args=-sanitizer-coverage-level=4 -Cllvm-args=-sanitizer-coverage-inline-8bit-counters -Cllvm-args=-sanitizer-coverage-pc-table -Cllvm-args=-sanitizer-coverage-trace-compares --cfg fuzzing -Cllvm-args=-simplifycfg-branch-fold-threshold=0 -Zsanitizer=address -Cdebug-assertions -Ccodegen-units=1" "cargo" "build" "--manifest-path" "/Users/adam/Developer/vcs/github.vexyart/vexy-json/fuzz/Cargo.toml" "--target" "x86_64-apple-darwin" "--release" "--config" "profile.release.debug=\"line-tables-only\"" "--bin" "fuzz_target_1"
+error: failed to run `rustc` to learn about target-specific information
+
+Caused by:
+  process didn't exit successfully: `/Users/adam/.rustup/toolchains/stable-x86_64-apple-darwin/bin/rustc - --crate-name ___ --print=file-names -Cpasses=sancov-module -Cllvm-args=-sanitizer-coverage-level=4 -Cllvm-args=-sanitizer-coverage-inline-8bit-counters -Cllvm-args=-sanitizer-coverage-pc-table -Cllvm-args=-sanitizer-coverage-trace-compares --cfg fuzzing -Cllvm-args=-simplifycfg-branch-fold-threshold=0 -Zsanitizer=address -Cdebug-assertions -Ccodegen-units=1 --target x86_64-apple-darwin --crate-type bin --crate-type rlib --crate-type dylib --crate-type cdylib --crate-type staticlib --crate-type proc-macro --print=sysroot --print=split-debuginfo --print=crate-name --print=cfg -Wwarnings` (exit status: 1)
+  --- stderr
+  error: the option `Z` is only accepted on the nightly compiler
+
+  help: consider switching to a nightly toolchain: `rustup default nightly`
+
+  note: selecting a toolchain with `+toolchain` arguments require a rustup proxy; see <https://rust-lang.github.io/rustup/concepts/index.html>
+
+  note: for more information about Rust's stability policy, see <https://doc.rust-lang.org/book/appendix-07-nightly-rust.html#unstable-features>
+
+  error: 1 nightly option were parsed
+
+Error: failed to build fuzz script: ASAN_OPTIONS="detect_odr_violation=0" RUSTFLAGS=" -Cpasses=sancov-module -Cllvm-args=-sanitizer-coverage-level=4 -Cllvm-args=-sanitizer-coverage-inline-8bit-counters -Cllvm-args=-sanitizer-coverage-pc-table -Cllvm-args=-sanitizer-coverage-trace-compares --cfg fuzzing -Cllvm-args=-simplifycfg-branch-fold-threshold=0 -Zsanitizer=address -Cdebug-assertions -Ccodegen-units=1" "cargo" "build" "--manifest-path" "/Users/adam/Developer/vcs/github.vexyart/vexy-json/fuzz/Cargo.toml" "--target" "x86_64-apple-darwin" "--release" "--config" "profile.release.debug=\"line-tables-only\"" "--bin" "json_structure"
+   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+   Compiling vexy-json-serde v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
+    Finished `release` profile [optimized] target(s) in 1m 19s
+   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json-cli v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/cli)
+    Finished `release` profile [optimized] target(s) in 1m 03s
+   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json-serde v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
+   Compiling vexy-json v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+    Finished `release` profile [optimized] target(s) in 19.83s
+    Checking vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+    Checking vexy-json-serde v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
+ Documenting vexy-json v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.61s
+   Generated /Users/adam/Developer/vcs/github.vexyart/vexy-json/target/doc/vexy_json/index.html
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+   Compiling vexy-json-wasm v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/wasm)
+   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+    Finished `release` profile [optimized] target(s) in 24.39s
+[INFO]: ⬇️  Installing wasm-bindgen...
+[INFO]: Optimizing wasm binaries with `wasm-opt`...
+[INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
+[INFO]: ✨   Done in 26.07s
+[INFO]: 📦   Your wasm pkg is ready to publish at /Users/adam/Developer/vcs/github.vexyart/vexy-json/docs/pkg.
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+    Finished `release` profile [optimized] target(s) in 0.14s
+[INFO]: ⬇️  Installing wasm-bindgen...
+[INFO]: Optimizing wasm binaries with `wasm-opt`...
+[INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
+[INFO]: ✨   Done in 2.64s
+[INFO]: 📦   Your wasm pkg is ready to publish at /Users/adam/Developer/vcs/github.vexyart/vexy-json/docs/pkg/nodejs.
+Searching for mounted interstitial disk image using /dev/disk5s... 
+waited 1 seconds for .DS_STORE to be created.
