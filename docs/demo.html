@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vexy JSON - Interactive Demo</title>
+    <meta name="description" content="Try Vexy JSON's forgiving parser in your browser - supports comments, unquoted keys, trailing commas, and more.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🔧</text></svg>">
+    
+    <!-- Tailwind CSS + DaisyUI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    
+    <style>
+        .demo-container { min-height: 400px; }
+        .editor-container { height: 300px; }
+        .result-container { max-height: 300px; overflow-y: auto; }
+        
+        /* Custom animations */
+        .pulse-success { 
+            animation: pulse-green 0.5s ease-in-out;
+        }
+        .pulse-error {
+            animation: pulse-red 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse-green {
+            0%, 100% { border-color: #10b981; }
+            50% { border-color: #059669; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3); }
+        }
+        
+        @keyframes pulse-red {
+            0%, 100% { border-color: #ef4444; }
+            50% { border-color: #dc2626; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3); }
+        }
+    </style>
+</head>
+
+<body class="bg-base-100">
+    <!-- Header -->
+    <header class="navbar bg-base-200 shadow-sm">
+        <div class="navbar-start">
+            <h1 class="text-xl font-bold">🔧 Vexy JSON</h1>
+        </div>
+        <div class="navbar-center">
+            <span class="text-sm opacity-70">Interactive Demo</span>
+        </div>
+        <div class="navbar-end">
+            <a href="/" class="btn btn-sm btn-ghost">← Docs</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- Introduction -->
+        <div class="hero bg-base-200 rounded-lg mb-6">
+            <div class="hero-content text-center">
+                <div class="max-w-md">
+                    <h2 class="text-3xl font-bold">Try Vexy JSON</h2>
+                    <p class="py-4">A forgiving JSON parser that handles comments, trailing commas, unquoted keys, and more. Edit the JSON below and see it parsed in real-time!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Interface -->
+        <div class="grid lg:grid-cols-2 gap-6">
+            <!-- Input Panel -->
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="card-title">Input JSON</h3>
+                        <div class="dropdown dropdown-end">
+                            <label tabindex="0" class="btn btn-sm btn-outline">Examples</label>
+                            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-10">
+                                <li><a onclick="loadExample('comments')">With Comments</a></li>
+                                <li><a onclick="loadExample('trailing')">Trailing Commas</a></li>
+                                <li><a onclick="loadExample('unquoted')">Unquoted Keys</a></li>
+                                <li><a onclick="loadExample('mixed')">Mixed Features</a></li>
+                                <li><a onclick="loadExample('complex')">Complex Example</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div id="input-editor" class="editor-container border rounded"></div>
+                    
+                    <!-- Options -->
+                    <div class="form-control mt-4">
+                        <label class="label cursor-pointer">
+                            <span class="label-text">Allow Comments</span>
+                            <input type="checkbox" id="allow-comments" class="checkbox checkbox-primary" checked>
+                        </label>
+                        <label class="label cursor-pointer">
+                            <span class="label-text">Allow Trailing Commas</span>
+                            <input type="checkbox" id="allow-trailing-commas" class="checkbox checkbox-primary" checked>
+                        </label>
+                        <label class="label cursor-pointer">
+                            <span class="label-text">Allow Unquoted Keys</span>
+                            <input type="checkbox" id="allow-unquoted-keys" class="checkbox checkbox-primary" checked>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Output Panel -->
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="card-title">Parsed Output</h3>
+                        <div class="badge" id="status-badge">Ready</div>
+                    </div>
+                    
+                    <div id="output-container" class="result-container">
+                        <div id="output-editor" class="editor-container border rounded"></div>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="stats stats-horizontal shadow mt-4">
+                        <div class="stat">
+                            <div class="stat-title">Parse Time</div>
+                            <div class="stat-value text-sm" id="parse-time">-</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-title">Input Size</div>
+                            <div class="stat-value text-sm" id="input-size">0 chars</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Showcase -->
+        <div class="mt-8">
+            <h3 class="text-2xl font-bold mb-4">Features Demonstrated</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="card bg-primary text-primary-content">
+                    <div class="card-body">
+                        <h4 class="card-title text-sm">Comments</h4>
+                        <p class="text-xs">Single-line // and multi-line /* */ comments</p>
+                    </div>
+                </div>
+                <div class="card bg-secondary text-secondary-content">
+                    <div class="card-body">
+                        <h4 class="card-title text-sm">Trailing Commas</h4>
+                        <p class="text-xs">Extra commas in arrays and objects</p>
+                    </div>
+                </div>
+                <div class="card bg-accent text-accent-content">
+                    <div class="card-body">
+                        <h4 class="card-title text-sm">Unquoted Keys</h4>
+                        <p class="text-xs">Object keys without quotes</p>
+                    </div>
+                </div>
+                <div class="card bg-neutral text-neutral-content">
+                    <div class="card-body">
+                        <h4 class="card-title text-sm">Error Recovery</h4>
+                        <p class="text-xs">Intelligent error handling and suggestions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-4 bg-base-300 text-base-content mt-8">
+        <div>
+            <p>Powered by Vexy JSON WASM • <a href="https://github.com/vexyart/vexy-json" class="link">GitHub</a></p>
+        </div>
+    </footer>
+
+    <!-- WASM Loading -->
+    <div id="loading-modal" class="modal modal-open">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Loading Vexy JSON...</h3>
+            <p class="py-4">Initializing WASM module</p>
+            <progress class="progress progress-primary w-full"></progress>
+        </div>
+    </div>
+
+    <script type="module">
+        // WASM Module
+        let vexyJson = null;
+        let inputEditor = null;
+        let outputEditor = null;
+
+        // Example JSON snippets
+        const examples = {
+            comments: `{
+    // This is a comment
+    "name": "Vexy JSON",
+    "version": "1.0.5", /* version comment */
+    "features": [
+        "comments", // inline comment
+        "trailing commas"
+    ]
+}`,
+            trailing: `{
+    "users": [
+        {"name": "Alice", "age": 25},
+        {"name": "Bob", "age": 30},  // trailing comma here
+    ],
+    "active": true,  // and here
+}`,
+            unquoted: `{
+    name: "Unquoted keys work",
+    version: 1.0,
+    settings: {
+        debug: true,
+        maxRetries: 3
+    }
+}`,
+            mixed: `{
+    // Configuration file
+    appName: "My App",
+    version: "2.1.0", // current version
+    
+    /* Database settings */
+    database: {
+        host: "localhost",
+        port: 5432,
+        ssl: true,  // enable SSL
+    },
+    
+    features: [
+        "auth",
+        "logging",  // comma here is OK
+    ],
+}`,
+            complex: `{
+    // Complex configuration example
+    $schema: "config-v1",
+    
+    environments: {
+        development: {
+            apiUrl: "http://localhost:3000",
+            debug: true,
+            features: ["hotReload", "devTools",],  // trailing comma
+        },
+        
+        production: {
+            apiUrl: "https://api.example.com",
+            debug: false, // production ready
+            features: ["analytics", "monitoring"]
+        }
+    },
+    
+    /* Plugin configuration */
+    plugins: [
+        {name: "auth", enabled: true},
+        {name: "cache", enabled: false}, // disabled for now
+    ]
+}`
+        };
+
+        // Initialize Monaco Editor
+        async function initEditors() {
+            return new Promise((resolve) => {
+                require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
+                require(['vs/editor/editor.main'], function () {
+                    // Input editor
+                    inputEditor = monaco.editor.create(document.getElementById('input-editor'), {
+                        value: examples.mixed,
+                        language: 'json',
+                        theme: 'vs',
+                        minimap: { enabled: false },
+                        automaticLayout: true,
+                        fontSize: 14,
+                        lineNumbers: 'on',
+                        roundedSelection: false,
+                        scrollBeyondLastLine: false,
+                        wordWrap: 'on'
+                    });
+
+                    // Output editor
+                    outputEditor = monaco.editor.create(document.getElementById('output-editor'), {
+                        value: '',
+                        language: 'json',
+                        theme: 'vs',
+                        minimap: { enabled: false },
+                        automaticLayout: true,
+                        fontSize: 14,
+                        readOnly: true,
+                        lineNumbers: 'on',
+                        roundedSelection: false,
+                        scrollBeyondLastLine: false,
+                        wordWrap: 'on'
+                    });
+
+                    // Auto-parse on changes
+                    inputEditor.onDidChangeModelContent(() => {
+                        parseJSON();
+                    });
+
+                    resolve();
+                });
+            });
+        }
+
+        // Initialize WASM
+        async function initWasm() {
+            try {
+                const wasmModule = await import('./pkg/vexy_json_wasm.js');
+                await wasmModule.default();
+                vexyJson = wasmModule;
+                return true;
+            } catch (error) {
+                console.error('Failed to load WASM:', error);
+                return false;
+            }
+        }
+
+        // Parse JSON with timing
+        function parseJSON() {
+            if (!vexyJson || !inputEditor || !outputEditor) return;
+
+            const input = inputEditor.getValue();
+            const startTime = performance.now();
+            
+            // Update input size
+            document.getElementById('input-size').textContent = `${input.length} chars`;
+
+            try {
+                // Get options
+                const options = {
+                    allow_comments: document.getElementById('allow-comments').checked,
+                    allow_trailing_commas: document.getElementById('allow-trailing-commas').checked,
+                    allow_unquoted_keys: document.getElementById('allow-unquoted-keys').checked
+                };
+
+                // Parse with options (assuming parse_with_options exists in WASM)
+                const result = vexyJson.parse_json ? vexyJson.parse_json(input) : JSON.parse(input);
+                const endTime = performance.now();
+                const parseTime = (endTime - startTime).toFixed(2);
+
+                // Display result
+                outputEditor.setValue(JSON.stringify(result, null, 2));
+                
+                // Update UI
+                document.getElementById('parse-time').textContent = `${parseTime}ms`;
+                document.getElementById('status-badge').textContent = 'Success';
+                document.getElementById('status-badge').className = 'badge badge-success';
+                
+                // Add success animation
+                document.getElementById('output-container').classList.remove('pulse-error');
+                document.getElementById('output-container').classList.add('pulse-success');
+                setTimeout(() => {
+                    document.getElementById('output-container').classList.remove('pulse-success');
+                }, 500);
+
+            } catch (error) {
+                const endTime = performance.now();
+                const parseTime = (endTime - startTime).toFixed(2);
+
+                // Display error
+                outputEditor.setValue(`Error: ${error.message}`);
+                
+                // Update UI
+                document.getElementById('parse-time').textContent = `${parseTime}ms`;
+                document.getElementById('status-badge').textContent = 'Error';
+                document.getElementById('status-badge').className = 'badge badge-error';
+                
+                // Add error animation
+                document.getElementById('output-container').classList.remove('pulse-success');
+                document.getElementById('output-container').classList.add('pulse-error');
+                setTimeout(() => {
+                    document.getElementById('output-container').classList.remove('pulse-error');
+                }, 500);
+            }
+        }
+
+        // Load example
+        window.loadExample = function(type) {
+            if (inputEditor && examples[type]) {
+                inputEditor.setValue(examples[type]);
+            }
+        };
+
+        // Option change handlers
+        document.getElementById('allow-comments').addEventListener('change', parseJSON);
+        document.getElementById('allow-trailing-commas').addEventListener('change', parseJSON);
+        document.getElementById('allow-unquoted-keys').addEventListener('change', parseJSON);
+
+        // Initialize everything
+        async function init() {
+            try {
+                await initEditors();
+                const wasmLoaded = await initWasm();
+                
+                if (wasmLoaded) {
+                    parseJSON(); // Initial parse
+                } else {
+                    // Fallback to native JSON.parse
+                    console.warn('WASM failed to load, using fallback JSON.parse');
+                }
+            } catch (error) {
+                console.error('Initialization failed:', error);
+                outputEditor?.setValue('Failed to initialize demo');
+            } finally {
+                // Hide loading modal
+                document.getElementById('loading-modal').classList.remove('modal-open');
+            }
+        }
+
+        // Start initialization
+        init();
+    </script>
+</body>
+</html>

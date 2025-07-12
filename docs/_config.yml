@@ -42,15 +42,15 @@ exclude:
   - '**/site_template/**/*'
   - '**/gems/jekyll-*/lib/site_template/_posts/*'
   - 'internal/**/*'
+  - 'dev/**/*'
 github:
   repository_url: https://github.com/vexyart/vexy-json
 highlighter: rouge
 # Include WASM and tool files in build
 include:
   - pkg
+  - demo.html
   - tool.html
-  - test-browsers.html
-  - test-mobile.html
   - assets
 incremental: false
 # Development configuration

@@ -4,32 +4,31 @@ title: Home
 nav_order: 1
 ---
 
-# Welcome to vexy_json v2.0.0
+# Vexy JSON Documentation
 
-`vexy_json` is a forgiving JSON parser written in Rust, inspired by the JavaScript library `jsonic`. It provides robust, flexible parsing for both strict and non-standard JSON, supporting features like comments, unquoted keys, trailing commas, implicit arrays/objects, and more. vexy_json is available as a Rust library, CLI tool, and WebAssembly module for browser/Node.js usage.
+**A forgiving JSON parser that handles real-world JSON with comments, trailing commas, unquoted keys, and more.**
 
-## 🚀 New in Version 2.0.0
+---
 
-- **Streaming API**: Process large JSON files incrementally with minimal memory usage
-- **Parallel Processing**: Multi-threaded JSON processing for batch operations
-- **Plugin Architecture**: Extensible framework for custom transformations and validators
-- **Enhanced CLI**: Watch mode, batch processing, and advanced formatting options
-- **NDJSON Support**: Native support for newline-delimited JSON streams
+## 🚀 Quick Start
 
-## Key Features
+### Try It Now
+- **[Interactive Demo](demo.html)** - Test Vexy JSON in your browser with WASM
+- **[Legacy Tool](tool.html)** - Previous version of the web tool
 
-- Forgiving parsing: comments, unquoted keys, trailing commas, implicit arrays/objects
-- Extended number formats: hex, octal, binary, underscores
-- Strict mode for RFC 8259 compliance
-- WebAssembly/JavaScript support
-- Interactive web tool
-- **NEW**: Streaming parser for large files
-- **NEW**: Parallel processing capabilities
-- **NEW**: Plugin system for extensibility
+### Installation
+```bash
+# Rust
+cargo add vexy-json
 
-## Try It Online
+# Python
+pip install vexy-json
 
-🚀 **[Launch the Web Tool](tool.html)** — Parse forgiving JSON in your browser!
+# CLI
+cargo install vexy-json
+```
+
+---
 
 ## Quick Start (Rust)
 
@@ -43,81 +42,110 @@ fn main() {
 }
 ```
 
-## Documentation
+## 📚 Documentation
 
-- [Usage Guide](usage.md)
-- [Forgiving Features](features.md)
-- [Web Tool](web-tool.md)
-- [WASM API Reference](wasm.md)
-- [Troubleshooting](troubleshooting.md)
+### For Users
+- **[Getting Started](user/getting-started.md)** - Installation and basic usage
+- **[Features Overview](user/features.md)** - What makes Vexy JSON special
+- **[API Documentation](user/api/)** - Language-specific guides
+  - [Rust API](user/api/rust.md)
+  - [Python API](user/api/python-bindings.md)
+  - [WebAssembly](user/api/wasm.md)
+  - [Streaming API](user/api/streaming-api.md)
+- **[User Guides](user/guides/)**
+  - [Migration Guide](user/guides/migration.md)
+  - [Troubleshooting](user/guides/troubleshooting.md)
+  - [JSON Repair](user/guides/json-repair.md)
+- **[Reference](user/reference/)**
+  - [Release Notes](user/reference/release-notes.md)
 
-## Contributing
+### For Developers
+- **[Contributing](dev/contributing.md)** - How to contribute to the project
+- **[Developer Guide](dev/developer-guide.md)** - Architecture and internals
+- **[Plugin Development](dev/plugin-development.md)** - Creating plugins
+- **[Build Process](dev/build-process.md)** - Building and testing
+- **[Release Process](dev/release-process.md)** - How releases are made
+- **[Benchmarks](dev/benchmarks.md)** - Performance comparisons
 
-See [Contributing](contributing.md) for how to help improve vexy_json.
+---
 
-📦 **[Download the latest CLI release](https://github.com/vexyart/vexy-json/releases/latest)** - Get the `vexy_json` command-line interface for your platform.
+## ✨ Key Features
 
-## Features
-
-- **Forgiving Parsing**: Handles comments, trailing commas, unquoted keys, and implicit top-level objects/arrays.
-- **Rust Idiomatic API**: Designed with Rust's ownership, borrowing, and error handling principles in mind.
-- **Performance**: Optimized for speed and efficiency.
-- **Serde Integration**: Seamlessly convert `vexy_json::Value` to and from other data formats using the `serde` framework.
-- **WebAssembly (WASM) Bindings**: Use `vexy_json` directly in JavaScript environments.
-- **Interactive Web Tool**: Browser-based parser with real-time feedback and sharing capabilities.
-- **Compatibility**: Aims for API compatibility with the original `jsonic.js` where appropriate.
-
-## Getting Started
-
-To use `vexy_json` in your Rust project, add it to your `Cargo.toml`:
-
-```toml
-[dependencies]
-vexy_json = "2.0.0" # Replace with the latest version
-```
-
-Then, you can parse JSON-like strings:
-
-```rust
-use vexy_json::parse;
-
-fn main() {
-    let json_str = r#"
-        {
-            // This is a comment
-            name: "John Doe",
-            age: 30,
-            hobbies: [
-                "reading",
-                "hiking", // Trailing comma
-            ],
-        }
-    "#;
-
-    match parse(json_str) {
-        Ok(value) => {
-            println!("Parsed successfully: {:?}", value);
-        }
-        Err(e) => {
-            eprintln!("Parsing error: {}", e);
-        }
-    }
+### 💬 Comments Support
+```json
+{
+    // Single-line comments
+    "name": "example",
+    /* Multi-line
+       comments */ 
+    "value": 42
 }
 ```
 
-## Documentation
+### 🏷️ Unquoted Keys
+```json
+{
+    name: "No quotes needed",
+    version: 1.0,
+    active: true
+}
+```
 
-- [API Reference](api/)
-- [Usage Guide](usage/)
-- [Forgiving Features](features/)
-- [Streaming API](streaming-api/)
-- [Release Notes](release-notes/)
-- [Contributing](contributing/)
+### ➕ Trailing Commas
+```json
+{
+    "items": [
+        "first",
+        "second",  // <- This comma is OK
+    ],
+    "done": true,  // <- And this one too
+}
+```
 
-## Project Status
+### 🔧 Error Recovery
+```json
+{
+    "broken": "json,
+    "gets": "fixed automatically"
+}
+```
 
-`vexy_json` v2.0.0 is production-ready with comprehensive features including streaming parsing, parallel processing, and a plugin architecture. We welcome contributions to expand the ecosystem!
+---
 
-## License
+## 🎯 Use Cases
 
-`vexy_json` is distributed under the MIT License. See the [LICENSE](https://github.com/vexyart/vexy-json/blob/main/LICENSE) file for more details.
+- **Configuration Files** - More readable config with comments
+- **API Development** - Forgiving parsing for client-side JSON
+- **Data Migration** - Repair malformed JSON data
+- **Developer Tools** - Build JSON editors and validators
+- **Log Processing** - Handle JSON logs with comments
+
+---
+
+## 🌟 Performance
+
+Vexy JSON is designed for both **correctness** and **speed**:
+
+- ⚡ **Fast parsing** - Competitive with standard JSON parsers
+- 🧠 **Smart recovery** - Fixes common JSON errors automatically  
+- 🌐 **Multi-platform** - Rust, Python, WebAssembly, and C/C++ bindings
+- 🔒 **Memory safe** - Built in Rust with comprehensive error handling
+
+---
+
+## 🔗 Links
+
+- **[GitHub Repository](https://github.com/vexyart/vexy-json)** - Source code and issues
+- **[Crates.io](https://crates.io/crates/vexy-json)** - Rust package
+- **[PyPI](https://pypi.org/project/vexy-json/)** - Python package
+- **[NPM](https://www.npmjs.com/package/@vexyart/vexy-json)** - WebAssembly package
+
+---
+
+## 📄 License
+
+Licensed under either of:
+- Apache License, Version 2.0
+- MIT License
+
+at your option.
