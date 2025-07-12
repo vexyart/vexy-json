@@ -3,10 +3,10 @@ use std::process::Command;
 fn main() {
     // Get version from git tag or Cargo.toml
     let version = get_version();
-    
+
     // Set the version as an environment variable for compile-time access
     println!("cargo:rustc-env=VEXY_JSON_VERSION={}", version);
-    
+
     // Rerun if git HEAD changes
     println!("cargo:rerun-if-changed=../../.git/HEAD");
     println!("cargo:rerun-if-changed=../../.git/refs/tags");
@@ -24,7 +24,7 @@ fn get_version() -> String {
             return tag.strip_prefix('v').unwrap_or(&tag).to_string();
         }
     }
-    
+
     // Try to get the most recent tag with commit info
     if let Ok(output) = Command::new("git")
         .args(&["describe", "--tags", "--always"])
@@ -46,7 +46,7 @@ fn get_version() -> String {
             }
         }
     }
-    
+
     // Fallback to Cargo.toml version
     env!("CARGO_PKG_VERSION").to_string()
 }

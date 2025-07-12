@@ -443,7 +443,11 @@ impl AdvancedJsonRepairer {
         match action.action_type {
             RepairType::InsertText | RepairType::InsertComma => {
                 if action.position > input.len() {
-                    return Err(format!("Insert position {} is out of bounds for input of length {}", action.position, input.len()));
+                    return Err(format!(
+                        "Insert position {} is out of bounds for input of length {}",
+                        action.position,
+                        input.len()
+                    ));
                 }
                 let mut result = String::new();
                 result.push_str(&input[..action.position]);
@@ -457,10 +461,18 @@ impl AdvancedJsonRepairer {
             | RepairType::QuoteKey => {
                 let original_len = action.original.len();
                 if action.position > input.len() {
-                    return Err(format!("Replace position {} is out of bounds for input of length {}", action.position, input.len()));
+                    return Err(format!(
+                        "Replace position {} is out of bounds for input of length {}",
+                        action.position,
+                        input.len()
+                    ));
                 }
                 if action.position + original_len > input.len() {
-                    return Err(format!("Replace end position {} is out of bounds for input of length {}", action.position + original_len, input.len()));
+                    return Err(format!(
+                        "Replace end position {} is out of bounds for input of length {}",
+                        action.position + original_len,
+                        input.len()
+                    ));
                 }
                 let mut result = String::new();
                 result.push_str(&input[..action.position]);

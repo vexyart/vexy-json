@@ -1,11 +1,11 @@
 // this_file: tests/property_tests.rs
 
 use proptest::prelude::*;
-use vexy_json::{parse, Number, Value};
 use quickcheck::{Arbitrary, Gen, QuickCheck, TestResult};
 use quickcheck_macros::quickcheck;
-use vexy_json_core::{parse_with_options, ParserOptions};
 use rustc_hash::FxHashMap;
+use vexy_json::{parse, Number, Value};
+use vexy_json_core::{parse_with_options, ParserOptions};
 // use vexy_json_core::streaming::{JsonEventHandler, parse_streaming, StreamingEvent};
 
 // A strategy for generating simple JSON strings
@@ -112,18 +112,20 @@ proptest! {
         keys in prop::collection::vec(identifier_strategy(), 1..4),
         values in prop::collection::vec(simple_string_strategy(), 1..4)
     ) {
-        if keys.len() == values.len() {
-            // Test simple object
+        // Use the minimum length to ensure we have matched key-value pairs
+        let min_len = keys.len().min(values.len());
+        if min_len > 0 {
+            // Test simple object using only the first min_len elements
             let mut obj_parts = Vec::new();
-            for (key, value) in keys.iter().zip(values.iter()) {
+            for (key, value) in keys.iter().take(min_len).zip(values.iter().take(min_len)) {
                 obj_parts.push(format!("\"{}\": \"{}\"", key, value.replace("\"", "\\\"")));
             }
             let obj_json = format!("{{{}}}", obj_parts.join(", "));
 
             if let Ok(parsed) = parse(&obj_json) {
                 if let Value::Object(obj) = parsed {
-                    prop_assert_eq!(obj.len(), keys.len());
-                    for (key, expected_value) in keys.iter().zip(values.iter()) {
+                    prop_assert_eq!(obj.len(), min_len);
+                    for (key, expected_value) in keys.iter().take(min_len).zip(values.iter().take(min_len)) {
                         if let Some(Value::String(actual_value)) = obj.get(key) {
                             prop_assert_eq!(actual_value, expected_value);
                         }
@@ -301,7 +303,7 @@ fn arbitrary_json_string(g: &mut Gen) -> String {
 fn prop_parse_serialize_roundtrip(value: ArbitraryJsonValue) -> TestResult {
     // Convert our value to JSON string
     let json_string = value_to_json_string(&value.0);
-    
+
     // Parse it back
     match parse(&json_string) {
         Ok(parsed) => {
@@ -365,7 +367,7 @@ fn escape_json_string(s: &str) -> String {
 #[quickcheck]
 fn prop_forgiving_features_preserve_meaning(value: ArbitraryJsonValue) -> TestResult {
     let json_string = value_to_json_string(&value.0);
-    
+
     // Parse with strict options
     let strict_options = ParserOptions {
         allow_comments: false,
@@ -376,12 +378,14 @@ fn prop_forgiving_features_preserve_meaning(value: ArbitraryJsonValue) -> TestRe
         newline_as_comma: false,
         ..Default::default()
     };
-    
+
     // Parse with forgiving options
     let forgiving_options = ParserOptions::default();
-    
-    match (parse_with_options(&json_string, strict_options), 
-           parse_with_options(&json_string, forgiving_options)) {
+
+    match (
+        parse_with_options(&json_string, strict_options),
+        parse_with_options(&json_string, forgiving_options),
+    ) {
         (Ok(strict_val), Ok(forgiving_val)) => {
             if values_semantically_equal(&strict_val, &forgiving_val) {
                 TestResult::passed()
@@ -419,9 +423,9 @@ fn prop_parser_options_combinations(value: ArbitraryJsonValue, options_bits: u8)
         enable_repair: options_bits & 0x40 != 0,
         ..Default::default()
     };
-    
+
     let json_string = value_to_json_string(&value.0);
-    
+
     // Parsing should never panic, only return Ok or Err
     match parse_with_options(&json_string, options) {
         Ok(_) | Err(_) => TestResult::passed(),
@@ -435,7 +439,7 @@ fn prop_error_recovery_doesnt_crash(input: String) -> bool {
         max_repairs: 10,
         ..Default::default()
     };
-    
+
     // Parser with error recovery should never panic
     match parse_with_options(&input, options) {
         Ok(_) | Err(_) => true,
@@ -446,13 +450,13 @@ fn prop_error_recovery_doesnt_crash(input: String) -> bool {
 fn test_quickcheck_json_generation() {
     // Test that we can generate various JSON values
     let mut qc = QuickCheck::new().tests(100);
-    
+
     fn prop(value: ArbitraryJsonValue) -> bool {
         // Every generated value should be valid
         let json = value_to_json_string(&value.0);
         parse(&json).is_ok()
     }
-    
+
     qc.quickcheck(prop as fn(ArbitraryJsonValue) -> bool);
 }
 
@@ -462,33 +466,33 @@ fn test_quickcheck_json_generation() {
 // struct EventCollector {
 //     events: Vec<String>,
 // }
-// 
+//
 // impl JsonEventHandler for EventCollector {
 //     fn on_object_start(&mut self) -> Result<(), vexy_json_core::error::Error> {
 //         self.events.push("object_start".to_string());
 //         Ok(())
 //     }
-//     
+//
 //     fn on_object_end(&mut self) -> Result<(), vexy_json_core::error::Error> {
 //         self.events.push("object_end".to_string());
 //         Ok(())
 //     }
-//     
+//
 //     fn on_array_start(&mut self) -> Result<(), vexy_json_core::error::Error> {
 //         self.events.push("array_start".to_string());
 //         Ok(())
 //     }
-//     
+//
 //     fn on_array_end(&mut self) -> Result<(), vexy_json_core::error::Error> {
 //         self.events.push("array_end".to_string());
 //         Ok(())
 //     }
-//     
+//
 //     fn on_key(&mut self, key: &str) -> Result<(), vexy_json_core::error::Error> {
 //         self.events.push(format!("key:{}", key));
 //         Ok(())
 //     }
-//     
+//
 //     fn on_value(&mut self, value: &Value) -> Result<(), vexy_json_core::error::Error> {
 //         self.events.push(format!("value:{:?}", value));
 //         Ok(())

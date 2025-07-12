@@ -75,7 +75,7 @@ fn test_numbers() {
     assert_eq!(parse("-1.0").unwrap(), f(-1.0)); // Keep as float
     assert_eq!(parse("0.0").unwrap(), f(0.0)); // Keep as float
 
-    // Leading decimal point is now supported  
+    // Leading decimal point is now supported
     assert_eq!(parse(".1").unwrap(), f(0.1));
     assert_eq!(parse("-.1").unwrap(), f(-0.1));
     assert_eq!(parse(".0").unwrap(), f(0.0));

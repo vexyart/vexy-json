@@ -70,10 +70,7 @@ impl JsonNormalizer {
 
     /// Creates a new JSON normalizer with custom options.
     pub fn with_options(options: NormalizerOptions) -> Self {
-        Self {
-            options,
-            depth: 0,
-        }
+        Self { options, depth: 0 }
     }
 
     /// Normalizes a JSON value according to the configured options.
@@ -106,7 +103,7 @@ impl JsonNormalizer {
 
         for (key, value) in obj {
             let normalized_value = self.normalize_value(value)?;
-            
+
             // Skip null values if configured
             if self.options.remove_null_values && normalized_value == Value::Null {
                 continue;
@@ -138,7 +135,7 @@ impl JsonNormalizer {
 
         for value in arr {
             let normalized_value = self.normalize_value(value)?;
-            
+
             // Skip null values if configured
             if self.options.remove_null_values && normalized_value == Value::Null {
                 continue;
@@ -206,19 +203,19 @@ impl JsonNormalizer {
             (Value::Null, Value::Null) => Ordering::Equal,
             (Value::Null, _) => Ordering::Less,
             (_, Value::Null) => Ordering::Greater,
-            
+
             (Value::Bool(a), Value::Bool(b)) => a.cmp(b),
             (Value::Bool(_), _) => Ordering::Less,
             (_, Value::Bool(_)) => Ordering::Greater,
-            
+
             (Value::Number(a), Value::Number(b)) => self.compare_numbers(a, b),
             (Value::Number(_), _) => Ordering::Less,
             (_, Value::Number(_)) => Ordering::Greater,
-            
+
             (Value::String(a), Value::String(b)) => a.cmp(b),
             (Value::String(_), _) => Ordering::Less,
             (_, Value::String(_)) => Ordering::Greater,
-            
+
             (Value::Array(a), Value::Array(b)) => {
                 for (av, bv) in a.iter().zip(b.iter()) {
                     match self.compare_values(av, bv) {
@@ -230,7 +227,7 @@ impl JsonNormalizer {
             }
             (Value::Array(_), _) => Ordering::Less,
             (_, Value::Array(_)) => Ordering::Greater,
-            
+
             (Value::Object(_), Value::Object(_)) => Ordering::Equal, // Objects are equal for sorting
         }
     }
@@ -240,8 +237,12 @@ impl JsonNormalizer {
         match (a, b) {
             (Number::Integer(a), Number::Integer(b)) => a.cmp(b),
             (Number::Float(a), Number::Float(b)) => a.partial_cmp(b).unwrap_or(Ordering::Equal),
-            (Number::Integer(a), Number::Float(b)) => (*a as f64).partial_cmp(b).unwrap_or(Ordering::Equal),
-            (Number::Float(a), Number::Integer(b)) => a.partial_cmp(&(*b as f64)).unwrap_or(Ordering::Equal),
+            (Number::Integer(a), Number::Float(b)) => {
+                (*a as f64).partial_cmp(b).unwrap_or(Ordering::Equal)
+            }
+            (Number::Float(a), Number::Integer(b)) => {
+                a.partial_cmp(&(*b as f64)).unwrap_or(Ordering::Equal)
+            }
         }
     }
 }
@@ -281,7 +282,7 @@ impl CanonicalNormalizer {
             deduplicate_arrays: false,
             max_depth: 100,
         };
-        
+
         let mut normalizer = JsonNormalizer::with_options(options);
         normalizer.normalize(value)
     }
@@ -299,7 +300,7 @@ impl CanonicalNormalizer {
             deduplicate_arrays: true,
             max_depth: 100,
         };
-        
+
         let mut normalizer = JsonNormalizer::with_options(options);
         normalizer.normalize(value)
     }
@@ -322,7 +323,7 @@ impl CleanupNormalizer {
             deduplicate_arrays: false,
             max_depth: 100,
         };
-        
+
         let mut normalizer = JsonNormalizer::with_options(options);
         normalizer.normalize(value)
     }
@@ -339,16 +340,25 @@ mod tests {
         obj.insert("zebra".to_string(), Value::String("last".to_string()));
         obj.insert("apple".to_string(), Value::String("first".to_string()));
         obj.insert("banana".to_string(), Value::String("second".to_string()));
-        
+
         let value = Value::Object(obj);
         let normalized = normalize(&value).unwrap();
-        
+
         // The result should be the same content (sorting is for serialization)
         if let Value::Object(normalized_obj) = normalized {
             assert_eq!(normalized_obj.len(), 3);
-            assert_eq!(normalized_obj.get("zebra"), Some(&Value::String("last".to_string())));
-            assert_eq!(normalized_obj.get("apple"), Some(&Value::String("first".to_string())));
-            assert_eq!(normalized_obj.get("banana"), Some(&Value::String("second".to_string())));
+            assert_eq!(
+                normalized_obj.get("zebra"),
+                Some(&Value::String("last".to_string()))
+            );
+            assert_eq!(
+                normalized_obj.get("apple"),
+                Some(&Value::String("first".to_string()))
+            );
+            assert_eq!(
+                normalized_obj.get("banana"),
+                Some(&Value::String("second".to_string()))
+            );
         } else {
             panic!("Expected object");
         }
@@ -359,18 +369,21 @@ mod tests {
         let mut obj = FxHashMap::default();
         obj.insert("keep".to_string(), Value::String("value".to_string()));
         obj.insert("remove".to_string(), Value::Null);
-        
+
         let value = Value::Object(obj);
         let options = NormalizerOptions {
             remove_null_values: true,
             ..Default::default()
         };
-        
+
         let normalized = normalize_with_options(&value, options).unwrap();
-        
+
         if let Value::Object(normalized_obj) = normalized {
             assert_eq!(normalized_obj.len(), 1);
-            assert_eq!(normalized_obj.get("keep"), Some(&Value::String("value".to_string())));
+            assert_eq!(
+                normalized_obj.get("keep"),
+                Some(&Value::String("value".to_string()))
+            );
             assert!(normalized_obj.get("remove").is_none());
         } else {
             panic!("Expected object");
@@ -383,18 +396,21 @@ mod tests {
         obj.insert("keep".to_string(), Value::String("value".to_string()));
         obj.insert("empty_obj".to_string(), Value::Object(FxHashMap::default()));
         obj.insert("empty_arr".to_string(), Value::Array(vec![]));
-        
+
         let value = Value::Object(obj);
         let options = NormalizerOptions {
             remove_empty_containers: true,
             ..Default::default()
         };
-        
+
         let normalized = normalize_with_options(&value, options).unwrap();
-        
+
         if let Value::Object(normalized_obj) = normalized {
             assert_eq!(normalized_obj.len(), 1);
-            assert_eq!(normalized_obj.get("keep"), Some(&Value::String("value".to_string())));
+            assert_eq!(
+                normalized_obj.get("keep"),
+                Some(&Value::String("value".to_string()))
+            );
         } else {
             panic!("Expected object");
         }
@@ -407,9 +423,9 @@ mod tests {
             prefer_integers: true,
             ..Default::default()
         };
-        
+
         let normalized = normalize_with_options(&value, options).unwrap();
-        
+
         assert_eq!(normalized, Value::Number(Number::Integer(42)));
     }
 
@@ -421,9 +437,9 @@ mod tests {
             normalize_string_case: true,
             ..Default::default()
         };
-        
+
         let normalized = normalize_with_options(&value, options).unwrap();
-        
+
         assert_eq!(normalized, Value::String("hello world".to_string()));
     }
 
@@ -440,9 +456,9 @@ mod tests {
             deduplicate_arrays: true,
             ..Default::default()
         };
-        
+
         let normalized = normalize_with_options(&value, options).unwrap();
-        
+
         if let Value::Array(normalized_arr) = normalized {
             assert_eq!(normalized_arr.len(), 3);
             // Elements should be sorted and deduplicated
@@ -459,10 +475,10 @@ mod tests {
         let mut obj = FxHashMap::default();
         obj.insert("zebra".to_string(), Value::String("last".to_string()));
         obj.insert("apple".to_string(), Value::String("first".to_string()));
-        
+
         let value = Value::Object(obj);
         let canonical = CanonicalNormalizer::canonicalize(&value).unwrap();
-        
+
         // Should be the same as input (keys sorted during serialization)
         if let Value::Object(canonical_obj) = canonical {
             assert_eq!(canonical_obj.len(), 2);
@@ -477,13 +493,16 @@ mod tests {
         obj.insert("keep".to_string(), Value::String("  value  ".to_string()));
         obj.insert("remove".to_string(), Value::Null);
         obj.insert("empty".to_string(), Value::Array(vec![]));
-        
+
         let value = Value::Object(obj);
         let cleaned = CleanupNormalizer::cleanup(&value).unwrap();
-        
+
         if let Value::Object(cleaned_obj) = cleaned {
             assert_eq!(cleaned_obj.len(), 1);
-            assert_eq!(cleaned_obj.get("keep"), Some(&Value::String("value".to_string())));
+            assert_eq!(
+                cleaned_obj.get("keep"),
+                Some(&Value::String("value".to_string()))
+            );
         } else {
             panic!("Expected object");
         }
@@ -492,18 +511,24 @@ mod tests {
     #[test]
     fn test_deep_nested_normalization() {
         let mut inner = FxHashMap::default();
-        inner.insert("inner_key".to_string(), Value::String("inner_value".to_string()));
-        
+        inner.insert(
+            "inner_key".to_string(),
+            Value::String("inner_value".to_string()),
+        );
+
         let mut outer = FxHashMap::default();
         outer.insert("outer_key".to_string(), Value::Object(inner));
-        
+
         let value = Value::Object(outer);
         let normalized = normalize(&value).unwrap();
-        
+
         // Should maintain structure
         if let Value::Object(normalized_obj) = normalized {
             if let Some(Value::Object(inner_obj)) = normalized_obj.get("outer_key") {
-                assert_eq!(inner_obj.get("inner_key"), Some(&Value::String("inner_value".to_string())));
+                assert_eq!(
+                    inner_obj.get("inner_key"),
+                    Some(&Value::String("inner_value".to_string()))
+                );
             } else {
                 panic!("Expected nested object");
             }
@@ -516,15 +541,15 @@ mod tests {
     fn test_max_depth_limit() {
         let mut obj = FxHashMap::default();
         obj.insert("key".to_string(), Value::String("value".to_string()));
-        
+
         let value = Value::Object(obj);
         let options = NormalizerOptions {
             max_depth: 0,
             ..Default::default()
         };
-        
+
         let normalized = normalize_with_options(&value, options).unwrap();
-        
+
         // Should return original value when depth limit is exceeded
         assert_eq!(normalized, value);
     }

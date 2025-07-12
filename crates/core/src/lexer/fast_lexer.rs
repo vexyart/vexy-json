@@ -1,5 +1,5 @@
 //! Fast lexer implementation optimized for performance
-//! 
+//!
 //! This lexer implementation focuses on speed by:
 //! - Using hand-written state machine instead of regex
 //! - Minimizing allocations
@@ -95,13 +95,15 @@ impl<'a> FastLexer<'a> {
         let start = self.position;
 
         // Optional sign (+ or -)
-        if self.position < self.input.len() && (self.input[self.position] == b'-' || self.input[self.position] == b'+') {
+        if self.position < self.input.len()
+            && (self.input[self.position] == b'-' || self.input[self.position] == b'+')
+        {
             self.position += 1;
         }
 
         // Check if we start with a decimal point (e.g., .5)
         let starts_with_dot = self.position < self.input.len() && self.input[self.position] == b'.';
-        
+
         if starts_with_dot {
             // Skip the dot, we'll handle it in the fractional part
         } else {
@@ -113,10 +115,15 @@ impl<'a> FastLexer<'a> {
                         b'x' | b'X' => {
                             // Hexadecimal number
                             self.position += 2; // Skip "0x"
-                            if self.position >= self.input.len() || !self.input[self.position].is_ascii_hexdigit() {
+                            if self.position >= self.input.len()
+                                || !self.input[self.position].is_ascii_hexdigit()
+                            {
                                 return Err(Error::InvalidNumber(start));
                             }
-                            while self.position < self.input.len() && (self.input[self.position].is_ascii_hexdigit() || self.input[self.position] == b'_') {
+                            while self.position < self.input.len()
+                                && (self.input[self.position].is_ascii_hexdigit()
+                                    || self.input[self.position] == b'_')
+                            {
                                 self.position += 1;
                             }
                             return Ok((Token::Number, Span::new(start, self.position)));
@@ -124,10 +131,15 @@ impl<'a> FastLexer<'a> {
                         b'o' | b'O' => {
                             // Octal number
                             self.position += 2; // Skip "0o"
-                            if self.position >= self.input.len() || !matches!(self.input[self.position], b'0'..=b'7') {
+                            if self.position >= self.input.len()
+                                || !matches!(self.input[self.position], b'0'..=b'7')
+                            {
                                 return Err(Error::InvalidNumber(start));
                             }
-                            while self.position < self.input.len() && (matches!(self.input[self.position], b'0'..=b'7') || self.input[self.position] == b'_') {
+                            while self.position < self.input.len()
+                                && (matches!(self.input[self.position], b'0'..=b'7')
+                                    || self.input[self.position] == b'_')
+                            {
                                 self.position += 1;
                             }
                             return Ok((Token::Number, Span::new(start, self.position)));
@@ -135,10 +147,15 @@ impl<'a> FastLexer<'a> {
                         b'b' | b'B' => {
                             // Binary number
                             self.position += 2; // Skip "0b"
-                            if self.position >= self.input.len() || !matches!(self.input[self.position], b'0' | b'1') {
+                            if self.position >= self.input.len()
+                                || !matches!(self.input[self.position], b'0' | b'1')
+                            {
                                 return Err(Error::InvalidNumber(start));
                             }
-                            while self.position < self.input.len() && (matches!(self.input[self.position], b'0' | b'1') || self.input[self.position] == b'_') {
+                            while self.position < self.input.len()
+                                && (matches!(self.input[self.position], b'0' | b'1')
+                                    || self.input[self.position] == b'_')
+                            {
                                 self.position += 1;
                             }
                             return Ok((Token::Number, Span::new(start, self.position)));
@@ -154,11 +171,15 @@ impl<'a> FastLexer<'a> {
                 }
             } else {
                 // Integer part
-                if self.position >= self.input.len() || !self.input[self.position].is_ascii_digit() {
+                if self.position >= self.input.len() || !self.input[self.position].is_ascii_digit()
+                {
                     return Err(Error::InvalidNumber(start));
                 }
 
-                while self.position < self.input.len() && (self.input[self.position].is_ascii_digit() || self.input[self.position] == b'_') {
+                while self.position < self.input.len()
+                    && (self.input[self.position].is_ascii_digit()
+                        || self.input[self.position] == b'_')
+                {
                     self.position += 1;
                 }
             }
@@ -167,20 +188,25 @@ impl<'a> FastLexer<'a> {
         // Fractional part
         if self.position < self.input.len() && self.input[self.position] == b'.' {
             self.position += 1;
-            
+
             // Check for double decimal point immediately (e.g., "1..1" or "..1")
             if self.position < self.input.len() && self.input[self.position] == b'.' {
                 return Err(Error::InvalidNumber(start));
             }
-            
+
             // For numbers starting with dot (e.g., .5), we need at least one digit
-            if starts_with_dot && (self.position >= self.input.len() || !self.input[self.position].is_ascii_digit()) {
+            if starts_with_dot
+                && (self.position >= self.input.len()
+                    || !self.input[self.position].is_ascii_digit())
+            {
                 return Err(Error::InvalidNumber(start));
             }
-            
+
             // Allow trailing decimal point (e.g., "1.") - vexy_json compatibility
             // Only consume digits if they exist after the decimal point
-            while self.position < self.input.len() && (self.input[self.position].is_ascii_digit() || self.input[self.position] == b'_') {
+            while self.position < self.input.len()
+                && (self.input[self.position].is_ascii_digit() || self.input[self.position] == b'_')
+            {
                 self.position += 1;
             }
         } else if starts_with_dot {
@@ -201,7 +227,9 @@ impl<'a> FastLexer<'a> {
             if self.position >= self.input.len() || !self.input[self.position].is_ascii_digit() {
                 return Err(Error::InvalidNumber(start));
             }
-            while self.position < self.input.len() && (self.input[self.position].is_ascii_digit() || self.input[self.position] == b'_') {
+            while self.position < self.input.len()
+                && (self.input[self.position].is_ascii_digit() || self.input[self.position] == b'_')
+            {
                 self.position += 1;
             }
         }
@@ -435,7 +463,7 @@ mod tests {
             mode: LexerMode::Standard,
             ..Default::default()
         };
-        let mut lexer = FastLexer::new(r#"{"key": 123}"# , config);
+        let mut lexer = FastLexer::new(r#"{"key": 123}"#, config);
 
         assert_eq!(lexer.next_token().unwrap().0, Token::LeftBrace);
         assert_eq!(lexer.next_token().unwrap().0, Token::String);

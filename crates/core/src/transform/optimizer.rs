@@ -90,7 +90,8 @@ impl StringInterner {
     pub fn finalize(&mut self) {
         for (string, count) in &self.counts {
             if *count >= self.min_count {
-                self.strings.insert(string.clone(), Arc::from(string.as_str()));
+                self.strings
+                    .insert(string.clone(), Arc::from(string.as_str()));
             }
         }
     }
@@ -106,7 +107,9 @@ impl StringInterner {
             total_strings: self.counts.len(),
             interned_strings: self.strings.len(),
             total_occurrences: self.counts.values().sum(),
-            saved_bytes: self.strings.iter()
+            saved_bytes: self
+                .strings
+                .iter()
                 .map(|(s, _)| {
                     let count = self.counts.get(s).unwrap_or(&0);
                     if *count > 1 {
@@ -235,7 +238,7 @@ impl AstOptimizer {
 
         for (key, value) in obj {
             let optimized_value = self.optimize_value(value)?;
-            
+
             // Skip empty containers if configured
             if self.options.remove_empty_containers {
                 match &optimized_value {
@@ -259,9 +262,10 @@ impl AstOptimizer {
         }
 
         // Consider converting small objects to arrays if beneficial
-        if self.options.optimize_small_objects && 
-           optimized.len() <= self.options.max_small_object_size &&
-           self.should_convert_to_array(&optimized) {
+        if self.options.optimize_small_objects
+            && optimized.len() <= self.options.max_small_object_size
+            && self.should_convert_to_array(&optimized)
+        {
             return Ok(self.convert_object_to_array(&optimized));
         }
 
@@ -279,7 +283,7 @@ impl AstOptimizer {
 
         for value in arr {
             let optimized_value = self.optimize_value(value)?;
-            
+
             // Skip empty containers if configured
             if self.options.remove_empty_containers {
                 match &optimized_value {
@@ -319,7 +323,11 @@ impl AstOptimizer {
         match n {
             Number::Float(f) => {
                 // Convert float to integer if it's a whole number
-                if f.fract() == 0.0 && f.is_finite() && *f >= i64::MIN as f64 && *f <= i64::MAX as f64 {
+                if f.fract() == 0.0
+                    && f.is_finite()
+                    && *f >= i64::MIN as f64
+                    && *f <= i64::MAX as f64
+                {
                     Value::Number(Number::Integer(*f as i64))
                 } else {
                     Value::Number(Number::Float(*f))
@@ -338,10 +346,15 @@ impl AstOptimizer {
             (Value::Number(a), Value::Number(b)) => self.numbers_equal(a, b),
             (Value::String(a), Value::String(b)) => a == b,
             (Value::Array(a), Value::Array(b)) => {
-                a.len() == b.len() && a.iter().zip(b.iter()).all(|(av, bv)| self.values_equal(av, bv))
+                a.len() == b.len()
+                    && a.iter()
+                        .zip(b.iter())
+                        .all(|(av, bv)| self.values_equal(av, bv))
             }
             (Value::Object(a), Value::Object(b)) => {
-                a.len() == b.len() && a.iter().all(|(k, v)| b.get(k).map_or(false, |bv| self.values_equal(v, bv)))
+                a.len() == b.len()
+                    && a.iter()
+                        .all(|(k, v)| b.get(k).map_or(false, |bv| self.values_equal(v, bv)))
             }
             _ => false,
         }
@@ -502,7 +515,10 @@ mod tests {
 
         if let Value::Object(optimized_obj) = optimized {
             assert_eq!(optimized_obj.len(), 1);
-            assert_eq!(optimized_obj.get("keep"), Some(&Value::String("value".to_string())));
+            assert_eq!(
+                optimized_obj.get("keep"),
+                Some(&Value::String("value".to_string()))
+            );
         } else {
             panic!("Expected object");
         }
@@ -550,23 +566,23 @@ mod tests {
     #[test]
     fn test_string_interning() {
         let mut interner = StringInterner::new(3, 2);
-        
+
         // Record strings
         interner.record("hello");
         interner.record("world");
         interner.record("hello");
         interner.record("hello");
         interner.record("short");
-        
+
         interner.finalize();
-        
+
         // "hello" should be interned (length >= 3, count >= 2)
         assert!(interner.get("hello").is_some());
         // "world" should not be interned (count < 2)
         assert!(interner.get("world").is_none());
         // "short" should not be interned (count < 2)
         assert!(interner.get("short").is_none());
-        
+
         let stats = interner.stats();
         assert_eq!(stats.interned_strings, 1);
         assert_eq!(stats.total_strings, 3);
@@ -586,7 +602,10 @@ mod tests {
         // Should maintain structure but optimize the nested float
         if let Value::Object(optimized_obj) = optimized {
             if let Some(Value::Object(inner_obj)) = optimized_obj.get("outer_key") {
-                assert_eq!(inner_obj.get("inner_key"), Some(&Value::Number(Number::Float(3.14))));
+                assert_eq!(
+                    inner_obj.get("inner_key"),
+                    Some(&Value::Number(Number::Float(3.14)))
+                );
             } else {
                 panic!("Expected nested object");
             }
@@ -606,7 +625,10 @@ mod tests {
 
         if let Value::Object(optimized_obj) = optimized {
             assert_eq!(optimized_obj.len(), 1);
-            assert_eq!(optimized_obj.get("keep"), Some(&Value::Number(Number::Integer(42))));
+            assert_eq!(
+                optimized_obj.get("keep"),
+                Some(&Value::Number(Number::Integer(42)))
+            );
         } else {
             panic!("Expected object");
         }
@@ -632,7 +654,7 @@ mod tests {
         let mut optimizer = AstOptimizer::with_options(options);
         let value = Value::String("test".to_string());
         let _ = optimizer.optimize(&value).unwrap();
-        
+
         let stats = optimizer.stats();
         assert_eq!(stats.interner_stats.total_strings, 1);
     }
@@ -649,7 +671,7 @@ mod tests {
         };
 
         let optimized = optimize_with_options(&value, options).unwrap();
-        
+
         // Should return original value when depth limit is exceeded
         assert_eq!(optimized, value);
     }

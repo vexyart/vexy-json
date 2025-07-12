@@ -59,9 +59,9 @@ pub use lexer::Lexer;
 pub use parallel::{parse_ndjson_parallel, parse_parallel, ParallelConfig, ParallelParser};
 pub use parser::{
     parse, parse_iterative, parse_optimized, parse_optimized_v2, parse_optimized_v2_with_options,
-    parse_optimized_with_options, parse_recursive, parse_v2_with_stats, parse_with_detailed_repair_tracking,
-    parse_with_fallback, parse_with_options, parse_with_stats, IterativeParser, Parser, ParserOptions,
-    RecursiveDescentParser,
+    parse_optimized_with_options, parse_recursive, parse_v2_with_stats,
+    parse_with_detailed_repair_tracking, parse_with_fallback, parse_with_options, parse_with_stats,
+    IterativeParser, Parser, ParserOptions, RecursiveDescentParser,
 };
 pub use repair::JsonRepairer;
 pub use streaming::{
@@ -69,7 +69,7 @@ pub use streaming::{
     NdJsonParser, SimpleStreamingLexer, StreamingEvent, StreamingParser, StreamingValueBuilder,
 };
 pub use transform::{
-    normalize, normalize_with_options, CanonicalNormalizer, CleanupNormalizer, JsonNormalizer,
-    NormalizerOptions, optimize, optimize_with_options, AstOptimizer, MemoryOptimizer, 
-    OptimizerOptions, OptimizerStats, PerformanceOptimizer, StringInterner, InternerStats,
+    normalize, normalize_with_options, optimize, optimize_with_options, AstOptimizer,
+    CanonicalNormalizer, CleanupNormalizer, InternerStats, JsonNormalizer, MemoryOptimizer,
+    NormalizerOptions, OptimizerOptions, OptimizerStats, PerformanceOptimizer, StringInterner,
 };

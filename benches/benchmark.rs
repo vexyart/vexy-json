@@ -1,6 +1,5 @@
 // this_file: benches/benchmark.rs
 
-
 const ITERATIONS: u32 = 100;
 
 struct BenchmarkResult {

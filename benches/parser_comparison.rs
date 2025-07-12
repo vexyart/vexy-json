@@ -8,14 +8,10 @@
 //! - Recursive descent parser (recursive)
 //! - Stack-based iterative parser (iterative)
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
 use vexy_json_core::{
-    parse_with_options, 
-    parse_optimized_with_options,
-    parse_optimized_v2_with_options,
-    parse_recursive,
-    parse_iterative,
-    ParserOptions,
+    parse_iterative, parse_optimized_v2_with_options, parse_optimized_with_options,
+    parse_recursive, parse_with_options, ParserOptions,
 };
 
 // Test data for benchmarking
@@ -86,9 +82,9 @@ fn generate_deep_array(depth: usize) -> String {
 
 fn bench_parser_comparison(c: &mut Criterion) {
     let mut group = c.benchmark_group("parser_comparison");
-    
+
     let options = ParserOptions::default();
-    
+
     for test_data in TEST_DATA {
         // Benchmark original parser
         group.bench_with_input(
@@ -101,7 +97,7 @@ fn bench_parser_comparison(c: &mut Criterion) {
                 });
             },
         );
-        
+
         // Benchmark optimized parser
         group.bench_with_input(
             BenchmarkId::new("optimized", test_data.name),
@@ -113,7 +109,7 @@ fn bench_parser_comparison(c: &mut Criterion) {
                 });
             },
         );
-        
+
         // Benchmark optimized parser V2
         group.bench_with_input(
             BenchmarkId::new("optimized_v2", test_data.name),
@@ -125,7 +121,7 @@ fn bench_parser_comparison(c: &mut Criterion) {
                 });
             },
         );
-        
+
         // Benchmark recursive descent parser
         group.bench_with_input(
             BenchmarkId::new("recursive", test_data.name),
@@ -137,7 +133,7 @@ fn bench_parser_comparison(c: &mut Criterion) {
                 });
             },
         );
-        
+
         // Benchmark iterative parser
         group.bench_with_input(
             BenchmarkId::new("iterative", test_data.name),
@@ -150,20 +146,20 @@ fn bench_parser_comparison(c: &mut Criterion) {
             },
         );
     }
-    
+
     group.finish();
 }
 
 fn bench_deep_nesting(c: &mut Criterion) {
     let mut group = c.benchmark_group("deep_nesting");
-    
+
     let options = ParserOptions::default();
     let depths = [10, 20, 50, 100];
-    
+
     for depth in depths {
         let deep_object = generate_deep_object(depth);
         let deep_array = generate_deep_array(depth);
-        
+
         // Deep object benchmarks
         group.bench_with_input(
             BenchmarkId::new("recursive_deep_object", depth),
@@ -175,7 +171,7 @@ fn bench_deep_nesting(c: &mut Criterion) {
                 });
             },
         );
-        
+
         group.bench_with_input(
             BenchmarkId::new("iterative_deep_object", depth),
             &deep_object,
@@ -186,7 +182,7 @@ fn bench_deep_nesting(c: &mut Criterion) {
                 });
             },
         );
-        
+
         // Deep array benchmarks
         group.bench_with_input(
             BenchmarkId::new("recursive_deep_array", depth),
@@ -198,7 +194,7 @@ fn bench_deep_nesting(c: &mut Criterion) {
                 });
             },
         );
-        
+
         group.bench_with_input(
             BenchmarkId::new("iterative_deep_array", depth),
             &deep_array,
@@ -210,13 +206,13 @@ fn bench_deep_nesting(c: &mut Criterion) {
             },
         );
     }
-    
+
     group.finish();
 }
 
 fn bench_forgiving_features(c: &mut Criterion) {
     let mut group = c.benchmark_group("forgiving_features");
-    
+
     let forgiving_options = ParserOptions::default();
     let strict_options = ParserOptions {
         allow_comments: false,
@@ -227,47 +223,45 @@ fn bench_forgiving_features(c: &mut Criterion) {
         newline_as_comma: false,
         ..ParserOptions::default()
     };
-    
+
     let test_cases = [
-        ("comments", r#"{"key": "value", /* comment */ "number": 42}"#),
+        (
+            "comments",
+            r#"{"key": "value", /* comment */ "number": 42}"#,
+        ),
         ("trailing_commas", r#"{"key": "value", "number": 42,}"#),
         ("unquoted_keys", r#"{key: "value", number: 42}"#),
         ("single_quotes", r#"{'key': 'value', 'number': 42}"#),
-        ("newline_as_comma", "{\n\"key\": \"value\"\n\"number\": 42\n}"),
+        (
+            "newline_as_comma",
+            "{\n\"key\": \"value\"\n\"number\": 42\n}",
+        ),
     ];
-    
+
     for (feature, json) in test_cases {
         // Test with forgiving options
-        group.bench_with_input(
-            BenchmarkId::new("forgiving", feature),
-            json,
-            |b, json| {
-                b.iter(|| {
-                    let _ = parse_recursive(black_box(json), black_box(forgiving_options.clone()));
-                });
-            },
-        );
-        
+        group.bench_with_input(BenchmarkId::new("forgiving", feature), json, |b, json| {
+            b.iter(|| {
+                let _ = parse_recursive(black_box(json), black_box(forgiving_options.clone()));
+            });
+        });
+
         // Test with strict options (some will fail, that's expected)
-        group.bench_with_input(
-            BenchmarkId::new("strict", feature),
-            json,
-            |b, json| {
-                b.iter(|| {
-                    let _ = parse_recursive(black_box(json), black_box(strict_options.clone()));
-                });
-            },
-        );
+        group.bench_with_input(BenchmarkId::new("strict", feature), json, |b, json| {
+            b.iter(|| {
+                let _ = parse_recursive(black_box(json), black_box(strict_options.clone()));
+            });
+        });
     }
-    
+
     group.finish();
 }
 
 fn bench_memory_usage(c: &mut Criterion) {
     let mut group = c.benchmark_group("memory_usage");
-    
+
     let options = ParserOptions::default();
-    
+
     // Large JSON structures to test memory allocation patterns
     let large_object = {
         let mut json = String::from("{");
@@ -280,7 +274,7 @@ fn bench_memory_usage(c: &mut Criterion) {
         json.push('}');
         json
     };
-    
+
     let large_array = {
         let mut json = String::from("[");
         for i in 0..1000 {
@@ -292,7 +286,7 @@ fn bench_memory_usage(c: &mut Criterion) {
         json.push(']');
         json
     };
-    
+
     // Test memory usage with different parsers
     group.bench_function("optimized_large_object", |b| {
         b.iter(|| {
@@ -300,64 +294,64 @@ fn bench_memory_usage(c: &mut Criterion) {
                 .expect("Parse should succeed")
         });
     });
-    
+
     group.bench_function("optimized_v2_large_object", |b| {
         b.iter(|| {
             parse_optimized_v2_with_options(black_box(&large_object), black_box(options.clone()))
                 .expect("Parse should succeed")
         });
     });
-    
+
     group.bench_function("recursive_large_object", |b| {
         b.iter(|| {
             parse_recursive(black_box(&large_object), black_box(options.clone()))
                 .expect("Parse should succeed")
         });
     });
-    
+
     group.bench_function("iterative_large_object", |b| {
         b.iter(|| {
             parse_iterative(black_box(&large_object), black_box(options.clone()))
                 .expect("Parse should succeed")
         });
     });
-    
+
     group.bench_function("optimized_large_array", |b| {
         b.iter(|| {
             parse_optimized_with_options(black_box(&large_array), black_box(options.clone()))
                 .expect("Parse should succeed")
         });
     });
-    
+
     group.bench_function("optimized_v2_large_array", |b| {
         b.iter(|| {
             parse_optimized_v2_with_options(black_box(&large_array), black_box(options.clone()))
                 .expect("Parse should succeed")
         });
     });
-    
+
     group.bench_function("recursive_large_array", |b| {
         b.iter(|| {
             parse_recursive(black_box(&large_array), black_box(options.clone()))
                 .expect("Parse should succeed")
         });
     });
-    
+
     group.bench_function("iterative_large_array", |b| {
         b.iter(|| {
             parse_iterative(black_box(&large_array), black_box(options.clone()))
                 .expect("Parse should succeed")
         });
     });
-    
+
     group.finish();
 }
 
 fn bench_error_handling(c: &mut Criterion) {
     let mut group = c.benchmark_group("error_handling");
-    
+
     let options = ParserOptions::default();
-    
+
     let invalid_json_cases = [
         ("missing_quote", r#"{"key": "value, "number": 42}"#),
         ("missing_comma", r#"{"key": "value" "number": 42}"#),
@@ -366,7 +360,7 @@ fn bench_error_handling(c: &mut Criterion) {
         ("unclosed_array", r#"[1, 2, 3, 4, 5"#),
         ("trailing_comma_strict", r#"{"key": "value",}"#),
     ];
-    
+
     for (error_type, json) in invalid_json_cases {
         group.bench_with_input(
             BenchmarkId::new("recursive_error", error_type),
@@ -377,7 +371,7 @@ fn bench_error_handling(c: &mut Criterion) {
                 });
             },
         );
-        
+
         group.bench_with_input(
             BenchmarkId::new("iterative_error", error_type),
             json,
@@ -388,7 +382,7 @@ fn bench_error_handling(c: &mut Criterion) {
             },
         );
     }
-    
+
     group.finish();
 }
 

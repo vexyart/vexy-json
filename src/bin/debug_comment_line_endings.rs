@@ -8,7 +8,7 @@ fn main() {
         "# comment\na:1",
         "# comment\r\na:1",
     ];
-    
+
     for input in inputs {
         println!("Testing: {}", input.escape_debug());
         match parse(input) {
@@ -24,7 +24,7 @@ fn main() {
                 } else {
                     println!("  ERROR: Result is not an object!");
                 }
-            },
+            }
             Err(e) => println!("  Error: {:?}", e),
         }
         println!();

@@ -1,6 +1,6 @@
 use serde_json::Value;
-use wasm_bindgen::prelude::*;
 use vexy_json_core::{parse, parse_with_options, ParserOptions};
+use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {

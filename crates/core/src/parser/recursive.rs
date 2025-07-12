@@ -70,7 +70,10 @@ impl<'a> RecursiveDescentParser<'a> {
 
     /// Gets the current token's span.
     fn current_span(&self) -> Span {
-        self.current_token.as_ref().map(|(_, span)| *span).unwrap_or(Span { start: 0, end: 0 })
+        self.current_token
+            .as_ref()
+            .map(|(_, span)| *span)
+            .unwrap_or(Span { start: 0, end: 0 })
     }
 
     /// Consumes the current token if it matches the expected token.
@@ -118,7 +121,7 @@ impl<'a> RecursiveDescentParser<'a> {
     }
 
     /// Parses a JSON value.
-    /// 
+    ///
     /// Grammar:
     /// ```
     /// value = object | array | string | number | boolean | null
@@ -149,7 +152,7 @@ impl<'a> RecursiveDescentParser<'a> {
     }
 
     /// Parses a JSON object.
-    /// 
+    ///
     /// Grammar:
     /// ```
     /// object = "{" [pair ("," pair)*] "}"
@@ -172,10 +175,10 @@ impl<'a> RecursiveDescentParser<'a> {
         loop {
             // Parse key
             let key = self.parse_object_key()?;
-            
+
             // Expect colon
             self.expect(Token::Colon)?;
-            
+
             // Parse value
             let value = self.parse_value()?;
             object.insert(key, value);
@@ -184,7 +187,7 @@ impl<'a> RecursiveDescentParser<'a> {
             match self.peek() {
                 Some(Token::Comma) => {
                     self.advance()?;
-                    
+
                     // Handle trailing comma
                     if let Some(Token::RightBrace) = self.peek() {
                         if self.options.allow_trailing_commas {
@@ -197,7 +200,7 @@ impl<'a> RecursiveDescentParser<'a> {
                 Some(Token::RightBrace) => break,
                 Some(Token::Newline) if self.options.newline_as_comma => {
                     self.advance()?;
-                    
+
                     // Handle trailing newline
                     if let Some(Token::RightBrace) = self.peek() {
                         break;
@@ -264,7 +267,7 @@ impl<'a> RecursiveDescentParser<'a> {
     }
 
     /// Parses a JSON array.
-    /// 
+    ///
     /// Grammar:
     /// ```
     /// array = "[" [value ("," value)*] "]"
@@ -291,7 +294,7 @@ impl<'a> RecursiveDescentParser<'a> {
             match self.peek() {
                 Some(Token::Comma) => {
                     self.advance()?;
-                    
+
                     // Handle trailing comma
                     if let Some(Token::RightBracket) = self.peek() {
                         if self.options.allow_trailing_commas {
@@ -304,7 +307,7 @@ impl<'a> RecursiveDescentParser<'a> {
                 Some(Token::RightBracket) => break,
                 Some(Token::Newline) if self.options.newline_as_comma => {
                     self.advance()?;
-                    
+
                     // Handle trailing newline
                     if let Some(Token::RightBracket) = self.peek() {
                         break;
@@ -365,12 +368,13 @@ impl<'a> RecursiveDescentParser<'a> {
     /// Parses a string from a span with escape sequence processing.
     fn parse_string_from_span(&self, span: Span) -> Result<Value> {
         let text = self.lexer.span_text(&span);
-        
+
         // Remove quotes
         let content = if text.starts_with('"') && text.ends_with('"') {
-            &text[1..text.len()-1]
-        } else if text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes {
-            &text[1..text.len()-1]
+            &text[1..text.len() - 1]
+        } else if text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes
+        {
+            &text[1..text.len() - 1]
         } else {
             return Err(Error::Custom("Invalid string format".to_string()));
         };
@@ -378,7 +382,7 @@ impl<'a> RecursiveDescentParser<'a> {
         // Process escape sequences
         let mut result = String::new();
         let mut chars = content.chars();
-        
+
         while let Some(ch) = chars.next() {
             if ch == '\\' {
                 match chars.next() {
@@ -401,13 +405,19 @@ impl<'a> RecursiveDescentParser<'a> {
                                 if let Some(unicode_char) = char::from_u32(code) {
                                     result.push(unicode_char);
                                 } else {
-                                    return Err(Error::Custom("Invalid unicode code point".to_string()));
+                                    return Err(Error::Custom(
+                                        "Invalid unicode code point".to_string(),
+                                    ));
                                 }
                             }
-                            Err(_) => return Err(Error::Custom("Invalid unicode escape".to_string())),
+                            Err(_) => {
+                                return Err(Error::Custom("Invalid unicode escape".to_string()))
+                            }
                         }
                     }
-                    Some(ch) => return Err(Error::Custom(format!("Invalid escape sequence: \\{}", ch))),
+                    Some(ch) => {
+                        return Err(Error::Custom(format!("Invalid escape sequence: \\{}", ch)))
+                    }
                     None => return Err(Error::Custom("Incomplete escape sequence".to_string())),
                 }
             } else {
@@ -422,19 +432,19 @@ impl<'a> RecursiveDescentParser<'a> {
     fn parse_number(&mut self) -> Result<Value> {
         if let Some((Token::Number, span)) = self.current_token {
             let text = self.lexer.span_text(&span);
-            
+
             // Try to parse as integer first
             if let Ok(int_val) = text.parse::<i64>() {
                 self.advance()?;
                 return Ok(Value::Number(Number::Integer(int_val)));
             }
-            
+
             // Try to parse as float
             if let Ok(float_val) = text.parse::<f64>() {
                 self.advance()?;
                 return Ok(Value::Number(Number::Float(float_val)));
             }
-            
+
             Err(Error::InvalidNumber(span.start))
         } else {
             Err(Error::Expected {
@@ -504,7 +514,7 @@ mod tests {
     fn test_parse_boolean() {
         let result = parse_recursive("true", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Bool(true));
-        
+
         let result = parse_recursive("false", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Bool(false));
     }
@@ -513,7 +523,7 @@ mod tests {
     fn test_parse_number() {
         let result = parse_recursive("42", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Number(Number::Integer(42)));
-        
+
         let result = parse_recursive("3.14", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Number(Number::Float(3.14)));
     }
@@ -527,11 +537,14 @@ mod tests {
     #[test]
     fn test_parse_array() {
         let result = parse_recursive("[1, 2, 3]", ParserOptions::default()).unwrap();
-        assert_eq!(result, Value::Array(vec![
-            Value::Number(Number::Integer(1)),
-            Value::Number(Number::Integer(2)),
-            Value::Number(Number::Integer(3)),
-        ]));
+        assert_eq!(
+            result,
+            Value::Array(vec![
+                Value::Number(Number::Integer(1)),
+                Value::Number(Number::Integer(2)),
+                Value::Number(Number::Integer(3)),
+            ])
+        );
     }
 
     #[test]
@@ -546,17 +559,20 @@ mod tests {
     fn test_parse_nested() {
         let json = r#"{"array": [1, 2, {"nested": true}]}"#;
         let result = parse_recursive(json, ParserOptions::default()).unwrap();
-        
+
         let mut nested_obj = FxHashMap::default();
         nested_obj.insert("nested".to_string(), Value::Bool(true));
-        
+
         let mut expected = FxHashMap::default();
-        expected.insert("array".to_string(), Value::Array(vec![
-            Value::Number(Number::Integer(1)),
-            Value::Number(Number::Integer(2)),
-            Value::Object(nested_obj),
-        ]));
-        
+        expected.insert(
+            "array".to_string(),
+            Value::Array(vec![
+                Value::Number(Number::Integer(1)),
+                Value::Number(Number::Integer(2)),
+                Value::Object(nested_obj),
+            ]),
+        );
+
         assert_eq!(result, Value::Object(expected));
     }
 
@@ -564,11 +580,11 @@ mod tests {
     fn test_parse_with_comments() {
         let json = r#"{"key": "value", /* comment */ "number": 42}"#;
         let result = parse_recursive(json, ParserOptions::default()).unwrap();
-        
+
         let mut expected = FxHashMap::default();
         expected.insert("key".to_string(), Value::String("value".to_string()));
         expected.insert("number".to_string(), Value::Number(Number::Integer(42)));
-        
+
         assert_eq!(result, Value::Object(expected));
     }
 
@@ -576,11 +592,11 @@ mod tests {
     fn test_parse_with_trailing_comma() {
         let json = r#"{"key": "value", "number": 42,}"#;
         let result = parse_recursive(json, ParserOptions::default()).unwrap();
-        
+
         let mut expected = FxHashMap::default();
         expected.insert("key".to_string(), Value::String("value".to_string()));
         expected.insert("number".to_string(), Value::Number(Number::Integer(42)));
-        
+
         assert_eq!(result, Value::Object(expected));
     }
 
@@ -588,11 +604,11 @@ mod tests {
     fn test_parse_with_unquoted_keys() {
         let json = r#"{key: "value", number: 42}"#;
         let result = parse_recursive(json, ParserOptions::default()).unwrap();
-        
+
         let mut expected = FxHashMap::default();
         expected.insert("key".to_string(), Value::String("value".to_string()));
         expected.insert("number".to_string(), Value::Number(Number::Integer(42)));
-        
+
         assert_eq!(result, Value::Object(expected));
     }
 
@@ -600,10 +616,10 @@ mod tests {
     fn test_depth_limit() {
         let mut options = ParserOptions::default();
         options.max_depth = 2;
-        
+
         let json = r#"{"a": {"b": {"c": "too deep"}}}"#;
         let result = parse_recursive(json, options);
-        
+
         assert!(result.is_err());
         assert!(matches!(result.unwrap_err(), Error::DepthLimitExceeded(_)));
     }
@@ -626,7 +642,7 @@ mod tests {
     fn test_empty_containers() {
         let result = parse_recursive("{}", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Object(FxHashMap::default()));
-        
+
         let result = parse_recursive("[]", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Array(vec![]));
     }

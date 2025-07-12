@@ -81,7 +81,10 @@ enum ParserState {
     /// Inside an object, expecting key or closing brace
     InObject { expecting_key: bool },
     /// Inside an array, expecting value or closing bracket
-    InArray { #[allow(dead_code)] first_element: bool },
+    InArray {
+        #[allow(dead_code)]
+        first_element: bool,
+    },
     /// Between values (handling whitespace/commas)
     BetweenValues,
 }

@@ -6,12 +6,12 @@
 //! allowing Python users to parse forgiving JSON with the same capabilities
 //! as the Rust library.
 
+use pyo3::exceptions::{PyTypeError, PyValueError};
 use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyList};
-use pyo3::exceptions::{PyValueError, PyTypeError};
-use vexy_json_core::{parse, parse_with_options, ParserOptions};
-use vexy_json_core::ast::Value;
 use rustc_hash::FxHashMap;
+use vexy_json_core::ast::Value;
+use vexy_json_core::{parse, parse_with_options, ParserOptions};
 
 /// Convert a vexy_json Value to a Python object
 fn value_to_python(py: Python, value: &Value) -> PyResult<PyObject> {
@@ -219,7 +219,7 @@ fn is_valid(input: &str) -> bool {
 #[pyo3(signature = (obj, indent = None))]
 fn dumps(py: Python, obj: &Bound<'_, PyAny>, indent: Option<usize>) -> PyResult<String> {
     let value = python_to_value(py, obj)?;
-    
+
     if let Some(spaces) = indent {
         // Pretty printing with indentation
         Ok(format_value_pretty(&value, spaces))
@@ -237,7 +237,7 @@ fn format_value_pretty(value: &Value, indent: usize) -> String {
 fn format_value_with_indent(value: &Value, current_indent: usize, indent_size: usize) -> String {
     let spaces = " ".repeat(current_indent);
     let inner_spaces = " ".repeat(current_indent + indent_size);
-    
+
     match value {
         Value::Null => "null".to_string(),
         Value::Bool(b) => b.to_string(),
@@ -253,7 +253,11 @@ fn format_value_with_indent(value: &Value, current_indent: usize, indent_size: u
                 let mut result = "[\n".to_string();
                 for (i, item) in arr.iter().enumerate() {
                     result.push_str(&inner_spaces);
-                    result.push_str(&format_value_with_indent(item, current_indent + indent_size, indent_size));
+                    result.push_str(&format_value_with_indent(
+                        item,
+                        current_indent + indent_size,
+                        indent_size,
+                    ));
                     if i < arr.len() - 1 {
                         result.push(',');
                     }
@@ -271,11 +275,15 @@ fn format_value_with_indent(value: &Value, current_indent: usize, indent_size: u
                 let mut result = "{\n".to_string();
                 let mut entries: Vec<_> = obj.iter().collect();
                 entries.sort_by_key(|(k, _)| *k);
-                
+
                 for (i, (key, value)) in entries.iter().enumerate() {
                     result.push_str(&inner_spaces);
                     result.push_str(&format!("\"{}\": ", key));
-                    result.push_str(&format_value_with_indent(value, current_indent + indent_size, indent_size));
+                    result.push_str(&format_value_with_indent(
+                        value,
+                        current_indent + indent_size,
+                        indent_size,
+                    ));
                     if i < entries.len() - 1 {
                         result.push(',');
                     }
@@ -307,26 +315,77 @@ fn format_value_with_indent(value: &Value, current_indent: usize, indent_size: u
 ///     ...     result = vexy_json.load(f)
 #[pyfunction]
 #[pyo3(signature = (fp, **kwargs))]
-fn load(py: Python, fp: &Bound<'_, PyAny>, kwargs: Option<&Bound<'_, PyDict>>) -> PyResult<PyObject> {
+fn load(
+    py: Python,
+    fp: &Bound<'_, PyAny>,
+    kwargs: Option<&Bound<'_, PyDict>>,
+) -> PyResult<PyObject> {
     // Read content from file-like object
     let content = fp.call_method0("read")?;
     let content_str = content.extract::<String>()?;
-    
+
     // Parse with options if provided
     if let Some(options) = kwargs {
-        let allow_comments = options.get_item("allow_comments")?.map(|v| v.extract::<bool>().unwrap_or(true)).unwrap_or(true);
-        let allow_trailing_commas = options.get_item("allow_trailing_commas")?.map(|v| v.extract::<bool>().unwrap_or(true)).unwrap_or(true);
-        let allow_unquoted_keys = options.get_item("allow_unquoted_keys")?.map(|v| v.extract::<bool>().unwrap_or(true)).unwrap_or(true);
-        let allow_single_quotes = options.get_item("allow_single_quotes")?.map(|v| v.extract::<bool>().unwrap_or(true)).unwrap_or(true);
-        let implicit_top_level = options.get_item("implicit_top_level")?.map(|v| v.extract::<bool>().unwrap_or(true)).unwrap_or(true);
-        let newline_as_comma = options.get_item("newline_as_comma")?.map(|v| v.extract::<bool>().unwrap_or(true)).unwrap_or(true);
-        let max_depth = options.get_item("max_depth")?.map(|v| v.extract::<usize>().unwrap_or(128)).unwrap_or(128);
-        let enable_repair = options.get_item("enable_repair")?.map(|v| v.extract::<bool>().unwrap_or(true)).unwrap_or(true);
-        let max_repairs = options.get_item("max_repairs")?.map(|v| v.extract::<usize>().unwrap_or(100)).unwrap_or(100);
-        let fast_repair = options.get_item("fast_repair")?.map(|v| v.extract::<bool>().unwrap_or(false)).unwrap_or(false);
-        let report_repairs = options.get_item("report_repairs")?.map(|v| v.extract::<bool>().unwrap_or(true)).unwrap_or(true);
-        
-        parse_with_options_py(py, &content_str, allow_comments, allow_trailing_commas, allow_unquoted_keys, allow_single_quotes, implicit_top_level, newline_as_comma, max_depth, enable_repair, max_repairs, fast_repair, report_repairs)
+        let allow_comments = options
+            .get_item("allow_comments")?
+            .map(|v| v.extract::<bool>().unwrap_or(true))
+            .unwrap_or(true);
+        let allow_trailing_commas = options
+            .get_item("allow_trailing_commas")?
+            .map(|v| v.extract::<bool>().unwrap_or(true))
+            .unwrap_or(true);
+        let allow_unquoted_keys = options
+            .get_item("allow_unquoted_keys")?
+            .map(|v| v.extract::<bool>().unwrap_or(true))
+            .unwrap_or(true);
+        let allow_single_quotes = options
+            .get_item("allow_single_quotes")?
+            .map(|v| v.extract::<bool>().unwrap_or(true))
+            .unwrap_or(true);
+        let implicit_top_level = options
+            .get_item("implicit_top_level")?
+            .map(|v| v.extract::<bool>().unwrap_or(true))
+            .unwrap_or(true);
+        let newline_as_comma = options
+            .get_item("newline_as_comma")?
+            .map(|v| v.extract::<bool>().unwrap_or(true))
+            .unwrap_or(true);
+        let max_depth = options
+            .get_item("max_depth")?
+            .map(|v| v.extract::<usize>().unwrap_or(128))
+            .unwrap_or(128);
+        let enable_repair = options
+            .get_item("enable_repair")?
+            .map(|v| v.extract::<bool>().unwrap_or(true))
+            .unwrap_or(true);
+        let max_repairs = options
+            .get_item("max_repairs")?
+            .map(|v| v.extract::<usize>().unwrap_or(100))
+            .unwrap_or(100);
+        let fast_repair = options
+            .get_item("fast_repair")?
+            .map(|v| v.extract::<bool>().unwrap_or(false))
+            .unwrap_or(false);
+        let report_repairs = options
+            .get_item("report_repairs")?
+            .map(|v| v.extract::<bool>().unwrap_or(true))
+            .unwrap_or(true);
+
+        parse_with_options_py(
+            py,
+            &content_str,
+            allow_comments,
+            allow_trailing_commas,
+            allow_unquoted_keys,
+            allow_single_quotes,
+            implicit_top_level,
+            newline_as_comma,
+            max_depth,
+            enable_repair,
+            max_repairs,
+            fast_repair,
+            report_repairs,
+        )
     } else {
         parse_json(py, &content_str)
     }
@@ -349,7 +408,12 @@ fn load(py: Python, fp: &Bound<'_, PyAny>, kwargs: Option<&Bound<'_, PyDict>>) -
 ///     ...     vexy_json.dump(data, f, indent=2)
 #[pyfunction]
 #[pyo3(signature = (obj, fp, indent = None))]
-fn dump(py: Python, obj: &Bound<'_, PyAny>, fp: &Bound<'_, PyAny>, indent: Option<usize>) -> PyResult<()> {
+fn dump(
+    py: Python,
+    obj: &Bound<'_, PyAny>,
+    fp: &Bound<'_, PyAny>,
+    indent: Option<usize>,
+) -> PyResult<()> {
     let json_str = dumps(py, obj, indent)?;
     fp.call_method1("write", (json_str,))?;
     Ok(())
@@ -505,19 +569,19 @@ impl StreamingIterator {
         // Read chunk from file
         let chunk = self.fp.call_method1(py, "read", (8192,))?;
         let chunk_str = chunk.extract::<String>(py)?;
-        
+
         if chunk_str.is_empty() {
             return Ok(None);
         }
 
         self.buffer.push_str(&chunk_str);
-        
+
         // Try to parse complete JSON objects from buffer
         // This is a simplified implementation - a real streaming parser would be more sophisticated
         if let Some(end_pos) = self.find_complete_json_end(&self.buffer) {
             let json_str = self.buffer[..end_pos].to_string();
             self.buffer.drain(..end_pos);
-            
+
             match parse_with_options(&json_str, self.options.clone()) {
                 Ok(value) => {
                     let py_obj = value_to_python(py, &value)?;
@@ -542,13 +606,13 @@ impl StreamingIterator {
         let mut depth = 0;
         let mut in_string = false;
         let mut escape_next = false;
-        
+
         for (i, ch) in buffer.char_indices() {
             if escape_next {
                 escape_next = false;
                 continue;
             }
-            
+
             match ch {
                 '"' if !in_string => in_string = true,
                 '"' if in_string => in_string = false,
@@ -563,7 +627,7 @@ impl StreamingIterator {
                 _ => {}
             }
         }
-        
+
         None
     }
 }
@@ -584,7 +648,7 @@ impl LineIterator {
     fn __next__(&mut self, py: Python) -> PyResult<Option<PyObject>> {
         let line = self.fp.call_method0(py, "readline")?;
         let line_str = line.extract::<String>(py)?;
-        
+
         if line_str.is_empty() {
             return Ok(None);
         }
@@ -628,7 +692,11 @@ fn loads_numpy(py: Python, input: &str, dtype: Option<&str>) -> PyResult<PyObjec
     // Try to import numpy
     let numpy = match py.import_bound("numpy") {
         Ok(np) => np,
-        Err(_) => return Err(PyValueError::new_err("NumPy is not available. Please install numpy: pip install numpy")),
+        Err(_) => {
+            return Err(PyValueError::new_err(
+                "NumPy is not available. Please install numpy: pip install numpy",
+            ))
+        }
     };
 
     // Parse the JSON
@@ -642,23 +710,26 @@ fn loads_numpy(py: Python, input: &str, dtype: Option<&str>) -> PyResult<PyObjec
         Value::Array(arr) => {
             // Check if all elements are numbers for efficient conversion
             let all_numbers = arr.iter().all(|v| matches!(v, Value::Number(_)));
-            
+
             if all_numbers {
                 // Fast path for numeric arrays
-                let numbers: Vec<f64> = arr.iter().map(|v| {
-                    match v {
-                        Value::Number(vexy_json_core::ast::Number::Integer(i)) => *i as f64,
-                        Value::Number(vexy_json_core::ast::Number::Float(f)) => *f,
-                        _ => 0.0, // Should not happen due to all_numbers check
-                    }
-                }).collect();
-                
+                let numbers: Vec<f64> = arr
+                    .iter()
+                    .map(|v| {
+                        match v {
+                            Value::Number(vexy_json_core::ast::Number::Integer(i)) => *i as f64,
+                            Value::Number(vexy_json_core::ast::Number::Float(f)) => *f,
+                            _ => 0.0, // Should not happen due to all_numbers check
+                        }
+                    })
+                    .collect();
+
                 let numpy_array = if let Some(dt) = dtype {
                     numpy.call_method1("array", (numbers, dt))?
                 } else {
                     numpy.call_method1("array", (numbers,))?
                 };
-                
+
                 Ok(numpy_array.into())
             } else {
                 // Fallback: convert to Python objects first, then to NumPy
@@ -667,17 +738,19 @@ fn loads_numpy(py: Python, input: &str, dtype: Option<&str>) -> PyResult<PyObjec
                     let py_item = value_to_python(py, &item)?;
                     py_list.append(py_item)?;
                 }
-                
+
                 let numpy_array = if let Some(dt) = dtype {
                     numpy.call_method1("array", (py_list, dt))?
                 } else {
                     numpy.call_method1("array", (py_list,))?
                 };
-                
+
                 Ok(numpy_array.into())
             }
         }
-        _ => Err(PyValueError::new_err("Input must be a JSON array for NumPy conversion")),
+        _ => Err(PyValueError::new_err(
+            "Input must be a JSON array for NumPy conversion",
+        )),
     }
 }
 
@@ -699,7 +772,11 @@ fn loads_numpy_zerocopy(py: Python, input: &str, dtype: Option<&str>) -> PyResul
     // Try to import numpy
     let numpy = match py.import_bound("numpy") {
         Ok(np) => np,
-        Err(_) => return Err(PyValueError::new_err("NumPy is not available. Please install numpy: pip install numpy")),
+        Err(_) => {
+            return Err(PyValueError::new_err(
+                "NumPy is not available. Please install numpy: pip install numpy",
+            ))
+        }
     };
 
     // Parse the JSON
@@ -713,7 +790,7 @@ fn loads_numpy_zerocopy(py: Python, input: &str, dtype: Option<&str>) -> PyResul
             // Analyze the array to determine if we can use zero-copy optimization
             let mut all_integers = true;
             let mut all_floats = true;
-            
+
             for item in &arr {
                 match item {
                     Value::Number(vexy_json_core::ast::Number::Integer(_)) => {
@@ -732,43 +809,51 @@ fn loads_numpy_zerocopy(py: Python, input: &str, dtype: Option<&str>) -> PyResul
 
             if all_integers {
                 // Zero-copy path for integers
-                let integers: Vec<i64> = arr.iter().map(|v| {
-                    match v {
-                        Value::Number(vexy_json_core::ast::Number::Integer(i)) => *i,
-                        _ => 0, // Should not happen
-                    }
-                }).collect();
-                
+                let integers: Vec<i64> = arr
+                    .iter()
+                    .map(|v| {
+                        match v {
+                            Value::Number(vexy_json_core::ast::Number::Integer(i)) => *i,
+                            _ => 0, // Should not happen
+                        }
+                    })
+                    .collect();
+
                 let numpy_array = if let Some(dt) = dtype {
                     numpy.call_method1("array", (integers, dt))?
                 } else {
                     numpy.call_method1("array", (integers,))?
                 };
-                
+
                 Ok(numpy_array.into())
             } else if all_floats || arr.iter().all(|v| matches!(v, Value::Number(_))) {
                 // Zero-copy path for floats or mixed numbers
-                let floats: Vec<f64> = arr.iter().map(|v| {
-                    match v {
-                        Value::Number(vexy_json_core::ast::Number::Integer(i)) => *i as f64,
-                        Value::Number(vexy_json_core::ast::Number::Float(f)) => *f,
-                        _ => 0.0, // Should not happen
-                    }
-                }).collect();
-                
+                let floats: Vec<f64> = arr
+                    .iter()
+                    .map(|v| {
+                        match v {
+                            Value::Number(vexy_json_core::ast::Number::Integer(i)) => *i as f64,
+                            Value::Number(vexy_json_core::ast::Number::Float(f)) => *f,
+                            _ => 0.0, // Should not happen
+                        }
+                    })
+                    .collect();
+
                 let numpy_array = if let Some(dt) = dtype {
                     numpy.call_method1("array", (floats, dt))?
                 } else {
                     numpy.call_method1("array", (floats,))?
                 };
-                
+
                 Ok(numpy_array.into())
             } else {
                 // Fallback to regular conversion
                 loads_numpy(py, input, dtype)
             }
         }
-        _ => Err(PyValueError::new_err("Input must be a JSON array for NumPy conversion")),
+        _ => Err(PyValueError::new_err(
+            "Input must be a JSON array for NumPy conversion",
+        )),
     }
 }
 
@@ -792,7 +877,11 @@ fn loads_dataframe(py: Python, input: &str, _orient: &str) -> PyResult<PyObject>
     // Try to import pandas
     let pandas = match py.import_bound("pandas") {
         Ok(pd) => pd,
-        Err(_) => return Err(PyValueError::new_err("pandas is not available. Please install pandas: pip install pandas")),
+        Err(_) => {
+            return Err(PyValueError::new_err(
+                "pandas is not available. Please install pandas: pip install pandas",
+            ))
+        }
     };
 
     // Parse the JSON
@@ -818,26 +907,32 @@ fn _vexy_json(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(dumps, m)?)?;
     m.add_function(wrap_pyfunction!(load, m)?)?;
     m.add_function(wrap_pyfunction!(dump, m)?)?;
-    
+
     // Add NumPy integration functions
     m.add_function(wrap_pyfunction!(loads_numpy, m)?)?;
     m.add_function(wrap_pyfunction!(loads_numpy_zerocopy, m)?)?;
     m.add_function(wrap_pyfunction!(loads_dataframe, m)?)?;
-    
+
     // Add streaming parser class
     m.add_class::<StreamingParser>()?;
-    
+
     // Add convenience aliases
     m.add("parse", m.getattr("parse_json")?)?;
     m.add("parse_with_options", m.getattr("parse_with_options_py")?)?;
-    
+
     // Add standard json module compatibility
     m.add("loads", m.getattr("parse_json")?)?;
-    
+
     // Add version information
-    m.add("__version__", env!("VEXY_JSON_VERSION", env!("CARGO_PKG_VERSION")))?;
+    m.add(
+        "__version__",
+        env!("VEXY_JSON_VERSION", env!("CARGO_PKG_VERSION")),
+    )?;
     m.add("__author__", "Adam Twardoch")?;
-    m.add("__description__", "A forgiving JSON parser - Python bindings for vexy_json")?;
-    
+    m.add(
+        "__description__",
+        "A forgiving JSON parser - Python bindings for vexy_json",
+    )?;
+
     Ok(())
 }

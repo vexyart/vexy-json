@@ -59,7 +59,11 @@ enum FixTemplate {
     /// Insert string at position
     InsertString { string: String, offset: i32 },
     /// Replace a range with new text
-    ReplaceRange { start: i32, end: i32, replacement: String },
+    ReplaceRange {
+        start: i32,
+        end: i32,
+        replacement: String,
+    },
     /// Remove a range
     RemoveRange { start: i32, end: i32 },
     /// Complex operation with multiple sub-operations
@@ -330,10 +334,7 @@ impl MLPatternRecognizer {
                 fixed.replace_range(start_pos..end_pos, replacement);
                 Some(fixed)
             }
-            FixTemplate::RemoveRange {
-                start,
-                end,
-            } => {
+            FixTemplate::RemoveRange { start, end } => {
                 let start_pos = (context.position as i32 + start).max(0) as usize;
                 let end_pos = (context.position as i32 + end).max(0) as usize;
                 let mut fixed = context.input.clone();
@@ -549,7 +550,6 @@ impl FeatureExtractor for ErrorTypeExtractor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
 
     #[test]
     fn test_ml_pattern_recognition() {

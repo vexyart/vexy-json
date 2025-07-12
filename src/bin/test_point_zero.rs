@@ -1,8 +1,8 @@
-use vexy_json::{parse, Value, Number};
+use vexy_json::{parse, Number, Value};
 
 fn main() {
     let test_cases = vec!["1.0", "-1.0", "0.0", "+1.0"];
-    
+
     for input in test_cases {
         match parse(input) {
             Ok(val) => {
@@ -15,7 +15,7 @@ fn main() {
                 } else {
                     println!();
                 }
-            },
+            }
             Err(e) => println!("'{}' => Error: {:?}", input, e),
         }
     }

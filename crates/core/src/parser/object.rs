@@ -143,9 +143,9 @@ impl<'a> Parser<'a> {
                     return Err(Error::Expected {
                         expected: "string key".to_string(),
                         found: match &self.current_token {
-                    Some((token, _)) => format!("{:?}", token),
-                    None => "EOF".to_string(),
-                },
+                            Some((token, _)) => format!("{:?}", token),
+                            None => "EOF".to_string(),
+                        },
                         position: self.lexer.position(),
                     });
                 }

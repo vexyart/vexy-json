@@ -28,7 +28,7 @@ use self::string::parse_string_token;
 use crate::ast::{Number, Token, Value};
 use crate::error::repair::{EnhancedParseResult, ParsingTier};
 use crate::error::{Error, Result, Span};
-use crate::lexer::{JsonLexer, Lexer, FastLexer, LexerConfig, LexerMode};
+use crate::lexer::{FastLexer, JsonLexer, Lexer, LexerConfig, LexerMode};
 use crate::optimization::ValueBuilder;
 use crate::repair::JsonRepairer;
 pub use iterative::{parse_iterative, IterativeParser};
@@ -118,18 +118,22 @@ impl<'a> Parser<'a> {
     /// Creates a new parser with the given input and options.
     pub fn new(input: &'a str, options: ParserOptions) -> Self {
         // Determine if we need forgiving features
-        let needs_forgiving = options.allow_comments || 
-                            options.allow_trailing_commas || 
-                            options.allow_unquoted_keys || 
-                            options.allow_single_quotes ||
-                            options.implicit_top_level ||
-                            options.newline_as_comma;
-        
+        let needs_forgiving = options.allow_comments
+            || options.allow_trailing_commas
+            || options.allow_unquoted_keys
+            || options.allow_single_quotes
+            || options.implicit_top_level
+            || options.newline_as_comma;
+
         // Create appropriate lexer based on options
         let lexer: Box<dyn JsonLexer + 'a> = if needs_forgiving {
             // Use FastLexer with forgiving mode for non-strict parsing
             let config = LexerConfig {
-                mode: if options.allow_comments { LexerMode::Forgiving } else { LexerMode::Strict },
+                mode: if options.allow_comments {
+                    LexerMode::Forgiving
+                } else {
+                    LexerMode::Strict
+                },
                 collect_stats: false,
                 buffer_size: 8192,
                 max_depth: options.max_depth,
@@ -140,7 +144,7 @@ impl<'a> Parser<'a> {
             // Use LogosLexer for strict parsing
             Box::new(Lexer::new(input))
         };
-        
+
         Parser {
             lexer,
             original_input: input,
@@ -229,7 +233,7 @@ impl<'a> Parser<'a> {
             self.current_token.as_ref().map(|(t, _)| t),
             Some(&Token::LeftBrace) | Some(&Token::LeftBracket)
         );
-        
+
         let first_value = if self.options.implicit_top_level && !is_explicit_structure {
             self.parse_value_or_implicit()?
         } else {
@@ -244,8 +248,12 @@ impl<'a> Parser<'a> {
             _ if is_explicit_structure => {
                 // For explicit JSON structures (arrays/objects), check if there's a trailing comma
                 // that should start an implicit array
-                if self.options.implicit_top_level 
-                    && matches!(self.current_token.as_ref().map(|(t, _)| t), Some(&Token::Comma)) {
+                if self.options.implicit_top_level
+                    && matches!(
+                        self.current_token.as_ref().map(|(t, _)| t),
+                        Some(&Token::Comma)
+                    )
+                {
                     // Treat the explicit structure as the first element of an implicit array
                     let mut array = vec![first_value];
                     self.advance()?;
@@ -388,7 +396,7 @@ impl<'a> Parser<'a> {
                 if self.options.implicit_top_level && self.is_value_token() {
                     // Create an implicit array with the first value and continue parsing
                     let mut array = vec![first_value];
-                    
+
                     // Parse the remaining values
                     loop {
                         // Check for consecutive separators (which mean null values)
@@ -401,14 +409,14 @@ impl<'a> Parser<'a> {
                             }
                             continue;
                         }
-                        
+
                         array.push(self.parse_value()?);
                         self.skip_comments()?;
-                        
+
                         if self.current_token.as_ref().map(|(t, _)| t) == Some(&Token::Eof) {
                             break;
                         }
-                        
+
                         // Check if there's a separator
                         if self.is_separator() {
                             self.advance()?;
@@ -424,7 +432,7 @@ impl<'a> Parser<'a> {
                             });
                         }
                     }
-                    
+
                     Ok(Value::Array(array))
                 } else {
                     Err(Error::Expected {
@@ -471,22 +479,21 @@ impl<'a> Parser<'a> {
     fn is_value_token(&self) -> bool {
         matches!(
             self.current_token.as_ref().map(|(t, _)| t),
-            Some(&Token::String) 
-            | Some(&Token::UnquotedString) 
-            | Some(&Token::Number) 
-            | Some(&Token::LeftBrace) 
-            | Some(&Token::LeftBracket) 
-            | Some(&Token::True) 
-            | Some(&Token::False) 
-            | Some(&Token::Null)
+            Some(&Token::String)
+                | Some(&Token::UnquotedString)
+                | Some(&Token::Number)
+                | Some(&Token::LeftBrace)
+                | Some(&Token::LeftBracket)
+                | Some(&Token::True)
+                | Some(&Token::False)
+                | Some(&Token::Null)
         )
     }
-
 
     /// Skips comments and optionally newlines if newline_as_comma is enabled.
     pub(super) fn skip_comments_and_newlines(&mut self) -> Result<()> {
         let mut just_had_single_line_comment = false;
-        
+
         loop {
             match self.current_token.as_ref().map(|(t, _)| t) {
                 Some(&Token::SingleLineComment) => {
@@ -497,7 +504,9 @@ impl<'a> Parser<'a> {
                     just_had_single_line_comment = false;
                     self.advance()?;
                 }
-                Some(&Token::Newline) if self.options.newline_as_comma || just_had_single_line_comment => {
+                Some(&Token::Newline)
+                    if self.options.newline_as_comma || just_had_single_line_comment =>
+                {
                     just_had_single_line_comment = false;
                     self.advance()?;
                 }
@@ -525,18 +534,22 @@ impl<'a> Parser<'a> {
         // Create a temporary lexer to peek without modifying the main lexer's state
         let current_pos = self.lexer.position();
         let remaining_input = &self.original_input[current_pos..];
-        
+
         // Create same type of lexer as the main parser
-        let needs_forgiving = self.options.allow_comments || 
-                            self.options.allow_trailing_commas || 
-                            self.options.allow_unquoted_keys || 
-                            self.options.allow_single_quotes ||
-                            self.options.implicit_top_level ||
-                            self.options.newline_as_comma;
-        
+        let needs_forgiving = self.options.allow_comments
+            || self.options.allow_trailing_commas
+            || self.options.allow_unquoted_keys
+            || self.options.allow_single_quotes
+            || self.options.implicit_top_level
+            || self.options.newline_as_comma;
+
         let mut temp_lexer: Box<dyn JsonLexer> = if needs_forgiving {
             let config = LexerConfig {
-                mode: if self.options.allow_comments { LexerMode::Forgiving } else { LexerMode::Strict },
+                mode: if self.options.allow_comments {
+                    LexerMode::Forgiving
+                } else {
+                    LexerMode::Strict
+                },
                 collect_stats: false,
                 buffer_size: 8192,
                 max_depth: self.options.max_depth,

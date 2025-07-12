@@ -15,6 +15,6 @@ pub use normalizer::{
     NormalizerOptions,
 };
 pub use optimizer::{
-    optimize, optimize_with_options, AstOptimizer, MemoryOptimizer, OptimizerOptions,
-    OptimizerStats, PerformanceOptimizer, StringInterner, InternerStats,
+    optimize, optimize_with_options, AstOptimizer, InternerStats, MemoryOptimizer,
+    OptimizerOptions, OptimizerStats, PerformanceOptimizer, StringInterner,
 };

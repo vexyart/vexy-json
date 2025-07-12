@@ -161,12 +161,15 @@ mod comment_handling {
     fn test_comment_edge_cases() {
         // Comments at boundaries
         assert_eq!(parse("a,//comment\nb").unwrap(), arr(vec![s("a"), s("b")]));
-        
+
         // Note: Complex comment edge cases like "a:#comment\nb:2" are not fully supported
         // This would require sophisticated lookahead to distinguish between values and keys
         // For now, explicit objects work fine with comments
-        assert_eq!(parse("{a:null,//comment\nb:2}").unwrap(), obj(&[("a", null()), ("b", n(2))]));
-        
+        assert_eq!(
+            parse("{a:null,//comment\nb:2}").unwrap(),
+            obj(&[("a", null()), ("b", n(2))])
+        );
+
         assert_eq!(parse("{//comment\na:1}").unwrap(), obj(&[("a", n(1))]));
         assert_eq!(parse("[//comment\n1,2]").unwrap(), arr(vec![n(1), n(2)]));
     }

@@ -7,7 +7,7 @@ fn main() {
         Ok(val) => println!("  Success: {:?}", val),
         Err(e) => println!("  Error: {:?}", e),
     }
-    
+
     // Test with implicit top level disabled
     println!("\nWith implicit top level disabled:");
     let mut opts = ParserOptions::default();
@@ -16,7 +16,7 @@ fn main() {
         Ok(val) => println!("  Success: {:?}", val),
         Err(e) => println!("  Error: {:?}", e),
     }
-    
+
     // Also test a normal number for comparison
     println!("\nParsing '1.0' with default options:");
     match parse("1.0") {

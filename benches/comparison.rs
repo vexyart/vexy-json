@@ -21,9 +21,11 @@ fn comparison_benchmarks(c: &mut Criterion) {
 
     for &case in test_cases {
         let json_data = get_json_data(case);
-        group.bench_with_input(BenchmarkId::new("vexy_json", case), &json_data, |b, data| {
-            b.iter(|| parse(black_box(data)))
-        });
+        group.bench_with_input(
+            BenchmarkId::new("vexy_json", case),
+            &json_data,
+            |b, data| b.iter(|| parse(black_box(data))),
+        );
     }
     group.finish();
 }

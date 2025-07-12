@@ -10,8 +10,8 @@
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
 use std::fs;
 use vexy_json_core::{
-    parse, parse_optimized, parse_optimized_v2,
-    parse_optimized_with_options, parse_v2_with_stats, parse_with_stats, ParserOptions,
+    parse, parse_optimized, parse_optimized_v2, parse_optimized_with_options, parse_v2_with_stats,
+    parse_with_stats, ParserOptions,
 };
 
 /// Sample JSON documents for benchmarking

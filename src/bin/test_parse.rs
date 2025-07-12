@@ -6,13 +6,13 @@ fn main() {
         Ok(val) => println!("  Success: {:?}", val),
         Err(e) => println!("  Error: {:?}", e),
     }
-    
+
     println!("\nTesting parse('//comment'):");
     match parse("//comment") {
         Ok(val) => println!("  Success: {:?}", val),
         Err(e) => println!("  Error: {:?}", e),
     }
-    
+
     println!("\nTesting strict parse('//comment'):");
     let mut strict_opts = ParserOptions::default();
     strict_opts.allow_comments = false;

@@ -13,8 +13,8 @@ use tokio::time::{sleep, Duration};
 use vexy_json_core::ast::Value;
 use vexy_json_core::error::{EnhancedParseResult, ParsingTier, RepairType};
 use vexy_json_core::{
-    parse_with_detailed_repair_tracking,
-    parse_with_fallback, ParserOptions, ParallelConfig, ParallelParser,
+    parse_with_detailed_repair_tracking, parse_with_fallback, ParallelConfig, ParallelParser,
+    ParserOptions,
 };
 
 #[derive(Parser, Debug)]

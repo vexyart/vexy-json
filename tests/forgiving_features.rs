@@ -22,7 +22,10 @@ fn test_unquoted_keys() {
     let result = parse("{name: 'John', age: 30}").unwrap();
     let mut expected = FxHashMap::default();
     expected.insert("name".to_string(), Value::String("John".to_string()));
-    expected.insert("age".to_string(), Value::Number(vexy_json::Number::Integer(30)));
+    expected.insert(
+        "age".to_string(),
+        Value::Number(vexy_json::Number::Integer(30)),
+    );
     assert_eq!(result, Value::Object(expected));
 }
 
@@ -40,8 +43,14 @@ fn test_trailing_commas() {
 
     let result = parse("{a: 1, b: 2,}").unwrap();
     let mut expected = FxHashMap::default();
-    expected.insert("a".to_string(), Value::Number(vexy_json::Number::Integer(1)));
-    expected.insert("b".to_string(), Value::Number(vexy_json::Number::Integer(2)));
+    expected.insert(
+        "a".to_string(),
+        Value::Number(vexy_json::Number::Integer(1)),
+    );
+    expected.insert(
+        "b".to_string(),
+        Value::Number(vexy_json::Number::Integer(2)),
+    );
     assert_eq!(result, Value::Object(expected));
 }
 
@@ -56,8 +65,14 @@ fn test_single_line_comments() {
 
     let result = parse("{a: 1, // comment\nb: 2}").unwrap();
     let mut expected = FxHashMap::default();
-    expected.insert("a".to_string(), Value::Number(vexy_json::Number::Integer(1)));
-    expected.insert("b".to_string(), Value::Number(vexy_json::Number::Integer(2)));
+    expected.insert(
+        "a".to_string(),
+        Value::Number(vexy_json::Number::Integer(1)),
+    );
+    expected.insert(
+        "b".to_string(),
+        Value::Number(vexy_json::Number::Integer(2)),
+    );
     assert_eq!(result, Value::Object(expected));
 }
 
@@ -69,8 +84,14 @@ fn test_multi_line_comments() {
 
     let result = parse("{a: 1, /* comment */ b: 2}").unwrap();
     let mut expected = FxHashMap::default();
-    expected.insert("a".to_string(), Value::Number(vexy_json::Number::Integer(1)));
-    expected.insert("b".to_string(), Value::Number(vexy_json::Number::Integer(2)));
+    expected.insert(
+        "a".to_string(),
+        Value::Number(vexy_json::Number::Integer(1)),
+    );
+    expected.insert(
+        "b".to_string(),
+        Value::Number(vexy_json::Number::Integer(2)),
+    );
     assert_eq!(result, Value::Object(expected));
 }
 
@@ -78,13 +99,19 @@ fn test_multi_line_comments() {
 fn test_implicit_object() {
     let result = parse("a: 1").unwrap();
     let mut expected = FxHashMap::default();
-    expected.insert("a".to_string(), Value::Number(vexy_json::Number::Integer(1)));
+    expected.insert(
+        "a".to_string(),
+        Value::Number(vexy_json::Number::Integer(1)),
+    );
     assert_eq!(result, Value::Object(expected));
 
     let result = parse("name: 'John', age: 30").unwrap();
     let mut expected = FxHashMap::default();
     expected.insert("name".to_string(), Value::String("John".to_string()));
-    expected.insert("age".to_string(), Value::Number(vexy_json::Number::Integer(30)));
+    expected.insert(
+        "age".to_string(),
+        Value::Number(vexy_json::Number::Integer(30)),
+    );
     assert_eq!(result, Value::Object(expected));
 }
 
@@ -134,7 +161,10 @@ fn test_mixed_features() {
     let result = parse(input).unwrap();
     let mut expected = FxHashMap::default();
     expected.insert("name".to_string(), Value::String("John".to_string()));
-    expected.insert("age".to_string(), Value::Number(vexy_json::Number::Integer(30)));
+    expected.insert(
+        "age".to_string(),
+        Value::Number(vexy_json::Number::Integer(30)),
+    );
     expected.insert(
         "hobbies".to_string(),
         Value::Array(vec![

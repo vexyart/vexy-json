@@ -62,10 +62,10 @@ impl<'a> IterativeParser<'a> {
     /// Parses the input and returns the parsed value.
     pub fn parse(&mut self) -> Result<Value> {
         self.advance()?;
-        
+
         // Start with a top-level value context
         self.parse_stack.push(ParseContext::Value);
-        
+
         // Main parsing loop
         while !self.parse_stack.is_empty() {
             match self.parse_stack.last() {
@@ -83,10 +83,12 @@ impl<'a> IterativeParser<'a> {
                 None => unreachable!(),
             }
         }
-        
+
         self.expect_eof()?;
-        
-        self.result.take().ok_or_else(|| Error::Custom("No result produced".to_string()))
+
+        self.result
+            .take()
+            .ok_or_else(|| Error::Custom("No result produced".to_string()))
     }
 
     /// Advances to the next token, skipping comments if allowed.
@@ -116,7 +118,10 @@ impl<'a> IterativeParser<'a> {
 
     /// Gets the current token's span.
     fn current_span(&self) -> Span {
-        self.current_token.as_ref().map(|(_, span)| *span).unwrap_or(Span { start: 0, end: 0 })
+        self.current_token
+            .as_ref()
+            .map(|(_, span)| *span)
+            .unwrap_or(Span { start: 0, end: 0 })
     }
 
     /// Expects the end of input.
@@ -146,9 +151,8 @@ impl<'a> IterativeParser<'a> {
             }
             Some(Token::LeftBracket) => {
                 self.advance()?;
-                self.parse_stack.push(ParseContext::Array {
-                    array: Vec::new(),
-                });
+                self.parse_stack
+                    .push(ParseContext::Array { array: Vec::new() });
                 Ok(Value::Null) // Placeholder - will be replaced when array is complete
             }
             Some(Token::String) => self.parse_string(),
@@ -189,8 +193,13 @@ impl<'a> IterativeParser<'a> {
         }
 
         let context = self.parse_stack.last().unwrap().clone();
-        
-        if let ParseContext::Object { mut object, current_key, expecting_key } = context {
+
+        if let ParseContext::Object {
+            mut object,
+            current_key,
+            expecting_key,
+        } = context
+        {
             // Handle empty object
             if let Some(Token::RightBrace) = self.peek() {
                 self.advance()?;
@@ -203,7 +212,7 @@ impl<'a> IterativeParser<'a> {
             if expecting_key {
                 // Parse key
                 let key = self.parse_object_key()?;
-                
+
                 // Expect colon
                 if !matches!(self.peek(), Some(Token::Colon)) {
                     return Err(Error::Expected {
@@ -213,7 +222,7 @@ impl<'a> IterativeParser<'a> {
                     });
                 }
                 self.advance()?;
-                
+
                 // Update context to expecting value
                 self.parse_stack.pop();
                 self.parse_stack.push(ParseContext::Object {
@@ -221,7 +230,7 @@ impl<'a> IterativeParser<'a> {
                     current_key: Some(key),
                     expecting_key: false,
                 });
-                
+
                 // Push value parsing context
                 self.parse_stack.push(ParseContext::Value);
             } else {
@@ -230,12 +239,12 @@ impl<'a> IterativeParser<'a> {
                     if let Some(value) = self.result.take() {
                         object.insert(key, value);
                     }
-                    
+
                     // Check for continuation
                     match self.peek() {
                         Some(Token::Comma) => {
                             self.advance()?;
-                            
+
                             // Handle trailing comma
                             if let Some(Token::RightBrace) = self.peek() {
                                 if self.options.allow_trailing_commas {
@@ -245,10 +254,12 @@ impl<'a> IterativeParser<'a> {
                                     self.push_value(value)?;
                                     return Ok(());
                                 } else {
-                                    return Err(Error::Custom("Trailing comma not allowed".to_string()));
+                                    return Err(Error::Custom(
+                                        "Trailing comma not allowed".to_string(),
+                                    ));
                                 }
                             }
-                            
+
                             // Continue parsing next key
                             self.parse_stack.pop();
                             self.parse_stack.push(ParseContext::Object {
@@ -265,7 +276,7 @@ impl<'a> IterativeParser<'a> {
                         }
                         Some(Token::Newline) if self.options.newline_as_comma => {
                             self.advance()?;
-                            
+
                             // Handle trailing newline
                             if let Some(Token::RightBrace) = self.peek() {
                                 self.advance()?;
@@ -274,7 +285,7 @@ impl<'a> IterativeParser<'a> {
                                 self.push_value(value)?;
                                 return Ok(());
                             }
-                            
+
                             // Continue parsing next key
                             self.parse_stack.pop();
                             self.parse_stack.push(ParseContext::Object {
@@ -303,7 +314,7 @@ impl<'a> IterativeParser<'a> {
                 }
             }
         }
-        
+
         Ok(())
     }
 
@@ -315,7 +326,7 @@ impl<'a> IterativeParser<'a> {
         }
 
         let context = self.parse_stack.last().unwrap().clone();
-        
+
         if let ParseContext::Array { mut array } = context {
             // Handle empty array
             if let Some(Token::RightBracket) = self.peek() {
@@ -329,12 +340,12 @@ impl<'a> IterativeParser<'a> {
             // If we just parsed a value, add it to the array
             if let Some(value) = self.result.take() {
                 array.push(value);
-                
+
                 // Check for continuation
                 match self.peek() {
                     Some(Token::Comma) => {
                         self.advance()?;
-                        
+
                         // Handle trailing comma
                         if let Some(Token::RightBracket) = self.peek() {
                             if self.options.allow_trailing_commas {
@@ -344,10 +355,12 @@ impl<'a> IterativeParser<'a> {
                                 self.push_value(value)?;
                                 return Ok(());
                             } else {
-                                return Err(Error::Custom("Trailing comma not allowed".to_string()));
+                                return Err(Error::Custom(
+                                    "Trailing comma not allowed".to_string(),
+                                ));
                             }
                         }
-                        
+
                         // Continue parsing next element
                         self.parse_stack.pop();
                         self.parse_stack.push(ParseContext::Array { array });
@@ -361,7 +374,7 @@ impl<'a> IterativeParser<'a> {
                     }
                     Some(Token::Newline) if self.options.newline_as_comma => {
                         self.advance()?;
-                        
+
                         // Handle trailing newline
                         if let Some(Token::RightBracket) = self.peek() {
                             self.advance()?;
@@ -370,7 +383,7 @@ impl<'a> IterativeParser<'a> {
                             self.push_value(value)?;
                             return Ok(());
                         }
-                        
+
                         // Continue parsing next element
                         self.parse_stack.pop();
                         self.parse_stack.push(ParseContext::Array { array });
@@ -396,7 +409,7 @@ impl<'a> IterativeParser<'a> {
                 self.parse_stack.push(ParseContext::Value);
             }
         }
-        
+
         Ok(())
     }
 
@@ -471,12 +484,13 @@ impl<'a> IterativeParser<'a> {
     /// Parses a string from a span with escape sequence processing.
     fn parse_string_from_span(&self, span: Span) -> Result<Value> {
         let text = self.lexer.span_text(&span);
-        
+
         // Remove quotes
         let content = if text.starts_with('"') && text.ends_with('"') {
-            &text[1..text.len()-1]
-        } else if text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes {
-            &text[1..text.len()-1]
+            &text[1..text.len() - 1]
+        } else if text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes
+        {
+            &text[1..text.len() - 1]
         } else {
             return Err(Error::Custom("Invalid string format".to_string()));
         };
@@ -484,7 +498,7 @@ impl<'a> IterativeParser<'a> {
         // Process escape sequences
         let mut result = String::new();
         let mut chars = content.chars();
-        
+
         while let Some(ch) = chars.next() {
             if ch == '\\' {
                 match chars.next() {
@@ -507,13 +521,19 @@ impl<'a> IterativeParser<'a> {
                                 if let Some(unicode_char) = char::from_u32(code) {
                                     result.push(unicode_char);
                                 } else {
-                                    return Err(Error::Custom("Invalid unicode code point".to_string()));
+                                    return Err(Error::Custom(
+                                        "Invalid unicode code point".to_string(),
+                                    ));
                                 }
                             }
-                            Err(_) => return Err(Error::Custom("Invalid unicode escape".to_string())),
+                            Err(_) => {
+                                return Err(Error::Custom("Invalid unicode escape".to_string()))
+                            }
                         }
                     }
-                    Some(ch) => return Err(Error::Custom(format!("Invalid escape sequence: \\{}", ch))),
+                    Some(ch) => {
+                        return Err(Error::Custom(format!("Invalid escape sequence: \\{}", ch)))
+                    }
                     None => return Err(Error::Custom("Incomplete escape sequence".to_string())),
                 }
             } else {
@@ -528,19 +548,19 @@ impl<'a> IterativeParser<'a> {
     fn parse_number(&mut self) -> Result<Value> {
         if let Some((Token::Number, span)) = self.current_token {
             let text = self.lexer.span_text(&span);
-            
+
             // Try to parse as integer first
             if let Ok(int_val) = text.parse::<i64>() {
                 self.advance()?;
                 return Ok(Value::Number(Number::Integer(int_val)));
             }
-            
+
             // Try to parse as float
             if let Ok(float_val) = text.parse::<f64>() {
                 self.advance()?;
                 return Ok(Value::Number(Number::Float(float_val)));
             }
-            
+
             Err(Error::InvalidNumber(span.start))
         } else {
             Err(Error::Expected {
@@ -601,7 +621,7 @@ mod tests {
     fn test_parse_boolean() {
         let result = parse_iterative("true", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Bool(true));
-        
+
         let result = parse_iterative("false", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Bool(false));
     }
@@ -610,7 +630,7 @@ mod tests {
     fn test_parse_number() {
         let result = parse_iterative("42", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Number(Number::Integer(42)));
-        
+
         let result = parse_iterative("3.14", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Number(Number::Float(3.14)));
     }
@@ -624,11 +644,14 @@ mod tests {
     #[test]
     fn test_parse_array() {
         let result = parse_iterative("[1, 2, 3]", ParserOptions::default()).unwrap();
-        assert_eq!(result, Value::Array(vec![
-            Value::Number(Number::Integer(1)),
-            Value::Number(Number::Integer(2)),
-            Value::Number(Number::Integer(3)),
-        ]));
+        assert_eq!(
+            result,
+            Value::Array(vec![
+                Value::Number(Number::Integer(1)),
+                Value::Number(Number::Integer(2)),
+                Value::Number(Number::Integer(3)),
+            ])
+        );
     }
 
     #[test]
@@ -643,17 +666,20 @@ mod tests {
     fn test_parse_nested() {
         let json = r#"{"array": [1, 2, {"nested": true}]}"#;
         let result = parse_iterative(json, ParserOptions::default()).unwrap();
-        
+
         let mut nested_obj = FxHashMap::default();
         nested_obj.insert("nested".to_string(), Value::Bool(true));
-        
+
         let mut expected = FxHashMap::default();
-        expected.insert("array".to_string(), Value::Array(vec![
-            Value::Number(Number::Integer(1)),
-            Value::Number(Number::Integer(2)),
-            Value::Object(nested_obj),
-        ]));
-        
+        expected.insert(
+            "array".to_string(),
+            Value::Array(vec![
+                Value::Number(Number::Integer(1)),
+                Value::Number(Number::Integer(2)),
+                Value::Object(nested_obj),
+            ]),
+        );
+
         assert_eq!(result, Value::Object(expected));
     }
 
@@ -670,7 +696,7 @@ mod tests {
             json.push_str("]");
         }
         json.push(']');
-        
+
         let result = parse_iterative(&json, ParserOptions::default());
         assert!(result.is_ok());
     }
@@ -679,10 +705,10 @@ mod tests {
     fn test_depth_limit() {
         let mut options = ParserOptions::default();
         options.max_depth = 2;
-        
+
         let json = r#"{"a": {"b": {"c": "too deep"}}}"#;
         let result = parse_iterative(json, options);
-        
+
         assert!(result.is_err());
         assert!(matches!(result.unwrap_err(), Error::DepthLimitExceeded(_)));
     }
@@ -691,7 +717,7 @@ mod tests {
     fn test_empty_containers() {
         let result = parse_iterative("{}", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Object(FxHashMap::default()));
-        
+
         let result = parse_iterative("[]", ParserOptions::default()).unwrap();
         assert_eq!(result, Value::Array(vec![]));
     }
@@ -700,11 +726,11 @@ mod tests {
     fn test_with_comments() {
         let json = r#"{"key": "value", /* comment */ "number": 42}"#;
         let result = parse_iterative(json, ParserOptions::default()).unwrap();
-        
+
         let mut expected = FxHashMap::default();
         expected.insert("key".to_string(), Value::String("value".to_string()));
         expected.insert("number".to_string(), Value::Number(Number::Integer(42)));
-        
+
         assert_eq!(result, Value::Object(expected));
     }
 
@@ -712,11 +738,11 @@ mod tests {
     fn test_with_trailing_comma() {
         let json = r#"{"key": "value", "number": 42,}"#;
         let result = parse_iterative(json, ParserOptions::default()).unwrap();
-        
+
         let mut expected = FxHashMap::default();
         expected.insert("key".to_string(), Value::String("value".to_string()));
         expected.insert("number".to_string(), Value::Number(Number::Integer(42)));
-        
+
         assert_eq!(result, Value::Object(expected));
     }
 }

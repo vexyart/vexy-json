@@ -198,7 +198,10 @@ fn test_backslash_behavior() {
                 );
             }
             Err(_) => {
-                println!("vexy_json errors on {} - that's valid behavior", description);
+                println!(
+                    "vexy_json errors on {} - that's valid behavior",
+                    description
+                );
             }
         }
     }

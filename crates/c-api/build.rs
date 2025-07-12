@@ -10,7 +10,7 @@ fn main() {
 
     // Only generate the header if cbindgen is available
     // This allows the crate to build even without cbindgen
-    if let Ok(cbindgen) = env::var("CARGO_FEATURE_CBINDGEN") {
+    if let Ok(_cbindgen) = env::var("CARGO_FEATURE_CBINDGEN") {
         cbindgen::Builder::new()
             .with_crate(crate_dir)
             .with_language(cbindgen::Language::C)
