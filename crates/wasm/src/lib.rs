@@ -123,7 +123,7 @@ pub fn stringify_value(input: &str, indent: Option<u32>) -> Result<String, JsVal
         serde_json::from_str(&value.to_string()).map_err(|e| JsValue::from_str(&e.to_string()))?;
 
     // Stringify with or without pretty printing
-    if let Some(indent_size) = indent {
+    if let Some(_indent_size) = indent {
         // TODO: Implement custom indentation size
         serde_json::to_string_pretty(&json_value).map_err(|e| JsValue::from_str(&e.to_string()))
     } else {

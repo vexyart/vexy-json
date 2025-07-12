@@ -1,6 +1,6 @@
 [package]
 name = "vexy_json-wasm"
-version = "1.0.3"
+version = "1.0.4"
 edition = "2021"
 description = "WebAssembly bindings for vexy_json - a forgiving JSON parser"
 repository = "https://github.com/twardoch/vexy_json"

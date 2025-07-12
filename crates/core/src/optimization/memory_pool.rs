@@ -376,9 +376,7 @@ mod tests {
 
         // Allocate more than BLOCK_SIZE
         let large_size = BLOCK_SIZE * 2;
-        let ptr = pool.allocate(large_size).unwrap();
-
-        assert!(!ptr.as_ptr().is_null());
+        let _ptr = pool.allocate(large_size).unwrap();
 
         let stats = pool.stats();
         assert_eq!(stats.total_used, large_size);
