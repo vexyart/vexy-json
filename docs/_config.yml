@@ -28,34 +28,23 @@ defaults:
 description: Lenieng and tolerant JSON parser in Rust
 enable_copy_code_button: true
 exclude:
-  - Gemfile
-  - Gemfile.lock
-  - node_modules
-  - vendor/bundle/
-  - vendor/cache/
-  - vendor/gems/
-  - vendor/ruby/
-  - vendor/
-  - '*.sh'
-  - '*.gemspec'
-  - '*.erb'
-  - vendor/bundle/**/*
-  - vendor/bundle/ruby/**/*
-  - vendor/bundle/ruby/*/gems/**/*
-  - vendor/bundle/ruby/*/gems/jekyll-*/lib/site_template/**/*
-  - '**/site_template/**/*'
-  - '**/gems/jekyll-*/lib/site_template/_posts/*'
-  - internal/**/*
-  - dev/**/*
-  - node_modules/
-  - package.json
-  - package-lock.json
-  - tailwind.config.js
-  - postcss.config.js
-  - assets/css/input.css
   - _build.sh
   - _serve.sh
+  - '*.erb'
+  - '*.gemspec'
   - '*.orig'
+  - '*.sh'
+  - '**/gems/jekyll-*/lib/site_template/_posts/*'
+  - '**/site_template/**/*'
+  - dev/**/*
+  - Gemfile
+  - Gemfile.lock
+  - internal/**/*
+  - node_modules/
+  - package-lock.json
+  - package.json
+  - postcss.config.js
+  - tailwind.config.js
 footer_content: Copyright &copy; 2025 Vexy Co. MIT License.
 github:
   repository_url: https://github.com/vexyart/vexy-json
@@ -105,7 +94,7 @@ static_files:
   - /pkg/*.wasm
   - /pkg/*.js
   - /assets/**/*
-# Site configuration for vexy_json documentation
+# Site configuration for vexy-json documentation
 title: Vexy JSON
 url: https://vexyart.github.io/vexy-json
 # MIME type handling for GitHub Pages
