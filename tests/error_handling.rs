@@ -284,7 +284,7 @@ fn test_number_format_errors() {
     assert!(
         parse("1.").is_ok(),
         "Trailing decimal point should be valid"
-    ); // jsonic allows this
+    ); // vexy_json allows this
     assert!(parse(".").is_err(), "Lone decimal point should error");
     assert!(parse("..1").is_err(), "Double decimal should error");
     assert!(

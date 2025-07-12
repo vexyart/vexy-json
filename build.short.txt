@@ -1,0 +1,88 @@
+Failure Details from build.log.txt:
+
+1.  Test Failure: `test_simple_structures`
+    *   Location: `tests/property_tests.rs`
+    *   Error:
+        ```
+        ---- test_simple_structures stdout ----
+        proptest: FileFailurePersistence::SourceParallel set, but failed to find lib.rs or main.rs
+        thread 'test_simple_structures' panicked at tests/property_tests.rs:26:1:
+        Test failed: assertion failed: `(left == right)` 
+          left: `2`,
+         right: `3` at tests/property_tests.rs:125.
+        minimal failing input: keys = [
+            "A",
+            "_",
+        ], values = [
+            "",
+        ]
+            successes: 0
+            local rejects: 0
+            global rejects: 0
+        note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+            test_simple_structures
+        test result: FAILED. 9 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+        error: test failed, to rerun pass `-p vexy_json --test property_tests`
+        ```
+
+2.  Clippy Linter Failure:
+    *   Multiple errors reported across various `build.rs` files.
+    *   Example errors:
+        ```
+        error: variables can be used directly in the `format!` string
+         --> crates/core/build.rs:8:5
+          |
+        8 |     println!("cargo:rustc-env=VEXY_JSON_VERSION={}", version);
+          |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+          = note: `-D clippy::uninlined-format-args` implied by `-D warnings`
+          = help: to override `-D warnings` add `#[allow(clippy::uninlined_format_args)]`
+        help: change this to
+        8 -     println!("cargo:rustc-env=VEXY_JSON_VERSION={}", version);
+        8 +     println!("cargo:rustc-env=VEXY_JSON_VERSION={version}");
+         --> build.rs:8:5
+        error: the borrowed expression implements the required traits
+          --> crates/core/build.rs:18:15
+        18 |         .args(&["describe", "--exact-match", "--tags"])
+           |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: change this to: `["describe", "--exact-match", "--tags"]`
+           = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_borrows_for_generic_args
+           = note: `-D clippy::needless-borrows-for-generic-args` implied by `-D warnings`
+           = help: to override `-D warnings` add `#[allow(clippy::needless_borrows_for_generic_args)]`
+        error: this `map_or` can be simplified
+          --> crates/core/build.rs:36:40
+        36 |             if tag.starts_with('v') || tag.chars().next().map_or(false, |c| c.is_numeric()) {
+           |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unnecessary_map_or
+           = note: `-D clippy::unnecessary-map-or` implied by `-D warnings`
+           = help: to override `-D warnings` add `#[allow(clippy::unnecessary_map_or)]`
+        help: use is_some_and instead
+        36 -             if tag.starts_with('v') || tag.chars().next().map_or(false, |c| c.is_numeric()) {
+        36 +             if tag.starts_with('v') || tag.chars().next().is_some_and(|c| c.is_numeric()) {
+        error: could not compile `vexy_json` (build script) due to 4 previous errors
+        ```
+
+3.  Code Formatting Issues (rustfmt):
+    *   `rustfmt` reported diffs in several files, indicating that the code does not conform to the project's formatting standards.
+    *   Example diffs:
+        ```
+        Diff in /Users/adam/Developer/vcs/github.vexyart/vexy-json/benches/benchmark.rs:1:
+         // this_file: benches/benchmark.rs
+         
+        -
+         const ITERATIONS: u32 = 100;
+         struct BenchmarkResult {
+        Diff in /Users/adam/Developer/vcs/github.vexyart/vexy-json/benches/comparison.rs:21:
+             for &case in test_cases {
+                 let json_data = get_json_data(case);
+        -        group.bench_with_input(BenchmarkId::new("vexy_json", case), &json_data, |b, data| {
+        -            b.iter(|| parse(black_box(data)))
+        -        });
+        +        group.bench_with_input(
+        +            BenchmarkId::new("vexy_json", case),
+        +            &json_data,
+        +            |b, data| b.iter(|| parse(black_box(data))),
+        +        );
+             }
+             group.finish();
+         }
+        ```

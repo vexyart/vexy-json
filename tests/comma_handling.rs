@@ -419,7 +419,7 @@ fn test_special_cases() {
         }
     }
 
-    // Test space-separated values (jsonic feature)
+    // Test space-separated values (vexy_json feature)
     let result = parse("a:1 b:2");
     match result {
         Ok(Value::Object(obj)) if obj.len() == 2 => {

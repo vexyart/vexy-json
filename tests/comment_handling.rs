@@ -4,7 +4,7 @@ use vexy_json::{parse, Value};
 
 /// Comment handling tests ported from jsonic comment.test.js
 /// Tests single-line, multi-line comments, hash behavior, and edge cases
-/// Reference: ref/jsonic/test/comment.test.js
+/// Reference: ref/vexy_json/test/comment.test.js
 
 #[test]
 fn test_double_slash_comments() {

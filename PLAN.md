@@ -147,7 +147,7 @@ The Vexy JSON project has successfully completed its renaming from ZZSON. The co
 
 ## Next Steps
 
-1. Remove the ZZSON reference from line 8 of this file
+
 2. Run `cargo fix` to clean up simple warnings
 3. Investigate and fix the 8 failing tests
 4. Release version 2.3.1 as a "post-migration cleanup" release

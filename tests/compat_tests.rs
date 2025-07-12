@@ -28,7 +28,7 @@ fn f(num: f64) -> Value {
 
 #[test]
 fn test_happy_path() {
-    // Basic tests from jsonic.test.js happy()
+    // Basic tests from vexy_json.test.js happy()
     assert_eq!(parse("{a:1}").unwrap(), obj(&[("a", n(1))]));
     assert_eq!(
         parse("{a:1,b:2}").unwrap(),
