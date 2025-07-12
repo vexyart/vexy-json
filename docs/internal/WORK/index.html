@@ -24,7 +24,7 @@
     
     
       
-        <title>this_file: docs/internal/WORK.md - Vexy JSON</title>
+        <title>this_file: docs-src/internal/WORK.md - Vexy JSON</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#this_file-docsinternalworkmd" class="md-skip">
+        <a href="#this_file-docs-srcinternalworkmd" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              this_file: docs/internal/WORK.md
+              this_file: docs-src/internal/WORK.md
             
           </span>
         </div>
@@ -826,7 +826,7 @@
         
   
   <span class="md-ellipsis">
-    this_file: docs/internal/TODO.md
+    this_file: docs-src/internal/PLAN.md
   </span>
   
 
@@ -877,7 +877,7 @@
         
   
   <span class="md-ellipsis">
-    this_file: docs/internal/WORK.md
+    this_file: docs-src/internal/WORK.md
   </span>
   
 
@@ -1885,9 +1885,22 @@
   
 
 
-<h1 id="this_file-docsinternalworkmd">this_file: docs/internal/WORK.md<a class="headerlink" href="#this_file-docsinternalworkmd" title="Permanent link">&para;</a></h1>
-<h1 id="work-progress-v233">Work Progress - v2.3.3<a class="headerlink" href="#work-progress-v233" title="Permanent link">&para;</a></h1>
+<h1 id="this_file-docs-srcinternalworkmd">this_file: docs-src/internal/WORK.md<a class="headerlink" href="#this_file-docs-srcinternalworkmd" title="Permanent link">&para;</a></h1>
+<h1 id="work-progress-v234">Work Progress - v2.3.4<a class="headerlink" href="#work-progress-v234" title="Permanent link">&para;</a></h1>
 <h2 id="completed-in-this-session">Completed in this session<a class="headerlink" href="#completed-in-this-session" title="Permanent link">&para;</a></h2>
+<h3 id="documentation-migration-to-mkdocs">Documentation Migration to MkDocs<a class="headerlink" href="#documentation-migration-to-mkdocs" title="Permanent link">&para;</a></h3>
+<ol>
+<li>✅ Successfully migrated documentation from Jekyll to MkDocs Material</li>
+<li>Moved all docs from <code>/docs</code> to <code>/docs-src</code> preserving git history</li>
+<li>Deleted Jekyll-specific files (_config.yml, Gemfile, _headers)</li>
+<li>Created mkdocs.yml configuration with Material theme</li>
+<li>Added mkdocs-awesome-nav and mkdocs-nav-weight plugins</li>
+<li>Updated GitHub Actions workflow for automated MkDocs builds</li>
+<li>Created requirements-docs.txt for easy dependency installation</li>
+<li>Cleaned up Jekyll front-matter from all markdown files</li>
+<li>Successfully built documentation locally with MkDocs</li>
+<li>Added .nojekyll file to bypass GitHub Pages Jekyll processing</li>
+</ol>
 <h3 id="critical-build-fixes">Critical Build Fixes<a class="headerlink" href="#critical-build-fixes" title="Permanent link">&para;</a></h3>
 <ol>
 <li>✅ Fixed critical clippy errors that were blocking compilation:</li>

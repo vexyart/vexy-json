@@ -24,7 +24,7 @@
     
     
       
-        <title>this_file: docs/internal/TODO.md - Vexy JSON</title>
+        <title>this_file: docs-src/internal/PLAN.md - Vexy JSON</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#this_file-docsinternaltodomd" class="md-skip">
+        <a href="#this_file-docs-srcinternalplanmd" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              this_file: docs/internal/TODO.md
+              this_file: docs-src/internal/PLAN.md
             
           </span>
         </div>
@@ -835,7 +835,7 @@
         
   
   <span class="md-ellipsis">
-    this_file: docs/internal/TODO.md
+    this_file: docs-src/internal/PLAN.md
   </span>
   
 
@@ -878,7 +878,7 @@
         
   
   <span class="md-ellipsis">
-    this_file: docs/internal/WORK.md
+    this_file: docs-src/internal/WORK.md
   </span>
   
 
@@ -1885,12 +1885,20 @@
   
 
 
-<h1 id="this_file-docsinternaltodomd">this_file: docs/internal/TODO.md<a class="headerlink" href="#this_file-docsinternaltodomd" title="Permanent link">&para;</a></h1>
-<p>Now /report and mark completed items as done in <!-- Imported from: PLAN.md --></p>
-<h1 id="this_file-docsinternalplanmd">this_file: docs/internal/PLAN.md<a class="headerlink" href="#this_file-docsinternalplanmd" title="Permanent link">&para;</a></h1>
-<h1 id="vexy-json-improvement-plan-v232-the-reference-implementation-removal-build-fixes">Vexy JSON Improvement Plan - v2.3.2 the reference implementation Removal &amp; Build Fixes<a class="headerlink" href="#vexy-json-improvement-plan-v232-the-reference-implementation-removal-build-fixes" title="Permanent link">&para;</a></h1>
+<h1 id="this_file-docs-srcinternalplanmd">this_file: docs-src/internal/PLAN.md<a class="headerlink" href="#this_file-docs-srcinternalplanmd" title="Permanent link">&para;</a></h1>
+<h1 id="vexy-json-improvement-plan-v234-documentation-migration-build-improvements">Vexy JSON Improvement Plan - v2.3.4 Documentation Migration &amp; Build Improvements<a class="headerlink" href="#vexy-json-improvement-plan-v234-documentation-migration-build-improvements" title="Permanent link">&para;</a></h1>
 <h2 id="executive-summary">Executive Summary<a class="headerlink" href="#executive-summary" title="Permanent link">&para;</a></h2>
-<p>Following the successful project renaming to Vexy JSON, this plan addresses critical remaining issues:</p>
+<p>Following the successful project renaming to Vexy JSON, this plan tracks the migration and improvement efforts:</p>
+<h3 id="completed-v234">Completed (v2.3.4)<a class="headerlink" href="#completed-v234" title="Permanent link">&para;</a></h3>
+<ol>
+<li>✅ <strong>Documentation System Migration</strong> - Migrated from Jekyll to MkDocs Material</li>
+<li>All documentation moved from <code>/docs</code> to <code>/docs-src</code></li>
+<li>Jekyll dependencies removed</li>
+<li>MkDocs with Material theme and plugins configured</li>
+<li>GitHub Actions workflow updated for automated builds</li>
+<li>Successfully builds with <code>mkdocs build</code></li>
+<li>✅ <strong>Build Configuration Fix</strong> - Commented out missing comprehensive_comparison benchmark</li>
+</ol>
 <h3 id="new-critical-issues-found-v232">New Critical Issues Found (v2.3.2)<a class="headerlink" href="#new-critical-issues-found-v232" title="Permanent link">&para;</a></h3>
 <ol>
 <li><strong>the reference implementation references removal</strong> - Found 50 files containing "the reference implementation" references that need cleanup</li>

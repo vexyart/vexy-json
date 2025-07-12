@@ -1785,3 +1785,8 @@ Error: failed to build fuzz script: ASAN_OPTIONS="detect_odr_violation=0" RUSTFL
 [INFO]: 📦   Your wasm pkg is ready to publish at /Users/adam/Developer/vcs/github.vexyart/vexy-json/docs/pkg/nodejs.
 Searching for mounted interstitial disk image using /dev/disk5s... 
 waited 1 seconds for .DS_STORE to be created.
+To https://github.com/vexyart/vexy-json.git
+   45b8426..ec2bf7f  main -> main
+To https://github.com/vexyart/vexy-json.git
+ * [new tag]         v1.5.2 -> v1.5.2
+Publish to crates.io now? (y/N): 

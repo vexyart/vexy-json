@@ -868,3 +868,39 @@ Disk image done
 [0;32m✅ Release archives created[0m
 [0;34m[2025-07-13 00:09:19][0m Committing changes and creating git tag...
 [0;34m[2025-07-13 00:09:19][0m Running: Stage all changes for release
+[0;32m✅ Stage all changes for release completed[0m
+[main ec2bf7f] Release v1.5.2\n\nThis commit updates all version numbers and prepares the release.
+ 25 files changed, 3113 insertions(+), 12 deletions(-)
+ create mode 100644 dist/vexy-json-1.5.2-macos.dmg
+ create mode 100644 dist/vexy-json-1.5.2-src.tar.gz
+ create mode 100755 dist/vexy-json-1.5.2-x86_64-darwin
+ create mode 100644 dist/vexy-json-1.5.2-x86_64-darwin.tar.gz
+ create mode 100644 dist/vexy-json-1.5.2/CHANGELOG.md
+ create mode 100644 dist/vexy-json-1.5.2/LICENSE
+ create mode 100644 dist/vexy-json-1.5.2/README.md
+ create mode 100755 dist/vexy-json-1.5.2/vexy-json
+[0;32m✅ Changes committed for v1.5.2[0m
+[0;34m[2025-07-13 00:09:23][0m Running: Create release tag
+[0;32m✅ Create release tag completed[0m
+[0;32m✅ Git tag v1.5.2 created[0m
+[0;34m[2025-07-13 00:09:23][0m Pushing to remote repository...
+[0;34m[2025-07-13 00:09:23][0m Running: Push commits to origin/main
+[0;32m✅ Push commits to origin/main completed[0m
+[0;34m[2025-07-13 00:09:43][0m Running: Push tag v1.5.2 to origin
+[0;32m✅ Push tag v1.5.2 to origin completed[0m
+[0;32m✅ Changes and tag pushed to remote repository[0m
+[0;34m[2025-07-13 00:09:45][0m Preparing GitHub release...
+[0;34m[2025-07-13 00:09:46][0m Running: Create GitHub release
+https://github.com/vexyart/vexy-json/releases/tag/v1.5.2
+[0;32m✅ Create GitHub release completed[0m
+[0;32m✅ GitHub release created[0m
+[0;34m[2025-07-13 00:10:11][0m Publishing to crates.io...
+[1;33m⚠️  Crates.io publishing requires manual intervention[0m
+[0;36mℹ️  Run the following commands to publish:[0m
+[0;36mℹ️    cargo publish -p vexy-json-test-utils[0m
+[0;36mℹ️    cargo publish -p vexy-json-core[0m
+[0;36mℹ️    cargo publish -p vexy-json-serde[0m
+[0;36mℹ️    cargo publish -p vexy-json-cli[0m
+[0;36mℹ️    cargo publish -p vexy-json-wasm[0m
+[0;36mℹ️    cargo publish -p vexy-json-c-api[0m
+[0;36mℹ️    cargo publish -p vexy-json[0m
