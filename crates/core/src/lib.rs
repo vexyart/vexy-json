@@ -45,7 +45,6 @@ pub mod parallel;
 pub mod parallel_chunked;
 
 #[cfg(feature = "serde")]
-
 /// WebAssembly bindings for browser usage.
 #[cfg(feature = "wasm")]
 pub use ast::{Number, Token, Value};

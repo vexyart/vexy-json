@@ -17,27 +17,27 @@ use vexy_json_core::{parse, parse_with_options, ParserOptions};
 fn value_to_python(py: Python, value: &Value) -> PyResult<PyObject> {
     match value {
         Value::Null => Ok(py.None()),
-        Value::Bool(b) => Ok(b.to_object(py)),
+        Value::Bool(b) => Ok(b.into_pyobject(py)?.unbind().into()),
         Value::Number(num) => match num {
-            vexy_json_core::ast::Number::Integer(i) => Ok(i.to_object(py)),
-            vexy_json_core::ast::Number::Float(f) => Ok(f.to_object(py)),
+            vexy_json_core::ast::Number::Integer(i) => Ok(i.into_pyobject(py)?.unbind().into()),
+            vexy_json_core::ast::Number::Float(f) => Ok(f.into_pyobject(py)?.unbind().into()),
         },
-        Value::String(s) => Ok(s.to_object(py)),
+        Value::String(s) => Ok(s.into_pyobject(py)?.unbind().into()),
         Value::Array(arr) => {
-            let py_list = PyList::empty_bound(py);
+            let py_list = PyList::empty(py);
             for item in arr {
                 let py_item = value_to_python(py, item)?;
                 py_list.append(py_item)?;
             }
-            Ok(py_list.to_object(py))
+            Ok(py_list.into())
         }
         Value::Object(obj) => {
-            let py_dict = PyDict::new_bound(py);
+            let py_dict = PyDict::new(py);
             for (key, value) in obj {
                 let py_value = value_to_python(py, value)?;
                 py_dict.set_item(key, py_value)?;
             }
-            Ok(py_dict.to_object(py))
+            Ok(py_dict.into())
         }
     }
 }
@@ -690,7 +690,7 @@ impl LineIterator {
 #[pyo3(signature = (input, dtype = None))]
 fn loads_numpy(py: Python, input: &str, dtype: Option<&str>) -> PyResult<PyObject> {
     // Try to import numpy
-    let numpy = match py.import_bound("numpy") {
+    let numpy = match py.import("numpy") {
         Ok(np) => np,
         Err(_) => {
             return Err(PyValueError::new_err(
@@ -733,7 +733,7 @@ fn loads_numpy(py: Python, input: &str, dtype: Option<&str>) -> PyResult<PyObjec
                 Ok(numpy_array.into())
             } else {
                 // Fallback: convert to Python objects first, then to NumPy
-                let py_list = PyList::empty_bound(py);
+                let py_list = PyList::empty(py);
                 for item in arr {
                     let py_item = value_to_python(py, &item)?;
                     py_list.append(py_item)?;
@@ -770,7 +770,7 @@ fn loads_numpy(py: Python, input: &str, dtype: Option<&str>) -> PyResult<PyObjec
 #[pyo3(signature = (input, dtype = None))]
 fn loads_numpy_zerocopy(py: Python, input: &str, dtype: Option<&str>) -> PyResult<PyObject> {
     // Try to import numpy
-    let numpy = match py.import_bound("numpy") {
+    let numpy = match py.import("numpy") {
         Ok(np) => np,
         Err(_) => {
             return Err(PyValueError::new_err(
@@ -875,7 +875,7 @@ fn loads_numpy_zerocopy(py: Python, input: &str, dtype: Option<&str>) -> PyResul
 #[pyo3(signature = (input, _orient = "records"))]
 fn loads_dataframe(py: Python, input: &str, _orient: &str) -> PyResult<PyObject> {
     // Try to import pandas
-    let pandas = match py.import_bound("pandas") {
+    let pandas = match py.import("pandas") {
         Ok(pd) => pd,
         Err(_) => {
             return Err(PyValueError::new_err(

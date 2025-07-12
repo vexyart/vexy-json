@@ -1,4 +1,4 @@
-VEXY_JSON v1.0.14
+VEXY_JSON v1.5.0
 
 This package will install the vexy-json command-line tool to /usr/local/bin.
 
