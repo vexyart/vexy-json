@@ -14,7 +14,7 @@ rayon = "1.7"
 colored = "3.0"
 thiserror = "2.0"
 notify = "8.1"
-dirs = "5.0"
+dirs = "6.0"
 
 
 [dependencies.vexy-json-core]
