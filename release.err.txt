@@ -1789,4 +1789,3 @@ To https://github.com/vexyart/vexy-json.git
    45b8426..ec2bf7f  main -> main
 To https://github.com/vexyart/vexy-json.git
  * [new tag]         v1.5.2 -> v1.5.2
-Publish to crates.io now? (y/N): 

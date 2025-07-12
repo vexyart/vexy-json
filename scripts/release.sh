@@ -589,7 +589,8 @@ publish_crates() {
     info "  cargo publish -p vexy-json"
 
     if [ "$DRY_RUN" = false ]; then
-        read -p "Publish to crates.io now? (y/N): " -n 1 -r
+        # read -p "Publish to crates.io now? (y/N): " -n 1 -r
+        REPLY="N" # FIXME TODO
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             # Publish in dependency order

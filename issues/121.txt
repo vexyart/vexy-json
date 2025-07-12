@@ -1,2 +1,11 @@
-We've ran `./build.sh;gitnextver;./release.sh >release.log.txt 2>release.err.txt`
-Now analyze: build.log.txt build.err.txt release.log.txt release.err.txt
+Run 
+
+```
+./build.sh;gitnextver;./release.sh >release.log.txt 2>release.err.txt
+```
+
+Then analyze the files: build.log.txt build.err.txt release.log.txt release.err.txt 
+
+And then into @PLAN.md write a detailed plan on how to fix the problems and then into @TODO.md write a linearized content of that. 
+
+And then implement all changes detailed in @TODO.md and @PLAN.md 
