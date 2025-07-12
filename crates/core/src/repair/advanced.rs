@@ -337,8 +337,7 @@ impl AdvancedJsonRepairer {
                                 original: capture.get(0).unwrap().as_str().to_string(),
                                 replacement: number_str.to_string(),
                                 description: format!(
-                                    "Convert quoted number \"{}\" to unquoted",
-                                    number_str
+                                    "Convert quoted number \"{number_str}\" to unquoted"
                                 ),
                             },
                             confidence: RepairConfidence::new(0.8),

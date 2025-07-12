@@ -170,7 +170,7 @@ impl ErrorReporter {
         let code = error.code();
         let formatted_code = self.formatter.format_error_code(code.as_str());
 
-        format!("[{}] {}", formatted_code, error_msg)
+        format!("[{formatted_code}] {error_msg}")
     }
 
     /// Adds the main error header to the report.
@@ -180,7 +180,7 @@ impl ErrorReporter {
             .formatter
             .format_text(&error.to_string(), ColorScheme::Error);
 
-        report.push_str(&format!("{} {}\n", error_header, error_msg));
+        report.push_str(&format!("{error_header} {error_msg}\n"));
     }
 
     /// Adds the context section showing the error location in the input.
@@ -190,7 +190,7 @@ impl ErrorReporter {
         if !context.lines.is_empty() {
             report.push('\n');
             let context_header = self.formatter.format_text("Context:", ColorScheme::Info);
-            report.push_str(&format!("{}\n", context_header));
+            report.push_str(&format!("{context_header}\n"));
 
             let formatted_context = context.format_with_formatter(&self.formatter);
             report.push_str(&formatted_context);
@@ -209,8 +209,7 @@ impl ErrorReporter {
             .format_text(code.description(), ColorScheme::Info);
 
         report.push_str(&format!(
-            "{} {} - {}\n",
-            code_header, formatted_code, description
+            "{code_header} {formatted_code} - {description}\n"
         ));
     }
 
@@ -223,7 +222,7 @@ impl ErrorReporter {
             let suggestions_header = self
                 .formatter
                 .format_text("Suggestions:", ColorScheme::Info);
-            report.push_str(&format!("{}\n", suggestions_header));
+            report.push_str(&format!("{suggestions_header}\n"));
 
             for (i, suggestion) in suggestions.iter().enumerate() {
                 let wrapped_suggestion = self.wrap_text(suggestion, self.config.max_line_width);
@@ -245,7 +244,7 @@ impl ErrorReporter {
             let recovery_header = self
                 .formatter
                 .format_text("Automatic Recovery:", ColorScheme::Success);
-            report.push_str(&format!("{}\n", recovery_header));
+            report.push_str(&format!("{recovery_header}\n"));
 
             for (i, strategy) in strategies.iter().enumerate() {
                 let strategy_desc = self
@@ -264,7 +263,7 @@ impl ErrorReporter {
                     "Note: Automatic recovery may not be perfect. Manual review recommended.",
                     ColorScheme::Warning,
                 );
-                report.push_str(&format!("\n{}\n", warning));
+                report.push_str(&format!("\n{warning}\n"));
             }
         }
     }

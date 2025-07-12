@@ -197,14 +197,14 @@ impl<H: JsonEventHandler> EventDrivenParser<H> {
         loop {
             let bytes_read = reader
                 .read(&mut buffer)
-                .map_err(|e| Error::Custom(format!("IO error: {}", e)))?;
+                .map_err(|e| Error::Custom(format!("IO error: {e}")))?;
 
             if bytes_read == 0 {
                 break;
             }
 
             let chunk = std::str::from_utf8(&buffer[..bytes_read])
-                .map_err(|e| Error::Custom(format!("UTF-8 error: {}", e)))?;
+                .map_err(|e| Error::Custom(format!("UTF-8 error: {e}")))?;
 
             self.parse_chunk(chunk)?;
         }
@@ -316,7 +316,7 @@ impl<H: JsonEventHandler> EventDrivenParser<H> {
                     path.push_str(key);
                 }
                 ParserContext::Array { index } => {
-                    path.push_str(&format!("[{}]", index));
+                    path.push_str(&format!("[{index}]"));
                 }
                 _ => {}
             }
@@ -490,12 +490,12 @@ mod tests {
         }
 
         fn on_key(&mut self, key: &str) -> Result<()> {
-            self.events.push(format!("key:{}", key));
+            self.events.push(format!("key:{key}"));
             Ok(())
         }
 
         fn on_string(&mut self, value: &str) -> Result<()> {
-            self.events.push(format!("string:{}", value));
+            self.events.push(format!("string:{value}"));
             Ok(())
         }
     }

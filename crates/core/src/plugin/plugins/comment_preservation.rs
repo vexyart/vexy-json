@@ -138,14 +138,14 @@ impl ParserPlugin for CommentPreservationPlugin {
 
                 // Recurse into object values
                 for (key, val) in obj.iter_mut() {
-                    let child_path = format!("{}.{}", path, key);
+                    let child_path = format!("{path}.{key}");
                     self.transform_value(val, &child_path)?;
                 }
             }
             Value::Array(arr) => {
                 // Recurse into array elements
                 for (i, val) in arr.iter_mut().enumerate() {
-                    let child_path = format!("{}[{}]", path, i);
+                    let child_path = format!("{path}[{i}]");
                     self.transform_value(val, &child_path)?;
                 }
             }

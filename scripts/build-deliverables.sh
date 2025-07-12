@@ -182,18 +182,18 @@ This directory contains pre-built binaries and installers for Vexy JSON.
 ### macOS
 1. Download the .dmg file
 2. Open it and run the installer
-3. The \`vexy_json\` command will be available in your terminal
+3. The \`vexy-json\` command will be available in your terminal
 
 ### Windows
 1. Download the .zip file
 2. Extract it to a directory in your PATH
-3. Run \`vexy_json.exe\` from the command prompt
+3. Run \`vexy-json.exe\` from the command prompt
 
 ### Linux
 1. Download the .tar.gz file
 2. Extract it: \`tar -xzf vexy_json-${VERSION}-linux.tar.gz\`
-3. Move the binary to a directory in your PATH: \`sudo mv vexy_json /usr/local/bin/\`
-4. Make it executable: \`chmod +x /usr/local/bin/vexy_json\`
+3. Move the binary to a directory in your PATH: \`sudo mv vexy-json /usr/local/bin/\`
+4. Make it executable: \`chmod +x /usr/local/bin/vexy-json\`
 
 ## Verification
 
@@ -211,13 +211,13 @@ sha256sum -c checksums.sha256
 
 \`\`\`bash
 # Parse JSON from stdin
-echo '{"key": "value"}' | vexy_json
+echo '{"key": "value"}' | vexy-json
 
 # Parse JSON file
-vexy_json < data.json
+vexy-json < data.json
 
 # Pretty print JSON
-echo '{"compact":true}' | vexy_json
+echo '{"compact":true}' | vexy-json
 \`\`\`
 
 For more information: https://github.com/vexyart/vexy-json

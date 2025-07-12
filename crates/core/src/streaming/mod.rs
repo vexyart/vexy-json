@@ -417,12 +417,12 @@ impl StreamingValueBuilder {
                 let value = if n.contains('.') || n.contains('e') || n.contains('E') {
                     Value::Number(crate::ast::Number::Float(
                         n.parse()
-                            .map_err(|_| Error::Custom(format!("Invalid number: {}", n)))?,
+                            .map_err(|_| Error::Custom(format!("Invalid number: {n}")))?,
                     ))
                 } else {
                     Value::Number(crate::ast::Number::Integer(
                         n.parse()
-                            .map_err(|_| Error::Custom(format!("Invalid number: {}", n)))?,
+                            .map_err(|_| Error::Custom(format!("Invalid number: {n}")))?,
                     ))
                 };
                 self.add_value(value)?;

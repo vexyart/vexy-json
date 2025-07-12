@@ -300,7 +300,7 @@ mod tests {
         // Test case 1: {\"array\": [1, 2, {\"nested\": \"value\"
         let input1 = r#"{"array": [1, 2, {"nested": "value""#;
         let balance1 = repairer.analyze_bracket_balance(input1);
-        println!("Input1: {}", input1);
+        println!("Input1: {input1}");
         println!(
             "Balance1: braces={}, brackets={}",
             balance1
@@ -318,7 +318,7 @@ mod tests {
         // Test case 2: {\"key\": \"value\", \"array\": [1, 2, 3
         let input2 = r#"{"key": "value", "array": [1, 2, 3"#;
         let balance2 = repairer.analyze_bracket_balance(input2);
-        println!("Input2: {}", input2);
+        println!("Input2: {input2}");
         println!(
             "Balance2: braces={}, brackets={}",
             balance2

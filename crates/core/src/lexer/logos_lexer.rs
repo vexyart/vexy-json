@@ -73,18 +73,17 @@ impl<'a> JsonLexer for LogosLexer<'a> {
         }
 
         match self.lexer.next() {
-            Some(token) => {
+            Some(token_result) => {
                 let logos_span = self.lexer.span();
                 let span = Span::new(logos_span.start, logos_span.end);
                 self.update_position(&span);
 
-                if token == Token::Error {
-                    Err(Error::UnexpectedChar(
+                match token_result {
+                    Ok(token) => Ok((token, span)),
+                    Err(_) => Err(Error::UnexpectedChar(
                         self.lexer.slice().chars().next().unwrap_or(' '),
                         span.start,
-                    ))
-                } else {
-                    Ok((token, span))
+                    )),
                 }
             }
             None => {

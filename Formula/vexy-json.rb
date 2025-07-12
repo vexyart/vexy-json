@@ -1,5 +1,5 @@
 class VexyJson < Formula
-  desc "Forgiving JSON parser for Rust - a port of the JavaScript library jsonic"
+  desc "Forgiving JSON parser for Rust with relaxed syntax support"
   homepage "https://github.com/vexyart/vexy-json"
   url "https://github.com/vexyart/vexy-json/archive/refs/tags/v2.0.0.tar.gz"
   sha256 "ce66e4af1e0aeb4f35456eb44aa82d5052e1a26c33adbaa1969284a5aa8c24ab"

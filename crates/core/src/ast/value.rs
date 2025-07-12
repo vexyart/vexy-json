@@ -163,16 +163,16 @@ impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Value::Null => write!(f, "null"),
-            Value::Bool(b) => write!(f, "{}", b),
-            Value::Number(n) => write!(f, "{}", n),
-            Value::String(s) => write!(f, "\"{}\"", s),
+            Value::Bool(b) => write!(f, "{b}"),
+            Value::Number(n) => write!(f, "{n}"),
+            Value::String(s) => write!(f, "\"{s}\""),
             Value::Array(arr) => {
                 write!(f, "[")?;
                 for (i, v) in arr.iter().enumerate() {
                     if i > 0 {
                         write!(f, ", ")?;
                     }
-                    write!(f, "{}", v)?;
+                    write!(f, "{v}")?;
                 }
                 write!(f, "]")
             }
@@ -182,7 +182,7 @@ impl fmt::Display for Value {
                     if i > 0 {
                         write!(f, ", ")?;
                     }
-                    write!(f, "\"{}\": {}", k, v)?;
+                    write!(f, "\"{k}\": {v}")?;
                 }
                 write!(f, "}}")
             }
@@ -193,8 +193,8 @@ impl fmt::Display for Value {
 impl fmt::Display for Number {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Number::Integer(i) => write!(f, "{}", i),
-            Number::Float(fl) => write!(f, "{}", fl),
+            Number::Integer(i) => write!(f, "{i}"),
+            Number::Float(fl) => write!(f, "{fl}"),
         }
     }
 }

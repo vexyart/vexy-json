@@ -15,7 +15,7 @@ impl<'a> Parser<'a> {
             return Err(Error::Expected {
                 expected: "{".to_string(),
                 found: match &self.current_token {
-                    Some((token, _)) => format!("{:?}", token),
+                    Some((token, _)) => format!("{token:?}"),
                     None => "EOF".to_string(),
                 },
                 position: self.lexer.position(),
@@ -143,7 +143,7 @@ impl<'a> Parser<'a> {
                     return Err(Error::Expected {
                         expected: "string key".to_string(),
                         found: match &self.current_token {
-                            Some((token, _)) => format!("{:?}", token),
+                            Some((token, _)) => format!("{token:?}"),
                             None => "EOF".to_string(),
                         },
                         position: self.lexer.position(),
@@ -157,7 +157,7 @@ impl<'a> Parser<'a> {
                 return Err(Error::Expected {
                     expected: ":".to_string(),
                     found: match &self.current_token {
-                        Some((token, _)) => format!("{:?}", token),
+                        Some((token, _)) => format!("{token:?}"),
                         None => "EOF".to_string(),
                     },
                     position: self.lexer.position(),
@@ -228,7 +228,7 @@ impl<'a> Parser<'a> {
                                 return Err(Error::Expected {
                                     expected: ", or } or newline".to_string(),
                                     found: match &self.current_token {
-                                        Some((token, _)) => format!("{:?}", token),
+                                        Some((token, _)) => format!("{token:?}"),
                                         None => "EOF".to_string(),
                                     },
                                     position: self.lexer.position(),
@@ -239,7 +239,7 @@ impl<'a> Parser<'a> {
                         return Err(Error::Expected {
                             expected: ", or } or newline".to_string(),
                             found: match &self.current_token {
-                                Some((token, _)) => format!("{:?}", token),
+                                Some((token, _)) => format!("{token:?}"),
                                 None => "EOF".to_string(),
                             },
                             position: self.lexer.position(),

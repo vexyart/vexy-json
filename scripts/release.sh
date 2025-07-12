@@ -620,12 +620,11 @@ push_to_remote() {
     # Get current branch
     local branch=$(git branch --show-current)
 
-    # Check if we have a remote named 'origin'
-    if ! git remote | grep -q '^origin
-; then
-        error "No 'origin' remote found. Please add a remote repository."
-        exit 1
-    fi
+# Check if we have a remote named 'origin'
+if ! git remote | grep -q '^origin'; then
+    error "No 'origin' remote found. Please add a remote repository."
+    exit 1
+fi
 
     # Push commits
     run_cmd "git push origin $branch" "Push commits to origin/$branch"

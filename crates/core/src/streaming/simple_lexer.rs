@@ -367,8 +367,7 @@ impl SimpleStreamingLexer {
                 Ok(())
             }
             LexerState::InMultiLineComment { start_pos, .. } => Err(Error::Custom(format!(
-                "Unterminated comment at position {}",
-                start_pos
+                "Unterminated comment at position {start_pos}"
             ))),
             LexerState::PotentialComment { start_pos } => {
                 Err(Error::UnexpectedChar('/', *start_pos))

@@ -1,6 +1,6 @@
 # Vexy JSON Python Bindings
 
-Fast, forgiving JSON parser for Python - a port of the JavaScript library jsonic.
+Fast, forgiving JSON parser for Python with relaxed syntax support.
 
 ## Features
 

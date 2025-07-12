@@ -76,7 +76,6 @@ pub enum Token {
     /// End of file/input. (Logos usually handles this implicitly)
     Eof,
 
-    #[error]
     /// Represents a lexical error.
     Error, // Catch-all for lexing errors. Logos requires this.
 }

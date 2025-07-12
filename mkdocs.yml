@@ -1,0 +1,41 @@
+site_name: Vexy JSON
+site_url: https://vexyart.github.io/vexy-json
+site_description: Lenient and tolerant JSON parser in Rust
+repo_url: https://github.com/vexyart/vexy-json
+repo_name: vexyart/vexy-json
+
+docs_dir: docs-src        # points to moved sources
+site_dir: docs            # rendered HTML overwrites /docs
+use_directory_urls: true
+
+theme:
+  name: material
+  logo: assets/images/flamegraph.svg
+  palette:
+    - scheme: slate        # dark by default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+    - scheme: default      # light
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+  features:
+    - navigation.tabs
+    - content.code.copy    # copy-to-clipboard button
+
+plugins:
+  - search
+  - awesome-nav            # auto-nav plugin
+  - mkdocs-nav-weight      # weight plugin
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - footnotes
+  - tables
+  - attr_list
+  - def_list
+  - pymdownx.extra
+  - pymdownx.highlight

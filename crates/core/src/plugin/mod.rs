@@ -108,8 +108,7 @@ impl PluginRegistry {
 
         if self.plugin_map.contains_key(&name) {
             return Err(Error::Custom(format!(
-                "Plugin '{}' already registered",
-                name
+                "Plugin '{name}' already registered"
             )));
         }
 

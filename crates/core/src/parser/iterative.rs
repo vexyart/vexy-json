@@ -174,7 +174,7 @@ impl<'a> IterativeParser<'a> {
             }
             Some(token) => Err(Error::Expected {
                 expected: "value".to_string(),
-                found: format!("{:?}", token),
+                found: format!("{token:?}"),
                 position: self.current_span().start,
             }),
             None => Err(Error::Expected {
@@ -297,7 +297,7 @@ impl<'a> IterativeParser<'a> {
                         Some(token) => {
                             return Err(Error::Expected {
                                 expected: "comma or closing brace".to_string(),
-                                found: format!("{:?}", token),
+                                found: format!("{token:?}"),
                                 position: self.current_span().start,
                             });
                         }
@@ -392,7 +392,7 @@ impl<'a> IterativeParser<'a> {
                     Some(token) => {
                         return Err(Error::Expected {
                             expected: "comma or closing bracket".to_string(),
-                            found: format!("{:?}", token),
+                            found: format!("{token:?}"),
                             position: self.current_span().start,
                         });
                     }
@@ -440,7 +440,7 @@ impl<'a> IterativeParser<'a> {
             }
             Some(token) => Err(Error::Expected {
                 expected: "string key".to_string(),
-                found: format!("{:?}", token),
+                found: format!("{token:?}"),
                 position: self.current_span().start,
             }),
             None => Err(Error::Expected {
@@ -532,7 +532,7 @@ impl<'a> IterativeParser<'a> {
                         }
                     }
                     Some(ch) => {
-                        return Err(Error::Custom(format!("Invalid escape sequence: \\{}", ch)))
+                        return Err(Error::Custom(format!("Invalid escape sequence: \\{ch}")))
                     }
                     None => return Err(Error::Custom("Incomplete escape sequence".to_string())),
                 }

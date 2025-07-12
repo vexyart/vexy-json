@@ -187,7 +187,7 @@ impl ContextWindow {
                 let after = &line[error_end..];
 
                 result.push_str(before);
-                result.push_str(&format!(">>{}<<", error_text)); // Simple highlighting
+                result.push_str(&format!(">>{error_text}<<")); // Simple highlighting
                 result.push_str(after);
                 result.push('\n');
 

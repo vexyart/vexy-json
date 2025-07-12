@@ -77,24 +77,24 @@ impl RecoveryStrategy {
     pub fn description(&self) -> String {
         match self {
             RecoveryStrategy::InsertText { text, .. } => {
-                format!("Insert \"{}\"", text)
+                format!("Insert \"{text}\"")
             }
             RecoveryStrategy::RemoveText { span } => {
                 format!("Remove {} characters", span.len())
             }
             RecoveryStrategy::ReplaceText { replacement, .. } => {
-                format!("Replace with \"{}\"", replacement)
+                format!("Replace with \"{replacement}\"")
             }
             RecoveryStrategy::AddClosing { delimiter, .. } => {
-                format!("Add closing '{}'", delimiter)
+                format!("Add closing '{delimiter}'")
             }
             RecoveryStrategy::FixQuoting { quote_char, .. } => {
-                format!("Fix quoting with '{}'", quote_char)
+                format!("Fix quoting with '{quote_char}'")
             }
             RecoveryStrategy::RepairNumber {
                 corrected_value, ..
             } => {
-                format!("Repair number to \"{}\"", corrected_value)
+                format!("Repair number to \"{corrected_value}\"")
             }
             RecoveryStrategy::AddComma { .. } => "Add missing comma".to_string(),
             RecoveryStrategy::RemoveTrailingComma { .. } => "Remove trailing comma".to_string(),

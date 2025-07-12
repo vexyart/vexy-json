@@ -259,7 +259,7 @@ impl ErrorRecoveryEngineV2 {
 
         for (idx, line) in lines[start_line..end_line].iter().enumerate() {
             let line_num = start_line + idx + 1;
-            output.push_str(&format!("{:4} | {}\n", line_num, line));
+            output.push_str(&format!("{line_num:4} | {line}\n"));
 
             if start_line + idx == error_line {
                 // Add error arrow
@@ -395,7 +395,7 @@ impl RecoveryStrategy for BracketMatchingStrategy {
                     fixed.push(*close);
 
                     suggestions.push(RecoverySuggestion {
-                        description: format!("Add missing '{}'", close),
+                        description: format!("Add missing '{close}'"),
                         confidence: 0.8,
                         fixed_input: fixed,
                         category: SuggestionCategory::MissingBracket,
@@ -458,7 +458,7 @@ impl RecoveryStrategy for QuoteInferenceStrategy {
             fixed.push(quote_char);
 
             suggestions.push(RecoverySuggestion {
-                description: format!("Add missing closing quote '{}'", quote_char),
+                description: format!("Add missing closing quote '{quote_char}'"),
                 confidence: 0.9,
                 fixed_input: fixed,
                 category: SuggestionCategory::UnmatchedQuote,

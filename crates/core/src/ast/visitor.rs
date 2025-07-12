@@ -6,6 +6,7 @@
 use crate::ast::{Number, Value};
 use crate::error::Result;
 use rustc_hash::FxHashMap;
+use std::fmt;
 
 /// Visitor trait for traversing JSON values
 pub trait Visitor {
@@ -51,7 +52,7 @@ pub trait Visitor {
 
     /// Visit an object value
     fn visit_object(&mut self, object: &FxHashMap<String, Value>) -> Result<()> {
-        for (_key, value) in object {
+        for value in object.values() {
             self.visit_value(value)?;
         }
         Ok(())
@@ -102,7 +103,7 @@ pub trait MutVisitor {
 
     /// Visit an object value
     fn visit_object_mut(&mut self, object: &mut FxHashMap<String, Value>) -> Result<()> {
-        for (_key, value) in object {
+        for value in object.values_mut() {
             self.visit_value_mut(value)?;
         }
         Ok(())
@@ -206,23 +207,18 @@ impl JsonPath {
         self.segments.pop()
     }
 
-    /// Get the path as a string
-    pub fn to_string(&self) -> String {
-        let mut result = String::from("$");
+}
+
+impl fmt::Display for JsonPath {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "$")?;
         for segment in &self.segments {
             match segment {
-                PathSegment::Key(key) => {
-                    result.push('.');
-                    result.push_str(key);
-                }
-                PathSegment::Index(idx) => {
-                    result.push('[');
-                    result.push_str(&idx.to_string());
-                    result.push(']');
-                }
+                PathSegment::Key(key) => write!(f, ".{}", key)?,
+                PathSegment::Index(idx) => write!(f, "[{}]", idx)?,
             }
         }
-        result
+        Ok(())
     }
 }
 
@@ -301,7 +297,7 @@ impl Visitor for CountingVisitor {
 
     fn visit_object(&mut self, object: &FxHashMap<String, Value>) -> Result<()> {
         self.object_count += 1;
-        for (_key, value) in object {
+        for value in object.values() {
             self.visit_value(value)?;
         }
         Ok(())

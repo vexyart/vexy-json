@@ -273,7 +273,7 @@ impl Iterator for NdJsonIterator {
                     }
                 }
                 Some(Err(e)) => {
-                    return Some(Err(Error::Custom(format!("IO error: {}", e))));
+                    return Some(Err(Error::Custom(format!("IO error: {e}"))));
                 }
                 None => {
                     // End of input

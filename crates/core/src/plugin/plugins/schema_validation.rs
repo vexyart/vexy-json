@@ -44,8 +44,7 @@ impl SchemaValidationPlugin {
 
                 if expected_type != actual_type {
                     return Err(Error::Custom(format!(
-                        "Type mismatch at {}: expected {}, got {}",
-                        path, expected_type, actual_type
+                        "Type mismatch at {path}: expected {expected_type}, got {actual_type}"
                     )));
                 }
             }
@@ -55,7 +54,7 @@ impl SchemaValidationPlugin {
                 (value, schema_obj.get("properties"))
             {
                 for (key, prop_schema) in properties {
-                    let prop_path = format!("{}.{}", path, key);
+                    let prop_path = format!("{path}.{key}");
                     if let Some(prop_value) = obj.get(key) {
                         self.validate_against_schema(prop_value, prop_schema, &prop_path)?;
                     } else if let Some(Value::Array(required)) = schema_obj.get("required") {
@@ -64,8 +63,7 @@ impl SchemaValidationPlugin {
                             .any(|v| matches!(v, Value::String(s) if s == key))
                         {
                             return Err(Error::Custom(format!(
-                                "Missing required property: {}",
-                                prop_path
+                                "Missing required property: {prop_path}"
                             )));
                         }
                     }
@@ -75,7 +73,7 @@ impl SchemaValidationPlugin {
             // Validate array items
             if let (Value::Array(arr), Some(items_schema)) = (value, schema_obj.get("items")) {
                 for (i, item) in arr.iter().enumerate() {
-                    let item_path = format!("{}[{}]", path, i);
+                    let item_path = format!("{path}[{i}]");
                     self.validate_against_schema(item, items_schema, &item_path)?;
                 }
             }
@@ -133,11 +131,10 @@ impl SchemaValidationPlugin {
 
                 if let Some(Value::String(pattern)) = schema_obj.get("pattern") {
                     let re = regex::Regex::new(pattern)
-                        .map_err(|e| Error::Custom(format!("Invalid regex pattern: {}", e)))?;
+                        .map_err(|e| Error::Custom(format!("Invalid regex pattern: {e}")))?;
                     if !re.is_match(s) {
                         return Err(Error::Custom(format!(
-                            "String at {} does not match pattern: {}",
-                            path, pattern
+                            "String at {path} does not match pattern: {pattern}"
                         )));
                     }
                 }

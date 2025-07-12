@@ -414,12 +414,12 @@ impl Error {
         // Format the main error message
         let error_msg = formatter.format_text(&self.to_string(), ColorScheme::Error);
 
-        let mut diagnostic = format!("[{}] {}", formatted_code, error_msg);
+        let mut diagnostic = format!("[{formatted_code}] {error_msg}");
 
         if !suggestions.is_empty() {
             // Format suggestions header
             let suggestions_header = formatter.format_text("Suggestions:", ColorScheme::Info);
-            diagnostic.push_str(&format!("\n\n{}", suggestions_header));
+            diagnostic.push_str(&format!("\n\n{suggestions_header}"));
 
             for (i, suggestion) in suggestions.iter().enumerate() {
                 let formatted_suggestion = formatter.format_suggestion(i + 1, suggestion);

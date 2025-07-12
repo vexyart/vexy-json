@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vexy_json WASM Test</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .panel {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      textarea {
+        width: 100%;
+        height: 300px;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .status {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .version {
+        background: #d1ecf1;
+        color: #0c5460;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>vexy_json WASM Test Page</h1>
+    <div class="version" id="version">Loading WASM module...</div>
+
+    <div class="container">
+      <div class="panel">
+        <h2>Input (Forgiving JSON)</h2>
+        <textarea id="input" placeholder="Enter your JSON here...">
+{
+    // Comments are supported
+    name: "John Doe",    // Unquoted keys
+    'age': 30,          // Single quotes
+    city: "New York",
+    hobbies: [
+        "reading",
+        "coding",       // Trailing commas
+    ],
+}</textarea
+        >
+        <button onclick="parseJSON()">Parse JSON</button>
+        <div id="input-status"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Output (Standard JSON)</h2>
+        <textarea
+          id="output"
+          readonly
+          placeholder="Parsed output will appear here..."
+        ></textarea>
+        <div id="output-status"></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px">
+      <h3>Parser Options</h3>
+      <div id="options"></div>
+    </div>
+
+    <script type="module">
+      import init, {
+        parse_json,
+        parse_json_with_options,
+        get_version_info,
+        get_parser_options,
+        validate_json,
+      } from './pkg/vexy_json_wasm.js';
+
+      let wasmReady = false;
+
+      async function initWasm() {
+        try {
+          await init();
+          wasmReady = true;
+
+          // Display version info
+          const versionInfo = JSON.parse(get_version_info());
+          document.getElementById('version').innerHTML = `
+                    <strong>vexy_json WASM</strong> v${versionInfo.version} - ${versionInfo.description}
+                `;
+          document.getElementById('version').className = 'version';
+
+          // Display parser options
+          const options = JSON.parse(get_parser_options());
+          let optionsHtml = '<table style="width: 100%;">';
+          for (const [key, value] of Object.entries(options)) {
+            optionsHtml += `
+                        <tr>
+                            <td><strong>${key}</strong></td>
+                            <td>${value.description}</td>
+                            <td>Default: ${value.default}</td>
+                        </tr>
+                    `;
+          }
+          optionsHtml += '</table>';
+          document.getElementById('options').innerHTML = optionsHtml;
+
+          console.log('WASM module loaded successfully');
+        } catch (error) {
+          console.error('Failed to initialize WASM:', error);
+          document.getElementById('version').innerHTML =
+            'Failed to load WASM module: ' + error.message;
+          document.getElementById('version').className = 'error';
+        }
+      }
+
+      window.parseJSON = function () {
+        if (!wasmReady) {
+          alert('WASM module is not loaded yet. Please wait...');
+          return;
+        }
+
+        const input = document.getElementById('input').value;
+        const inputStatus = document.getElementById('input-status');
+        const output = document.getElementById('output');
+        const outputStatus = document.getElementById('output-status');
+
+        try {
+          // First validate
+          const isValid = validate_json(input);
+
+          // Then parse with all forgiving options enabled
+          const result = parse_json_with_options(
+            input,
+            true, // allow_comments
+            true, // allow_trailing_commas
+            true, // allow_unquoted_keys
+            true, // allow_single_quotes
+            true, // implicit_top_level
+            true, // newline_as_comma
+            true, // enable_repair
+            128 // max_depth
+          );
+
+          // Pretty print the result
+          const parsed = JSON.parse(result);
+          output.value = JSON.stringify(parsed, null, 2);
+
+          inputStatus.innerHTML = 'Successfully parsed!';
+          inputStatus.className = 'status success';
+
+          outputStatus.innerHTML = `Valid JSON: ${
+            isValid ? 'Yes (already valid)' : 'No (required repair)'
+          }`;
+          outputStatus.className = 'status success';
+        } catch (error) {
+          output.value = '';
+          inputStatus.innerHTML = 'Parse error: ' + error.message;
+          inputStatus.className = 'status error';
+          outputStatus.innerHTML = '';
+        }
+      };
+
+      // Initialize WASM when page loads
+      initWasm();
+    </script>
+  </body>
+</html>

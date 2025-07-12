@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vexy JSON Deep Debug</title>
+  </head>
+  <body>
+    <h1>Vexy JSON Deep Debug Test</h1>
+    <button onclick="runTest()">Run Test</button>
+    <pre id="log"></pre>
+
+    <script type="module">
+      import init, {
+        parse_json,
+        parse_json_with_options,
+      } from '../pkg/vexy_json_wasm.js';
+
+      let log = '';
+      function appendLog(message) {
+        log += message + '\n';
+        document.getElementById('log').textContent = log;
+        console.log(message);
+      }
+
+      let initialized = false;
+
+      async function initWasm() {
+        try {
+          await init();
+          initialized = true;
+          appendLog('✅ WASM module initialized successfully');
+        } catch (error) {
+          appendLog('❌ WASM initialization failed: ' + error);
+          console.error('WASM init error:', error);
+        }
+      }
+
+      window.runTest = async function () {
+        if (!initialized) {
+          appendLog('⏳ Initializing WASM...');
+          await initWasm();
+        }
+
+        appendLog('\n🔍 Starting deep debug tests...');
+
+        // Test 1: Very simple JSON
+        try {
+          const input1 = '1';
+          appendLog(`📝 Testing simple number: ${input1}`);
+          const result1 = parse_json(input1);
+          appendLog(
+            `✅ Result: ${JSON.stringify(result1)}, type: ${typeof result1}`
+          );
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+          console.error('Error details:', error);
+        }
+
+        // Test 2: Simple string
+        try {
+          const input2 = '"hello"';
+          appendLog(`\n📝 Testing simple string: ${input2}`);
+          const result2 = parse_json(input2);
+          appendLog(
+            `✅ Result: ${JSON.stringify(result2)}, type: ${typeof result2}`
+          );
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+          console.error('Error details:', error);
+        }
+
+        // Test 3: Empty object
+        try {
+          const input3 = '{}';
+          appendLog(`\n📝 Testing empty object: ${input3}`);
+          const result3 = parse_json(input3);
+          appendLog(
+            `✅ Result: ${JSON.stringify(result3)}, type: ${typeof result3}`
+          );
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+          console.error('Error details:', error);
+        }
+
+        // Test 4: Simple quoted object
+        try {
+          const input4 = '{"a":1}';
+          appendLog(`\n📝 Testing quoted object: ${input4}`);
+          const result4 = parse_json(input4);
+          appendLog(
+            `✅ Result: ${JSON.stringify(result4)}, type: ${typeof result4}`
+          );
+          appendLog(`🔍 Object keys: ${Object.keys(result4 || {})}`);
+          appendLog(`🔍 Object values: ${Object.values(result4 || {})}`);
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+          console.error('Error details:', error);
+        }
+
+        // Test 5: Array
+        try {
+          const input5 = '[1,2,3]';
+          appendLog(`\n📝 Testing array: ${input5}`);
+          const result5 = parse_json(input5);
+          appendLog(
+            `✅ Result: ${JSON.stringify(result5)}, type: ${typeof result5}`
+          );
+        } catch (error) {
+          appendLog(`❌ ERROR: ${error}`);
+          console.error('Error details:', error);
+        }
+
+        // Test 6: Check what parse_json_with_options looks like
+        try {
+          appendLog(`\n🔍 Checking parse_json_with_options function:`);
+          appendLog(`Function type: ${typeof parse_json_with_options}`);
+          appendLog(`Function: ${parse_json_with_options.toString()}`);
+        } catch (error) {
+          appendLog(`❌ ERROR checking function: ${error}`);
+          console.error('Function check error:', error);
+        }
+      };
+
+      // Auto-initialize when page loads
+      initWasm();
+    </script>
+  </body>
+</html>

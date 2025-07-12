@@ -93,7 +93,7 @@ impl<'a> OptimizedParser<'a> {
         if next_token != Token::Eof {
             return Err(Error::Expected {
                 expected: "end of input".to_string(),
-                found: format!("{:?}", next_token),
+                found: format!("{next_token:?}"),
                 position: self.lexer.position(),
             });
         }
@@ -233,7 +233,7 @@ impl<'a> OptimizedParser<'a> {
                     _ => {
                         return Err(Error::Expected {
                             expected: "comma or }".to_string(),
-                            found: format!("{:?}", token),
+                            found: format!("{token:?}"),
                             position: span.start,
                         });
                     }
@@ -270,7 +270,7 @@ impl<'a> OptimizedParser<'a> {
                 _ => {
                     return Err(Error::Expected {
                         expected: "string key".to_string(),
-                        found: format!("{:?}", key_token),
+                        found: format!("{key_token:?}"),
                         position: key_span.start,
                     });
                 }
@@ -283,7 +283,7 @@ impl<'a> OptimizedParser<'a> {
                 _ => {
                     return Err(Error::Expected {
                         expected: "colon".to_string(),
-                        found: format!("{:?}", colon_token),
+                        found: format!("{colon_token:?}"),
                         position: colon_span.start,
                     });
                 }
@@ -354,7 +354,7 @@ impl<'a> OptimizedParser<'a> {
                     _ => {
                         return Err(Error::Expected {
                             expected: "comma or ]".to_string(),
-                            found: format!("{:?}", token),
+                            found: format!("{token:?}"),
                             position: span.start,
                         });
                     }

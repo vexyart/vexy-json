@@ -41,22 +41,3 @@ updates:
     commit-message:
       prefix: "ci"
       include: "scope"
-
-  # npm dependencies (for jsonic reference)
-  - package-ecosystem: "npm"
-    directory: "/ref/jsonic"
-    schedule:
-      interval: "monthly"
-    open-pull-requests-limit: 3
-    reviewers:
-      - "twardoch"
-    labels:
-      - "dependencies"
-      - "javascript"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    ignore:
-      # Ignore major version updates for stability
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]

@@ -1,1 +1,228 @@
+Below is a **step‑by‑step migration blueprint** that will let you replace the current Jekyll‑based site in `/docs` with a fully automated **MkDocs Material** build that uses **`mkdocs‑awesome‑nav`** and **`mkdocs‑nav‑weight`**, works locally, and is deployed to GitHub Pages from the **main branch’s `/docs` folder**.
 
+---
+
+## 0  High‑level game plan
+
+1. **Move all Markdown sources out of `/docs`** (we’ll call the new folder `/docs-src`).
+2. **Scrub Jekyll front‑matter** (keep only the keys you need for `nav‑weight`).
+3. **Add a single `mkdocs.yml`** at the repository root that points to `docs-src` and contains the Material theme + both plugins.
+4. **Create a GitHub Actions workflow** that:
+
+   * installs MkDocs Material and the two plugins,
+   * runs `mkdocs build --strict --site-dir docs`,
+   * commits the rendered HTML into `/docs` on the **same commit** (so Pages still serves `/docs`) and
+   * drops a `.nojekyll` sentinel so the Pages runner skips its own Jekyll pass.
+5. Delete every leftover Jekyll/Ruby artefact.
+
+Once merged, nothing in the Pages settings changes (still **main / docs**), and contributors run `mkdocs serve` locally for instant preview.
+
+---
+
+## 1  Files & folders to **delete**
+
+| Path                                                                                            | Why                                                 |
+| ----------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `docs/_config.yml`, `Gemfile`, `Gemfile.lock`, `_headers`, any `_layouts`, `_includes`, `_sass` | Pure‑Jekyll; MkDocs ignores them ([GitHub Docs][1]) |
+| `docs/_build.sh`, `docs/_serve.sh`, `docs/**/*.erb`                                             | Ruby tooling no longer used                         |
+| `docs/**/*.html` under **`internal/`** and **`demo/`** that exist only for Jekyll previews      | Replaced by MkDocs’ live‑server                     |
+
+*(Markdown, images, Wasm bundles and the whole `pkg/` tree are kept – they’re still valid static assets.)*
+
+---
+
+## 2  Files & folders to **move / rename**
+
+| From                                  | To                | Rationale                                           |
+| ------------------------------------- | ----------------- | --------------------------------------------------- |
+| `docs/**` **(all remaining content)** | `docs-src/**`     | Keeps Markdown sources separate from the built site |
+| Any custom CSS/JS under `docs/assets` | `docs-src/assets` | MkDocs will copy them as‑is                         |
+
+> **Tip:** after the move, run `git add -A && git mv docs docs-src` so history is preserved.
+
+---
+
+## 3  Files to **create**
+
+### 3.1 `mkdocs.yml` (at repo root)
+
+```yaml
+site_name: Vexy JSON
+site_url: https://vexyart.github.io/vexy-json
+site_description: Lenient and tolerant JSON parser in Rust
+repo_url: https://github.com/vexyart/vexy-json
+repo_name: vexyart/vexy-json
+
+docs_dir: docs-src        # <— points to moved sources
+site_dir: docs            # <— rendered HTML overwrites /docs
+use_directory_urls: true
+
+theme:
+  name: material           # MkDocs Material :contentReference[oaicite:1]{index=1}
+  logo: assets/images/flamegraph.svg
+  palette:
+    - scheme: slate        # dark by default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+    - scheme: default      # light
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+  features:
+    - navigation.tabs
+    - content.code.copy    # copy‑to‑clipboard button
+
+plugins:                   # install with pip – see §4
+  - search
+  - awesome-nav            # auto‑nav plugin :contentReference[oaicite:2]{index=2}
+  - nav-weight             # weight plugin :contentReference[oaicite:3]{index=3}
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - footnotes
+  - tables
+  - attr_list
+  - def_list
+  - pymdownx.extra
+  - pymdownx.highlight
+```
+
+### 3.2 `.github/workflows/docs.yml`
+
+```yaml
+name: Build & deploy MkDocs
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write      # allow committing built site
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: |
+          pip install \
+            mkdocs-material \
+            mkdocs-awesome-nav \
+            mkdocs-nav-weight         # :contentReference[oaicite:4]{index=4}
+      - run: mkdocs build --strict --config-file mkdocs.yml --site-dir docs
+      - run: touch docs/.nojekyll      # bypass GH Pages Jekyll :contentReference[oaicite:5]{index=5}
+      - name: Commit & push to main/docs
+        run: |
+          git config user.name  github-actions
+          git config user.email github-actions@github.com
+          git add docs
+          git commit -m "docs: automated MkDocs build 📚" || echo "No changes"
+          git push
+```
+
+*The job never touches `gh-pages`; Pages keeps using **main / docs** (GitHub permits that source) ([GitHub Docs][1]).*
+
+### 3.3 `requirements-docs.txt` (optional convenience)
+
+```
+mkdocs-material
+mkdocs-awesome-nav
+mkdocs-nav-weight
+```
+
+---
+
+## 4  Front‑matter cleanup script
+
+MkDocs supports YAML metadata but **keys must be lower‑case** and unknown keys are silently dropped ([MkDocs][2]).
+If existing files start with Jekyll layouts like:
+
+```yaml
+---
+layout: page
+title: …
+weight: 10
+---
+```
+
+run once:
+
+```bash
+find docs-src -name '*.md' | while read -r f; do
+  # keep only "weight" and other MkDocs‑friendly keys
+  sed -i '/^---$/,/^---$/{
+            /layout:/d
+            s/^title:/nav_title:/
+          }' "$f"
+done
+```
+
+*(Or just delete the front‑matter completely if you don’t need `weight`.)*
+`mkdocs-nav-weight` will respect the `weight:` values you keep ([GitHub][3]).
+
+---
+
+## 5  Local developer experience
+
+```bash
+pip install -r requirements-docs.txt   # one‑time :contentReference[oaicite:9]{index=9}
+mkdocs serve                           # hot‑reload preview :contentReference[oaicite:10]{index=10}
+```
+
+Material’s live server reloads instantly as you edit files.
+
+---
+
+## 6  GitHub Pages deployment flow explained
+
+1. Workflow builds the site with `mkdocs build` (exports to `docs/`).
+2. It commits the new HTML into the same branch.
+3. The `.nojekyll` file prevents the Pages infrastructure from re‑running Jekyll, so the HTML is served verbatim ([GitHub Docs][4]).
+
+If you ever decide you’d rather keep sources and output separated, replace the last two steps with `mkdocs gh-deploy --force --clean` to push into `gh-pages` automatically ([MkDocs][5], [MkDocs][6]).
+
+---
+
+## 7  Edge‑case notes & gotchas
+
+* **Assets paths** – Nothing changes; relative links like `![logo](assets/images/flamegraph.svg)` still work because MkDocs copies the `assets/` directory verbatim.
+* **Wasm MIME types** – MkDocs Material doesn’t touch response headers, but GitHub Pages already sends `application/wasm` for `.wasm` files, so `_headers` can be deleted ([GitHub Docs][1]).
+* **Dark‑mode palette** – the palette section above uses Material’s auto light/dark switch ([squidfunk.github.io][7]).
+* **Large HTML test benches** (`internal/debug/*.html`) – If you keep them, add `exclude:` patterns in `mkdocs.yml` or mark them `headless: true` so they don’t clutter navigation (supported by `nav-weight`) ([GitHub][3]).
+
+---
+
+## 8  Migration checklist (commit order)
+
+1. **Move** `docs/` ➜ `docs-src/`; commit.
+2. **Delete** Jekyll artefacts; commit.
+3. **Add** `mkdocs.yml`, workflow, requirements file; commit.
+4. **Run** front‑matter cleanup; commit.
+5. Push to `main`. Wait for the workflow to finish, then browse **[https://vexyart.github.io/vexy-json/](https://vexyart.github.io/vexy-json/)** – the new MkDocs Material site is live.
+
+---
+
+## 9  Reference snippets & docs consulted
+
+Material install ([squidfunk.github.io][8]) • Color schemes ([squidfunk.github.io][7]) • Awesome‑nav install & docs ([lukasgeiter.github.io][9]) • Nav‑weight usage ([GitHub][3]) • MkDocs CLI (`build`, `serve`, `gh-deploy`) ([MkDocs][5]) • Publishing with GitHub Actions ([squidfunk.github.io][10]) • Pages folder source rules ([GitHub Docs][1]) • `.nojekyll` rationale ([The GitHub Blog][11]) • Alternative “gh‑deploy” flow ([MkDocs][6]) • MkDocs front‑matter semantics ([MkDocs][2])
+
+You now have a **minimal‑viable yet fully automated** MkDocs Material setup that slots straight into your existing GitHub Pages workflow. Happy documenting!
+
+[1]: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site "Configuring a publishing source for your GitHub Pages site - GitHub Docs"
+[2]: https://www.mkdocs.org/user-guide/writing-your-docs/?utm_source=chatgpt.com "Writing Your Docs - MkDocs"
+[3]: https://github.com/shu307/mkdocs-nav-weight "GitHub - shu307/mkdocs-nav-weight: A simple mkdocs plugin, enables to organize Navigation in a more markdownic way."
+[4]: https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll?utm_source=chatgpt.com "About GitHub Pages and Jekyll - GitHub Docs"
+[5]: https://www.mkdocs.org/user-guide/cli/ "Command Line Interface - MkDocs"
+[6]: https://www.mkdocs.org/user-guide/deploying-your-docs/?utm_source=chatgpt.com "Deploying Your Docs - MkDocs"
+[7]: https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/?utm_source=chatgpt.com "Changing the colors - Material for MkDocs - GitHub Pages"
+[8]: https://squidfunk.github.io/mkdocs-material/getting-started/?utm_source=chatgpt.com "Installation - Material for MkDocs - GitHub Pages"
+[9]: https://lukasgeiter.github.io/mkdocs-awesome-nav "Getting Started - Awesome Nav for MkDocs"
+[10]: https://squidfunk.github.io/mkdocs-material/publishing-your-site/ "Publishing your site - Material for MkDocs"
+[11]: https://github.blog/news-insights/bypassing-jekyll-on-github-pages/?utm_source=chatgpt.com "Bypassing Jekyll on GitHub Pages"

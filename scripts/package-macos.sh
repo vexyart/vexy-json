@@ -1,6 +1,6 @@
 #!/bin/bash
 # this_file: scripts/package-macos.sh
-# Package vexy_json for macOS as a .pkg inside a .dmg
+# Package vexy-json for macOS as a .pkg inside a .dmg
 
 set -e
 
@@ -13,7 +13,7 @@ BUILD_DIR="target/macos-package"
 PKG_NAME="${BINARY_NAME}-${VERSION}.pkg"
 DMG_NAME="${BINARY_NAME}-${VERSION}-macos.dmg"
 
-echo "Building vexy_json v${VERSION} for macOS..."
+echo "Building vexy-json v${VERSION} for macOS..."
 
 # Clean and create build directory
 rm -rf "${BUILD_DIR}"
@@ -23,7 +23,7 @@ mkdir -p "${BUILD_DIR}/dmg"
 
 # Build release binary
 echo "Building release binary..."
-cargo build --release
+cargo build --release -p vexy-json-cli --bin vexy-json
 
 # Copy binary to package root
 cp "target/release/${BINARY_NAME}" "${BUILD_DIR}/root${INSTALL_LOCATION}/"
@@ -89,7 +89,7 @@ cat > "${BUILD_DIR}/dmg/README.txt" << EOF
 vexy-json ${VERSION} for macOS
 ========================
 
-A forgiving JSON parser - Rust port of jsonic
+A forgiving JSON parser with relaxed syntax support
 
 Installation:
 1. Double-click on ${PKG_NAME} to install

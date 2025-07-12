@@ -1,0 +1,2775 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Lenient and tolerant JSON parser in Rust">
+      
+      
+      
+        <link rel="canonical" href="https://vexyart.github.io/vexy-json/user/guides/transform/">
+      
+      
+        <link rel="prev" href="../migration/">
+      
+      
+        <link rel="next" href="../troubleshooting/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>JSON Transformation - Vexy JSON</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#json-transformation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Vexy JSON" class="md-header__button md-logo" aria-label="Vexy JSON" data-md-component="logo">
+      
+  <img src="../../../assets/images/flamegraph.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Vexy JSON
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              JSON Transformation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/vexyart/vexy-json" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    vexyart/vexy-json
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Vexy JSON Documentation
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../dev/" class="md-tabs__link">
+          
+  
+  Dev
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../internal/naming-unification-plan/" class="md-tabs__link">
+          
+  
+  Internal
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  User
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../wasm/npm-package/" class="md-tabs__link">
+          
+  
+  Wasm
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Vexy JSON" class="md-nav__button md-logo" aria-label="Vexy JSON" data-md-component="logo">
+      
+  <img src="../../../assets/images/flamegraph.svg" alt="logo">
+
+    </a>
+    Vexy JSON
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/vexyart/vexy-json" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    vexyart/vexy-json
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vexy JSON Documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Dev
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Dev
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Developer Documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/benchmarks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Benchmark Results
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/build-process/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Status Dashboard
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing to vexy_json
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/developer-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Developer Guide for Extending the vexy_json Web Tool
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/development/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/feedback/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Feedback &amp; Support
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/packaging-macos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    macOS Packaging Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/plugin-development/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vexy JSON Plugin Development Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/plugin-registry/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vexy JSON Plugin Registry
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/release-process/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Release Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_13" id="__nav_2_13_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Design
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_13">
+            <span class="md-nav__icon md-icon"></span>
+            Design
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/design/cli-enhancements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI Enhancements Design for vexy_json
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/design/python-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python API Design for vexy_json
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Internal
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Internal
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/naming-unification-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Naming Unification Plan for Vexy JSON
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/PLAN/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    this_file: docs/internal/TODO.md
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/TODO/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    this_file: docs/internal/TODO.md
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/WORK/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    this_file: docs/internal/WORK.md
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/development/agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AI Agent Development Guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/development/distribution-builds/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    vexy_json Distribution Build Scripts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/development/gemini/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gemini Development Guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/development/implementation-summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Task Implementation Summary - vexy_json WebAssembly &amp; Feature Verification
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/development/lean-minimalization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LEAN.md
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/development/RELEASE_CANDIDATE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vexy JSON v2.0-RC1 Release Candidate
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/development/RELEASE_CHECKLIST/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vexy JSON Release Checklist
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/development/RELEASE_PROCESS/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vexy JSON Release Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/development/RELEASE_v2.0.0_SUMMARY/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vexy JSON v2.0.0 Release Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/development/refactor-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REFACTOR.md – Authoring Brief (Revised for Lean &amp; Refactor Principles)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Drafts
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            Drafts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/drafts/publication-ready/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🚀 vexy_json v1.1.0 - Ready for Publication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/drafts/refactor-prompt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Refactor prompt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../internal/drafts/work-progress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Work progress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    User
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            User
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User Documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Features
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vexy JSON Features Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Usage Guide v2.0.0
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Api
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            Api
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/python-bindings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python Bindings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/rust/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference v2.0.0
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/streaming-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Streaming Parser API Documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/wasm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WebAssembly (WASM) API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5_5" id="__nav_4_5_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            Python
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/python/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    vexy_json - Forgiving JSON Parser for Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../json-repair/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JSON Repair
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Migration Guide: vexy_json v2.0.0
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    JSON Transformation
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    JSON Transformation
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#json-normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      JSON Normalization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JSON Normalization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalization-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Normalization Options
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specialized-normalizers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specialized Normalizers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specialized Normalizers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#canonical-normalizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Canonical Normalizer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cleanup-normalizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cleanup Normalizer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ast-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      AST Optimization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AST Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optimization Features
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optimization Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#string-interning" class="md-nav__link">
+    <span class="md-ellipsis">
+      String Interning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#number-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Number Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#container-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Container Optimization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specialized-optimizers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specialized Optimizers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specialized Optimizers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memory-optimizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory Optimizer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-optimizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Optimizer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optimization Statistics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chaining-transformations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chaining Transformations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-transformation-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Transformation Pipeline
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to Use Normalization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to Use Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Handling
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-with-other-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration with Other Features
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration with Other Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#with-parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      With Parsing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      With Streaming
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/release-notes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    vexy_json v2.0.0 Release Notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Wasm
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Wasm
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../wasm/npm-package/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    @twardoch/vexy_json-wasm
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#json-normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      JSON Normalization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JSON Normalization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalization-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Normalization Options
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specialized-normalizers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specialized Normalizers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specialized Normalizers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#canonical-normalizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Canonical Normalizer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cleanup-normalizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cleanup Normalizer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ast-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      AST Optimization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AST Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optimization Features
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optimization Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#string-interning" class="md-nav__link">
+    <span class="md-ellipsis">
+      String Interning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#number-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Number Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#container-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Container Optimization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specialized-optimizers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specialized Optimizers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specialized Optimizers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memory-optimizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory Optimizer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-optimizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Optimizer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optimization Statistics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chaining-transformations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chaining Transformations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-transformation-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Transformation Pipeline
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to Use Normalization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to Use Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Handling
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-with-other-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration with Other Features
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration with Other Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#with-parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      With Parsing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      With Streaming
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="json-transformation">JSON Transformation<a class="headerlink" href="#json-transformation" title="Permanent link">&para;</a></h1>
+<p>The Vexy JSON library provides powerful JSON transformation capabilities through its <code>transform</code> module. This module includes JSON normalization and AST optimization features.</p>
+<h2 id="json-normalization">JSON Normalization<a class="headerlink" href="#json-normalization" title="Permanent link">&para;</a></h2>
+<p>The JSON normalizer provides standardized JSON formatting with various normalization options.</p>
+<h3 id="basic-usage">Basic Usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::</span><span class="n">transform</span><span class="p">::{</span><span class="n">normalize</span><span class="p">,</span><span class="w"> </span><span class="n">normalize_with_options</span><span class="p">,</span><span class="w"> </span><span class="n">NormalizerOptions</span><span class="p">};</span>
+
+<span class="c1">// Basic normalization with default options</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">r#&quot;{&quot;b&quot;: 2, &quot;a&quot;: 1, &quot;c&quot;: null}&quot;#</span><span class="p">;</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">normalized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normalize</span><span class="p">(</span><span class="n">json</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="c1">// Result: {&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: null}</span>
+
+<span class="c1">// Custom normalization options</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NormalizerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">sort_keys</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">remove_null_values</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">remove_empty_containers</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="o">..</span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">()</span>
+<span class="p">};</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">normalized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normalize_with_options</span><span class="p">(</span><span class="n">json</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="c1">// Result: {&quot;a&quot;: 1, &quot;b&quot;: 2}</span>
+</code></pre></div>
+<h3 id="normalization-options">Normalization Options<a class="headerlink" href="#normalization-options" title="Permanent link">&para;</a></h3>
+<p>The <code>NormalizerOptions</code> struct provides fine-grained control over normalization:</p>
+<ul>
+<li><code>sort_keys</code>: Sort object keys alphabetically</li>
+<li><code>remove_null_values</code>: Remove null values from objects</li>
+<li><code>remove_empty_containers</code>: Remove empty objects and arrays</li>
+<li><code>normalize_numbers</code>: Convert floats to integers when possible</li>
+<li><code>prefer_integers</code>: Prefer integer representation for whole numbers</li>
+<li><code>trim_strings</code>: Trim whitespace from string values</li>
+<li><code>normalize_string_case</code>: Convert strings to lowercase</li>
+<li><code>deduplicate_arrays</code>: Remove duplicate values from arrays</li>
+<li><code>max_depth</code>: Maximum recursion depth for nested structures</li>
+</ul>
+<h3 id="specialized-normalizers">Specialized Normalizers<a class="headerlink" href="#specialized-normalizers" title="Permanent link">&para;</a></h3>
+<h4 id="canonical-normalizer">Canonical Normalizer<a class="headerlink" href="#canonical-normalizer" title="Permanent link">&para;</a></h4>
+<p>Produces deterministic JSON output suitable for hashing and comparison:</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::</span><span class="n">transform</span><span class="p">::</span><span class="n">CanonicalNormalizer</span><span class="p">;</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="n">normalizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CanonicalNormalizer</span><span class="p">::</span><span class="n">new</span><span class="p">();</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">canonical</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normalizer</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">json</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="cleanup-normalizer">Cleanup Normalizer<a class="headerlink" href="#cleanup-normalizer" title="Permanent link">&para;</a></h4>
+<p>Removes unnecessary elements and optimizes for size:</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::</span><span class="n">transform</span><span class="p">::</span><span class="n">CleanupNormalizer</span><span class="p">;</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="n">normalizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CleanupNormalizer</span><span class="p">::</span><span class="n">new</span><span class="p">();</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">cleaned</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normalizer</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">json</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+</code></pre></div>
+<h2 id="ast-optimization">AST Optimization<a class="headerlink" href="#ast-optimization" title="Permanent link">&para;</a></h2>
+<p>The AST optimizer improves JSON structure performance through various optimization techniques.</p>
+<h3 id="basic-usage_1">Basic Usage<a class="headerlink" href="#basic-usage_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::</span><span class="n">transform</span><span class="p">::{</span><span class="n">optimize</span><span class="p">,</span><span class="w"> </span><span class="n">optimize_with_options</span><span class="p">,</span><span class="w"> </span><span class="n">OptimizerOptions</span><span class="p">};</span>
+
+<span class="c1">// Basic optimization with default options</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">r#&quot;{&quot;count&quot;: 42.0, &quot;items&quot;: [1, 2, 3]}&quot;#</span><span class="p">;</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">optimized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">json</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="c1">// Numbers are optimized, strings may be interned</span>
+
+<span class="c1">// Custom optimization options</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OptimizerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">intern_strings</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">min_intern_length</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">    </span><span class="n">min_intern_count</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">optimize_numbers</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">remove_empty_containers</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="o">..</span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">()</span>
+<span class="p">};</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">optimized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimize_with_options</span><span class="p">(</span><span class="o">&amp;</span><span class="n">json</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+</code></pre></div>
+<h3 id="optimization-features">Optimization Features<a class="headerlink" href="#optimization-features" title="Permanent link">&para;</a></h3>
+<h4 id="string-interning">String Interning<a class="headerlink" href="#string-interning" title="Permanent link">&para;</a></h4>
+<p>Reduces memory usage by deduplicating repeated strings:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OptimizerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">intern_strings</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">min_intern_length</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">    </span><span class="c1">// Only intern strings &gt;= 10 chars</span>
+<span class="w">    </span><span class="n">min_intern_count</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">      </span><span class="c1">// Only intern strings appearing &gt;= 3 times</span>
+<span class="w">    </span><span class="o">..</span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">()</span>
+<span class="p">};</span>
+</code></pre></div>
+<h4 id="number-optimization">Number Optimization<a class="headerlink" href="#number-optimization" title="Permanent link">&para;</a></h4>
+<p>Converts floats to integers when possible:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Input: {&quot;price&quot;: 19.0, &quot;count&quot;: 42.5}</span>
+<span class="c1">// Output: {&quot;price&quot;: 19, &quot;count&quot;: 42.5}</span>
+</code></pre></div>
+<h4 id="container-optimization">Container Optimization<a class="headerlink" href="#container-optimization" title="Permanent link">&para;</a></h4>
+<p>Optimizes small objects and arrays:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OptimizerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">optimize_small_objects</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">max_small_object_size</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">    </span><span class="n">collapse_single_arrays</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">remove_empty_containers</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="o">..</span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">()</span>
+<span class="p">};</span>
+</code></pre></div>
+<h3 id="specialized-optimizers">Specialized Optimizers<a class="headerlink" href="#specialized-optimizers" title="Permanent link">&para;</a></h3>
+<h4 id="memory-optimizer">Memory Optimizer<a class="headerlink" href="#memory-optimizer" title="Permanent link">&para;</a></h4>
+<p>Optimizes for minimal memory usage:</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::</span><span class="n">transform</span><span class="p">::</span><span class="n">MemoryOptimizer</span><span class="p">;</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="n">optimized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MemoryOptimizer</span><span class="p">::</span><span class="n">minimize_memory</span><span class="p">(</span><span class="o">&amp;</span><span class="n">json</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+</code></pre></div>
+<h4 id="performance-optimizer">Performance Optimizer<a class="headerlink" href="#performance-optimizer" title="Permanent link">&para;</a></h4>
+<p>Optimizes for maximum performance:</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::</span><span class="n">transform</span><span class="p">::</span><span class="n">PerformanceOptimizer</span><span class="p">;</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="n">optimized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PerformanceOptimizer</span><span class="p">::</span><span class="n">maximize_performance</span><span class="p">(</span><span class="o">&amp;</span><span class="n">json</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+</code></pre></div>
+<h3 id="optimization-statistics">Optimization Statistics<a class="headerlink" href="#optimization-statistics" title="Permanent link">&para;</a></h3>
+<p>Track optimization effectiveness:</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::</span><span class="n">transform</span><span class="p">::</span><span class="n">AstOptimizer</span><span class="p">;</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">optimizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AstOptimizer</span><span class="p">::</span><span class="n">new</span><span class="p">();</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">optimized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimizer</span><span class="p">.</span><span class="n">optimize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">json</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimizer</span><span class="p">.</span><span class="n">stats</span><span class="p">();</span>
+
+<span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Interned strings: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">stats</span><span class="p">.</span><span class="n">interner_stats</span><span class="p">.</span><span class="n">interned_strings</span><span class="p">);</span>
+<span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Saved bytes: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">stats</span><span class="p">.</span><span class="n">interner_stats</span><span class="p">.</span><span class="n">saved_bytes</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="advanced-usage">Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permanent link">&para;</a></h2>
+<h3 id="chaining-transformations">Chaining Transformations<a class="headerlink" href="#chaining-transformations" title="Permanent link">&para;</a></h3>
+<p>Combine normalization and optimization:</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::{</span><span class="n">parse</span><span class="p">,</span><span class="w"> </span><span class="n">transform</span><span class="p">::{</span><span class="n">normalize</span><span class="p">,</span><span class="w"> </span><span class="n">optimize</span><span class="p">}};</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">r#&quot;{&quot;z&quot;: 1.0, &quot;a&quot;: 2.0, &quot;b&quot;: null}&quot;#</span><span class="p">;</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse</span><span class="p">(</span><span class="n">json</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">normalized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normalize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">optimized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">normalized</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+</code></pre></div>
+<h3 id="custom-transformation-pipeline">Custom Transformation Pipeline<a class="headerlink" href="#custom-transformation-pipeline" title="Permanent link">&para;</a></h3>
+<p>Create custom transformation pipelines:</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::</span><span class="n">transform</span><span class="p">::{</span><span class="n">NormalizerOptions</span><span class="p">,</span><span class="w"> </span><span class="n">OptimizerOptions</span><span class="p">};</span>
+
+<span class="k">fn</span><span class="w"> </span><span class="nf">custom_transform</span><span class="p">(</span><span class="n">json</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nb">Result</span><span class="o">&lt;</span><span class="nb">String</span><span class="p">,</span><span class="w"> </span><span class="n">Error</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// First normalize</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">norm_options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NormalizerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sort_keys</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="n">remove_null_values</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="o">..</span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">()</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">normalized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normalize_with_options</span><span class="p">(</span><span class="n">json</span><span class="p">,</span><span class="w"> </span><span class="n">norm_options</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Then optimize</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">opt_options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OptimizerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">intern_strings</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="n">optimize_numbers</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="o">..</span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">()</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">optimized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimize_with_options</span><span class="p">(</span><span class="o">&amp;</span><span class="n">normalized</span><span class="p">,</span><span class="w"> </span><span class="n">opt_options</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nb">Ok</span><span class="p">(</span><span class="n">optimized</span><span class="p">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="performance-considerations">Performance Considerations<a class="headerlink" href="#performance-considerations" title="Permanent link">&para;</a></h2>
+<h3 id="when-to-use-normalization">When to Use Normalization<a class="headerlink" href="#when-to-use-normalization" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Data deduplication</strong>: When you need consistent JSON formatting</li>
+<li><strong>Comparison</strong>: When comparing JSON structures</li>
+<li><strong>Storage</strong>: When minimizing storage space</li>
+<li><strong>Hashing</strong>: When creating content hashes</li>
+</ul>
+<h3 id="when-to-use-optimization">When to Use Optimization<a class="headerlink" href="#when-to-use-optimization" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Memory-constrained environments</strong>: Use MemoryOptimizer</li>
+<li><strong>Performance-critical applications</strong>: Use PerformanceOptimizer</li>
+<li><strong>Large JSON datasets</strong>: String interning provides significant benefits</li>
+<li><strong>Repeated processing</strong>: Optimization overhead pays off over time</li>
+</ul>
+<h3 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Profile before optimizing</strong>: Measure actual performance impact</li>
+<li><strong>Choose appropriate options</strong>: Not all optimizations help every use case</li>
+<li><strong>Consider trade-offs</strong>: Memory savings vs. processing time</li>
+<li><strong>Test thoroughly</strong>: Ensure optimizations don't change semantics</li>
+</ol>
+<h2 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h2>
+<p>Both normalization and optimization can fail:</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::</span><span class="n">transform</span><span class="p">::</span><span class="n">normalize</span><span class="p">;</span>
+
+<span class="k">match</span><span class="w"> </span><span class="n">normalize</span><span class="p">(</span><span class="n">json</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">Ok</span><span class="p">(</span><span class="n">normalized</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Success: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">normalized</span><span class="p">),</span>
+<span class="w">    </span><span class="nb">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="fm">eprintln!</span><span class="p">(</span><span class="s">&quot;Normalization failed: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">),</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Common error scenarios:
+- Invalid JSON input
+- Circular references (when max_depth is exceeded)
+- Memory allocation failures
+- Serialization errors</p>
+<h2 id="integration-with-other-features">Integration with Other Features<a class="headerlink" href="#integration-with-other-features" title="Permanent link">&para;</a></h2>
+<h3 id="with-parsing">With Parsing<a class="headerlink" href="#with-parsing" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::{</span><span class="n">parse_with_options</span><span class="p">,</span><span class="w"> </span><span class="n">transform</span><span class="p">::</span><span class="n">normalize</span><span class="p">,</span><span class="w"> </span><span class="n">ParserOptions</span><span class="p">};</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ParserOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">allow_comments</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">allow_trailing_commas</span><span class="p">:</span><span class="w"> </span><span class="nc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="o">..</span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">()</span>
+<span class="p">};</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="n">parsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse_with_options</span><span class="p">(</span><span class="n">json</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">normalized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normalize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">parsed</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="with-streaming">With Streaming<a class="headerlink" href="#with-streaming" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">vexy_json_core</span><span class="p">::{</span><span class="n">streaming</span><span class="p">::</span><span class="n">parse_streaming</span><span class="p">,</span><span class="w"> </span><span class="n">transform</span><span class="p">::</span><span class="n">optimize</span><span class="p">};</span>
+
+<span class="k">for</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">parse_streaming</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span><span class="o">?</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">optimized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimize</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="o">?</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Process optimized value</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This transformation system provides powerful tools for JSON processing while maintaining the flexibility and performance that Vexy JSON is known for.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>

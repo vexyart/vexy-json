@@ -161,7 +161,7 @@ impl<'a> LazyParser<'a> {
                     _ => {
                         return Err(Error::Expected {
                             expected: "comma or ]".to_string(),
-                            found: format!("{:?}", token),
+                            found: format!("{token:?}"),
                             position: span.start,
                         });
                     }

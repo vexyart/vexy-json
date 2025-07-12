@@ -255,7 +255,7 @@ impl TerminalFormatter {
         if !self.colors_enabled {
             let spaces = " ".repeat(column.saturating_sub(1));
             let arrows = "^".repeat(length.max(1));
-            return format!("     | {}{}", spaces, arrows);
+            return format!("     | {spaces}{arrows}");
         }
 
         let spaces = " ".repeat(column.saturating_sub(1));
@@ -272,9 +272,9 @@ impl TerminalFormatter {
 
     /// Formats a line number with appropriate styling.
     pub fn format_line_number(&self, line_num: usize) -> String {
-        let line_str = format!("{:4}", line_num);
+        let line_str = format!("{line_num:4}");
         if !self.colors_enabled {
-            return format!("{} | ", line_str);
+            return format!("{line_str} | ");
         }
 
         format!("{} | ", self.colorize(&line_str, ColorScheme::LineNumbers))
@@ -283,24 +283,24 @@ impl TerminalFormatter {
     /// Formats an error code with appropriate styling.
     pub fn format_error_code(&self, code: &str) -> String {
         if !self.colors_enabled {
-            return format!("[{}]", code);
+            return format!("[{code}]");
         }
 
-        let formatted_code = format!("[{}]", code);
+        let formatted_code = format!("[{code}]");
         self.bold_colorize(&formatted_code, ColorScheme::ErrorCode)
     }
 
     /// Formats a suggestion with appropriate styling.
     pub fn format_suggestion(&self, index: usize, suggestion: &str) -> String {
         if !self.colors_enabled {
-            return format!("  {}. {}", index, suggestion);
+            return format!("  {index}. {suggestion}");
         }
 
-        let number = format!("{}.", index);
+        let number = format!("{index}.");
         let colored_number = self.colorize(&number, ColorScheme::Info);
         let colored_suggestion = self.colorize(suggestion, ColorScheme::Context);
 
-        format!("  {} {}", colored_number, colored_suggestion)
+        format!("  {colored_number} {colored_suggestion}")
     }
 
     /// Returns whether colors are currently enabled.
@@ -335,7 +335,7 @@ impl TerminalUtils {
     pub fn key_value(formatter: &TerminalFormatter, key: &str, value: &str) -> String {
         let colored_key = formatter.colorize(key, ColorScheme::Info);
         let colored_value = formatter.colorize(value, ColorScheme::Context);
-        format!("{}: {}", colored_key, colored_value)
+        format!("{colored_key}: {colored_value}")
     }
 
     /// Formats a file path with appropriate styling.

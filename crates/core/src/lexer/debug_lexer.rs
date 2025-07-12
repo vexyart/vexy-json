@@ -105,8 +105,7 @@ impl<'a> DebugLexer<'a> {
                 } => {
                     writeln!(
                         &mut output,
-                        "[{:4}] {:>8}ns | ERROR at {}: {}",
-                        i, timestamp_ns, position, error
+                        "[{i:4}] {timestamp_ns:>8}ns | ERROR at {position}: {error}"
                     )
                     .unwrap();
                 }
@@ -116,8 +115,7 @@ impl<'a> DebugLexer<'a> {
                 } => {
                     writeln!(
                         &mut output,
-                        "[{:4}] {:>8}ns | State: {}",
-                        i, timestamp_ns, description
+                        "[{i:4}] {timestamp_ns:>8}ns | State: {description}"
                     )
                     .unwrap();
                 }

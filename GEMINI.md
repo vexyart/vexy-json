@@ -1,6 +1,4 @@
 
-After every iteration, /report and mark completed items as done in @PLAN.md and @TODO.md. Then run `./build.sh` and then check the `./build_logs`. Then /work on items from @TODO.md consulting on @PLAN.md. Then review reflect refine revise, and then continue to /work on @PLAN.md and @TODO.md until every single item and issue has been fixed. Iterate iterate iterate! Do not stop, do not ask for confirmation. Work! When you're finishing one task or item, say "Wait, but..." and go on to the next task/item. It’s CRUCIAL that we get to a solution that BUILDS everything correctly!
-
 ## 1. Project Overview
 
 `vexy_json` is a forgiving JSON parser, a forgiving JSON parser. The project is officially named "Vexy JSON". The reference JavaScript implementation is located in the `ref/the reference implementation/` directory.

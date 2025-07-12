@@ -8,11 +8,11 @@ fn main() {
     let input1 = "{'name': 'Alice', 'age': 30, 'city': 'New York'}";
 
     println!("Example 1: Quote Repair");
-    println!("Input:  {}", input1);
+    println!("Input:  {input1}");
 
     match repairer.repair(input1) {
         Ok((repaired, strategies)) => {
-            println!("Output: {}", repaired);
+            println!("Output: {repaired}");
             println!("Repairs applied: {}", strategies.len());
             for strategy in strategies {
                 println!(
@@ -22,7 +22,7 @@ fn main() {
                 );
             }
         }
-        Err(e) => println!("Error: {}", e),
+        Err(e) => println!("Error: {e}"),
     }
     println!();
 
@@ -30,11 +30,11 @@ fn main() {
     let input2 = r#"{"count": "42", "price": "19.99", "active": "true"}"#;
 
     println!("Example 2: Type Coercion");
-    println!("Input:  {}", input2);
+    println!("Input:  {input2}");
 
     match repairer.repair(input2) {
         Ok((repaired, strategies)) => {
-            println!("Output: {}", repaired);
+            println!("Output: {repaired}");
             println!("Repairs applied: {}", strategies.len());
             for strategy in strategies {
                 println!(
@@ -44,7 +44,7 @@ fn main() {
                 );
             }
         }
-        Err(e) => println!("Error: {}", e),
+        Err(e) => println!("Error: {e}"),
     }
     println!();
 
@@ -56,7 +56,7 @@ fn main() {
     let input3 = "{name: 'Bob', items: [1 2 3]}";
 
     println!("Example 3: Repair Preview Mode");
-    println!("Input:  {}", input3);
+    println!("Input:  {input3}");
 
     match repairer_preview.preview_repairs(input3) {
         Ok(preview) => {
@@ -71,7 +71,7 @@ fn main() {
                 );
             }
         }
-        Err(e) => println!("Error: {}", e),
+        Err(e) => println!("Error: {e}"),
     }
     println!();
 
@@ -88,15 +88,15 @@ fn main() {
     let input4 = r#"{'price': "99.99", active: true}"#;
 
     println!("Example 4: Custom Type Coercion Rules");
-    println!("Input:  {}", input4);
+    println!("Input:  {input4}");
     println!("Rules:  Keep quoted numbers, fix quotes, quote keys");
 
     match custom_repairer.repair(input4) {
         Ok((repaired, _strategies)) => {
-            println!("Output: {}", repaired);
+            println!("Output: {repaired}");
             println!("Note: The quoted number '99.99' was preserved");
         }
-        Err(e) => println!("Error: {}", e),
+        Err(e) => println!("Error: {e}"),
     }
     println!();
 

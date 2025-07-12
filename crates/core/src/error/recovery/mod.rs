@@ -298,7 +298,7 @@ impl ErrorRecoveryAnalyzer {
                 "\\`" => "`",   // Backtick doesn't need escaping
                 _ => {
                     // Try to fix by doubling the backslash
-                    &format!("\\{}", escape_sequence)
+                    &format!("\\{escape_sequence}")
                 }
             };
 
@@ -449,7 +449,7 @@ impl ErrorRecoveryAnalyzer {
                 let hex_part = &unicode_escape[2..];
                 if hex_part.len() < 4 {
                     // Pad with zeros
-                    let padded = format!("\\u{:0>4}", hex_part);
+                    let padded = format!("\\u{hex_part:0>4}");
                     strategies.push(RecoveryStrategy::ReplaceText {
                         span,
                         replacement: padded,

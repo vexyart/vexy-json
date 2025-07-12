@@ -47,39 +47,6 @@ jobs:
             echo "✅ No known security vulnerabilities found"
           fi
 
-  audit-npm:
-    name: npm Security Audit
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Check jsonic reference
-        working-directory: ref/jsonic
-        run: |
-          # Install dependencies
-          npm ci
-          
-          # Run audit
-          npm audit --json > audit-report.json || true
-          
-          # Check for high or critical vulnerabilities
-          HIGH_VULNS=$(jq '.metadata.vulnerabilities.high // 0' audit-report.json)
-          CRITICAL_VULNS=$(jq '.metadata.vulnerabilities.critical // 0' audit-report.json)
-          
-          if [ $HIGH_VULNS -gt 0 ] || [ $CRITICAL_VULNS -gt 0 ]; then
-            echo "❌ High or critical vulnerabilities found in jsonic reference!"
-            npm audit
-            exit 1
-          else
-            echo "✅ No high or critical vulnerabilities in jsonic reference"
-          fi
-
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest

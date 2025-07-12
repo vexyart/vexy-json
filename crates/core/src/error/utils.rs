@@ -246,8 +246,8 @@ pub fn detect_repairs(original: &str, repaired: &str) -> Vec<RepairAction> {
                 },
                 position: 0, // Would need actual position tracking in full implementation
                 original: bracket_char.to_string(),
-                replacement: format!("{} (count: {} → {})", bracket_char, orig_count, rep_count),
-                description: format!("Balanced {} brackets", bracket_char),
+                replacement: format!("{bracket_char} (count: {orig_count} → {rep_count})"),
+                description: format!("Balanced {bracket_char} brackets"),
             });
         }
     }
@@ -260,7 +260,7 @@ pub fn detect_repairs(original: &str, repaired: &str) -> Vec<RepairAction> {
                 position: 0,
                 original: String::new(),
                 replacement: bracket_char.to_string(),
-                description: format!("Added {} brackets", bracket_char),
+                description: format!("Added {bracket_char} brackets"),
             });
         }
     }

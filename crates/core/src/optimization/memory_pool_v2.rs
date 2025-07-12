@@ -333,7 +333,7 @@ mod tests {
 
         // Allocate many small items
         for i in 0..100 {
-            let s = format!("{}", i);
+            let s = format!("{i}");
             pool.allocate_str(&s);
         }
 

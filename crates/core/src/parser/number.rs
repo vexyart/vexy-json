@@ -22,7 +22,7 @@ pub(super) fn parse_number_token(original_input: &str, span: Span) -> Result<Val
     // Normalize number format for Rust's parser
     let normalized_number = if has_trailing_decimal {
         // Convert "1." to "1.0" for Rust's parser
-        format!("{}0", number_slice)
+        format!("{number_slice}0")
     } else {
         number_slice.to_string()
     };

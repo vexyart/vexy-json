@@ -1,0 +1,198 @@
+---
+---
+
+// @import "just-the-docs";
+// Custom styles for vexy_json documentation site
+// This file extends the just-the-docs theme with custom styling
+
+// Import our tool-specific styles
+// @import "tool";
+
+// Custom color scheme refinements
+:root {
+  --vexy_json-primary: #0969da;
+  --vexy_json-secondary: #656d76;
+  --vexy_json-accent: #0550ae;
+  --vexy_json-success: #1a7f37;
+  --vexy_json-warning: #bf8700;
+  --vexy_json-danger: #cf222e;
+}
+
+// Enhanced code blocks for JSON examples
+.language-json {
+  .highlight {
+    background-color: var(--code-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 16px;
+    margin: 16px 0;
+    
+    pre {
+      margin: 0;
+      background: transparent;
+    }
+  }
+}
+
+// Custom navigation enhancements
+.site-nav {
+  .nav-list {
+    .nav-list-item {
+      .nav-list-link {
+        &.active {
+          font-weight: 600;
+          color: var(--vexy_json-primary);
+        }
+      }
+    }
+  }
+}
+
+// Enhanced footer
+.site-footer {
+  border-top: 1px solid var(--border-color);
+  background-color: var(--body-background-color);
+  
+  .footer-content {
+    font-size: 14px;
+    color: var(--vexy_json-secondary);
+    
+    a {
+      color: var(--vexy_json-primary);
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Custom button styles
+.btn-vexy_json {
+  background-color: var(--vexy_json-primary);
+  border: 1px solid var(--vexy_json-primary);
+  color: white;
+  
+  &:hover {
+    background-color: var(--vexy_json-accent);
+    border-color: var(--vexy_json-accent);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
+  }
+}
+
+// Enhanced tables for API documentation
+.table-wrapper {
+  table {
+    th {
+      background-color: var(--code-background-color);
+      font-weight: 600;
+      color: var(--vexy_json-primary);
+    }
+    
+    td {
+      code {
+        background-color: var(--code-background-color);
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-size: 0.9em;
+      }
+    }
+  }
+}
+
+// Custom callouts and alerts
+.callout {
+  padding: 16px;
+  margin: 16px 0;
+  border-left: 4px solid;
+  border-radius: 0 6px 6px 0;
+  
+  &.callout-info {
+    background-color: rgba(9, 105, 218, 0.1);
+    border-left-color: var(--vexy_json-primary);
+    
+    .callout-title {
+      color: var(--vexy_json-primary);
+      font-weight: 600;
+    }
+  }
+  
+  &.callout-warning {
+    background-color: rgba(191, 135, 0, 0.1);
+    border-left-color: var(--vexy_json-warning);
+    
+    .callout-title {
+      color: var(--vexy_json-warning);
+      font-weight: 600;
+    }
+  }
+  
+  &.callout-success {
+    background-color: rgba(26, 127, 55, 0.1);
+    border-left-color: var(--vexy_json-success);
+    
+    .callout-title {
+      color: var(--vexy_json-success);
+      font-weight: 600;
+    }
+  }
+}
+
+// Performance optimizations
+.performance-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+  
+  .stat-card {
+    background: var(--code-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+    
+    .stat-value {
+      font-size: 2em;
+      font-weight: 700;
+      color: var(--vexy_json-primary);
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 0.9em;
+      color: var(--vexy_json-secondary);
+      margin-top: 4px;
+    }
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  :root {
+    --vexy_json-primary: #58a6ff;
+    --vexy_json-secondary: #8b949e;
+    --vexy_json-accent: #79c0ff;
+    --vexy_json-success: #3fb950;
+    --vexy_json-warning: #d29922;
+    --vexy_json-danger: #f85149;
+  }
+}
+
+// Print styles
+@media print {
+  .site-nav,
+  .aux-nav,
+  .site-footer {
+    display: none;
+  }
+  
+  .main-content {
+    max-width: none;
+    margin: 0;
+  }
+}
