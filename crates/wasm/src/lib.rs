@@ -29,6 +29,7 @@ pub fn parse_json(input: &str) -> Result<String, JsValue> {
 
 /// Parse a JSON/Vexy JSON string with custom options
 #[wasm_bindgen]
+#[allow(clippy::too_many_arguments)]
 pub fn parse_json_with_options(
     input: &str,
     allow_comments: bool,

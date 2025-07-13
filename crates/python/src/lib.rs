@@ -43,6 +43,7 @@ fn value_to_python(py: Python, value: &Value) -> PyResult<PyObject> {
 }
 
 /// Convert a Python object to a vexy_json Value
+#[allow(clippy::only_used_in_recursion)]
 fn python_to_value(py: Python, obj: &Bound<'_, PyAny>) -> PyResult<Value> {
     if obj.is_none() {
         Ok(Value::Null)
@@ -142,6 +143,7 @@ fn parse_json(py: Python, input: &str) -> PyResult<PyObject> {
     fast_repair = false,
     report_repairs = true
 ))]
+#[allow(clippy::too_many_arguments)]
 fn parse_with_options_py(
     py: Python,
     input: &str,
@@ -457,6 +459,7 @@ impl StreamingParser {
         fast_repair = false,
         report_repairs = true
     ))]
+    #[allow(clippy::too_many_arguments)]
     fn new(
         allow_comments: bool,
         allow_trailing_commas: bool,

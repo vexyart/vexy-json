@@ -261,12 +261,17 @@ run_tests() {
     # Cargo fmt check
     run_cmd "cargo fmt --all -- --check" "Check code formatting"
 
-    # Run fuzzing tests (quick run)
+    # Run fuzzing tests (quick run) - requires nightly toolchain
     if [[ -d "fuzz" ]]; then
-        log "Running fuzz tests (quick run)..."
-        cd fuzz
-        run_cmd "cargo fuzz list | head -3 | xargs -I {} timeout 30s cargo fuzz run {} || true" "Quick fuzz testing"
-        cd "$PROJECT_ROOT"
+        # Check if nightly toolchain is available
+        if rustc --version | grep -q "nightly"; then
+            log "Running fuzz tests (quick run)..."
+            cd fuzz
+            run_cmd "cargo fuzz list | head -3 | xargs -I {} timeout 30s cargo fuzz run {} || true" "Quick fuzz testing"
+            cd "$PROJECT_ROOT"
+        else
+            warning "Skipping fuzz tests (requires nightly Rust toolchain)"
+        fi
     fi
 
     # Build examples

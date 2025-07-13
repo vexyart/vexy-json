@@ -417,6 +417,7 @@ impl<R: Read> BufferedStreamingParser<R> {
     }
 
     /// Helper to add a value to its parent container.
+    #[allow(clippy::ptr_arg)]
     fn add_value_to_parent(
         &self,
         value_stack: &mut Vec<Value>,

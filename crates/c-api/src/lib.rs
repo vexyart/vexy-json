@@ -62,6 +62,18 @@ pub extern "C" fn vexy_json_version() -> *const c_char {
 }
 
 /// Parse JSON with default options
+///
+/// # Safety
+///
+/// This function is unsafe because it:
+/// - Dereferences a raw pointer (`input`)
+/// - Assumes `input` points to a valid null-terminated C string
+/// - Returns raw pointers that must be freed using `vexy_json_free_result`
+///
+/// The caller must ensure:
+/// - `input` is either null or points to a valid null-terminated UTF-8 string
+/// - The returned `VexyJsonParseResult` is eventually freed using `vexy_json_free_result`
+/// - The returned pointers in the result are not used after being freed
 #[no_mangle]
 pub unsafe extern "C" fn vexy_json_parse(input: *const c_char) -> VexyJsonParseResult {
     if input.is_null() {
@@ -102,6 +114,20 @@ pub unsafe extern "C" fn vexy_json_parse(input: *const c_char) -> VexyJsonParseR
 }
 
 /// Parse JSON with custom options
+///
+/// # Safety
+///
+/// This function is unsafe because it:
+/// - Dereferences raw pointers (`input` and `options`)
+/// - Assumes `input` points to a valid null-terminated C string
+/// - Assumes `options` (if non-null) points to a valid `VexyJsonParserOptions` struct
+/// - Returns raw pointers that must be freed using `vexy_json_free_result`
+///
+/// The caller must ensure:
+/// - `input` is either null or points to a valid null-terminated UTF-8 string
+/// - `options` is either null or points to a valid `VexyJsonParserOptions` struct
+/// - The returned `VexyJsonParseResult` is eventually freed using `vexy_json_free_result`
+/// - The returned pointers in the result are not used after being freed
 #[no_mangle]
 pub unsafe extern "C" fn vexy_json_parse_with_options(
     input: *const c_char,
@@ -151,6 +177,20 @@ pub unsafe extern "C" fn vexy_json_parse_with_options(
 }
 
 /// Parse JSON and get detailed information including repairs
+///
+/// # Safety
+///
+/// This function is unsafe because it:
+/// - Dereferences raw pointers (`input` and `options`)
+/// - Assumes `input` points to a valid null-terminated C string
+/// - Assumes `options` (if non-null) points to a valid `VexyJsonParserOptions` struct
+/// - Returns raw pointers that must be freed using `vexy_json_free_detailed_result`
+///
+/// The caller must ensure:
+/// - `input` is either null or points to a valid null-terminated UTF-8 string
+/// - `options` is either null or points to a valid `VexyJsonParserOptions` struct
+/// - The returned `VexyJsonDetailedResult` is eventually freed using `vexy_json_free_detailed_result`
+/// - The returned pointers in the result are not used after being freed
 #[no_mangle]
 pub unsafe extern "C" fn vexy_json_parse_detailed(
     input: *const c_char,
@@ -173,6 +213,19 @@ pub unsafe extern "C" fn vexy_json_parse_detailed(
 }
 
 /// Create a new parser instance
+///
+/// # Safety
+///
+/// This function is unsafe because it:
+/// - Dereferences a raw pointer (`options`) if non-null
+/// - Assumes `options` (if non-null) points to a valid `VexyJsonParserOptions` struct
+/// - Returns a raw pointer that must be freed using `vexy_json_parser_free`
+///
+/// The caller must ensure:
+/// - `options` is either null or points to a valid `VexyJsonParserOptions` struct
+/// - The returned parser pointer is eventually freed using `vexy_json_parser_free`
+/// - The returned parser pointer is not used after being freed
+/// - The returned parser pointer is not shared across threads without proper synchronization
 #[no_mangle]
 pub unsafe extern "C" fn vexy_json_parser_new(
     options: *const VexyJsonParserOptions,
@@ -191,6 +244,21 @@ pub unsafe extern "C" fn vexy_json_parser_new(
 }
 
 /// Parse JSON using a parser instance
+///
+/// # Safety
+///
+/// This function is unsafe because it:
+/// - Dereferences raw pointers (`parser` and `input`)
+/// - Assumes `parser` points to a valid `VexyJsonParser` instance created by `vexy_json_parser_new`
+/// - Assumes `input` points to a valid null-terminated C string
+/// - Returns raw pointers that must be freed using `vexy_json_free_result`
+///
+/// The caller must ensure:
+/// - `parser` is either null or points to a valid `VexyJsonParser` created by `vexy_json_parser_new`
+/// - `input` is either null or points to a valid null-terminated UTF-8 string
+/// - The parser has not been freed or moved
+/// - The returned `VexyJsonParseResult` is eventually freed using `vexy_json_free_result`
+/// - The returned pointers in the result are not used after being freed
 #[no_mangle]
 pub unsafe extern "C" fn vexy_json_parser_parse(
     parser: *mut VexyJsonParser,
@@ -242,6 +310,18 @@ pub unsafe extern "C" fn vexy_json_parser_parse(
 }
 
 /// Free a parser instance
+///
+/// # Safety
+///
+/// This function is unsafe because it:
+/// - Takes ownership of the raw pointer `parser`
+/// - Deallocates the memory pointed to by `parser`
+///
+/// The caller must ensure:
+/// - `parser` is either null or points to a valid `VexyJsonParser` created by `vexy_json_parser_new`
+/// - `parser` has not already been freed
+/// - `parser` is not used after this call
+/// - No other references to the parser exist
 #[no_mangle]
 pub unsafe extern "C" fn vexy_json_parser_free(parser: *mut VexyJsonParser) {
     if !parser.is_null() {
@@ -250,6 +330,18 @@ pub unsafe extern "C" fn vexy_json_parser_free(parser: *mut VexyJsonParser) {
 }
 
 /// Free a parse result
+///
+/// # Safety
+///
+/// This function is unsafe because it:
+/// - Takes ownership of the raw pointers in `result`
+/// - Deallocates the memory pointed to by `result.json` and `result.error`
+///
+/// The caller must ensure:
+/// - The pointers in `result` are either null or were returned by one of the parse functions
+/// - The pointers have not already been freed
+/// - The pointers are not used after this call
+/// - The result struct was obtained from `vexy_json_parse`, `vexy_json_parse_with_options`, or `vexy_json_parser_parse`
 #[no_mangle]
 pub unsafe extern "C" fn vexy_json_free_result(result: VexyJsonParseResult) {
     if !result.json.is_null() {
@@ -261,6 +353,19 @@ pub unsafe extern "C" fn vexy_json_free_result(result: VexyJsonParseResult) {
 }
 
 /// Free a detailed result
+///
+/// # Safety
+///
+/// This function is unsafe because it:
+/// - Takes ownership of the raw pointers in `result`
+/// - Deallocates the memory pointed to by `result.json`, `result.error`, and `result.repairs`
+///
+/// The caller must ensure:
+/// - The pointers in `result` are either null or were returned by `vexy_json_parse_detailed`
+/// - The pointers have not already been freed
+/// - The pointers are not used after this call
+/// - If `result.repairs` is non-null, it points to an array of `result.repair_count` elements
+/// - Each repair in the array has valid pointers that need to be freed
 #[no_mangle]
 pub unsafe extern "C" fn vexy_json_free_detailed_result(result: VexyJsonDetailedResult) {
     if !result.json.is_null() {

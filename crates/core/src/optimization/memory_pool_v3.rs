@@ -322,6 +322,7 @@ thread_local! {
 }
 
 /// Get or create the thread-local memory pool
+#[allow(clippy::arc_with_non_send_sync)]
 pub fn with_pool<F, R>(f: F) -> R
 where
     F: FnOnce(&MemoryPoolV3) -> R,
@@ -334,6 +335,7 @@ where
 }
 
 /// Scoped memory pool for localized allocations
+#[allow(clippy::arc_with_non_send_sync)]
 pub struct ScopedMemoryPoolV3 {
     pool: Arc<MemoryPoolV3>,
 }
@@ -346,6 +348,7 @@ impl Default for ScopedMemoryPoolV3 {
 
 impl ScopedMemoryPoolV3 {
     /// Create a new scoped pool
+    #[allow(clippy::arc_with_non_send_sync)]
     pub fn new() -> Self {
         ScopedMemoryPoolV3 {
             pool: Arc::new(MemoryPoolV3::new()),

@@ -29,6 +29,7 @@ impl SchemaValidationPlugin {
     }
 
     /// Validate a value against a schema
+    #[allow(clippy::only_used_in_recursion)]
     fn validate_against_schema(&self, value: &Value, schema: &Value, path: &str) -> Result<()> {
         if let Value::Object(schema_obj) = schema {
             // Check type
