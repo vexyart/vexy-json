@@ -99,6 +99,8 @@ All immediate fixes and improvements are complete. The project is in excellent s
 
 ## Future Development (Post-Release)
 
+**Note**: The items below are substantial feature development projects for future major releases (v1.6+), not bug fixes. Each would require significant architecture work and implementation time.
+
 ### Architecture Improvements
 
 - [ ] Complete the pattern-based error recovery system (currently stubbed)
