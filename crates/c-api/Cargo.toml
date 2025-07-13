@@ -1,6 +1,6 @@
 [package]
 name = "vexy-json-c-api"
-version = "1.5.3"
+version = "1.5.5-dev"
 authors = [ "Vexy JSON Contributors" ]
 edition = "2021"
 license = "MIT OR Apache-2.0"

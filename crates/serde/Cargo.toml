@@ -1,6 +1,6 @@
 [package]
 name = "vexy-json-serde"
-version = "1.5.3"
+version = "1.5.5-dev"
 edition = "2021"
 
 
