@@ -151,6 +151,9 @@ Project Structure:
 │   │   │   ├── 📄 parallel.rs
 │   │   │   ├── 📄 parallel_chunked.rs
 │   │   │   └── 📄 repair.rs
+│   │   ├── 📁 tests
+│   │   │   ├── 📄 error_recovery_test.rs
+│   │   │   └── 📄 streaming_parser_test.rs
 │   │   ├── 📄 BENCHMARK_RESULTS.md
 │   │   ├── 📄 BENCHMARK_RESULTS_V2.md
 │   │   ├── 📄 build.rs
@@ -261,6 +264,7 @@ Project Structure:
 │   │   ├── 📁 test-results
 │   │   ├── 📁 TODO
 │   │   ├── 📁 WORK
+│   │   ├── 📄 IMPROVEMENTS.md
 │   │   ├── 📄 PLAN.md
 │   │   └── 📄 WORK.md
 │   ├── 📁 pkg
@@ -517,6 +521,9 @@ Project Structure:
 │   │       ├── 📁 advanced_features-10sbau117gjiq
 │   │       │   └── 📁 s-h94sfa885f-17kut5p-94ttuszncvtqes7ux55w6tp7v
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 advanced_features-10z46ffz2iqb2
+│   │       │   └── 📁 s-h96a8uralk-1w1qwja-2xrae6xi5lgxcpbkut1dzhbls
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 advanced_features-164ibfjvivu9x
 │   │       │   └── 📁 s-h94sufyx81-1syhmfr-1e9564b3u3hinvdigxa7wlnd5
 │   │       │       └── ... (depth limit reached)
@@ -531,6 +538,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 advanced_features-1o0fsgr5zwp4y
 │   │       │   └── 📁 s-h95jz3ehz0-145ovv7-4irfienxebdh9osdzi4khutkf
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 advanced_features-1o3oy8zo3p0zg
+│   │       │   └── 📁 s-h96gq3xjkp-0brheli-bbh2unxd96au5dtbcc006cj44
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 advanced_features-1proudd5p0v8o
 │   │       │   └── 📁 s-h95f6idbg4-0du69gn-4yab0dxs1y8qslad3rxrf530l
@@ -616,6 +626,9 @@ Project Structure:
 │   │       ├── 📁 advanced_repair-1afa99qkonucv
 │   │       │   └── 📁 s-h94suef370-1urln2h-dpfznpnfronlm0lhmwekjb0q8
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 advanced_repair-1azs4lfeiwl0d
+│   │       │   └── 📁 s-h96a8sxv83-1tanvbr-4ta83uyv7y9oooc0sz5or82gr
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 advanced_repair-1azu3zh73r25n
 │   │       │   └── 📁 s-h94rmvyayn-1lpwwrl-8fdiqkrg43c9fx93gyvvgnocv
 │   │       │       └── ... (depth limit reached)
@@ -649,6 +662,9 @@ Project Structure:
 │   │       ├── 📁 advanced_repair-2w0oqyzyyc5du
 │   │       │   └── 📁 s-h95k5x5k1e-1j91arn-50vzyqkl2vglsckzkrkqqljng
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 advanced_repair-2xqyrqzj05szq
+│   │       │   └── 📁 s-h96g8nnd0p-1bjj5t8-am6dlg0k3yq671d6k2cn9zf3y
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 advanced_repair-2yvnnh3mb9bh5
 │   │       │   └── 📁 s-h95q2dvqjn-0euor12-dcjnnssl2u8b2bz14eu8cbxf6
 │   │       │       └── ... (depth limit reached)
@@ -672,6 +688,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 advanced_repair-3oeodbefsbe0q
 │   │       │   └── 📁 s-h95k0tom91-038q5ln-99dukv70masc6p5xjc0e68697
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 basic_tests-03gqpctrq1yej
+│   │       │   └── 📁 s-h96gl3t9h4-06nufz9-working
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 basic_tests-04ubcy9lzch3p
 │   │       │   └── 📁 s-h94sjnvidc-0sl20p1-3d5eewn7ebffnffaopzex72z8
@@ -767,6 +786,9 @@ Project Structure:
 │   │       ├── 📁 basic_tests-2bltckkvj8d8q
 │   │       │   └── 📁 s-h94r7cqjl9-052mx0u-ezpsp5483y4zb0eyxgp7ay4cr
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 basic_tests-2nh3tysx0ccu5
+│   │       │   └── 📁 s-h96a8utgyv-07o287g-4vqq2byql7dhp4knt1ucqsfd4
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 basic_tests-2wjfxfgrejp2u
 │   │       │   └── 📁 s-h95k5uvf54-1m3mjm8-8rdpyej5ig7ydoa9i00feg5n5
 │   │       │       └── ... (depth limit reached)
@@ -818,8 +840,14 @@ Project Structure:
 │   │       ├── 📁 benchmark-24fofsgtzts0o
 │   │       │   └── 📁 s-h95ap7zydx-0mxkulb-75vl0chloo186y68ww4dcz6ld
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 benchmark-25wiyckbyg2n6
+│   │       │   └── 📁 s-h96gq87p3g-0cbvxcc-1mtdi81r9e68u6ibbi0uc1t6z
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 benchmark-2iuibhdc6xgzy
 │   │       │   └── 📁 s-h95f6pt1c1-16vk3y3-67w1fnjo3y93brfbukx232omt
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 benchmark-2lee08nuclmrx
+│   │       │   └── 📁 s-h96a8w8slv-1j5h25x-2c587961j34of5tq14gizznjt
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 benchmark-2qq0c15l8ayp6
 │   │       │   └── 📁 s-h94r8uhwts-0kluywv-deons0vm8y0rpc9g34ki3r0p2
@@ -901,6 +929,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-0btcrpp4tqy9y
 │   │       │   └── 📁 s-h95q2mahvf-0ir2lyy-dkye2oj7d7ce2rlrxz0c1s35c
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-0c9au5h0j0ct7
+│   │       │   └── 📁 s-h96a8o1xli-0nge30u-4ivud19vfsggagv7mhjzpowck
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-0cab9l02cbd5c
 │   │       │   └── 📁 s-h95jymrgah-1f7j8c8-1j9nthks3qqdkhasueokuqijg
@@ -986,6 +1017,9 @@ Project Structure:
 │   │       ├── 📁 build_script_build-0t4hq18qvz91z
 │   │       │   └── 📁 s-h95q259atn-02jc47d-8fv1qhv0rw1230d5snbyw8a0m
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-0tcn6fl57bi3y
+│   │       │   └── 📁 s-h96fx25mrq-1q630zq-d6ntg7hu5tm5v6kmjtshi7e8e
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-0tos0s7xvf59l
 │   │       │   └── 📁 s-h94r70p4xh-1dmirri-akbp2ia4o17bbf8cq2mikotsh
 │   │       │       └── ... (depth limit reached)
@@ -997,6 +1031,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-0wq4bjdktsyxf
 │   │       │   └── 📁 s-h959wwkaxc-02eq99b-duaqlds7zvm0y278wwr4hd3zw
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-0ymxjbzm3di6p
+│   │       │   └── 📁 s-h96a8o3azm-04x9w8z-d5zdgi181n8mh76mklv4o9u26
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-0zu3lq0y5u5yg
 │   │       │   └── 📁 s-h94rkka0uw-1dbiw1h-0z8yutblb45lqu0dje30pl8gw
@@ -1094,6 +1131,9 @@ Project Structure:
 │   │       ├── 📁 build_script_build-1prnf4ogbfu4p
 │   │       │   └── 📁 s-h94svcfjzd-1u6a3g2-2d9fw58vjojftzwkf2nej4a10
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-1qsih2ycjwoad
+│   │       │   └── 📁 s-h96a8o35rw-1pjpbbr-99h17xvyzkrq5useq8epsc4t9
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-1r3gle45kmc76
 │   │       │   └── 📁 s-h95slcvnjb-0rvgrtg-dgnz3ut1mypicdydee9ds7qwg
 │   │       │       └── ... (depth limit reached)
@@ -1115,11 +1155,17 @@ Project Structure:
 │   │       ├── 📁 build_script_build-1vbo5ie8qrw3z
 │   │       │   └── 📁 s-h95fv9fz7t-01ctu8o-3t4di99j4ooreuelf8cfjgj06
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-1vjqsvb2pmxu1
+│   │       │   └── 📁 s-h96fsr5y41-1nxjo1x-a282uhclkh2cyc7y7y4vjuvea
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-1wj2dc0zqd12m
 │   │       │   └── 📁 s-h94qboyw9d-1snc3en-cnlw1s6oda2sz4l7z4siv5ajw
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-1x45fc66d9r13
 │   │       │   └── 📁 s-h94ra9cbf2-1o0fcjw-working
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-1xp7spd8j4ja7
+│   │       │   └── 📁 s-h96h8w7qh2-0tlahrf-75muv8sdx8gxjzpaj3fllowj3
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-1xtt3duabu6ol
 │   │       │   └── 📁 s-h94rkrfk8r-0hkqf4e-dre2r9bovsrir7tyyl9n5lr7f
@@ -1232,6 +1278,9 @@ Project Structure:
 │   │       ├── 📁 build_script_build-2n67p4f5578s1
 │   │       │   └── 📁 s-h95iz856op-0kh7be2-0v4cbvh35wg7ey34x4k6z0qcw
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-2np2j9xct2sq2
+│   │       │   └── 📁 s-h96h3ddhi5-0vfl390-180bkdlh1yhot4ykc7be24f5u
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-2o9lvplqzw9da
 │   │       │   └── 📁 s-h95q3yyusp-0ejknpw-6iu6l8uf41gscm8w6f1l21bdm
 │   │       │       └── ... (depth limit reached)
@@ -1243,6 +1292,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-2satrkfh4f08o
 │   │       │   └── 📁 s-h95iz82xvl-1nrggrf-732m789frtvxnijg08esr5tap
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-2t4x7bqrmo3yo
+│   │       │   └── 📁 s-h96a8o2i85-09ij8na-4bg6yj845hpjm1jy1gwox5d8v
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-2u1j6hu8eobai
 │   │       │   └── 📁 s-h94rkreq6f-005asp5-8szq7xc8hvr8m7kvslkavpnvi
@@ -1331,6 +1383,9 @@ Project Structure:
 │   │       ├── 📁 build_script_build-3ee84nml84sna
 │   │       │   └── 📁 s-h94lxcc6pa-1c2ghtg-13rhl5h3qk41k03n4lln0srzj
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-3ejwho2zkd0ci
+│   │       │   └── 📁 s-h96fsr4a7f-03cllir-5q1k2l4gpyi3vtbosoolcvhha
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-3exrrz93fsk54
 │   │       │   └── 📁 s-h959wwk2hl-16ao8f1-eotn2a7pi167x2c9u0iyprets
 │   │       │       └── ... (depth limit reached)
@@ -1351,6 +1406,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-3kebe7nb8yfvl
 │   │       │   └── 📁 s-h95saq5lba-0mk0lgo-2083fzzwm8xe41cl8l75kw4mq
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-3kwsobxwu19tj
+│   │       │   └── 📁 s-h96h2txtyz-15g5hdv-0beij2hsinjlvj5jqw3iu180i
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-3lexunwj4i6xe
 │   │       │   └── 📁 s-h95k2ndndt-1a74k71-5vbudp15c14atrtcm7cmi8ksi
@@ -1375,6 +1433,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-3rtufnmwd6zy3
 │   │       │   └── 📁 s-h95sq5uroe-1xs4hxm-6ywkjejxe6q7bo6kzy2wnocco
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 build_script_build-3rvkele7xyr4y
+│   │       │   └── 📁 s-h96a8o383o-12mxete-d7p9qwa1qjuudbvx2p1l9atyn
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 build_script_build-3s79txfgbmty7
 │   │       │   └── 📁 s-h94r72b9lh-15eqixx-ciyuiwhzxxk0c83i30a34zif3
@@ -1460,6 +1521,9 @@ Project Structure:
 │   │       ├── 📁 comma_handling-1wqwkz44o8ay3
 │   │       │   └── 📁 s-h95f7j0it2-180qio7-1sc8t5gl961ubc3i3af5is449
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 comma_handling-20ts5nnudg5mg
+│   │       │   └── 📁 s-h96gq09ism-0ravnm0-a3b8ke1dyaa9443mb3orrbni9
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 comma_handling-27kftd8ix0rd9
 │   │       │   └── 📁 s-h95skt7c18-12f5oes-bqswzi78v662eqdf520owms73
 │   │       │       └── ... (depth limit reached)
@@ -1468,6 +1532,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 comma_handling-2fhqhq62wymyq
 │   │       │   └── 📁 s-h94sp0k7wv-0885xpj-8ol468lblpkt847jtpqu7w02y
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 comma_handling-2rmvrc55uarkb
+│   │       │   └── 📁 s-h96a8uw98l-10e29dm-4embgq5rwp49qvrmww4n3u65a
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 comma_handling-2yzp37hzo7npj
 │   │       │   └── 📁 s-h94rm96wu5-1g0efk8-5xi8q5bkjzfmfnx8fwqi7pq1i
@@ -1553,6 +1620,12 @@ Project Structure:
 │   │       ├── 📁 comment_handling-1fe7gh5ldramp
 │   │       │   └── 📁 s-h95omsornp-02et2rd-4warjzdnb9lt5tn7fskrm7p9q
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 comment_handling-1ge9m6yr7ddr0
+│   │       │   └── 📁 s-h96fv13cma-0n96edf-a1slo79vzyfdqhhse3fjl24jj
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 comment_handling-1l8k5u6g2ut0y
+│   │       │   └── 📁 s-h96a8wc834-135l4pz-ceeku7qi6gtfli0gorffu5pbg
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 comment_handling-1s1k6avayduc6
 │   │       │   └── 📁 s-h94soygt9l-1qwygio-8iujg0xzqzc4yb4ruuq71af6r
 │   │       │       └── ... (depth limit reached)
@@ -1613,6 +1686,9 @@ Project Structure:
 │   │       ├── 📁 comment_handling-3sgnht8qv9pdv
 │   │       │   └── 📁 s-h94r8puetl-0oat2ud-9uwprgjtz3urrbdw4t28y2uk1
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 comparison-01pg4xvwyd153
+│   │       │   └── 📁 s-h96gpzyycq-0kl1m4w-20aoea2oqyvjkuhxlh4cehz8u
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 comparison-045k3k96e4z11
 │   │       │   └── 📁 s-h94sjl92me-0678x07-ewhxwsb5rf1arn7nzb9367y3d
 │   │       │       └── ... (depth limit reached)
@@ -1645,6 +1721,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 comparison-27r4bgl1z3hso
 │   │       │   └── 📁 s-h95f7l87uo-1ko0soo-73brb0y6tgmkw5rya7dhvf1k3
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 comparison-2crjo95q8cxvn
+│   │       │   └── 📁 s-h96a8vni6f-059uqhw-38jrmtkvqrz82xkmwtr8m4hb0
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 comparison-2jb0pwvzw1awl
 │   │       │   └── 📁 s-h95omr757r-1ca0d3y-2ok179pb7i97knlf80uup0wcq
@@ -1699,6 +1778,9 @@ Project Structure:
 │   │       ├── 📁 compat_tests-18by8op6lvwgx
 │   │       │   └── 📁 s-h95k5q5vq8-1oumjq8-bg4cztp8sbnfrbe74i2a62czo
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 compat_tests-19o6e8bf4ah05
+│   │       │   └── 📁 s-h96gkzew6d-1eqilk6-working
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 compat_tests-1e3zji1uxiinw
 │   │       │   └── 📁 s-h94sozf5nk-0hj8hgo-2rz1lrmkig9opwsehdvlfy7j2
 │   │       │       └── ... (depth limit reached)
@@ -1716,6 +1798,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 compat_tests-1vng90pbx1nuc
 │   │       │   └── 📁 s-h95k11ec2q-1mrlop2-0j0g6tu04oiz0dmo3q2sqzqjd
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 compat_tests-1x9qufakmb1nf
+│   │       │   └── 📁 s-h96a8uvy2p-15y2bxf-7i6n9zpurh83jygg5ew673wbb
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 compat_tests-2151dklpucssl
 │   │       │   └── 📁 s-h95jv9i67o-07nc6mw-0bfkbsl1c47uqlub57q3ai79m
@@ -1887,6 +1972,9 @@ Project Structure:
 │   │       ├── 📁 comprehensive_tests-1wuc3x7rgqk4m
 │   │       │   └── 📁 s-h95du5lkl0-18t2jua-axso94ibfyqwzs8h7nh9olvhl
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 comprehensive_tests-1x2yvo7g0c1wy
+│   │       │   └── 📁 s-h96gq7c36f-0ev8v7d-working
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 comprehensive_tests-22w7ro01pe19k
 │   │       │   └── 📁 s-h95a69vuk6-1xd26py-6mtvf6d9bgmzrrkuajspk3zpq
 │   │       │       └── ... (depth limit reached)
@@ -1898,6 +1986,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 comprehensive_tests-2tafp5t6rndot
 │   │       │   └── 📁 s-h95asntnp5-13e7uts-0l5urn4wwkyqtd9f75g0qyxae
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 comprehensive_tests-32an8jjs407hc
+│   │       │   └── 📁 s-h96a8us0qj-0of0vly-391wnh79q5lllwwcwloj3l7un
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 comprehensive_tests-333acenw0okcf
 │   │       │   └── 📁 s-h95bxa4mi9-0dum1cb-dhilcs9fa6gnqdmx189bhwv0t
@@ -1967,6 +2058,9 @@ Project Structure:
 │   │       ├── 📁 debug_comma_one-1l0d4v7lmj35x
 │   │       │   └── 📁 s-h94sfa8j52-0exj9cf-1oc75850abj7aanj3n8r5b4rb
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_comma_one-1lpzvzvwn44ya
+│   │       │   └── 📁 s-h96a8wffwf-1jniaex-15uv7sgw1zrb8a3wpojg4n2g2
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_comma_one-1m438qtywioo8
 │   │       │   └── 📁 s-h95q37b8dn-0ex9tcp-92fcj42ii1c43etrqaje5p1vv
 │   │       │       └── ... (depth limit reached)
@@ -1990,6 +2084,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_comma_one-24pu14l4fn4qm
 │   │       │   └── 📁 s-h95snjulxp-0e6ctym-8sb0y3kbu2rb2trn60u6oy4p3
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_comma_one-2616im1mkunci
+│   │       │   └── 📁 s-h96gl2tjjy-0j4e5ex-9dxvbzlnxd7lzncuwxbrzk0du
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_comma_one-29wnyphpbubbn
 │   │       │   └── 📁 s-h95bx4osw8-1r8h5u2-f2jzzk5l1jtre3x3n1x7q4x5s
@@ -2084,11 +2181,17 @@ Project Structure:
 │   │       ├── 📁 debug_comma_one_tokens-1h53n2ulwt14g
 │   │       │   └── 📁 s-h95frdecxo-0xuoewd-aeqhd10qlohvpbh2zuboir7u5
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_comma_one_tokens-1j5cjv8urk8ad
+│   │       │   └── 📁 s-h96a8tyxji-0pmeavw-5cyspy331rs2w5gkzpnlp7rho
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_comma_one_tokens-1tifeafy61itq
 │   │       │   └── 📁 s-h95du5lhyi-1kyopxz-4jgxv2lniejefll87ihkhtyh2
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_comma_one_tokens-2036c7cg6d4ac
 │   │       │   └── 📁 s-h94rmxyh9g-18ie0ly-8qnhc1e5vfxxkqewfzisblma7
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_comma_one_tokens-21ggbuio39as7
+│   │       │   └── 📁 s-h96gq8snaz-0l9ldbq-8s15qgaauffsddbtydmwtd2fm
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_comma_one_tokens-2nd4fddsrvvlz
 │   │       │   └── 📁 s-h95k5whu4l-10ce1fx-bk1y33gp2oa3p15zpbsyxqjwq
@@ -2267,6 +2370,9 @@ Project Structure:
 │   │       ├── 📁 debug_comment_tokens-0hk4t8lhk9d1m
 │   │       │   └── 📁 s-h95ten4m01-0pjxh6y-34j9ennm4tkanlbyejnhi8tnb
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_comment_tokens-0i5wkph3bez2f
+│   │       │   └── 📁 s-h96gq49xgb-09tb5j1-csfzal2g99wd6ravzdhgfbo0o
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_comment_tokens-10xlxf1nkdmgs
 │   │       │   └── 📁 s-h94lxyt08t-1yyjx3u-8lcu2tpjolnbtwhg641o9z3ph
 │   │       │       └── ... (depth limit reached)
@@ -2305,6 +2411,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_comment_tokens-2gmczym03ofse
 │   │       │   └── 📁 s-h95f6gzivx-0bwkz3d-b2cq3jdsu6vjgt4sgudbawney
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_comment_tokens-2j61x4lseh2t0
+│   │       │   └── 📁 s-h96a8vmenj-0fdbzcs-3c3131zwtx2fvrm2trib0dpfl
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_comment_tokens-2naxd2f61shie
 │   │       │   └── 📁 s-h95sktacse-13yd1qe-829vomqu9a3vxwx587fg8e16r
@@ -2396,6 +2505,9 @@ Project Structure:
 │   │       ├── 📁 debug_implicit_array-1wnc3ujwc5fnb
 │   │       │   └── 📁 s-h94q63pcm8-01jrson-c4j5wo2rpsb8f06yuy7dq5hnp
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_implicit_array-1yau5cmnqz0qu
+│   │       │   └── 📁 s-h96a8tx0f6-0zxa4mx-8hrjw083fe0aqubk31ylxwkrd
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_implicit_array-263jme0vyavdx
 │   │       │   └── 📁 s-h94rm5e6m1-0x1rwrf-1fqiz1h6tms88pogbupxhubxn
 │   │       │       └── ... (depth limit reached)
@@ -2425,6 +2537,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_implicit_array-3bhcfrrvajw5y
 │   │       │   └── 📁 s-h94soyj6c4-112q2d7-63vj5nskyz364asyxewqzzhut
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_implicit_array-3d7xrdx7xnpii
+│   │       │   └── 📁 s-h96gq3ux6h-0x5lg3x-9vhyd7kqfzkf7yld8wmoeo0w7
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_implicit_array-3efwe14xejs44
 │   │       │   └── 📁 s-h94qa165gg-0nuae1m-2qmdqo31o8wkgget3ugsf0iw7
@@ -2470,6 +2585,12 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_lookahead-0c8rt7x16bhcq
 │   │       │   └── 📁 s-h94r7d1i7e-0wnpcdz-0m32xrkybprmeqzkyp9ylmjdk
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_lookahead-0gou7d3rb7aw1
+│   │       │   └── 📁 s-h96a8usztb-0htx71z-7b6x2drh0rqxdxvz620n0vv6v
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_lookahead-0joukhye9jy1z
+│   │       │   └── 📁 s-h96gq08kae-1muot5b-685vpoajcchefs61vwcuv70qs
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_lookahead-0k95s6xck9dz2
 │   │       │   └── 📁 s-h95rgp2yjn-010yceq-9ve0r35g55oprit0j8j56sfo1
@@ -2717,6 +2838,9 @@ Project Structure:
 │   │       ├── 📁 debug_test-26pqu6wgrsfej
 │   │       │   └── 📁 s-h95atl67il-1pdw3y5-b1ayzh7ebqknoxmqad45g59wn
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_test-27e462748c5pq
+│   │       │   └── 📁 s-h96gq097n4-0cuymlw-4f4nxvdreazpchz3atxwils86
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_test-29yx0djuase8o
 │   │       │   └── 📁 s-h95k11hory-1jjrbe8-ecpmsasn1uhmpbjgumwqut4ml
 │   │       │       └── ... (depth limit reached)
@@ -2764,6 +2888,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_test-3ktujufjkkkln
 │   │       │   └── 📁 s-h95q2dwrlo-02fxwk7-ebyxav8mo5wgpzqz1nejms320
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_test-3st1a6ns8psse
+│   │       │   └── 📁 s-h96a8uujnf-1p3yz3x-52k70b5pwpbqfcumgme4d3msi
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_test-3ud7bg9ugebye
 │   │       │   └── 📁 s-h94qajmvjd-0oqqp6m-3v92b9e4gcab58suve5gy3p7y
@@ -2825,6 +2952,9 @@ Project Structure:
 │   │       ├── 📁 debug_trailing_comma-1wi5udg300ngz
 │   │       │   └── 📁 s-h95q2jlbbd-16m27wv-bxssaly3r8h8xciiia6w035if
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_trailing_comma-1wq3cy1fgishn
+│   │       │   └── 📁 s-h96a8tzjb6-0h4iuso-7asihn2w9u68vqeq8yx9iv2kd
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_trailing_comma-1wuah6t0nmx6l
 │   │       │   └── 📁 s-h95tel0qpd-0tx8695-48qo4tg85ys104juq76czpkmm
 │   │       │       └── ... (depth limit reached)
@@ -2875,6 +3005,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 debug_trailing_comma-3petuudz19k9t
 │   │       │   └── 📁 s-h95k5q9kvg-1mjmxqx-0mpm4ok0b8hkapgt5mvv7zgd7
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 debug_trailing_comma-3rhr5tvyjaoe2
+│   │       │   └── 📁 s-h96gq785r7-0d7ytjy-6pjono2gzzk0ixc8brhjhyvgc
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 error_handling-07ddjex7qin7k
 │   │       │   └── 📁 s-h95du6akt8-1ulzydo-c15iws3oyojs39se2fp0xgi8f
@@ -2930,6 +3063,9 @@ Project Structure:
 │   │       ├── 📁 error_handling-1xa7z9qoga884
 │   │       │   └── 📁 s-h94r8zyzug-1806gud-1rid2z3g5lgt6al80ph9e4z0k
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 error_handling-24e47urdo03sa
+│   │       │   └── 📁 s-h96gl1x9zo-11d496n-c5ugo3ap1lhgsnoy0uirmctsz
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 error_handling-25orsckaafu4u
 │   │       │   └── 📁 s-h94r79s7br-1um3lqc-c8beht0kgfzkae76fwsllh7vu
 │   │       │       └── ... (depth limit reached)
@@ -2963,6 +3099,9 @@ Project Structure:
 │   │       ├── 📁 error_handling-34z8a3ypqhsas
 │   │       │   └── 📁 s-h95jz4j770-1uwn1su-dbyxvwdlb5gbjwweb2rcg4tej
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 error_handling-39d1jsatcrr5g
+│   │       │   └── 📁 s-h96a8txl3m-0b9jk5l-bfra5eyozq4m760ax3u8xmdn6
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 error_handling-3b441c6o2jbrc
 │   │       │   └── 📁 s-h95sl3d151-0oubzvc-4l3jqh28o3h1yxfjhy0u2o2t7
 │   │       │       └── ... (depth limit reached)
@@ -2980,6 +3119,12 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 error_handling-3thn14t7yv751
 │   │       │   └── 📁 s-h95atkscy8-004tymj-2a57zjonls8fcwkow87o5dcf7
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 error_recovery_test-0j3gluc8l35h4
+│   │       │   └── 📁 s-h96hga2gd8-0e8zbie-4gap17n33cipvdj8t59bu37js
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 error_recovery_test-2cf671bkwyo63
+│   │       │   └── 📁 s-h96i44p7ph-0khy29c-working
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 error_reporting-00pcbt07my8c5
 │   │       │   └── 📁 s-h95q2yz8on-03599gd-esnqg2rte2xwf1ocmevpdb8yc
@@ -3011,6 +3156,9 @@ Project Structure:
 │   │       ├── 📁 error_reporting-0s5z60bjgry1v
 │   │       │   └── 📁 s-h94r2143hx-0e6ito9-0lryp30t90td0xcmonoa2mq53
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 error_reporting-0uyyalfn957ak
+│   │       │   └── 📁 s-h96g8nm9wn-183ka9f-38awmkteeboit5d7bi5a3x477
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 error_reporting-0v6tvedi8l64t
 │   │       │   └── 📁 s-h94r8mxfkp-1df2qc1-13drxhfkbjkp37h299k6xq7un
 │   │       │       └── ... (depth limit reached)
@@ -3040,6 +3188,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 error_reporting-20gr8ju5y60sl
 │   │       │   └── 📁 s-h94suegkwx-12y8dvx-du3rwnkiw30wtezrd7x5fj9we
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 error_reporting-26pctio41ns4h
+│   │       │   └── 📁 s-h96a8sx84a-0114q9n-bud0qwuruveqfeo457y23hcph
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 error_reporting-29i8wdd1gyvty
 │   │       │   └── 📁 s-h95k5urxh8-0tctuy9-5j4rne7hsjiqrp475ah6c8g6j
@@ -3125,6 +3276,9 @@ Project Structure:
 │   │       ├── 📁 feature_tests-2h7k03imm87no
 │   │       │   └── 📁 s-h94suvfvxd-1buc8yr-dpqndcnqgxr331465hqlfyffw
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 feature_tests-2hr18qagyzauo
+│   │       │   └── 📁 s-h96a8vp526-0dwpsxo-66ri7ep96t6spwaisvliztijn
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 feature_tests-2jzsxzofu0ynv
 │   │       │   └── 📁 s-h94r27yaeo-033dhoi-0gl7zjdazgyxfghr5zd2u7psa
 │   │       │       └── ... (depth limit reached)
@@ -3191,6 +3345,9 @@ Project Structure:
 │   │       ├── 📁 forgiving_features-0qmu8199ptmce
 │   │       │   └── 📁 s-h95f7nuk64-1jjcrmp-3hfcb8z371fs04y1gxfhkkcgg
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 forgiving_features-0uxiaovqfkrqr
+│   │       │   └── 📁 s-h96a8vroyo-0k7l6tf-e2eesmrn8f66x0nfyxnj696dm
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 forgiving_features-0xq9lcqe2osx5
 │   │       │   └── 📁 s-h94rmhlf9z-0seojhx-cyb95kerwvv63yhv1mca7dklh
 │   │       │       └── ... (depth limit reached)
@@ -3238,6 +3395,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 forgiving_features-2rcqx6vfehxki
 │   │       │   └── 📁 s-h95snu7uyo-048d2qf-2pukytaijtlkh2hpjs4acbclf
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 forgiving_features-2yshi55l2y943
+│   │       │   └── 📁 s-h96gpzz2bv-1ab2ha1-aiekoxeyb86d38s3sblq4t329
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 forgiving_features-3581e77jc6t3c
 │   │       │   └── 📁 s-h95atifv3h-07tuca5-59bjpqnozgly8vs8m020391fp
@@ -3317,6 +3477,9 @@ Project Structure:
 │   │       ├── 📁 lexer_microbenchmarks-0yueh5nlbuhk3
 │   │       │   └── 📁 s-h94q613b03-1ridf1b-ajboyzm54f2gng4f1aneo1fce
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 lexer_microbenchmarks-0zxbqd3db33hd
+│   │       │   └── 📁 s-h96gq8kc5o-14bq6ne-6vgv9wg058a51gv7ebk8cvjbe
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 lexer_microbenchmarks-16vdoin8o0f19
 │   │       │   └── 📁 s-h94rn4bu3t-11hun18-784z9xf5318u1wqohpmn1qdoy
 │   │       │       └── ... (depth limit reached)
@@ -3362,6 +3525,9 @@ Project Structure:
 │   │       ├── 📁 lexer_microbenchmarks-3a65h0flce7n6
 │   │       │   └── 📁 s-h95sl88b3k-0ae5fe6-0pn6ioujy1sh0rwuan25p3tkk
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 lexer_microbenchmarks-3b5oq48ikrwm0
+│   │       │   └── 📁 s-h96a8wfsnl-1cfmovr-6599grjv8gcib8wsr5o3v8kbm
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 lexer_microbenchmarks-3m2c9a6yvz328
 │   │       │   └── 📁 s-h95q372mey-1lp5tuk-4gdjjve6qvwvigxmnzcykdjat
 │   │       │       └── ... (depth limit reached)
@@ -3379,6 +3545,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 lexer_tests-0e3kovjegd1r7
 │   │       │   └── 📁 s-h94suuignq-0eron0b-31joyusy4xizf349aux2jpzzl
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 lexer_tests-0lj3oqs4uh8g7
+│   │       │   └── 📁 s-h96gq7x0nz-0x47dqf-7wlqliihlct8g7avwp5zjq54e
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 lexer_tests-0nsb8jc1dhknc
 │   │       │   └── 📁 s-h94rm5dd7e-0qkw3gy-ajvsjlvsdpyb3jpbowxz310cp
@@ -3434,6 +3603,9 @@ Project Structure:
 │   │       ├── 📁 lexer_tests-20mmcp9tbpz4y
 │   │       │   └── 📁 s-h95k111f9j-072r3fx-1o3jjwzjij2kgsmjlrxream04
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 lexer_tests-240fnm5xbie0w
+│   │       │   └── 📁 s-h96a8wgehf-0trxf91-6ve5xccqx6zbb0bkrfig4xdzf
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 lexer_tests-25bwx3kt6ou1j
 │   │       │   └── 📁 s-h95fvnq0yl-1tjj8ut-adglgbkuc3n2a9xkr1ea2k4in
 │   │       │       └── ... (depth limit reached)
@@ -3488,6 +3660,9 @@ Project Structure:
 │   │       ├── 📁 lib_integration-067vha5yk58bh
 │   │       │   └── 📁 s-h95omp2w0z-0icsgct-40qyjfp34952rmfgznxqr2t6o
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 lib_integration-06brl4tlc58op
+│   │       │   └── 📁 s-h96gq8qrgh-1mc9p9q-1700nr0152dye8skr2sb2d6fg
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 lib_integration-08nf0zsdeai4b
 │   │       │   └── 📁 s-h94r25dmy0-12echwz-3dkdv4q1s5m9hp7koziy70qif
 │   │       │       └── ... (depth limit reached)
@@ -3511,6 +3686,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 lib_integration-1k4oasvtvx8zu
 │   │       │   └── 📁 s-h94suhlaom-00vqrle-55lp9ka99g49c2qjtb78wqe6u
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 lib_integration-1m4e6bawz0lx4
+│   │       │   └── 📁 s-h96a8vo4p8-0h3idnz-13nqkkg3je603vjomt90wtyvd
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 lib_integration-1v5ojtgbordo9
 │   │       │   └── 📁 s-h95kn1deig-173bjqv-a56xc4sus5y94nx37rls2egwo
@@ -3596,6 +3774,9 @@ Project Structure:
 │   │       ├── 📁 memory_benchmarks-0rtn99zh9kcxx
 │   │       │   └── 📁 s-h94r25az3t-0kwoe14-62lxd1grkbuvpuh6dsrvzbdr4
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 memory_benchmarks-0su8g0yj7kcdz
+│   │       │   └── 📁 s-h96a8uw3q6-0xqdfwk-ahf8bwtbnzqvcua1kp5fyuane
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 memory_benchmarks-1b0ly1oc4nb5t
 │   │       │   └── 📁 s-h94rn0kzpb-02gs879-ed0ntr9o7rl1h6oez6tyujkh2
 │   │       │       └── ... (depth limit reached)
@@ -3610,6 +3791,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 memory_benchmarks-1zr7ajdjkna5y
 │   │       │   └── 📁 s-h95oms16ae-1xpnq8x-1czowz7d4scoszd9bstbhntpp
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 memory_benchmarks-24mz8cdvqccnr
+│   │       │   └── 📁 s-h96gq09jk1-13b12hm-b4z880wjt0wvqbqjogbzhz977
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 memory_benchmarks-2ef7yyv1q4ojz
 │   │       │   └── 📁 s-h95bx84md0-01g09gf-0sii1y6yyiekr8xypxrfuqx1b
@@ -3692,6 +3876,9 @@ Project Structure:
 │   │       ├── 📁 newline_as_comma-20oeehj4vqxps
 │   │       │   └── 📁 s-h95du5co4v-08brl69-88dm9ph3xeiqhyf521f5kkz50
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 newline_as_comma-23kgux6z6ow8u
+│   │       │   └── 📁 s-h96gq3l9rr-0xpzwx4-e93sojlyki8gyarzbysy4rz31
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 newline_as_comma-28vajhwwurq6e
 │   │       │   └── 📁 s-h95snri39x-0fm0axl-bf8e98hvooscbbs8aabnkfrw7
 │   │       │       └── ... (depth limit reached)
@@ -3742,6 +3929,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 newline_as_comma-3u6j0ujmquke1
 │   │       │   └── 📁 s-h95omsr5p1-1whgdru-9ztyqvu23kf1z7asmtpit4ajd
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 newline_as_comma-3vrw1u3i1tdzd
+│   │       │   └── 📁 s-h96a8vju2j-1xg4395-0n3nnk8nhs71g3dd7zeezp0cg
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 number_formats-05u1j53xgzijl
 │   │       │   └── 📁 s-h94r0vmt7l-02j9fkm-7hfrvbe7fv6t8ro6p7fahm8nf
@@ -3842,11 +4032,17 @@ Project Structure:
 │   │       ├── 📁 number_formats-3g5vzdzswnpr2
 │   │       │   └── 📁 s-h94sui5o1g-0p6que4-7w4ezkomazin7uoe06sf27wqv
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 number_formats-3hei2tqomqop1
+│   │       │   └── 📁 s-h96a8tzxye-1ghiv74-ai56bymemrgtl8kn7sf7d4maf
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 number_formats-3kndwopogvf3j
 │   │       │   └── 📁 s-h95du5ary7-1xyxq7t-357n5mzkaathhxry79w808r3o
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 number_formats-3ng8p6u1o5qbh
 │   │       │   └── 📁 s-h95f7qsm3c-1i039hz-d5gqhz7ek0d7grndr7aqsttt4
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 number_formats-3vvf4erfrpaqn
+│   │       │   └── 📁 s-h96gq7hyya-0r6veah-e7dlg13z98u7egqojdijif894
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parser_benchmarks-07q08prei407q
 │   │       │   └── 📁 s-h95omnaxu4-0e4fmq9-eeq6d9wzz7457bi5sj4p7hfzt
@@ -3877,6 +4073,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parser_benchmarks-213o7eiiz0czv
 │   │       │   └── 📁 s-h94sjjiyul-04108h2-0tzb9b0zzodsejiz81x5ij1l8
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 parser_benchmarks-26b4rw94jbzln
+│   │       │   └── 📁 s-h96a8sv4nm-00n56th-9lkoerqcpox4d522jhi1amsrq
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parser_benchmarks-2bwgkvf86xw4d
 │   │       │   └── 📁 s-h95frcagz9-0cnl4by-dara8eu656yinfwrt44rjvnid
@@ -4013,6 +4212,9 @@ Project Structure:
 │   │       ├── 📁 parser_comparison-26k9jq4tclkpj
 │   │       │   └── 📁 s-h95jvhnufd-11v7ca1-3235y32nfx29a335z4o7d6w3i
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 parser_comparison-29n7rqw4uiuci
+│   │       │   └── 📁 s-h96gq4akvj-0v5hwhz-3tsjmnhzrugj4cwkda3evqfaf
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parser_comparison-2i790wn9awd7z
 │   │       │   └── 📁 s-h95jz5kw7z-00y3gmd-6ryn6smejbz8f8djtacfojw6f
 │   │       │       └── ... (depth limit reached)
@@ -4034,6 +4236,9 @@ Project Structure:
 │   │       ├── 📁 parser_comparison-32io106vbxkcd
 │   │       │   └── 📁 s-h95kn7y90i-1m562gf-dsmuxkjtbqbxkagb9acx7347p
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 parser_comparison-331pxosh571kq
+│   │       │   └── 📁 s-h96a8tyowp-1uu8e36-ar8jh2vpg4b97fp83mgas7p25
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parser_comparison-33xu8ylq7oi9m
 │   │       │   └── 📁 s-h969ctcckl-1dmtr2k-288lnpkwkit3q4hazshtf7m3s
 │   │       │       └── ... (depth limit reached)
@@ -4042,6 +4247,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parser_comparison-36ev47pyrh20j
 │   │       │   └── 📁 s-h95sl8dxvp-1swj2hc-1ge1zsmprnsk05oyrqu9rpl84
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 parser_comparison-377c7b5db0ej6
+│   │       │   └── 📁 s-h96a8tzhfm-1tfcmnt-44uixmsx26w0fqj6qghuxguh5
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parser_comparison-37ga0pf47aodr
 │   │       │   └── 📁 s-h94r27yk65-1p3vjpm-agtzxdm4co4omv0s6vrwzypcy
@@ -4100,6 +4308,9 @@ Project Structure:
 │   │       ├── 📁 parser_microbenchmarks-2mjn0mp4mmdkj
 │   │       │   └── 📁 s-h969cpwhdp-0u4v7sl-3xqq6593dfqismk1t8hrx1xe4
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 parser_microbenchmarks-2qbh8qn1r00m1
+│   │       │   └── 📁 s-h96a8vw28n-046gx9p-2ri0o6eu7ga8zz1w7ud4yvyvx
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parser_microbenchmarks-2u0o48qcqc3a1
 │   │       │   └── 📁 s-h95sl7zrgq-1k6witp-2igcnfxfbx0pi0r8tnz3o6tc7
 │   │       │       └── ... (depth limit reached)
@@ -4114,6 +4325,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parser_microbenchmarks-369e6dfz6fpdq
 │   │       │   └── 📁 s-h95q35cn9h-1rnmemq-4zd1edw313o9zb6pczg1psnn0
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 parser_microbenchmarks-3cxs8ch22alpj
+│   │       │   └── 📁 s-h96gq09702-1pq5pwq-74up4l6cthoz9mp0aj39wncs3
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parser_microbenchmarks-3l6vv11bg5lv7
 │   │       │   └── 📁 s-h95fvq7tf8-18mxgjb-3q3wwzht2w0199b6q16p1lvng
@@ -4154,8 +4368,14 @@ Project Structure:
 │   │       ├── 📁 parsing-2ehq5klzibdu4
 │   │       │   └── 📁 s-h94sufzxsf-19nxayr-79wczpa1a87cx03g0y8q40rsg
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 parsing-2h8rt9jr2vwf4
+│   │       │   └── 📁 s-h96a8vsjwh-1s2rz1f-a2p5887ogg598902vr172907f
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parsing-2ouyyx4c9k4ma
 │   │       │   └── 📁 s-h94rn27z6x-1elx1tc-4h4thpk2m7ek5079t0kxa0tce
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 parsing-2qut7ie9o5gs2
+│   │       │   └── 📁 s-h96gq3sh6t-16hmuew-0dje7q9fqyhjbjnvhp0elksnc
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 parsing-2wpkvhz415e3e
 │   │       │   └── 📁 s-h94sjmoke3-0ap0eow-422to6plxunwvcx15kzqh0ato
@@ -4184,6 +4404,9 @@ Project Structure:
 │   │       ├── 📁 performance_comparison-06a9vjovgm1kw
 │   │       │   └── 📁 s-h94r8tjaam-0chc5x3-8d30988nfwm594q4ihxgrz4y2
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 performance_comparison-08z8mznl2ze0a
+│   │       │   └── 📁 s-h96a8tzeb3-08hj1eq-ehwhmt3i9nxt0fv10s9jwqya5
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 performance_comparison-091ixcgqjbr8z
 │   │       │   └── 📁 s-h95k10o27h-16du8lf-f0izn93w799hkthfs3hiphlaa
 │   │       │       └── ... (depth limit reached)
@@ -4192,6 +4415,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 performance_comparison-0bump03myg2hs
 │   │       │   └── 📁 s-h95du4pmtn-17vvxt2-dshn5ckagp95hje8y0sscingz
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 performance_comparison-0e6fcmmqora9h
+│   │       │   └── 📁 s-h96gq454te-0kyzhwz-27soaomet5n44e2jpmz4ekt5q
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 performance_comparison-0gz6cuo8msocq
 │   │       │   └── 📁 s-h95f6h4088-1om7mh3-cyizupo7zsqwaal34ml8lzc7m
@@ -4319,6 +4545,12 @@ Project Structure:
 │   │       ├── 📁 plugin_examples-2wxcruj0ars75
 │   │       │   └── 📁 s-h94qajjxy9-1tub1mb-4ger8wd0e0e4ym8h0futm12b9
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 plugin_examples-2yhbjzuezsp64
+│   │       │   └── 📁 s-h96a8uum2c-0estde9-1yejm77x5hjmcdf1pknlh40hw
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 plugin_examples-30nufg9xase0n
+│   │       │   └── 📁 s-h96gq49z64-1dxnuw2-1ldkttxe8ngq1zkc47yl9yhhs
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 plugin_examples-30r8n2uktkmjd
 │   │       │   └── 📁 s-h94r27x75e-1n973b7-3ut5f1ruz6mud6cr93xy7hxs9
 │   │       │       └── ... (depth limit reached)
@@ -4345,6 +4577,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 plugin_examples-3v3ekaevesta4
 │   │       │   └── 📁 s-h94sp0janp-1i6nal3-3odvjjja1dvq0svf13og02kzz
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 profile_parser-01hv2nausx89c
+│   │       │   └── 📁 s-h96gq09lv6-0s6own9-4g6zk98j51e2p7zrmontawjym
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 profile_parser-027gr0vcx1958
 │   │       │   └── 📁 s-h94r242m9r-1hmjdgu-az7tefchs0ocimugf5m00mz5j
@@ -4415,6 +4650,9 @@ Project Structure:
 │   │       ├── 📁 profile_parser-1yrfw7rrjbym1
 │   │       │   └── 📁 s-h94q62c38k-06rjtac-67afzix1ztom71fd10lrdqpuf
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 profile_parser-21od6xafuvznb
+│   │       │   └── 📁 s-h96a8u000g-0u9z2ad-2t76nnjnoxkgm5uf695jj1z79
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 profile_parser-27fi5f18ssg3g
 │   │       │   └── 📁 s-h95k3mfp32-09duq80-72th47p7c7f8ob93xu116w0f2
 │   │       │       └── ... (depth limit reached)
@@ -4457,6 +4695,9 @@ Project Structure:
 │   │       ├── 📁 profiling-0h7ucodcllc4r
 │   │       │   └── 📁 s-h94r8ztkb2-11sqs6n-b6ajg3z1u2ymdna036optoua7
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 profiling-0iu9kpgis45q5
+│   │       │   └── 📁 s-h96a8utpya-15g0qep-7n156srruto0a1u7ip8n2mgcf
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 profiling-0j853t9ww8k0t
 │   │       │   └── 📁 s-h94q60wcs1-08n1ros-1nq94bepjfrrd5ho3bzi4xgy3
 │   │       │       └── ... (depth limit reached)
@@ -4493,6 +4734,9 @@ Project Structure:
 │   │       ├── 📁 profiling-269fdn5ed1znj
 │   │       │   └── 📁 s-h94rmzgeik-1eshv0m-88op5h1xrtb2wi9h2td19e251
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 profiling-29eb7p3qsr8ox
+│   │       │   └── 📁 s-h96gq06k3o-1yl3hk8-2ixuo1il0tq2b1inyhc2aflm3
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 profiling-2cbq4msfje5eu
 │   │       │   └── 📁 s-h95f7jgy1z-0chvgxw-5quiczfb2pkbn5llg5uj8df4v
 │   │       │       └── ... (depth limit reached)
@@ -4514,6 +4758,9 @@ Project Structure:
 │   │       ├── 📁 property_tests-0i7vkm7ecu0tc
 │   │       │   └── 📁 s-h95a69vhty-0wn3bzu-5bdten2kmrrpcmojys0p083zu
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 property_tests-0pbqesck4g21m
+│   │       │   └── 📁 s-h96gq4gtn8-0l0mbea-94zesqeopfan46goe7n4xqi9e
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 property_tests-0sog86mlatu3d
 │   │       │   └── 📁 s-h94suuurlk-0emwfe8-eygcqekoq6j300xwg5nkdgqx3
 │   │       │       └── ... (depth limit reached)
@@ -4522,6 +4769,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 property_tests-12agaroyqxnon
 │   │       │   └── 📁 s-h95jvl19vd-1pwfc1t-4735gf0w7to6b3a8tyqav5ef7
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 property_tests-12fnjg4bkhxbw
+│   │       │   └── 📁 s-h96a8u02mc-0surxpc-5rw4ywnv0tis666jkalz27phn
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 property_tests-1364ozuehkz5o
 │   │       │   └── 📁 s-h94r14ldj2-0xee2vm-c1w85p8b8he5xre1j2vqa4l75
@@ -4625,6 +4875,12 @@ Project Structure:
 │   │       ├── 📁 real_world_benchmarks-0pd9e1zbxxu53
 │   │       │   └── 📁 s-h94sjm347w-1aisiho-boko5zngdrv57r01kf52isl2w
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 real_world_benchmarks-0s3edh4juo5bk
+│   │       │   └── 📁 s-h96gl361aq-1pf4w34-cq7a6gmbzc1ra6bgp3nx89i9i
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 real_world_benchmarks-0yopbjnciirpo
+│   │       │   └── 📁 s-h96a8tx2yy-0r8ngwb-ary8re6v4d0d7o1eous987oog
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 real_world_benchmarks-148jwz1fxq659
 │   │       │   └── 📁 s-h94r24c8ub-07uaq2f-du67ic33tlsqkc3fuxfb3qkjw
 │   │       │       └── ... (depth limit reached)
@@ -4724,8 +4980,14 @@ Project Structure:
 │   │       ├── 📁 real_world_scenarios-1d6ux54gvx6s9
 │   │       │   └── 📁 s-h95omsulk9-1hydfyn-b0ghg0ueb36d3pjrdjm3ba0k7
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 real_world_scenarios-1emid61tawc44
+│   │       │   └── 📁 s-h96gkypujr-0l9t0r3-f34qs69kmw7yet61ko3n1uzpl
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 real_world_scenarios-1yir6f1nl6lav
 │   │       │   └── 📁 s-h94rmcaoc3-0kfsdu8-0ointn89be6y8m12pqmj56ciq
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 real_world_scenarios-234vm4dkmtklr
+│   │       │   └── 📁 s-h96a8tzrn2-0tc2cnp-1fr2szke9dfeiktynnyophmr5
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 real_world_scenarios-24usao8a5puef
 │   │       │   └── 📁 s-h95sncj9el-0ps3g18-69hxdaj95xswpw1zc3dy85cgo
@@ -4781,6 +5043,9 @@ Project Structure:
 │   │       ├── 📁 recursive_parser-09x4wth3css4q
 │   │       │   └── 📁 s-h94rmzanen-0051ptj-60v4sl36giblwoniw12l5q9yn
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 recursive_parser-0e2qhv9xxm3y7
+│   │       │   └── 📁 s-h96gq3s89x-1ave1tn-7h78r93gxjzhrtfu8rogzmokt
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 recursive_parser-0klgyencvhtha
 │   │       │   └── 📁 s-h95f682swf-1ia5067-20vjkhqswbwyur8e3x6dmdrtn
 │   │       │       └── ... (depth limit reached)
@@ -4828,6 +5093,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 recursive_parser-2a8yfxge0jq57
 │   │       │   └── 📁 s-h95skta6zl-16kpsr9-cdka72zyx3qa8esq6c043efla
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 recursive_parser-2ibj7sdvu5f02
+│   │       │   └── 📁 s-h96a8uttp2-1nj9twb-0pw4qahg7cuz4kdh5qczazwy1
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 recursive_parser-2klgovst7nmiu
 │   │       │   └── 📁 s-h95k10wq9w-08qzqbb-2nvmbwoszpbt3noc4qwjskhrc
@@ -4907,6 +5175,9 @@ Project Structure:
 │   │       ├── 📁 simd_benchmarks-1sadtbukf1f7m
 │   │       │   └── 📁 s-h95k3mtp72-1fr0k4w-4t4ww36iq8cpr8hbsshaxmrib
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 simd_benchmarks-22t3g061xvmvp
+│   │       │   └── 📁 s-h96gq8s821-06kgj1h-46r9nuwt26j694k9du9bt1u2b
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 simd_benchmarks-29gvnnv238fp2
 │   │       │   └── 📁 s-h95q355ikl-1uyxca3-apyjh5oklgzlvqc8w6v6nobml
 │   │       │       └── ... (depth limit reached)
@@ -4927,6 +5198,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 simd_benchmarks-2zc1j6hvxa3sv
 │   │       │   └── 📁 s-h94sjoyxxj-0j3b599-6bcebj9pwoohntpm2jur6dv8c
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 simd_benchmarks-3901v6wy1an3m
+│   │       │   └── 📁 s-h96a8voxt0-0ttu9yi-1ipawrsw70iuwkjsaepgssb1h
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 simd_benchmarks-3byrkmivrcse1
 │   │       │   └── 📁 s-h95du3lbsm-1u9kszg-4hopklsvu7nt9eetkbf8jsow2
@@ -4954,6 +5228,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 simple-0yg5tqecjv8q4
 │   │       │   └── 📁 s-h95jvme73z-0cy95w6-en40tabu6o67b933ke6qwxihh
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 simple-0yhyfx97p3c5r
+│   │       │   └── 📁 s-h96gq4sdd8-0rs22kh-es1jevdm679vjx81vyyz53oos
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 simple-10kq81kiymsr6
 │   │       │   └── 📁 s-h95sktckyo-1wxep60-5hygd6mcidj1k5xf4xt5v8uvx
@@ -4996,6 +5273,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 simple-27gl416af13qg
 │   │       │   └── 📁 s-h94sfd2547-0vuxuwu-7zny3dq76t4dxz5mvkqdwvw69
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 simple-29e11xeuc4la2
+│   │       │   └── 📁 s-h96a8we48i-0n72g1j-bmxvwvvy2wuzdxmedaw22de3a
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 simple-2a3e25rs676ft
 │   │       │   └── 📁 s-h94suuj3q7-1pqzjes-9xtqfetjmuoutybn1czlzstpv
@@ -5054,6 +5334,9 @@ Project Structure:
 │   │       ├── 📁 stack_overflow_test-09dakib8to4ri
 │   │       │   └── 📁 s-h94r280gje-06usyyf-9wln805w6u2oxg4ur6txkojib
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 stack_overflow_test-0m7wlp6suzmrt
+│   │       │   └── 📁 s-h96a8wgtw9-058nq15-8keluko90lziyd4lnm0ex79io
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 stack_overflow_test-0nzcm5vtbqozr
 │   │       │   └── 📁 s-h95fvp2q1u-004xhcr-2m1a7xciu4hyzegweb3gacmux
 │   │       │       └── ... (depth limit reached)
@@ -5068,6 +5351,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 stack_overflow_test-1o0yzyuczpoeb
 │   │       │   └── 📁 s-h95q353wvh-1j24m4k-609vww7j6lx1otebqmj5zqfb5
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 stack_overflow_test-1r0yowqqckghk
+│   │       │   └── 📁 s-h96gkzco90-04f5sk6-6ivtt0kpenlxaajpfrh01rqzo
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 stack_overflow_test-1snlodskuyt07
 │   │       │   └── 📁 s-h95du4ixmt-111drt7-4i4674zfcm13itvj7bw5nt5v1
@@ -5107,6 +5393,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 stack_overflow_test-37330mvfvo6pu
 │   │       │   └── 📁 s-h95sktct6g-0awh7qs-38olouqmihnz9706afnmvyje8
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 streaming_example-00ab33c9k3fdl
+│   │       │   └── 📁 s-h96a8vkuxn-0lof4jm-evzjw2xddiifgs6hcol47jrzv
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 streaming_example-01pknv0qyfd1q
 │   │       │   └── 📁 s-h94suibid3-1upft5d-48mo0jw4igx4qx1nm97yluwtz
@@ -5174,6 +5463,9 @@ Project Structure:
 │   │       ├── 📁 streaming_example-22x9122zyo98k
 │   │       │   └── 📁 s-h95jvnfx7o-1io9vlp-0zqgytblk1acyf2p7k2rfa4hg
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 streaming_example-23epel3fh1a1e
+│   │       │   └── 📁 s-h96gkuaz2f-0sr3xk3-ctbylgkgq6dqasvzu09alruq5
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 streaming_example-26m3gmkydpzu8
 │   │       │   └── 📁 s-h969cr284x-0nf5csl-avdww8gudqq2pcmid87156ogj
 │   │       │       └── ... (depth limit reached)
@@ -5213,6 +5505,12 @@ Project Structure:
 │   │       ├── 📁 streaming_example-3vvaj2vzer7cv
 │   │       │   └── 📁 s-h94q5zage8-1mukrhb-f2gsz2i476wanxeoq2ozdz55t
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 streaming_parser_test-0hwsvg0hgc1bc
+│   │       │   └── 📁 s-h96hlpdm37-1yeckd1-cxt2n91zkdcp0m842xuqmtsi2
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 streaming_parser_test-3804tcv67dyx8
+│   │       │   └── 📁 s-h96hlkwv2n-05vwsce-1leqogwg4m64c38po36gt1qw3
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 string_handling-020t8yuxxwwrw
 │   │       │   └── 📁 s-h94sf3zgnc-05f5j5d-09rtntmu0pt3cks93imr5sds0
 │   │       │       └── ... (depth limit reached)
@@ -5233,6 +5531,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 string_handling-0q73twqzwdnf9
 │   │       │   └── 📁 s-h95f666byg-08rdoti-b5q0xsogtx2q6kmunhimegerv
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 string_handling-0w4kpwt6saiyd
+│   │       │   └── 📁 s-h96a8vmuk5-1y3lrid-4k3zu7gwjyj71ip0bogs3zadp
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 string_handling-10qd5pau191jd
 │   │       │   └── 📁 s-h94rn4dw2r-16iafjv-89hsatqdnrh73u60fvuqkd6e0
@@ -5263,6 +5564,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 string_handling-1qfhjox2wlr6h
 │   │       │   └── 📁 s-h94sui0oxp-0t2u6fw-0t07u94nnjcwmulrmc78bnprz
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 string_handling-1u2jhj2u82npj
+│   │       │   └── 📁 s-h96gq08sr2-1orssdc-1y3jxl5w0c8hh4hrzlr0pa6tn
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 string_handling-24iessy2l9g7s
 │   │       │   └── 📁 s-h95k3ju1sr-0a92iuc-15nis9h4jl6s2cxzgf8pzqzsg
@@ -5362,11 +5666,17 @@ Project Structure:
 │   │       ├── 📁 supported_features-1mhu1i76zydkh
 │   │       │   └── 📁 s-h95bx14b30-1a2gg4s-bcdvl75yd7nz160z1p1leow7b
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 supported_features-1ovghp9kpujn1
+│   │       │   └── 📁 s-h96a8ujjko-0li9p7e-avyarh8ciz1nb5hzx1wl064j5
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 supported_features-1ux1e1e18r8k0
 │   │       │   └── 📁 s-h94sf3xn2j-04t7i0f-cswawd7192pe26a4ead9zmahk
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 supported_features-1v6tc88bvcyhm
 │   │       │   └── 📁 s-h94r7aor2y-0dxq4je-9167bphcaaejp72effjcg3178
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 supported_features-1viaytlv334gi
+│   │       │   └── 📁 s-h96gq40hvp-1mdmopp-working
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 supported_features-1wjgux5i2gok3
 │   │       │   └── 📁 s-h94r1589av-0un6n9m-ajqmah6rapfx8h9qopjuljq56
@@ -5512,11 +5822,17 @@ Project Structure:
 │   │       ├── 📁 test_comment-2uijryjh851ba
 │   │       │   └── 📁 s-h95k116qw6-11q07jo-94ks9nb062qsshje6cj0ebkob
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_comment-30avqw74nqe68
+│   │       │   └── 📁 s-h96a8w3lrj-0j638dc-dyppeplfaoocb2y9dz39uptjf
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_comment-30oneomhez1km
 │   │       │   └── 📁 s-h94sjmmreo-14hooej-08ij6q8sf6jvf54h74pnv920w
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_comment-32548p0mvc9x3
 │   │       │   └── 📁 s-h94r15bwpq-1tmol0w-bvp9g3uamfyahgxr5xvbixlul
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_comment-3aaty09keyyoa
+│   │       │   └── 📁 s-h96gq05erj-0doxbb4-9zyu6rqgmxxr7kqds7ymdzual
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_comment-3i0pdbwmetan9
 │   │       │   └── 📁 s-h94r8zxcg4-148hr1s-bpvquop7bpr32aw8ic1v4sugw
@@ -5545,6 +5861,9 @@ Project Structure:
 │   │       ├── 📁 test_comment_with_value-06mlf3fk5btk1
 │   │       │   └── 📁 s-h94suhyund-0tv0d0b-cdt5uyvp8cfxgmj8vlbbrgdbx
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_comment_with_value-0aeqlsao444v7
+│   │       │   └── 📁 s-h96gq095yw-0lii8lv-c4tvzlqa2103e8y2d38u6s3m6
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_comment_with_value-0dkzharoks1se
 │   │       │   └── 📁 s-h94r15espl-18r41s6-61dpbjxkgg8kgwggy4lxe713q
 │   │       │       └── ... (depth limit reached)
@@ -5568,6 +5887,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_comment_with_value-15dvtbrp2wqp7
 │   │       │   └── 📁 s-h95fvol12w-0p4umw1-8o0i7rr6blxfny6c1bdgkomrh
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_comment_with_value-1765874bff7vy
+│   │       │   └── 📁 s-h96a8vpp4o-15iuhqh-3w0e4fm3dchr0gnwogqzbo43v
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_comment_with_value-1c9i8gan9vo8j
 │   │       │   └── 📁 s-h94qajlshj-13w9mir-9d9p6nnvcsjti6ch2bx2nqkaz
@@ -5646,6 +5968,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_dot_numbers-0cjnmueumj6mp
 │   │       │   └── 📁 s-h94r0vo3w7-18awam3-emh5787byvxep2odbf3k7ot3i
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_dot_numbers-0h95489uc8w5m
+│   │       │   └── 📁 s-h96gkzqsr0-0cx1azu-95glzj3fwxgdfe1s6jhm091j9
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_dot_numbers-0htcljlhpjbwq
 │   │       │   └── 📁 s-h94r22t76b-11yodsc-4tdxuykcvy1m5u64n6u6h3bjz
@@ -5745,6 +6070,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_dot_numbers-2d92tctrrzdu3
 │   │       │   └── 📁 s-h95a6bix81-09vcgah-79n6ukqvtqs58y8gnjn0tsd45
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_dot_numbers-2h4kn2qzqwpy0
+│   │       │   └── 📁 s-h96a8v6f0z-0kzd6u4-2moen00dp2xcro3tnn53oyd0y
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_dot_numbers-2ln6979qsyl66
 │   │       │   └── 📁 s-h95k11b154-1bvmvg5-58hm31yvy8v1pl663vji2arml
@@ -5866,8 +6194,14 @@ Project Structure:
 │   │       ├── 📁 test_full_parse-1r4thty11p7jr
 │   │       │   └── 📁 s-h94sjomcli-0l0zfu2-cu7b286nk50y8ip13wtp1zxoq
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_full_parse-1uibtm6f3t7k6
+│   │       │   └── 📁 s-h96a8vqo6v-0acsmns-a8jei4tdgcqs48ngh69q35gfr
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_full_parse-1yjm4yynfe4t9
 │   │       │   └── 📁 s-h94rma1m29-030we4v-epu8czyrrlljgwfgkil0oxa0n
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_full_parse-24nd5taf2knqb
+│   │       │   └── 📁 s-h96gq7lktu-0ui4mvt-6340ukjcux9oupqg8w9rnmcg2
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_full_parse-26v70nmp00ufc
 │   │       │   └── 📁 s-h94lxtvp61-1io67ys-5euz4udl9hs1dzxgl5481iqid
@@ -6055,6 +6389,9 @@ Project Structure:
 │   │       ├── 📁 test_implicit-1ifslz9nr537x
 │   │       │   └── 📁 s-h94lx5ywbl-03c3snk-4gxhsd11243gs1hb4yissb621
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_implicit-1jcujpt9wqi7v
+│   │       │   └── 📁 s-h96a8tzzmt-08lnth2-cebx4h7jtnne3z8r5f7kpj8lj
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_implicit-1mj85j7qcwsau
 │   │       │   └── 📁 s-h94q9x3a40-18x4jpl-2qpdpzdbrob42zvhu3yq8jj0s
 │   │       │       └── ... (depth limit reached)
@@ -6139,6 +6476,9 @@ Project Structure:
 │   │       ├── 📁 test_implicit-3kz3dtbms48ej
 │   │       │   └── 📁 s-h95f6h7arw-16rzl14-eo84dw534vie66nytraqhwo5d
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_implicit-3l0sjhnnc28j3
+│   │       │   └── 📁 s-h96gq7zh8r-0o9yie0-c2ky2nkd5pnw6gi90xrdtrzyb
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_implicit-3ny9ucjj24kaa
 │   │       │   └── 📁 s-h94q63n7z8-0q8n4jd-0zdnqbj7jfboyq9jo3tmzya1r
 │   │       │       └── ... (depth limit reached)
@@ -6189,6 +6529,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_implicit_array-1hya9z8j8x39q
 │   │       │   └── 📁 s-h95q371sxq-0di18qn-2s0yey5tf8ycopg5uhpqpvcsh
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_implicit_array-1mv72iitfc8kl
+│   │       │   └── 📁 s-h96a8tzh2f-0lbo5cj-byn0etrv08esxp4i1eha1ylxv
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_implicit_array-1qpza8g6s60zp
 │   │       │   └── 📁 s-h95f75459m-09gje3b-ab0z6srnxh84qteu2o1r8b1yp
@@ -6244,6 +6587,9 @@ Project Structure:
 │   │       ├── 📁 test_implicit_array-3srlr6wdqxk23
 │   │       │   └── 📁 s-h969csaorn-1jq9f5m-5yd0rlm1era9x2jdwvaoap3de
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_implicit_array-3t5oqlp1mlyxu
+│   │       │   └── 📁 s-h96gq8w08l-15wpnzg-f4t2mrkp6pe1mxkd6c6u5pb9r
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_implicit_array-3tru30tqapjto
 │   │       │   └── 📁 s-h94r92vg5l-15unxyk-98iirmnhku87rclak8p4erob4
 │   │       │       └── ... (depth limit reached)
@@ -6279,6 +6625,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_implicit_objects-0sb8tbohbu2d5
 │   │       │   └── 📁 s-h95kn8nrk1-1fv5d5z-bk1ymvuts23ctrmr6rh8roaly
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_implicit_objects-0thmd6626mzab
+│   │       │   └── 📁 s-h96gq08o5i-10impb6-b1l4elt9yfyy59kse0nfyagkn
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_implicit_objects-0ttvgnub7wp2d
 │   │       │   └── 📁 s-h94lxvvavi-0rg0llz-eainkngqp7uv2oybj9x5nmn7x
@@ -6336,6 +6685,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_implicit_objects-2hodfc6okx0db
 │   │       │   └── 📁 s-h94r234x0q-01btsuq-623cp6r92oxw3lsdzyn3byugb
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_implicit_objects-2jecqmxag4yga
+│   │       │   └── 📁 s-h96a8ux66g-1nek8ow-e2biw5j5outziw9owixrbl4xk
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_implicit_objects-2l1u3azoc425u
 │   │       │   └── 📁 s-h95sktavh5-0eyfupu-bl4adqhgtxc7vyaiwla1obhy0
@@ -6415,6 +6767,9 @@ Project Structure:
 │   │       ├── 📁 test_inline_comment-23nuji3gao9cg
 │   │       │   └── 📁 s-h94suusvd9-1he9i5l-0p72hp185l031h3mmqstb4mnx
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_inline_comment-2af73f51wcxq1
+│   │       │   └── 📁 s-h96a8uqj0b-09ga6tg-a0ta3f6i54qqonq65gwsn0faq
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_inline_comment-2dwxsu2uk6yp1
 │   │       │   └── 📁 s-h95du3kzgc-0yhm1f3-dzuhu6gzb57az9esg1gb5mntn
 │   │       │       └── ... (depth limit reached)
@@ -6441,6 +6796,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_inline_comment-2o81kk7rbqbqi
 │   │       │   └── 📁 s-h95sl7xwaf-1ylrkfp-8ol5xedubkii6e05in42rqfow
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_inline_comment-2qs2r78605npm
+│   │       │   └── 📁 s-h96gq4e547-1fgptvr-9f7znx837iif7pt76sk6azehh
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_inline_comment-2rfadd59lw3c5
 │   │       │   └── 📁 s-h94rn4ctnz-0ezfup2-59jtf7jt8tbjbu4oe13k95068
@@ -6541,6 +6899,12 @@ Project Structure:
 │   │       ├── 📁 test_number_types-2n8i3o14d320x
 │   │       │   └── 📁 s-h95jz2a6ew-10tpn3v-34cop0ynbl3sav2jgn556v4sq
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_number_types-2wsv3g96xio3y
+│   │       │   └── 📁 s-h96gq095kx-0oneein-9t0j0b2cshdwxur07dvwikkuw
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_number_types-2xma6kd20uuv5
+│   │       │   └── 📁 s-h96a8tyta0-1wi4rzb-1wt9aes1tge5pzjr13r83yxca
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_number_types-2zc8dh1zm8tbw
 │   │       │   └── 📁 s-h95bwp28rn-1tqqoo7-4p9phepev55m1vs50d23q683l
 │   │       │       └── ... (depth limit reached)
@@ -6616,8 +6980,14 @@ Project Structure:
 │   │       ├── 📁 test_parse-11vyf3ehl5xme
 │   │       │   └── 📁 s-h95f7cqua1-15j1kb6-6rzixo9290jx29zjkru04posr
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_parse-12uvllnanwm28
+│   │       │   └── 📁 s-h96gl40s6g-03iqyva-7n4noypzrw1ty94kycilgwutb
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_parse-13k7c4sgvbz4q
 │   │       │   └── 📁 s-h95c5k5ure-0fon3p5-9skv7hq8j736xvctmxdkkapwn
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_parse-19jfxugn9rkgj
+│   │       │   └── 📁 s-h96a8usbhn-0hsykh7-8kablktqb04vrwhbmniyhhtoh
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_parse-1amqy3yvmu1eq
 │   │       │   └── 📁 s-h94q9ytjb8-02wv4jx-0q67oy88italrktn1xx75z5yh
@@ -6769,6 +7139,9 @@ Project Structure:
 │   │       ├── 📁 test_point_zero-0lhm0h08p2hz3
 │   │       │   └── 📁 s-h94lxuhzay-14xx6of-2sy96jju1ya0qq71a3rw0y6f7
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_point_zero-0mlq7kuh84xtd
+│   │       │   └── 📁 s-h96gl3pix5-15xabbo-3sb9vqlqr5z7w5nxeelmdjmve
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_point_zero-0my0blp736gwq
 │   │       │   └── 📁 s-h94qgzvpyx-139lxni-d339u13di0ethzobwx3j0mdqz
 │   │       │       └── ... (depth limit reached)
@@ -6908,6 +7281,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_point_zero-3mzgs57u85omz
 │   │       │   └── 📁 s-h95f67qmbn-05731hn-8q6jxmints0im30ydz4pl2map
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_point_zero-3p5sz8sv0ua42
+│   │       │   └── 📁 s-h96a8vsmgg-0o8b7gw-7bpdgbbcgb1okp3d8dmdy6gbm
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_point_zero-3rjldtfr3k94a
 │   │       │   └── 📁 s-h94sufzttl-1qdq6bz-96gdfrm9eg9xk3b9tnyvpxgr7
@@ -7068,6 +7444,9 @@ Project Structure:
 │   │       ├── 📁 test_positive_numbers-3gbjs07hy1auj
 │   │       │   └── 📁 s-h95f6ify2v-1m85hg0-a4fk0eqpg71z3u6i0ezatzzwe
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_positive_numbers-3hez6xdnwjveq
+│   │       │   └── 📁 s-h96a8vshlm-1k6fj78-d6ud4l7f9lw2uh7e16wo3mqw8
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_positive_numbers-3in87389l8e87
 │   │       │   └── 📁 s-h95jz5s840-0s1c0yi-8l3spldslkit9y9g1urlceu0x
 │   │       │       └── ... (depth limit reached)
@@ -7079,6 +7458,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_positive_numbers-3n3jw6wbygcq1
 │   │       │   └── 📁 s-h969cqwcj0-10kevcf-dejvlhc44mrdmpexe3vpf80n0
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_positive_numbers-3s6bo3jwffuh0
+│   │       │   └── 📁 s-h96gq89xoe-0y38qy7-2lky1uiejatv4s1n95s1jq18m
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_positive_numbers-3swgkfdtyhp6r
 │   │       │   └── 📁 s-h95atjhen0-0xk8awz-0jm7vxjqzryb89y3nnaq8tks1
@@ -7134,6 +7516,9 @@ Project Structure:
 │   │       ├── 📁 test_rust_parse-0slppd4qh30np
 │   │       │   └── 📁 s-h94rn0f3zd-1pmgh16-2ur6qfqqp2xrm8wfqzydu47jd
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_rust_parse-101khw35az81g
+│   │       │   └── 📁 s-h96a8vgre9-0hkw5vk-8c7acmu8xmz32jnke72px1tbz
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_rust_parse-12lql7hpp5eaa
 │   │       │   └── 📁 s-h959x3kh0q-1fg5aog-7chl0lg8urf3u8m63oqrjocpc
 │   │       │       └── ... (depth limit reached)
@@ -7145,6 +7530,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_rust_parse-1ciel13hkhrmi
 │   │       │   └── 📁 s-h94rm5f95a-1ucluzp-d9u2nfgz2zz0nf84ynr5b423l
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_rust_parse-1cwzro6dfbzv8
+│   │       │   └── 📁 s-h96gq42ias-1xiae10-cqr0373tlh9w0nxdqz6z3eeuy
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_rust_parse-1e7xqp7cmxjfg
 │   │       │   └── 📁 s-h959njqp7b-1ddfx9m-f0192t1cay2z2yq2d9763f9c7
@@ -7260,6 +7648,9 @@ Project Structure:
 │   │       ├── 📁 test_rust_parse-3tlh0bobbofkk
 │   │       │   └── 📁 s-h94sugpjly-152jhc2-12g2ki226y491b526sbfk3czg
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_single_brace-011w1x75e7etf
+│   │       │   └── 📁 s-h96gq07vwq-0stzsf1-1hfi54s9y5jo8mc09ae6avha2
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_single_brace-0bkbqy15hu0l5
 │   │       │   └── 📁 s-h94r8px7uh-16ifs5m-eavj6qnm9etgtgo8cils4p5rt
 │   │       │       └── ... (depth limit reached)
@@ -7335,6 +7726,9 @@ Project Structure:
 │   │       ├── 📁 test_single_brace-3asejggdosryw
 │   │       │   └── 📁 s-h94qa3hvtu-0iqwdxv-9dguvkqpdl6r78hzvvpkp0r8r
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_single_brace-3cx98a2xnc5m5
+│   │       │   └── 📁 s-h96a8tz33h-0bht045-8li93sgigpc59tywb1pncc07o
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_single_brace-3h5zep1xxisbm
 │   │       │   └── 📁 s-h94rmesk0r-1v6qzu1-acjqhzh12rpflaf4p5wzktjc6
 │   │       │       └── ... (depth limit reached)
@@ -7401,6 +7795,9 @@ Project Structure:
 │   │       ├── 📁 test_single_quote-14i9c0usly2z5
 │   │       │   └── 📁 s-h95k3m5ydm-0e0sr9j-e7k9t2v7rghnw12en5xhcadk2
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_single_quote-17uuys9w6tvr7
+│   │       │   └── 📁 s-h96a8wgwgv-0ij1d76-b0xtojosgd88hk4l28jcf4ggm
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_single_quote-1ejnzi3x1qytb
 │   │       │   └── 📁 s-h95bx50ol7-1req3wl-9p63hxmnrvgu3681d7e535iw5
 │   │       │       └── ... (depth limit reached)
@@ -7448,6 +7845,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_single_quote-2sdgkty69cvgq
 │   │       │   └── 📁 s-h95rgirxxe-10x60rg-6g1abryqp685hfectpegwimrq
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_single_quote-2turonppo0dv0
+│   │       │   └── 📁 s-h96gq4fxe2-0x5idru-9cbp1y68aoj96w6magxrye5u3
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_single_quote-2u0c6vw5zdqsq
 │   │       │   └── 📁 s-h94qajm4yw-1szib8k-a8mfh295xju5g5q2ijok9ocvl
@@ -7605,6 +8005,9 @@ Project Structure:
 │   │       ├── 📁 test_strict_comment-2s55f36b5k9cm
 │   │       │   └── 📁 s-h94rn0sox1-0mw9549-4jh1dzwyjp2mnekdy8m7587br
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_strict_comment-2y4ks8hldhylo
+│   │       │   └── 📁 s-h96gq7p5kq-1jrb90z-cyt7y9h6bhwmqn8dsfmijcb19
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_strict_comment-2ybwhsksmtd93
 │   │       │   └── 📁 s-h94sf3wnre-1qpe8um-crtnmd01z5eieetuk67ycyygq
 │   │       │       └── ... (depth limit reached)
@@ -7613,6 +8016,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_strict_comment-3261n6ehaara9
 │   │       │   └── 📁 s-h94r937g4b-0l7fvkk-ecbrfwal30bq1upndvj5kmrzl
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_strict_comment-32sfl6q7vjf15
+│   │       │   └── 📁 s-h96a8wbad0-0o6qj81-07bymn1ef5lu9wpaps3e2hsdd
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_strict_comment-35oy802gdar9w
 │   │       │   └── 📁 s-h95k3mqiak-0blo1zg-811h39ukgko47galm3jhq0jr5
@@ -7712,6 +8118,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_trailing_decimal-17cpvlbsbtah7
 │   │       │   └── 📁 s-h94lxv3anf-0h2s175-e426a4r00kdqwar4ps1p1ajoo
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_trailing_decimal-1bjwicaxye1vw
+│   │       │   └── 📁 s-h96a8uraq2-1flguwz-5k7z41xg8op058mlr5hdi9kzm
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_trailing_decimal-1c7lmyai58ihh
 │   │       │   └── 📁 s-h95fvq0175-02cf8vr-65weyzotz2za3eh3fa0yk48je
@@ -7815,6 +8224,9 @@ Project Structure:
 │   │       ├── 📁 test_trailing_decimal-3ee2stuwjl0pu
 │   │       │   └── 📁 s-h94lxyq34c-086y0ve-alvpf4eoawdccbxpwseivzdq8
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_trailing_decimal-3gvh0an9kn2s4
+│   │       │   └── 📁 s-h96gq3x2uj-1qnbmij-axkq77at51vprece04w919ctj
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_trailing_decimal-3kpt8rbyiv9m1
 │   │       │   └── 📁 s-h95f6h33cz-0plkuwp-d934yhbj6llhuv82oi1pu9ftd
 │   │       │       └── ... (depth limit reached)
@@ -7829,6 +8241,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_unquoted-05uyo2dcjr6kf
 │   │       │   └── 📁 s-h95sny7fln-1fpsax3-0wxytppxvkjtkqw39pkzjqhjn
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_unquoted-088eb7nbtmcaf
+│   │       │   └── 📁 s-h96a8wgxz3-1ngva1u-abqy7h6w3k8zh01lwx1ihpnep
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_unquoted-0f0fki4alphyd
 │   │       │   └── 📁 s-h94r7dliyl-1ecnd0f-7w2izvrd5unppp1amitrrp2t2
@@ -7904,6 +8319,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_unquoted-31xrex4z6axr2
 │   │       │   └── 📁 s-h95du5htkg-1ykaiqn-3arh3t5o54zry14wjq7csxbfp
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 test_unquoted-330jlfgqop6xd
+│   │       │   └── 📁 s-h96gq8jl3s-0izmbul-1x26k7lym72ojxzn65wi3jvwd
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 test_unquoted-3ayprem964aq4
 │   │       │   └── 📁 s-h94q5x9tf6-0j974sw-6gw0yfbn0k4fq5jaeo81fvdua
@@ -8013,6 +8431,9 @@ Project Structure:
 │   │       ├── 📁 trace_comment_parse-0krmkdvw9o5nn
 │   │       │   └── 📁 s-h95sl37sy5-107007z-duovkofgwum7y08pzj1tu57rf
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 trace_comment_parse-0nxudfiao1zh7
+│   │       │   └── 📁 s-h96gq07tpq-1ra49sn-25j86m6xg2pc513wsomytzbys
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 trace_comment_parse-0s0z7ul4yti4d
 │   │       │   └── 📁 s-h95k29hdkt-0bxqgcw-c77ph5w83yqj2f46vn8fuxxjn
 │   │       │       └── ... (depth limit reached)
@@ -8048,6 +8469,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 trace_comment_parse-1n781aky6czd6
 │   │       │   └── 📁 s-h95atkkfag-07vx9y6-djjnxzvl4sm3n60q1nesvyrxl
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 trace_comment_parse-1s6cg0uhlf3hp
+│   │       │   └── 📁 s-h96a8wf935-0e8z3mu-7u1l0pfc4uewdfts3v48ssdw4
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 trace_comment_parse-1us74vk91eokf
 │   │       │   └── 📁 s-h95jz4upbp-1d9imj6-4misujaf5f714mq6e3nbndknj
@@ -8238,6 +8662,9 @@ Project Structure:
 │   │       ├── 📁 vexy_json-03hz03ibmjamq
 │   │       │   └── 📁 s-h95omvnvnk-0rb0ppz-5uv4w39rvvbiiux3nheqel79l
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-049i1gs8trk6z
+│   │       │   └── 📁 s-h96a8sygwg-0bxcf6y-9fj8lw6rul7enl5mnos0tvz4p
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-05ylfy1vehddn
 │   │       │   └── 📁 s-h95rg5cuxd-0glhp5m-bemvivk6ib8nob8a81t21va0h
 │   │       │       └── ... (depth limit reached)
@@ -8252,6 +8679,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-0cgukivgxdog3
 │   │       │   └── 📁 s-h95kmylxj0-13gn1t7-dh9f7glfhhcuckcn65bq184u9
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-0drwd7aalr1s0
+│   │       │   └── 📁 s-h96h48huj4-1ffp2x5-d2qibo395a6z8d16ab157pscx
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-0e9y4ra7kxkt0
 │   │       │   └── 📁 s-h94suegkk4-17u86gf-53ya26ylclf9webzg9i60ozq3
@@ -8276,6 +8706,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-0hqk1r637wogr
 │   │       │   └── 📁 s-h95k0tmvtq-1ecea1n-056x26bea7owfmrr8wxdlb8l5
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-0iilcqcectr72
+│   │       │   └── 📁 s-h96h44q2d5-176w6p7-b6msihdhuqnjxbgjq5cez0iyp
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-0j003oif6icfz
 │   │       │   └── 📁 s-h94lxtvprx-1nd35yr-d9ji6mqi8yg4wlj34ej4lm8e9
@@ -8312,6 +8745,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-0p99pa9joybxn
 │   │       │   └── 📁 s-h94r212kxe-11mou4f-adzs0kmc4ie30au51vc8y2bq7
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-0panm1tsnadta
+│   │       │   └── 📁 s-h96ha5vwic-1agh2vk-47bj4jb07tqw4olkrns0xzdpt
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-0pqwexaj1yta4
 │   │       │   └── 📁 s-h95skmohg1-0rferc7-6x0gqfrxzvgy8mh8x7tma72nv
@@ -8376,6 +8812,9 @@ Project Structure:
 │   │       ├── 📁 vexy_json-18zvr59u6antb
 │   │       │   └── 📁 s-h94r76tpw5-0bwjj6n-4z7lmui3y3dtwtawzqz2beagr
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-19ynbpwul8a6o
+│   │       │   └── 📁 s-h96gpwd7y8-1cwggmf-8hyjy5tab1kf0qq8obsxuyc1r
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-1a1uc5rl4qu1q
 │   │       │   └── 📁 s-h95du28exg-0m6nwrm-c7diwkivnwu2dr91ago4wx7ob
 │   │       │       └── ... (depth limit reached)
@@ -8403,6 +8842,9 @@ Project Structure:
 │   │       ├── 📁 vexy_json-1enfkqw8jgwe6
 │   │       │   └── 📁 s-h94r20zg1n-0mype71-e6fllltutlk4gywxfc932x4qz
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-1f0zptdp04r19
+│   │       │   └── 📁 s-h96h44xyds-0ibomqi-37aum2ukbc93fpjiqxn89x0dp
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-1h2w7cijq42v5
 │   │       │   └── 📁 s-h969cof65c-1pwrivs-279libb4mmbu4xq4gq3mto7ep
 │   │       │       └── ... (depth limit reached)
@@ -8429,6 +8871,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-1ko64r5ug9xbl
 │   │       │   └── 📁 s-h94r8neatl-0sfl9x8-4pladuj9tnzt628a8b0kqghyr
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-1kth4off2kvvl
+│   │       │   └── 📁 s-h96a8syh92-0whjttk-aqpv97zycgt5z5udiyh5gjmyh
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-1l8tawg3xd0zf
 │   │       │   └── 📁 s-h95fvl4pd0-1woc67r-1bafblfn9gyyewf3stfisulrj
@@ -8583,6 +9028,9 @@ Project Structure:
 │   │       ├── 📁 vexy_json-2s4jr8mxn9wtp
 │   │       │   └── 📁 s-h969cof5jn-0y9ffpl-3wlani35cw6jkx7ogh23uylsu
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-2sd7v1g6jkpy2
+│   │       │   └── 📁 s-h96a8t7nw5-0hlag90-64zmk8pj26foii0eh1x7o556w
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-2sp5o6ab85d0d
 │   │       │   └── 📁 s-h94r21gzik-1y7xepv-23ekjjb92ij4taxqh1h1ewk2p
 │   │       │       └── ... (depth limit reached)
@@ -8640,6 +9088,9 @@ Project Structure:
 │   │       ├── 📁 vexy_json-37ozijpxc8p1l
 │   │       │   └── 📁 s-h94sueoxq8-1g8qx04-9fwst0jzdqr1jjb7e0cs99lve
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-39mxfpdij7k7v
+│   │       │   └── 📁 s-h96ha5w2lz-08oj4e2-6cqqdzm76jhhe43pifdpv46xq
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-3ajpeuz6g77u0
 │   │       │   └── 📁 s-h94r7gzo3p-0zt98j3-34bwgtqg7wfxtyquo7scxhq2y
 │   │       │       └── ... (depth limit reached)
@@ -8648,6 +9099,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-3bdtwyhgpkpzr
 │   │       │   └── 📁 s-h95c3npxwa-0t1v1sm-77gpnjup08gi755wzznnzq4x0
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-3bnz7bwwqb7l4
+│   │       │   └── 📁 s-h96a8t7omc-0gawn2g-4kzdumv4vntcemminhqkxlfb0
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-3cz1zjzz4ffmf
 │   │       │   └── 📁 s-h94suehhor-153kmfm-5nzur25lai0i47vhg9fj94w3l
@@ -8688,6 +9142,9 @@ Project Structure:
 │   │       ├── 📁 vexy_json-3qfay8qwfqm6k
 │   │       │   └── 📁 s-h95snsu0yi-0a6vnjb-3cjic5vi1u42hsgxpyj6gcd1v
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json-3r580xweqj2w4
+│   │       │   └── 📁 s-h96gpwd44v-0i3hine-2yer8r2etd4yqj43sb53cufts
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json-3rp5z1e4fxv67
 │   │       │   └── 📁 s-h94lxw70kq-11j7h2m-8wd4hnazqc181whhd0pfrmv8b
 │   │       │       └── ... (depth limit reached)
@@ -8726,6 +9183,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_c_api-0hob2spyauto0
 │   │       │   └── 📁 s-h95du27jpd-1h1j85p-evay81lexv841tyfti0d1lmhv
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_c_api-0lddq677lvq9v
+│   │       │   └── 📁 s-h96h44phxj-0bex3iy-0zm68j1ocszs0izgzmlcu1cg8
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_c_api-0qqmlo9oesx21
 │   │       │   └── 📁 s-h94q5v3d1s-0pgt74s-9svlumrqpzg52s56gppbdt8gh
@@ -8793,6 +9253,9 @@ Project Structure:
 │   │       ├── 📁 vexy_json_c_api-2qgd5bwnf8193
 │   │       │   └── 📁 s-h94sf6dcvq-0orm77n-0r3p7z2iveui02con1jr68wix
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_c_api-2truynvyghuju
+│   │       │   └── 📁 s-h96a8syj6y-1bx21d2-0qger4mdfbwohpglp9khk960m
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_c_api-2x01ktj59yl1q
 │   │       │   └── 📁 s-h95sko5u68-1cho907-dmfx33a97u6dhtozx5aazr5rt
 │   │       │       └── ... (depth limit reached)
@@ -8810,6 +9273,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_c_api-3gg0dy0q0x1wj
 │   │       │   └── 📁 s-h95q2hkac9-1kg08p5-cnrjomoo8ry0nnpa5r8p58id2
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_c_api-3hio53q0a8o6f
+│   │       │   └── 📁 s-h96a8syfhz-18p4udk-bi8cqt8nlvi4wkuimvlazw7sq
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_c_api-3i1d9hmhntofy
 │   │       │   └── 📁 s-h94r213m8o-1pmv4v0-24uv5flsanelstf5s7isxcfo7
@@ -8852,11 +9318,17 @@ Project Structure:
 │   │       ├── 📁 vexy_json_core-07y2atckmztxx
 │   │       │   └── 📁 s-h94qoj1i87-0fjzc4v-38wuakhnjf2oyl7yyfx2ck1zw
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_core-0al0rcy3s505l
+│   │       │   └── 📁 s-h96h4237ac-1xsfb6w-8trefq49qam4haf0ah4sgs42o
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-0cldyprxpwiyf
 │   │       │   └── 📁 s-h94rlrtfj3-0gvbhnf-9bpg15n8gktsmw631rw51ne4m
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-0ea0ilx0jqcl1
 │   │       │   └── 📁 s-h94sje5g3g-0wxecdt-51iy319jbxwdb0eo831216mwy
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_core-0g8eyumsxcq2r
+│   │       │   └── 📁 s-h96gpby1wb-1qah1rj-9swouchnt7akn9pf2ggoh058w
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-0h9592w789z4f
 │   │       │   └── 📁 s-h95a64qqid-0x4h1v7-2w5purjst2co0ul1za54n69i8
@@ -8881,6 +9353,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-0m25ekwhdlb6l
 │   │       │   └── 📁 s-h94seqgbj6-0a2avym-btx5ordmh5o553f3b4x8qj79y
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_core-0myl0gbbktstc
+│   │       │   └── 📁 s-h96h4htq42-1w7sk6m-5pek080gesua0ffh0nw8u8srr
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-0oon5ri2ox9bq
 │   │       │   └── 📁 s-h94suddhyq-0rr4182-a71t0fhm995mavdp35q9632v3
@@ -8926,6 +9401,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-170tf1pfea672
 │   │       │   └── 📁 s-h95tf3j4hj-1hxjonw-working
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_core-19oghax5ctssz
+│   │       │   └── 📁 s-h96akc3ewv-1qty0ci-exqgrk2hqnswy7zanz1xpzfm3
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-19x32pwp608r5
 │   │       │   └── 📁 s-h95t31j8bo-185bn9k-axsnuhtgpb19q6rydvjda014f
@@ -9008,11 +9486,20 @@ Project Structure:
 │   │       ├── 📁 vexy_json_core-28s3d1kj2qmgp
 │   │       │   └── 📁 s-h94lxqoha3-0l9368u-drpx4ayume9p51o88yu1muuyp
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_core-28w8xx0d6brdk
+│   │       │   └── 📁 s-h96h2xuxxs-0q9iu7o-working
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_core-29whezxkmarmz
+│   │       │   └── 📁 s-h96hlo5knm-037a6uh-65ws2cx2yfa5neqdoo9jdncgt
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-2avgpgmaqdpje
 │   │       │   └── 📁 s-h95aknoecy-1ipar29-93uifs9jg81zloqri2zer4gxs
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-2b386zpfyg7vv
 │   │       │   └── 📁 s-h95du06q7v-01p8o1n-dztfm809les0hb75iomjvunhq
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_core-2bviwi5om5ngn
+│   │       │   └── 📁 s-h96ha72v6b-1gvsch1-c5yd01k7v7zqz819cqonvezfg
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-2dsang4gfhdjk
 │   │       │   └── 📁 s-h94lxti4rp-0wf02nh-bp3t8bq5sxdtt0vbd26drwij5
@@ -9047,6 +9534,9 @@ Project Structure:
 │   │       ├── 📁 vexy_json_core-2os5z90o8qfs3
 │   │       │   └── 📁 s-h94smbgqnq-01dhcfo-working
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_core-2qhv4dz7ympy0
+│   │       │   └── 📁 s-h96hgl56db-06ew7pz-eqi46ruw5dbm2qe26fm476cl1
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-2sirplucsggzp
 │   │       │   └── 📁 s-h94rmpdk0k-0z7jrnh-0vdr4ugj13ohdg4ysnhmnn006
 │   │       │       └── ... (depth limit reached)
@@ -9055,6 +9545,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-2uxq3zox4hifh
 │   │       │   └── 📁 s-h95jyuv7dj-078v2k9-0ru28sv9ujstqkb96igj1frun
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_core-2v8asksy59sjd
+│   │       │   └── 📁 s-h96a8qdv8z-03uqu7o-2canzf122fzsb0yvc115u3698
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-2wq4b9uh28ksy
 │   │       │   └── 📁 s-h95fraurc0-0vcqumu-43d4ozmetgjlt076iy7vw8u9n
@@ -9088,6 +9581,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-3gdf8qku0vao8
 │   │       │   └── 📁 s-h94sje5uty-1cixa3x-1hg0tlec68f0xmyujresbmoqm
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_core-3i5ffyx2zxxw1
+│   │       │   └── 📁 s-h96a8qe4hu-0gno9ou-d6w2o2pbf7ijwf712fgm98vnn
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_core-3jpozuo4ri2pb
 │   │       │   └── 📁 s-h95j0bjex5-0lvfhqj-working
@@ -9176,6 +9672,12 @@ Project Structure:
 │   │       ├── 📁 vexy_json_serde-0fyen8m8izesc
 │   │       │   └── 📁 s-h95q2yz9e6-10xnd8t-8qbau23i6y2si3l954hrh3sj0
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_serde-0i4jcbksemaq7
+│   │       │   └── 📁 s-h96gpuu2tq-0s4w9vw-7o5le1vwzx24wrpzy00g1oh0m
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_serde-0j30dvowho47b
+│   │       │   └── 📁 s-h96akvrzdr-1vkbnun-0p9xjp6d9tnrzix7i1okb6fit
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_serde-0ks7x5lvyjl6o
 │   │       │   └── 📁 s-h95k3gif77-0s7683w-djmmh6dr6pee1uzfcnh3dp2kw
 │   │       │       └── ... (depth limit reached)
@@ -9208,6 +9710,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_serde-10tlyrhdp7uib
 │   │       │   └── 📁 s-h94q9vp85z-0iv0l0e-3xd683kiqazr84xappd3foa8h
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_serde-11hp4ro8ahx3v
+│   │       │   └── 📁 s-h96a8sw3qc-09md58l-1c9ozkrn2y7iolxhwev8tlxsg
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_serde-16tavgq2g3bme
 │   │       │   └── 📁 s-h94q4dd827-12nsplb-430pdgta55x5utoseg3ckepjp
@@ -9305,6 +9810,9 @@ Project Structure:
 │   │       ├── 📁 vexy_json_serde-2gf2y2yrt6ugn
 │   │       │   └── 📁 s-h95k4xarkv-0efdlnz-eyj1nwxf0cxvcvtqusodnsj2a
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_serde-2j1iznt7mka9x
+│   │       │   └── 📁 s-h96h44ppjz-12cy6kn-dkzl0pdovqd8lq9f9v1qwq0m1
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_serde-2k13vfs1xmikp
 │   │       │   └── 📁 s-h94suehcmu-1sifijc-e5rbchukz0ep7dtu23bulin5b
 │   │       │       └── ... (depth limit reached)
@@ -9331,6 +9839,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_serde-38ytsec5mufbb
 │   │       │   └── 📁 s-h94reqbhji-0hgir00-3fj9ja5oc942va2bw98sphlb3
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_serde-39k0gzc8ba0do
+│   │       │   └── 📁 s-h96a8svr4l-1tpbn9p-954atqa86st69g2nhf1csp54b
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_serde-39klfj47is6ah
 │   │       │   └── 📁 s-h94rm086eu-1idhvqa-bqo1be1xj3tnhmdc4fnasuidc
@@ -9407,6 +9918,12 @@ Project Structure:
 │   │       ├── 📁 vexy_json_test_utils-1z7zi3w7yjbnk
 │   │       │   └── 📁 s-h95k5s06g1-1pf9dgk-ak208rb8atfum9tyhyb9kc0qt
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_test_utils-27a4nts5kufwg
+│   │       │   └── 📁 s-h96a8sy8xl-0opvf4n-32jvlzg5kq7ddjvfkjabzkbtj
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_test_utils-2cc3y3lll07m2
+│   │       │   └── 📁 s-h96h44przj-0vd87u4-9gzdq6i6xlnrevt0bm63mwa70
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_test_utils-2jqjfp66a3hbs
 │   │       │   └── 📁 s-h95omn4yfg-0w5qeao-3ebmewfcxbsbsw926ma6nn8e8
 │   │       │       └── ... (depth limit reached)
@@ -9418,6 +9935,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_test_utils-2wameh62wkrff
 │   │       │   └── 📁 s-h969cof4yv-05s7zl8-266iebqwey6v16v3msh6zzcy3
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_test_utils-2y0i29dx7gxbq
+│   │       │   └── 📁 s-h96a8sx9li-1ry5mem-7l73psowm0xohksl3t8xvvq1j
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_test_utils-34o5b0k73k7p9
 │   │       │   └── 📁 s-h95frca7g9-0ib46g6-acl6fsitm4l835pdigffroj11
@@ -9461,6 +9981,9 @@ Project Structure:
 │   │       ├── 📁 vexy_json_wasm-0et9xkrop3cfk
 │   │       │   └── 📁 s-h969cocjni-1dv3zhm-d1yj6aphamwsy7jit3napa1s8
 │   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_wasm-0j6by1onl3rk0
+│   │       │   └── 📁 s-h96a8syfh9-1woysy3-196xa2uj0iorsqt9g3wq0mb75
+│   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_wasm-0pmoeuo4v55wv
 │   │       │   └── 📁 s-h95du24i4l-13cq7nu-bfl0xairbo7gysz9m7axtdrxk
 │   │       │       └── ... (depth limit reached)
@@ -9475,6 +9998,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_wasm-10zshacvya02n
 │   │       │   └── 📁 s-h94lx5ykol-0prsxya-4mb6r2jofcppp6x5o5v0swsel
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_wasm-1539w4pensvu9
+│   │       │   └── 📁 s-h96h44pxdv-1d3d6zl-b0devvd2b6wguskn85cfpmp8a
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_wasm-167a3t1im72j7
 │   │       │   └── 📁 s-h95fvkont0-1yme3sd-4gces6zdb8iefz3mo8eb1eq68
@@ -9496,6 +10022,9 @@ Project Structure:
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_wasm-1jdxu4mfpumao
 │   │       │   └── 📁 s-h94q5v2sgi-0a7yj3r-e1v4c6euctwqpnym6kp7pmpus
+│   │       │       └── ... (depth limit reached)
+│   │       ├── 📁 vexy_json_wasm-1joiuelyrwh3f
+│   │       │   └── 📁 s-h96a8syfkg-076k77p-1st89qfe9h07dboxpip52ib7w
 │   │       │       └── ... (depth limit reached)
 │   │       ├── 📁 vexy_json_wasm-1t4sp7x8j5goa
 │   │       │   └── 📁 s-h95k5w9nxm-11bfwke-5dmcqzpvidhq0c7x0pyv2kz8t
@@ -12911,7 +13440,7 @@ exclude = [ "bindings/python", "fuzz" ]
 
 [package]
 name = "vexy-json"
-version = "1.5.5"
+version = "1.5.4"
 edition = "2021"
 description = "A forgiving JSON parser that accepts non-standard JSON formats"
 license = "MIT OR Apache-2.0"
@@ -14396,7 +14925,7 @@ struct TestData {
 <document_content>
 [package]
 name = "vexy_json-python"
-version = "1.5.5"
+version = "1.5.4"
 edition = "2021"
 authors = [ "Adam Twardoch <adam+github@twardoch.com>" ]
 license = "MIT OR Apache-2.0"
@@ -14685,7 +15214,7 @@ build-backend = "maturin"
 
 [project]
 name = "vexy-json"
-version = "1.5.5"
+version = "1.5.4"
 description = "A forgiving JSON parser for Python with relaxed syntax support"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -15157,7 +15686,7 @@ esac
 <document_content>
 [package]
 name = "vexy-json-c-api"
-version = "1.5.5"
+version = "1.5.4"
 authors = [ "Vexy JSON Contributors" ]
 edition = "2021"
 license = "MIT OR Apache-2.0"
@@ -16182,7 +16711,7 @@ fn value_to_json_string(value: &Value) -> Result<String, serde_json::Error> {
 <document_content>
 [package]
 name = "vexy-json-cli"
-version = "1.5.5"
+version = "1.5.4"
 edition = "2021"
 
 
@@ -16377,7 +16906,7 @@ The optimized memory pool v2 successfully addresses the performance issues found
 <document_content>
 [package]
 name = "vexy-json-core"
-version = "1.5.5"
+version = "1.5.4"
 edition = "2021"
 
 
@@ -18897,12 +19426,22 @@ struct PerformanceOptimizer {
 }
 
 
+# File: /Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core/tests/error_recovery_test.rs
+# Language: rust
+
+
+
+# File: /Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core/tests/streaming_parser_test.rs
+# Language: rust
+
+
+
 <document index="51">
 <source>crates/python/Cargo.toml</source>
 <document_content>
 [package]
 name = "vexy-json-python"
-version = "1.5.5"
+version = "1.5.4"
 edition = "2021"
 description = "Python bindings for vexy_json - a forgiving JSON parser"
 repository = "https://github.com/vexyart/vexy-json"
@@ -19655,7 +20194,7 @@ def parse((self, data)):
 <document_content>
 [package]
 name = "vexy-json-serde"
-version = "1.5.5"
+version = "1.5.4"
 edition = "2021"
 
 
@@ -19691,7 +20230,7 @@ struct SerdeValue {
 <document_content>
 [package]
 name = "vexy-json-test-utils"
-version = "1.5.5"
+version = "1.5.4"
 edition = "2021"
 
 
@@ -19715,7 +20254,7 @@ path = "../core"
 <document_content>
 [package]
 name = "vexy-json-wasm"
-version = "1.5.5"
+version = "1.5.4"
 edition = "2021"
 description = "WebAssembly bindings for vexy_json - a forgiving JSON parser"
 repository = "https://github.com/vexyart/vexy-json"
@@ -22364,6 +22903,140 @@ export const __wbindgen_start: () => void;
 </document>
 
 <document index="71">
+<source>docs/internal/IMPROVEMENTS.md</source>
+<document_content>
+# Improvements Made to Vexy JSON Codebase
+
+## Test Suite Fixes
+
+### 1. Iterative Parser Array Handling (Fixed)
+- **Issue**: Iterative parser was returning placeholder `Value::Null` for arrays and objects in `parse_value()`
+- **Solution**: Implemented `parse_value_and_push()` method that properly handles array/object contexts by pushing parse contexts instead of returning placeholders
+- **Impact**: Fixed 5 failing tests in the iterative parser suite
+
+### 2. Event Parser Token Processing (Fixed)
+- **Issue**: Event parser was using `SimpleStreamingLexer` which didn't provide access to token content
+- **Solution**: 
+  - Switched to standard `Lexer` for token content access
+  - Fixed position tracking by updating to `position = span.end`
+  - Properly extracted string values with quote removal
+- **Impact**: Fixed event parser tests
+
+### 3. NDJSON Parser Buffer Handling (Fixed)
+- **Issue**: NDJSON parser wasn't processing the last line if it didn't end with a newline
+- **Solution**: Added `finish()` method to process remaining buffer data
+- **Impact**: Fixed NDJSON streaming tests
+
+### 4. DateTime Plugin Date Parsing (Fixed)
+- **Issue**: Plugin couldn't parse date-only strings like "2023-12-25"
+- **Solution**: Added `NaiveDate` parsing support for date-only formats
+- **Impact**: Fixed datetime plugin tests
+
+### 5. Memory Pool Statistics Tracking (Fixed)
+- **Issue**: `allocate_str` method wasn't updating allocation statistics
+- **Solution**: Added proper stats tracking with `allocations` and `total_allocated` updates
+- **Impact**: Fixed memory pool tests
+
+## Code Quality Improvements
+
+### 1. Dead Code Removal
+- Removed unused methods from lazy parser:
+  - `find_array_end`
+  - `parse_array_boundaries_only`
+  - `find_object_end`
+  - `parse_object_keys_only`
+- Removed unused `JsonLexer` imports
+- **Impact**: Reduced binary size and improved compilation times
+
+### 2. Documentation Fixes
+- Fixed doc test failures by changing code blocks to text blocks in grammar documentation
+- **Impact**: All doc tests now pass
+
+### 3. Clippy Warning Fixes
+- Fixed identical if-else blocks in conditional logic
+- Fixed manual strip prefix warnings
+- **Impact**: Cleaner code with no clippy warnings
+
+## New Features
+
+### 1. ML-Based Pattern Recognition for Error Recovery
+- **Implementation**: Created `ErrorRecoveryEngineV2` with pattern-based error recovery
+- **Features**:
+  - Pattern database with regex support for sophisticated matching
+  - Multiple recovery strategies (bracket matching, quote inference, comma suggestion, type coercion, structural repair)
+  - Context-aware suggestion refinement
+  - Visual error display with source code snippets and error arrows
+  - Confidence scoring for ranking suggestions
+  - Support for learning from successful recoveries
+- **Components**:
+  - `ErrorPattern`: Defines common error patterns with regex matching
+  - `RecoverySuggestion`: Provides fix suggestions with confidence scores
+  - `RecoveryStrategy`: Trait for implementing different recovery approaches
+  - `PatternDatabase`: Manages error patterns with compiled regex caching
+- **Impact**: Significantly improved error messages and recovery suggestions for users
+
+### 2. Alternative Number Format Support
+- Added support for:
+  - Hexadecimal numbers (0x, 0X)
+  - Octal numbers (0o, 0O)
+  - Binary numbers (0b, 0B)
+  - Numbers with underscore separators
+- **Impact**: Enhanced compatibility with the reference implementation
+
+## Architecture Improvements
+
+### 1. Error Recovery System Architecture
+- Modular design with separate strategies for different error types
+- Extensible pattern database for adding new error patterns
+- Clean separation between error detection and recovery suggestion
+- **Impact**: Easy to extend and maintain error recovery capabilities
+
+### 2. Parser Number Handling
+- Centralized number parsing logic in `parse_number_token()`
+- Proper handling of trailing decimal points
+- Support for alternative number formats
+- **Impact**: More consistent and maintainable number parsing
+
+## Testing Improvements
+
+### 1. Comprehensive Error Recovery Tests
+- Added test suite for error recovery system covering:
+  - Missing brackets/braces
+  - Unmatched quotes
+  - Missing commas
+  - Type coercion scenarios
+  - Implicit object/array detection
+  - Visual error display
+- **Impact**: Ensures error recovery system works correctly
+
+### 2. Test Organization
+- Created dedicated test file for error recovery (`error_recovery_test.rs`)
+- **Impact**: Better test organization and maintainability
+
+## Performance Considerations
+
+### 1. Regex Caching
+- Implemented regex compilation caching in `PatternDatabase`
+- Compiles patterns only once and reuses them
+- **Impact**: Better performance for repeated error recovery operations
+
+### 2. Efficient Pattern Matching
+- Uses HashMap for O(1) pattern lookup
+- Sorts suggestions by confidence only once
+- **Impact**: Fast error recovery suggestion generation
+
+## Future Improvements Enabled
+
+The ML-based error recovery system provides a foundation for:
+1. Learning from user corrections
+2. Adding domain-specific error patterns
+3. Integration with IDE error correction features
+4. Statistical analysis of common JSON errors
+5. Automated fix application in repair mode
+</document_content>
+</document>
+
+<document index="72">
 <source>docs/internal/PLAN.md</source>
 <document_content>
 # Vexy JSON Build & Release Fix Plan
@@ -22458,7 +23131,7 @@ The release script times out after 20 minutes, likely due to the failing tests a
 </document_content>
 </document>
 
-<document index="72">
+<document index="73">
 <source>docs/internal/WORK.md</source>
 <document_content>
 # Work Progress
@@ -22523,21 +23196,21 @@ The release script times out after 20 minutes, likely due to the failing tests a
 </document_content>
 </document>
 
-<document index="73">
+<document index="74">
 <source>docs/pkg/.gitignore</source>
 <document_content>
 *
 </document_content>
 </document>
 
-<document index="74">
+<document index="75">
 <source>docs/pkg/nodejs/.gitignore</source>
 <document_content>
 *
 </document_content>
 </document>
 
-<document index="75">
+<document index="76">
 <source>docs/pkg/nodejs/vexy_json_wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -22591,7 +23264,7 @@ function takeFromExternrefTable0((idx))
 function isLikeNone((x))
 
 
-<document index="76">
+<document index="77">
 <source>docs/pkg/nodejs/vexy_json_wasm_bg.wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -22617,7 +23290,7 @@ export const __wbindgen_start: () => void;
 </document_content>
 </document>
 
-<document index="77">
+<document index="78">
 <source>docs/pkg/vexy_json_wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -22746,7 +23419,7 @@ function initSync((module))
 async function __wbg_init((module_or_path))
 
 
-<document index="78">
+<document index="79">
 <source>docs/pkg/vexy_json_wasm_bg.wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -22772,7 +23445,7 @@ export const __wbindgen_start: () => void;
 </document_content>
 </document>
 
-<document index="79">
+<document index="80">
 <source>docs/sitemap.xml</source>
 <document_content>
 <?xml version="1.0" encoding="UTF-8"?>
@@ -22969,7 +23642,7 @@ export const __wbindgen_start: () => void;
 </document_content>
 </document>
 
-<document index="80">
+<document index="81">
 <source>docs-src/assets/css/_tool.scss</source>
 <document_content>
 /* Custom styles for vexy_json web tool */
@@ -23142,7 +23815,7 @@ export const __wbindgen_start: () => void;
 </document_content>
 </document>
 
-<document index="81">
+<document index="82">
 <source>docs-src/assets/css/style.scss</source>
 <document_content>
 ---
@@ -23549,21 +24222,21 @@ class JsonicTool {
 }
 
 
-<document index="82">
+<document index="83">
 <source>docs-src/assets/wasm/.gitignore</source>
 <document_content>
 *
 </document_content>
 </document>
 
-<document index="83">
+<document index="84">
 <source>docs-src/assets/wasm/nodejs/.gitignore</source>
 <document_content>
 *
 </document_content>
 </document>
 
-<document index="84">
+<document index="85">
 <source>docs-src/assets/wasm/nodejs/vexy_json_wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -23617,7 +24290,7 @@ function takeFromExternrefTable0((idx))
 function isLikeNone((x))
 
 
-<document index="85">
+<document index="86">
 <source>docs-src/assets/wasm/nodejs/vexy_json_wasm_bg.wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -23643,7 +24316,7 @@ export const __wbindgen_start: () => void;
 </document_content>
 </document>
 
-<document index="86">
+<document index="87">
 <source>docs-src/assets/wasm/vexy_json_wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -23772,7 +24445,7 @@ function initSync((module))
 async function __wbg_init((module_or_path))
 
 
-<document index="87">
+<document index="88">
 <source>docs-src/assets/wasm/vexy_json_wasm_bg.wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -23798,7 +24471,7 @@ export const __wbindgen_start: () => void;
 </document_content>
 </document>
 
-<document index="88">
+<document index="89">
 <source>docs-src/dev/README.md</source>
 <document_content>
 # Developer Documentation
@@ -23846,7 +24519,7 @@ For project maintainers:
 </document_content>
 </document>
 
-<document index="89">
+<document index="90">
 <source>docs-src/dev/benchmarks.md</source>
 <document_content>
 ---
@@ -23891,7 +24564,7 @@ The benchmark definitions are located in the `benches/` directory, with data fil
 </document_content>
 </document>
 
-<document index="90">
+<document index="91">
 <source>docs-src/dev/build-process.md</source>
 <document_content>
 # Build Status Dashboard
@@ -23986,7 +24659,7 @@ For build failures or urgent issues, please [create an issue](https://github.com
 </document_content>
 </document>
 
-<document index="91">
+<document index="92">
 <source>docs-src/dev/contributing.md</source>
 <document_content>
 ---
@@ -24063,7 +24736,7 @@ Thank you for contributing to `vexy_json`!
 </document_content>
 </document>
 
-<document index="92">
+<document index="93">
 <source>docs-src/dev/design/cli-enhancements.md</source>
 <document_content>
 ---
@@ -24398,7 +25071,7 @@ These CLI enhancements will transform vexy_json from a basic JSON parser into a 
 </document_content>
 </document>
 
-<document index="93">
+<document index="94">
 <source>docs-src/dev/design/python-api.md</source>
 <document_content>
 ---
@@ -24672,7 +25345,7 @@ This design balances Python idioms with the performance benefits of Rust, provid
 </document_content>
 </document>
 
-<document index="94">
+<document index="95">
 <source>docs-src/dev/design.md</source>
 <document_content>
 ---
@@ -24691,7 +25364,7 @@ This section contains design documents and architectural decisions for the vexy_
 </document_content>
 </document>
 
-<document index="95">
+<document index="96">
 <source>docs-src/dev/developer-guide.md</source>
 <document_content>
 ---
@@ -24817,7 +25490,7 @@ We welcome contributions! Please refer to the main [Contributing Guide](contribu
 </document_content>
 </document>
 
-<document index="96">
+<document index="97">
 <source>docs-src/dev/development.md</source>
 <document_content>
 ---
@@ -24839,7 +25512,7 @@ This section contains documentation for developers working on the vexy_json proj
 </document_content>
 </document>
 
-<document index="97">
+<document index="98">
 <source>docs-src/dev/feedback.md</source>
 <document_content>
 ---
@@ -25006,7 +25679,7 @@ Response times may vary based on complexity and maintainer availability.
 </document_content>
 </document>
 
-<document index="98">
+<document index="99">
 <source>docs-src/dev/packaging-macos.md</source>
 <document_content>
 # macOS Packaging Guide
@@ -25083,7 +25756,7 @@ This packaging process is automated in the GitHub Actions release workflow. See 
 </document_content>
 </document>
 
-<document index="99">
+<document index="100">
 <source>docs-src/dev/plugin-development.md</source>
 <document_content>
 # Vexy JSON Plugin Development Guide
@@ -25759,7 +26432,7 @@ For more examples and detailed API documentation, see the `examples/plugin_examp
 </document_content>
 </document>
 
-<document index="100">
+<document index="101">
 <source>docs-src/dev/plugin-registry.md</source>
 <document_content>
 # Vexy JSON Plugin Registry
@@ -26066,7 +26739,7 @@ See `CONTRIBUTING.md` for details on contributing new plugins or improving exist
 </document_content>
 </document>
 
-<document index="101">
+<document index="102">
 <source>docs-src/dev/release-process.md</source>
 <document_content>
 # Release Process
@@ -26200,7 +26873,7 @@ If a release needs to be rolled back:
 </document_content>
 </document>
 
-<document index="102">
+<document index="103">
 <source>docs-src/index.md</source>
 <document_content>
 ---
@@ -26348,7 +27021,7 @@ at your option.
 </document_content>
 </document>
 
-<document index="103">
+<document index="104">
 <source>docs-src/internal/PLAN.md</source>
 <document_content>
 # this_file: docs-src/internal/PLAN.md
@@ -26519,7 +27192,7 @@ The project is in good shape with only minor housekeeping tasks remaining.
 </document_content>
 </document>
 
-<document index="104">
+<document index="105">
 <source>docs-src/internal/TODO.md</source>
 <document_content>
 # this_file: docs/internal/TODO.md
@@ -26938,7 +27611,7 @@ This section outlines a detailed plan to unify the naming conventions across the
 </document_content>
 </document>
 
-<document index="105">
+<document index="106">
 <source>docs-src/internal/WORK.md</source>
 <document_content>
 # this_file: docs-src/internal/WORK.md
@@ -27007,7 +27680,7 @@ This section outlines a detailed plan to unify the naming conventions across the
 </document_content>
 </document>
 
-<document index="106">
+<document index="107">
 <source>docs-src/internal/development/RELEASE_CANDIDATE.md</source>
 <document_content>
 # Vexy JSON v2.0-RC1 Release Candidate
@@ -27217,7 +27890,7 @@ This release represents a significant evolution of Vexy JSON, with major archite
 </document_content>
 </document>
 
-<document index="107">
+<document index="108">
 <source>docs-src/internal/development/RELEASE_CHECKLIST.md</source>
 <document_content>
 # Vexy JSON Release Checklist
@@ -27327,7 +28000,7 @@ If issues are discovered post-release:
 </document_content>
 </document>
 
-<document index="108">
+<document index="109">
 <source>docs-src/internal/development/RELEASE_PROCESS.md</source>
 <document_content>
 # Vexy JSON Release Process
@@ -27567,7 +28240,7 @@ For release issues:
 </document_content>
 </document>
 
-<document index="109">
+<document index="110">
 <source>docs-src/internal/development/RELEASE_v2.0.0_SUMMARY.md</source>
 <document_content>
 # Vexy JSON v2.0.0 Release Summary
@@ -27702,7 +28375,7 @@ The repository is now fully prepared for a professional v2.0.0 release with comp
 </document_content>
 </document>
 
-<document index="110">
+<document index="111">
 <source>docs-src/internal/development/agents.md</source>
 <document_content>
 ---
@@ -27957,7 +28630,7 @@ When I say "/work", you must work in iterations like so: Read all `./TODO.md` an
 </document_content>
 </document>
 
-<document index="111">
+<document index="112">
 <source>docs-src/internal/development/distribution-builds.md</source>
 <document_content>
 ---
@@ -28024,7 +28697,7 @@ For issues, see the main vexy_json repository or open an issue.
 </document_content>
 </document>
 
-<document index="112">
+<document index="113">
 <source>docs-src/internal/development/gemini.md</source>
 <document_content>
 ---
@@ -28168,7 +28841,7 @@ npm run test-some -- <test-pattern>
 </document_content>
 </document>
 
-<document index="113">
+<document index="114">
 <source>docs-src/internal/development/implementation-summary.md</source>
 <document_content>
 ---
@@ -28313,7 +28986,7 @@ The vexy_json project now has robust WebAssembly support with comprehensive feat
 </document_content>
 </document>
 
-<document index="114">
+<document index="115">
 <source>docs-src/internal/development/lean-minimalization.md</source>
 <document_content>
 ---
@@ -28396,7 +29069,7 @@ The following files are always required for the core crate:
 </document_content>
 </document>
 
-<document index="115">
+<document index="116">
 <source>docs-src/internal/development/refactor-plan.md</source>
 <document_content>
 ---
@@ -28647,7 +29320,7 @@ Treat this refactor as paving the road for long-term maintainability and minimal
 </document_content>
 </document>
 
-<document index="116">
+<document index="117">
 <source>docs-src/internal/drafts/publication-ready.md</source>
 <document_content>
 # 🚀 vexy_json v1.1.0 - Ready for Publication
@@ -28703,7 +29376,7 @@ After successful publication, update:
 </document_content>
 </document>
 
-<document index="117">
+<document index="118">
 <source>docs-src/internal/drafts/refactor-prompt.md</source>
 <document_content>
 Read @llms.txt which contains the snapshot of the entire codebase.
@@ -28838,7 +29511,7 @@ _Treat the refactor as paving the road for long-term maintainability rather than
 </document_content>
 </document>
 
-<document index="118">
+<document index="119">
 <source>docs-src/internal/drafts/work-progress.md</source>
 <document_content>
 ---
@@ -29013,7 +29686,7 @@ The project continues to be in a stable, production-ready state. The JSON repair
 </document_content>
 </document>
 
-<document index="119">
+<document index="120">
 <source>docs-src/internal/naming-unification-plan.md</source>
 <document_content>
 # Naming Unification Plan for Vexy JSON
@@ -29122,21 +29795,21 @@ This maintains consistency while respecting the conventions of each ecosystem.
 </document_content>
 </document>
 
-<document index="120">
+<document index="121">
 <source>docs-src/pkg/.gitignore</source>
 <document_content>
 *
 </document_content>
 </document>
 
-<document index="121">
+<document index="122">
 <source>docs-src/pkg/nodejs/.gitignore</source>
 <document_content>
 *
 </document_content>
 </document>
 
-<document index="122">
+<document index="123">
 <source>docs-src/pkg/nodejs/vexy_json_wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -29190,7 +29863,7 @@ function takeFromExternrefTable0((idx))
 function isLikeNone((x))
 
 
-<document index="123">
+<document index="124">
 <source>docs-src/pkg/nodejs/vexy_json_wasm_bg.wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -29216,7 +29889,7 @@ export const __wbindgen_start: () => void;
 </document_content>
 </document>
 
-<document index="124">
+<document index="125">
 <source>docs-src/pkg/vexy_json_wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -29345,7 +30018,7 @@ function initSync((module))
 async function __wbg_init((module_or_path))
 
 
-<document index="125">
+<document index="126">
 <source>docs-src/pkg/vexy_json_wasm_bg.wasm.d.ts</source>
 <document_content>
 /* tslint:disable */
@@ -29371,7 +30044,7 @@ export const __wbindgen_start: () => void;
 </document_content>
 </document>
 
-<document index="126">
+<document index="127">
 <source>docs-src/user/README.md</source>
 <document_content>
 # User Documentation
@@ -29414,7 +30087,7 @@ Real-world usage examples:
 </document_content>
 </document>
 
-<document index="127">
+<document index="128">
 <source>docs-src/user/api/python/index.md</source>
 <document_content>
 ---
@@ -29638,7 +30311,7 @@ at your option.
 </document_content>
 </document>
 
-<document index="128">
+<document index="129">
 <source>docs-src/user/api/python-bindings.md</source>
 <document_content>
 # Python Bindings
@@ -30075,7 +30748,7 @@ This comprehensive Python API provides all the power of Vexy JSON with the famil
 </document_content>
 </document>
 
-<document index="129">
+<document index="130">
 <source>docs-src/user/api/rust.md</source>
 <document_content>
 ---
@@ -30487,7 +31160,7 @@ println!("Parsed {} objects", values.len());
 </document_content>
 </document>
 
-<document index="130">
+<document index="131">
 <source>docs-src/user/api/streaming-api.md</source>
 <document_content>
 # Streaming Parser API Documentation
@@ -30746,7 +31419,7 @@ See `examples/streaming_example.rs` for a complete working example demonstrating
 </document_content>
 </document>
 
-<document index="131">
+<document index="132">
 <source>docs-src/user/api/wasm.md</source>
 <document_content>
 ---
@@ -31015,7 +31688,7 @@ try {
 </document_content>
 </document>
 
-<document index="132">
+<document index="133">
 <source>docs-src/user/features-overview.md</source>
 <document_content>
 # Vexy JSON Features Overview
@@ -31353,7 +32026,7 @@ This comprehensive feature set makes Vexy JSON suitable for a wide range of JSON
 </document_content>
 </document>
 
-<document index="133">
+<document index="134">
 <source>docs-src/user/features.md</source>
 <document_content>
 ---
@@ -31489,7 +32162,7 @@ For detailed API documentation on these features, see the [API Reference](api/).
 </document_content>
 </document>
 
-<document index="134">
+<document index="135">
 <source>docs-src/user/getting-started.md</source>
 <document_content>
 ---
@@ -31997,7 +32670,7 @@ For more details on the web tool, including its features and how to use it, refe
 </document_content>
 </document>
 
-<document index="135">
+<document index="136">
 <source>docs-src/user/guides/json-repair.md</source>
 <document_content>
 # JSON Repair
@@ -32388,7 +33061,7 @@ The JSON repair system provides powerful tools for handling malformed JSON while
 </document_content>
 </document>
 
-<document index="136">
+<document index="137">
 <source>docs-src/user/guides/migration.md</source>
 <document_content>
 ---
@@ -32662,7 +33335,7 @@ The refactor maintains the reliability you expect while providing a foundation f
 </document_content>
 </document>
 
-<document index="137">
+<document index="138">
 <source>docs-src/user/guides/transform.md</source>
 <document_content>
 # JSON Transformation
@@ -32950,7 +33623,7 @@ This transformation system provides powerful tools for JSON processing while mai
 </document_content>
 </document>
 
-<document index="138">
+<document index="139">
 <source>docs-src/user/guides/troubleshooting.md</source>
 <document_content>
 ---
@@ -33110,7 +33783,7 @@ If you encounter issues not covered here:
 </document_content>
 </document>
 
-<document index="139">
+<document index="140">
 <source>docs-src/user/reference/release-notes.md</source>
 <document_content>
 ---
@@ -33506,7 +34179,7 @@ For migration guidance, see our [Migration Guide](migration-guide/).
 </document_content>
 </document>
 
-<document index="140">
+<document index="141">
 <source>docs-src/wasm/npm-package.md</source>
 <document_content>
 ---
@@ -33790,7 +34463,7 @@ mod tests;
 
 
 
-<document index="141">
+<document index="142">
 <source>fuzz/.gitignore</source>
 <document_content>
 target
@@ -33801,7 +34474,7 @@ coverage
 </document_content>
 </document>
 
-<document index="142">
+<document index="143">
 <source>fuzz/Cargo.toml</source>
 <document_content>
 [package]
@@ -33946,7 +34619,7 @@ bench = false
 
 
 
-<document index="143">
+<document index="144">
 <source>mkdocs.yml</source>
 <document_content>
 site_name: Vexy JSON
@@ -33993,7 +34666,7 @@ markdown_extensions:
 </document_content>
 </document>
 
-<document index="144">
+<document index="145">
 <source>oss-fuzz/Dockerfile</source>
 <document_content>
 # this_file: oss-fuzz/Dockerfile
@@ -34022,7 +34695,7 @@ RUN chmod +x $SRC/build.sh
 </document_content>
 </document>
 
-<document index="145">
+<document index="146">
 <source>oss-fuzz/README.md</source>
 <document_content>
 # OSS-Fuzz Integration
@@ -34112,7 +34785,7 @@ The OSS-Fuzz integration requires minimal maintenance:
 </document_content>
 </document>
 
-<document index="146">
+<document index="147">
 <source>oss-fuzz/build.sh</source>
 <document_content>
 #!/bin/bash -eu
@@ -34220,7 +34893,7 @@ EOF
 </document_content>
 </document>
 
-<document index="147">
+<document index="148">
 <source>oss-fuzz/project.yaml</source>
 <document_content>
 # this_file: oss-fuzz/project.yaml
@@ -34255,7 +34928,7 @@ file_github_issue: true
 </document_content>
 </document>
 
-<document index="148">
+<document index="149">
 <source>release.sh</source>
 <document_content>
 #!/bin/bash
@@ -34351,7 +35024,7 @@ fi
 </document_content>
 </document>
 
-<document index="149">
+<document index="150">
 <source>rustfmt.toml</source>
 <document_content>
 edition = "2021"
@@ -34381,7 +35054,7 @@ wrap_comments = true
 </document_content>
 </document>
 
-<document index="150">
+<document index="151">
 <source>scripts/build-deliverables.sh</source>
 <document_content>
 #!/bin/bash
@@ -34674,7 +35347,7 @@ main "$@"
 </document_content>
 </document>
 
-<document index="151">
+<document index="152">
 <source>scripts/build-wasm.sh</source>
 <document_content>
 #!/bin/bash
@@ -34816,7 +35489,7 @@ echo "  </script>"
 </document_content>
 </document>
 
-<document index="152">
+<document index="153">
 <source>scripts/build.sh</source>
 <document_content>
 #!/bin/bash
@@ -34885,7 +35558,7 @@ async function generateReport((allResults))
 async function main(())
 
 
-<document index="153">
+<document index="154">
 <source>scripts/cross-platform/build-all.sh</source>
 <document_content>
 #!/bin/bash
@@ -35235,7 +35908,7 @@ main "$@"
 </document_content>
 </document>
 
-<document index="154">
+<document index="155">
 <source>scripts/cross-platform/build-macos-installer.sh</source>
 <document_content>
 #!/bin/bash
@@ -35688,7 +36361,7 @@ main "$@"
 </document_content>
 </document>
 
-<document index="155">
+<document index="156">
 <source>scripts/get-version.sh</source>
 <document_content>
 #!/bin/bash
@@ -35753,7 +36426,7 @@ fi
 </document_content>
 </document>
 
-<document index="156">
+<document index="157">
 <source>scripts/package-macos.sh</source>
 <document_content>
 #!/bin/bash
@@ -35895,7 +36568,7 @@ class VexyJsonPerformanceMonitor {
 }
 
 
-<document index="157">
+<document index="158">
 <source>scripts/pre-release-check.sh</source>
 <document_content>
 #!/bin/bash
@@ -36046,7 +36719,7 @@ echo "- Publish to crates.io and npm"
 </document_content>
 </document>
 
-<document index="158">
+<document index="159">
 <source>scripts/release-github.sh</source>
 <document_content>
 #!/bin/bash
@@ -36289,7 +36962,7 @@ fi
 </document_content>
 </document>
 
-<document index="159">
+<document index="160">
 <source>scripts/release.sh</source>
 <document_content>
 #!/bin/bash
@@ -37041,7 +37714,7 @@ main "$@"
 </document_content>
 </document>
 
-<document index="160">
+<document index="161">
 <source>scripts/release.sh.backup</source>
 <document_content>
 #!/bin/bash
@@ -37793,7 +38466,7 @@ main "$@"
 </document_content>
 </document>
 
-<document index="161">
+<document index="162">
 <source>scripts/update-versions.sh</source>
 <document_content>
 #!/bin/bash

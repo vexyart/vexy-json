@@ -63,7 +63,7 @@ pub extern "C" fn vexy_json_version() -> *const c_char {
 
 /// Parse JSON with default options
 #[no_mangle]
-pub extern "C" fn vexy_json_parse(input: *const c_char) -> VexyJsonParseResult {
+pub unsafe extern "C" fn vexy_json_parse(input: *const c_char) -> VexyJsonParseResult {
     if input.is_null() {
         return VexyJsonParseResult {
             json: ptr::null_mut(),
@@ -71,15 +71,13 @@ pub extern "C" fn vexy_json_parse(input: *const c_char) -> VexyJsonParseResult {
         };
     }
 
-    let input_str = unsafe {
-        match CStr::from_ptr(input).to_str() {
-            Ok(s) => s,
-            Err(_) => {
-                return VexyJsonParseResult {
-                    json: ptr::null_mut(),
-                    error: CString::new("Invalid UTF-8 input").unwrap().into_raw(),
-                };
-            }
+    let input_str = match CStr::from_ptr(input).to_str() {
+        Ok(s) => s,
+        Err(_) => {
+            return VexyJsonParseResult {
+                json: ptr::null_mut(),
+                error: CString::new("Invalid UTF-8 input").unwrap().into_raw(),
+            };
         }
     };
 
@@ -91,21 +89,21 @@ pub extern "C" fn vexy_json_parse(input: *const c_char) -> VexyJsonParseResult {
             },
             Err(e) => VexyJsonParseResult {
                 json: ptr::null_mut(),
-                error: CString::new(format!("Serialization error: {}", e))
+                error: CString::new(format!("Serialization error: {e}"))
                     .unwrap()
                     .into_raw(),
             },
         },
         Err(e) => VexyJsonParseResult {
             json: ptr::null_mut(),
-            error: CString::new(format!("{}", e)).unwrap().into_raw(),
+            error: CString::new(format!("{e}")).unwrap().into_raw(),
         },
     }
 }
 
 /// Parse JSON with custom options
 #[no_mangle]
-pub extern "C" fn vexy_json_parse_with_options(
+pub unsafe extern "C" fn vexy_json_parse_with_options(
     input: *const c_char,
     options: *const VexyJsonParserOptions,
 ) -> VexyJsonParseResult {
@@ -120,19 +118,17 @@ pub extern "C" fn vexy_json_parse_with_options(
         return vexy_json_parse(input);
     }
 
-    let input_str = unsafe {
-        match CStr::from_ptr(input).to_str() {
-            Ok(s) => s,
-            Err(_) => {
-                return VexyJsonParseResult {
-                    json: ptr::null_mut(),
-                    error: CString::new("Invalid UTF-8 input").unwrap().into_raw(),
-                };
-            }
+    let input_str = match CStr::from_ptr(input).to_str() {
+        Ok(s) => s,
+        Err(_) => {
+            return VexyJsonParseResult {
+                json: ptr::null_mut(),
+                error: CString::new("Invalid UTF-8 input").unwrap().into_raw(),
+            };
         }
     };
 
-    let rust_options = unsafe { c_options_to_rust(&*options) };
+    let rust_options = c_options_to_rust(&*options);
 
     match parse_with_options(input_str, rust_options) {
         Ok(value) => match value_to_json_string(&value) {
@@ -142,21 +138,21 @@ pub extern "C" fn vexy_json_parse_with_options(
             },
             Err(e) => VexyJsonParseResult {
                 json: ptr::null_mut(),
-                error: CString::new(format!("Serialization error: {}", e))
+                error: CString::new(format!("Serialization error: {e}"))
                     .unwrap()
                     .into_raw(),
             },
         },
         Err(e) => VexyJsonParseResult {
             json: ptr::null_mut(),
-            error: CString::new(format!("{}", e)).unwrap().into_raw(),
+            error: CString::new(format!("{e}")).unwrap().into_raw(),
         },
     }
 }
 
 /// Parse JSON and get detailed information including repairs
 #[no_mangle]
-pub extern "C" fn vexy_json_parse_detailed(
+pub unsafe extern "C" fn vexy_json_parse_detailed(
     input: *const c_char,
     options: *const VexyJsonParserOptions,
 ) -> VexyJsonDetailedResult {
@@ -178,13 +174,13 @@ pub extern "C" fn vexy_json_parse_detailed(
 
 /// Create a new parser instance
 #[no_mangle]
-pub extern "C" fn vexy_json_parser_new(
+pub unsafe extern "C" fn vexy_json_parser_new(
     options: *const VexyJsonParserOptions,
 ) -> *mut VexyJsonParser {
     let rust_options = if options.is_null() {
         ParserOptions::default()
     } else {
-        unsafe { c_options_to_rust(&*options) }
+        c_options_to_rust(&*options)
     };
 
     let parser = Box::new(VexyJsonParser {
@@ -196,7 +192,7 @@ pub extern "C" fn vexy_json_parser_new(
 
 /// Parse JSON using a parser instance
 #[no_mangle]
-pub extern "C" fn vexy_json_parser_parse(
+pub unsafe extern "C" fn vexy_json_parser_parse(
     parser: *mut VexyJsonParser,
     input: *const c_char,
 ) -> VexyJsonParseResult {
@@ -214,16 +210,14 @@ pub extern "C" fn vexy_json_parser_parse(
         };
     }
 
-    let parser_ref = unsafe { &*parser };
-    let input_str = unsafe {
-        match CStr::from_ptr(input).to_str() {
-            Ok(s) => s,
-            Err(_) => {
-                return VexyJsonParseResult {
-                    json: ptr::null_mut(),
-                    error: CString::new("Invalid UTF-8 input").unwrap().into_raw(),
-                };
-            }
+    let parser_ref = &*parser;
+    let input_str = match CStr::from_ptr(input).to_str() {
+        Ok(s) => s,
+        Err(_) => {
+            return VexyJsonParseResult {
+                json: ptr::null_mut(),
+                error: CString::new("Invalid UTF-8 input").unwrap().into_raw(),
+            };
         }
     };
 
@@ -235,55 +229,45 @@ pub extern "C" fn vexy_json_parser_parse(
             },
             Err(e) => VexyJsonParseResult {
                 json: ptr::null_mut(),
-                error: CString::new(format!("Serialization error: {}", e))
+                error: CString::new(format!("Serialization error: {e}"))
                     .unwrap()
                     .into_raw(),
             },
         },
         Err(e) => VexyJsonParseResult {
             json: ptr::null_mut(),
-            error: CString::new(format!("{}", e)).unwrap().into_raw(),
+            error: CString::new(format!("{e}")).unwrap().into_raw(),
         },
     }
 }
 
 /// Free a parser instance
 #[no_mangle]
-pub extern "C" fn vexy_json_parser_free(parser: *mut VexyJsonParser) {
+pub unsafe extern "C" fn vexy_json_parser_free(parser: *mut VexyJsonParser) {
     if !parser.is_null() {
-        unsafe {
-            let _ = Box::from_raw(parser);
-        }
+        let _ = Box::from_raw(parser);
     }
 }
 
 /// Free a parse result
 #[no_mangle]
-pub extern "C" fn vexy_json_free_result(result: VexyJsonParseResult) {
+pub unsafe extern "C" fn vexy_json_free_result(result: VexyJsonParseResult) {
     if !result.json.is_null() {
-        unsafe {
-            let _ = CString::from_raw(result.json);
-        }
+        let _ = CString::from_raw(result.json);
     }
     if !result.error.is_null() {
-        unsafe {
-            let _ = CString::from_raw(result.error);
-        }
+        let _ = CString::from_raw(result.error);
     }
 }
 
 /// Free a detailed result
 #[no_mangle]
-pub extern "C" fn vexy_json_free_detailed_result(result: VexyJsonDetailedResult) {
+pub unsafe extern "C" fn vexy_json_free_detailed_result(result: VexyJsonDetailedResult) {
     if !result.json.is_null() {
-        unsafe {
-            let _ = CString::from_raw(result.json);
-        }
+        let _ = CString::from_raw(result.json);
     }
     if !result.error.is_null() {
-        unsafe {
-            let _ = CString::from_raw(result.error);
-        }
+        let _ = CString::from_raw(result.error);
     }
     // TODO: Free repairs array when implemented
 }

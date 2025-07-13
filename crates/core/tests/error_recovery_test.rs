@@ -18,7 +18,7 @@ fn test_missing_closing_brace_recovery() {
     let suggestions = engine.suggest_recovery(&context);
     
     // Debug output
-    println!("Suggestions: {:?}", suggestions);
+    println!("Suggestions: {suggestions:?}");
     
     assert!(!suggestions.is_empty());
     

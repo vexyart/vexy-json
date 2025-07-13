@@ -158,7 +158,7 @@ impl MemoryPool {
             return Some(unsafe { slice::from_raw_parts(slice.as_ptr(), 0) });
         }
 
-        let size = size_of::<T>() * slice.len();
+        let size = size_of_val(slice);
         let align = align_of::<T>();
         let ptr = self.allocate_aligned(size, align)?;
 

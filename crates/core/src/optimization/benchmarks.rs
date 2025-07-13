@@ -19,6 +19,12 @@ pub struct PerformanceMonitor {
     pub test_data: Vec<String>,
 }
 
+impl Default for PerformanceMonitor {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl PerformanceMonitor {
     /// Create a new performance monitor with default test data.
     pub fn new() -> Self {

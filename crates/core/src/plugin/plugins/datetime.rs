@@ -199,10 +199,10 @@ mod tests {
                 assert!(obj.contains_key("_original"));
             }
             Value::String(s) => {
-                panic!("Date was not parsed. String value: {}", s);
+                panic!("Date was not parsed. String value: {s}");
             }
             _ => {
-                panic!("Unexpected value type: {:?}", value);
+                panic!("Unexpected value type: {value:?}");
             }
         }
     }

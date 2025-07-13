@@ -370,9 +370,8 @@ impl<'a> RecursiveDescentParser<'a> {
         let text = self.lexer.span_text(&span);
 
         // Remove quotes
-        let content = if text.starts_with('"') && text.ends_with('"') {
-            &text[1..text.len() - 1]
-        } else if text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes
+        let content = if (text.starts_with('"') && text.ends_with('"'))
+            || (text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes)
         {
             &text[1..text.len() - 1]
         } else {

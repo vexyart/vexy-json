@@ -23,7 +23,7 @@ pub fn parse_json(input: &str) -> Result<String, JsValue> {
                 .map_err(|e| JsValue::from_str(&e.to_string()))?;
             serde_json::to_string(&json_value).map_err(|e| JsValue::from_str(&e.to_string()))
         }
-        Err(e) => Err(JsValue::from_str(&format!("Parse error: {}", e))),
+        Err(e) => Err(JsValue::from_str(&format!("Parse error: {e}"))),
     }
 }
 
@@ -61,7 +61,7 @@ pub fn parse_json_with_options(
                 .map_err(|e| JsValue::from_str(&e.to_string()))?;
             serde_json::to_string(&json_value).map_err(|e| JsValue::from_str(&e.to_string()))
         }
-        Err(e) => Err(JsValue::from_str(&format!("Parse error: {}", e))),
+        Err(e) => Err(JsValue::from_str(&format!("Parse error: {e}"))),
     }
 }
 

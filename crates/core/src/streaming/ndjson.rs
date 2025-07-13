@@ -207,8 +207,6 @@ impl StreamingNdJsonParser {
     pub fn next_event(&mut self) -> Result<Option<StreamingEvent>> {
         if !self.event_queue.is_empty() {
             Ok(Some(self.event_queue.remove(0)))
-        } else if self.finished {
-            Ok(None)
         } else {
             Ok(None)
         }

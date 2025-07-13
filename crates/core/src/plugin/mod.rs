@@ -133,7 +133,7 @@ impl PluginRegistry {
         for hook in hooks {
             self.hooks
                 .entry(hook)
-                .or_insert_with(Vec::new)
+                .or_default()
                 .push(plugin_index);
         }
     }

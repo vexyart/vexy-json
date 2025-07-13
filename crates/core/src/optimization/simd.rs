@@ -257,7 +257,7 @@ fn is_simple_integer_simd(s: &str) -> bool {
 
     // Check if all remaining characters are digits
     for &byte in &bytes[start..] {
-        if !(b'0'..=b'9').contains(&byte) {
+        if !byte.is_ascii_digit() {
             return false;
         }
     }

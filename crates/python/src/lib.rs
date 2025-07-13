@@ -96,7 +96,7 @@ fn python_to_value(py: Python, obj: &Bound<'_, PyAny>) -> PyResult<Value> {
 fn parse_json(py: Python, input: &str) -> PyResult<PyObject> {
     match parse(input) {
         Ok(value) => value_to_python(py, &value),
-        Err(e) => Err(PyValueError::new_err(format!("Parse error: {}", e))),
+        Err(e) => Err(PyValueError::new_err(format!("Parse error: {e}"))),
     }
 }
 
@@ -173,7 +173,7 @@ fn parse_with_options_py(
 
     match parse_with_options(input, options) {
         Ok(value) => value_to_python(py, &value),
-        Err(e) => Err(PyValueError::new_err(format!("Parse error: {}", e))),
+        Err(e) => Err(PyValueError::new_err(format!("Parse error: {e}"))),
     }
 }
 
@@ -278,7 +278,7 @@ fn format_value_with_indent(value: &Value, current_indent: usize, indent_size: u
 
                 for (i, (key, value)) in entries.iter().enumerate() {
                     result.push_str(&inner_spaces);
-                    result.push_str(&format!("\"{}\": ", key));
+                    result.push_str(&format!("\"{key}\": "));
                     result.push_str(&format_value_with_indent(
                         value,
                         current_indent + indent_size,
@@ -663,7 +663,7 @@ impl LineIterator {
                 let py_obj = value_to_python(py, &value)?;
                 Ok(Some(py_obj))
             }
-            Err(e) => Err(PyValueError::new_err(format!("Parse error: {}", e))),
+            Err(e) => Err(PyValueError::new_err(format!("Parse error: {e}"))),
         }
     }
 }
@@ -702,7 +702,7 @@ fn loads_numpy(py: Python, input: &str, dtype: Option<&str>) -> PyResult<PyObjec
     // Parse the JSON
     let value = match parse(input) {
         Ok(v) => v,
-        Err(e) => return Err(PyValueError::new_err(format!("Parse error: {}", e))),
+        Err(e) => return Err(PyValueError::new_err(format!("Parse error: {e}"))),
     };
 
     // Convert to NumPy array
@@ -782,7 +782,7 @@ fn loads_numpy_zerocopy(py: Python, input: &str, dtype: Option<&str>) -> PyResul
     // Parse the JSON
     let value = match parse(input) {
         Ok(v) => v,
-        Err(e) => return Err(PyValueError::new_err(format!("Parse error: {}", e))),
+        Err(e) => return Err(PyValueError::new_err(format!("Parse error: {e}"))),
     };
 
     match value {
@@ -887,7 +887,7 @@ fn loads_dataframe(py: Python, input: &str, _orient: &str) -> PyResult<PyObject>
     // Parse the JSON
     let value = match parse(input) {
         Ok(v) => v,
-        Err(e) => return Err(PyValueError::new_err(format!("Parse error: {}", e))),
+        Err(e) => return Err(PyValueError::new_err(format!("Parse error: {e}"))),
     };
 
     // Convert to Python object

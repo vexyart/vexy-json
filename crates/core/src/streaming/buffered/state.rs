@@ -23,14 +23,11 @@ pub(super) struct TempParsingState {
 /// Type of comment being parsed.
 #[derive(Debug, Clone, Copy, PartialEq)]
 #[allow(dead_code)]
+#[derive(Default)]
 pub(super) enum CommentType {
+    #[default]
     None,
     SingleLine,
     MultiLine,
 }
 
-impl Default for CommentType {
-    fn default() -> Self {
-        CommentType::None
-    }
-}

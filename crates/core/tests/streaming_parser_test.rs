@@ -3,7 +3,6 @@
 use vexy_json_core::streaming::{StreamingParser, StreamingEvent, StreamingValueBuilder};
 use vexy_json_core::parser::ParserOptions;
 use vexy_json_core::ast::{Value, Number};
-use rustc_hash::FxHashMap;
 
 #[test]
 fn test_streaming_parser_simple_object() {

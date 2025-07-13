@@ -484,14 +484,14 @@ impl<H: JsonEventHandler> AsyncEventDrivenParser<H> {
             let bytes_read = reader
                 .read(&mut buffer)
                 .await
-                .map_err(|e| Error::Custom(format!("Async IO error: {}", e)))?;
+                .map_err(|e| Error::Custom(format!("Async IO error: {e}")))?;
 
             if bytes_read == 0 {
                 break;
             }
 
             let chunk = std::str::from_utf8(&buffer[..bytes_read])
-                .map_err(|e| Error::Custom(format!("UTF-8 error: {}", e)))?;
+                .map_err(|e| Error::Custom(format!("UTF-8 error: {e}")))?;
 
             self.inner.parse_chunk(chunk)?;
         }

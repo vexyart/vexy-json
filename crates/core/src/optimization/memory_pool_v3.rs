@@ -35,6 +35,12 @@ pub struct TypedArena<T> {
     allocations: Cell<usize>,
 }
 
+impl<T> Default for TypedArena<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T> TypedArena<T> {
     /// Create a new typed arena with default chunk size
     pub fn new() -> Self {
@@ -148,6 +154,12 @@ pub enum SmallVec<T> {
     Heap(Vec<T>),
 }
 
+impl<T> Default for SmallVec<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T> SmallVec<T> {
     /// Create a new small vector
     pub fn new() -> Self {
@@ -180,6 +192,12 @@ pub struct MemoryPoolV3 {
     common_keys: FxHashMap<&'static str, &'static str>,
     /// Statistics
     stats: RefCell<AllocationStats>,
+}
+
+impl Default for MemoryPoolV3 {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl MemoryPoolV3 {
@@ -300,7 +318,7 @@ impl MemoryPoolV3 {
 
 // Thread-local access to memory pool
 thread_local! {
-    static POOL: RefCell<Option<Arc<MemoryPoolV3>>> = RefCell::new(None);
+    static POOL: RefCell<Option<Arc<MemoryPoolV3>>> = const { RefCell::new(None) };
 }
 
 /// Get or create the thread-local memory pool
@@ -318,6 +336,12 @@ where
 /// Scoped memory pool for localized allocations
 pub struct ScopedMemoryPoolV3 {
     pool: Arc<MemoryPoolV3>,
+}
+
+impl Default for ScopedMemoryPoolV3 {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl ScopedMemoryPoolV3 {

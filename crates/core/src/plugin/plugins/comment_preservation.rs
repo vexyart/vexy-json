@@ -54,7 +54,7 @@ impl CommentPreservationPlugin {
         self.all_comments.push(comment.clone());
         self.comments
             .entry(path.to_string())
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(comment);
     }
 

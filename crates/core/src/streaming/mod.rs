@@ -100,6 +100,12 @@ enum ParserContext {
     Array { first_element: bool },
 }
 
+impl Default for StreamingParser {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl StreamingParser {
     /// Create a new streaming parser with default options
     pub fn new() -> Self {
@@ -148,7 +154,7 @@ impl StreamingParser {
             }
 
             // If no token available, we're done for now
-            let Some((token, span)) = self.current_token.clone() else {
+            let Some((token, span)) = self.current_token else {
                 break;
             };
 
@@ -177,7 +183,7 @@ impl StreamingParser {
                     } else {
                         return Err(Error::Expected {
                             expected: "colon".to_string(),
-                            found: format!("{:?}", token),
+                            found: format!("{token:?}"),
                             position: span.start,
                         });
                     }
@@ -328,11 +334,7 @@ impl StreamingParser {
 
     /// Transition state after processing a value
     fn transition_after_value(&mut self) {
-        if self.state_stack.is_empty() {
-            self.current_state = ParserState::BetweenValues;
-        } else {
-            self.current_state = ParserState::BetweenValues;
-        }
+        self.current_state = ParserState::BetweenValues;
     }
 
     /// Get the next event from the parser

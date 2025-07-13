@@ -131,16 +131,7 @@ impl<'a> OptimizedParser<'a> {
 
         match token.0 {
             // Most common cases first for better branch prediction
-            Token::String => {
-                if likely(
-                    !self.options.allow_single_quotes
-                        || self.input.chars().nth(token.1.start).unwrap() == '"',
-                ) {
-                    self.parse_string_pooled(token.1)
-                } else {
-                    self.parse_string_pooled(token.1)
-                }
-            }
+            Token::String => self.parse_string_pooled(token.1),
             Token::Number => self.parse_number_optimized(token.1),
             Token::LeftBrace => self.parse_object(),
             Token::LeftBracket => self.parse_array(),

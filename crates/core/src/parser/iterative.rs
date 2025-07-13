@@ -147,14 +147,14 @@ impl<'a> IterativeParser<'a> {
                     expecting_key: true,
                 });
                 // Don't return a value - the object context will handle it
-                return Ok(Value::Null);
+                Ok(Value::Null)
             }
             Some(Token::LeftBracket) => {
                 self.advance()?;
                 self.parse_stack
                     .push(ParseContext::Array { array: Vec::new() });
                 // Don't return a value - the array context will handle it
-                return Ok(Value::Null);
+                Ok(Value::Null)
             }
             Some(Token::String) => self.parse_string(),
             Some(Token::Number) => self.parse_number(),
@@ -715,11 +715,11 @@ mod tests {
         let mut json = String::new();
         json.push('[');
         for _ in 0..100 {
-            json.push_str("[");
+            json.push('[');
         }
         json.push_str("42");
         for _ in 0..100 {
-            json.push_str("]");
+            json.push(']');
         }
         json.push(']');
 

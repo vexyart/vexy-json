@@ -738,7 +738,7 @@ impl RecoveryStrategy for TypeCoercionStrategy {
                     fixed.replace_range(pos..value_start + end_pos + 1, value);
                     
                     suggestions.push(RecoverySuggestion {
-                        description: format!("Convert string \"{}\" to boolean {}", value, value),
+                        description: format!("Convert string \"{value}\" to boolean {value}"),
                         confidence: 0.70,
                         fixed_input: fixed,
                         category: SuggestionCategory::TypeMismatch,
@@ -755,7 +755,7 @@ impl RecoveryStrategy for TypeCoercionStrategy {
                     fixed.replace_range(pos..value_start + end_pos + 1, value);
                     
                     suggestions.push(RecoverySuggestion {
-                        description: format!("Convert string \"{}\" to number {}", value, value),
+                        description: format!("Convert string \"{value}\" to number {value}"),
                         confidence: 0.65,
                         fixed_input: fixed,
                         category: SuggestionCategory::TypeMismatch,
@@ -795,7 +795,7 @@ impl RecoveryStrategy for StructuralRepairStrategy {
             
             // Look for pattern like: key: value or "key": value
             if trimmed.contains(':') && !trimmed.starts_with('{') && !trimmed.starts_with('[') {
-                let fixed = format!("{{{}}}", trimmed);
+                let fixed = format!("{{{trimmed}}}");
                 
                 suggestions.push(RecoverySuggestion {
                     description: "Wrap in object braces for implicit object".to_string(),
@@ -811,7 +811,7 @@ impl RecoveryStrategy for StructuralRepairStrategy {
             
             // Look for comma-separated values without brackets
             if trimmed.contains(',') && !trimmed.starts_with('[') && !trimmed.starts_with('{') {
-                let fixed = format!("[{}]", trimmed);
+                let fixed = format!("[{trimmed}]");
                 
                 suggestions.push(RecoverySuggestion {
                     description: "Wrap in array brackets for implicit array".to_string(),

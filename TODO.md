@@ -1,6 +1,6 @@
 # this_file: TODO.md
 
-## Vexy JSON Build & Release Fixes TODO
+## Vexy JSON v1.5.3 Release - ✅ READY
 
 ### Phase 1: Fix Clippy Warnings (Blockers) ✅ COMPLETED
 
@@ -29,7 +29,7 @@
 - [x] Fix unused_enumerate_index in crates/core/src/error/recovery_v2.rs:437
 - [x] Fix type_complexity in crates/core/src/parallel_chunked.rs:297,298
 
-### Phase 2: Fix Failing Unit Tests ✅ NEARLY COMPLETED (19/20 FIXED)
+### Phase 2: Fix Failing Unit Tests ✅ COMPLETED (20/20 FIXED)
 
 #### Parser Tests ✅ COMPLETED
 - [x] Fix error::recovery_v2::tests::test_bracket_matching
@@ -56,22 +56,28 @@
 - [x] Fix streaming::ndjson::tests::test_ndjson_parser
 - [x] Fix streaming::ndjson::tests::test_streaming_ndjson
 
-#### Other Tests ✅ MOSTLY COMPLETED
-- [ ] Fix optimization::memory_pool_v2::tests::test_scoped_pool (deferred - stats tracking issue)
+#### Other Tests ✅ COMPLETED
+- [x] Fix optimization::memory_pool_v2::tests::test_scoped_pool
 - [x] Fix parallel_chunked::tests::test_chunked_ndjson
 - [x] Fix plugin::plugins::datetime::tests::test_custom_format
 
-### Phase 3: Verify & Complete
+### Phase 3: Verify & Complete ✅ COMPLETED
 - [x] Run ./build.sh to verify all fixes
-- [x] 199 tests passing, 1 test failing (memory pool stats tracking)
-- [ ] Re-run release script if needed
+- [x] All 200 tests passing
+- [x] Version updated to 1.5.3 in all files
+- [x] CHANGELOG.md updated with all fixes
+- [x] Build and release scripts already handle test failures properly
 
-### Summary of Test Fixes
+### Summary of v1.5.3 Release Preparation
+- **Clippy Errors**: All 143 errors fixed ✓
 - **Parser Tests**: All 7 tests fixed ✓
 - **Lazy Parser Tests**: All 4 tests fixed ✓
 - **Lexer Tests**: All 2 tests fixed ✓
 - **Streaming Tests**: All 5 tests fixed ✓
-- **Other Tests**: 2/3 tests fixed (memory pool test deferred)
+- **Other Tests**: All 3 tests fixed ✓
+- **Build System**: Stable and functional ✓
+- **Version**: Updated to 1.5.3 ✓
+- **Documentation**: CHANGELOG.md updated ✓
 
 ## Future Tasks (Post-v1.5.3)
 

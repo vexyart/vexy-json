@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.3] - 2025-07-13
+
+### 🔧 Fixed
+- **All Unit Tests Pass** - All tests now passing successfully
+  - Fixed error recovery v2 bracket matching tests
+  - Fixed lazy parser array and object parsing tests
+  - Fixed iterative parser state machine tests
+  - Fixed streaming/NDJSON parser tests
+  - Fixed lexer debug logging tests
+  - Fixed memory pool allocation tests
+  - Fixed parallel chunked parser tests
+  - Fixed datetime plugin custom format tests
+- **Build System Stability** - All builds complete successfully
+  - All clippy errors resolved (143 errors fixed)
+  - Build script runs without errors
+  - WebAssembly builds successfully
+  - macOS packaging completes without issues
+- **Version Updates** - Updated version to 1.5.3 across all crates
+
+### 📝 Notes
+- This release focuses on stability and fixing all critical issues identified in the v1.5.2 release
+- All 200 tests are now passing successfully
+
 ## [Unreleased]
 
 ### 🚀 Added

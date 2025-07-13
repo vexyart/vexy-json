@@ -276,7 +276,7 @@ fn process_parallel_content(content: &str, source: &str, args: &CliArgs) -> Resu
                 println!(
                     "{} {}",
                     "✓".green(),
-                    format!("{} is valid JSON", source).green()
+                    format!("{source} is valid JSON").green()
                 );
             } else {
                 let formatted = format_output(&value, args);
@@ -346,7 +346,7 @@ async fn watch_mode(args: &CliArgs) -> Result<()> {
     let mut watcher = notify::recommended_watcher(move |res: notify::Result<notify::Event>| {
         if let Ok(event) = res {
             if let Err(e) = tx.blocking_send(event) {
-                eprintln!("Watch error: {}", e);
+                eprintln!("Watch error: {e}");
             }
         }
     })?;
@@ -416,9 +416,9 @@ fn print_validation_result_with_repair(
     };
 
     if args.files.len() > 1 || args.watch {
-        println!("{}: {}", source, status);
+        println!("{source}: {status}");
     } else {
-        println!("{}", status);
+        println!("{status}");
     }
 }
 
@@ -646,7 +646,7 @@ fn write_output(content: &str, args: &CliArgs) -> Result<()> {
     if let Some(output_file) = &args.output {
         fs::write(output_file, content)?;
     } else {
-        print!("{}", content);
+        print!("{content}");
         io::stdout().flush()?;
     }
     Ok(())
@@ -711,7 +711,7 @@ fn print_error(error: &CliError, args: &CliArgs) {
     eprintln!("{}", "Error:".red().bold());
 
     if args.verbose_errors {
-        eprintln!("{}", error);
+        eprintln!("{error}");
 
         // If it's a parse error with context, show it
         if let CliError::ParseError {
@@ -728,9 +728,9 @@ fn print_error(error: &CliError, args: &CliArgs) {
         // Simple error message
         match error {
             CliError::ParseError { file, message, .. } => {
-                eprintln!("{}: {}", file, message);
+                eprintln!("{file}: {message}");
             }
-            _ => eprintln!("{}", error),
+            _ => eprintln!("{error}"),
         }
     }
 }
@@ -744,12 +744,12 @@ fn print_error_context(content: &str, line: usize, col: usize) {
     for (i, line_content) in lines[start..end].iter().enumerate() {
         let line_num = start + i + 1;
         let prefix = if line_num == line {
-            format!("{:4} > ", line_num).red().bold()
+            format!("{line_num:4} > ").red().bold()
         } else {
-            format!("{:4}   ", line_num).white().dimmed()
+            format!("{line_num:4}   ").white().dimmed()
         };
 
-        eprintln!("{}{}", prefix, line_content);
+        eprintln!("{prefix}{line_content}");
 
         if line_num == line {
             let pointer = " ".repeat(6 + col.saturating_sub(1)) + "^";

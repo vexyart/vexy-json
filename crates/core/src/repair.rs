@@ -306,12 +306,12 @@ mod tests {
             balance1
                 .unmatched_stack
                 .iter()
-                .filter(|&&ref x| x == &BracketType::Brace)
+                .filter(|&x| x == &BracketType::Brace)
                 .count(),
             balance1
                 .unmatched_stack
                 .iter()
-                .filter(|&&ref x| x == &BracketType::Bracket)
+                .filter(|&x| x == &BracketType::Bracket)
                 .count()
         );
 
@@ -324,12 +324,12 @@ mod tests {
             balance2
                 .unmatched_stack
                 .iter()
-                .filter(|&&ref x| x == &BracketType::Brace)
+                .filter(|&x| x == &BracketType::Brace)
                 .count(),
             balance2
                 .unmatched_stack
                 .iter()
-                .filter(|&&ref x| x == &BracketType::Bracket)
+                .filter(|&x| x == &BracketType::Bracket)
                 .count()
         );
 

@@ -21,7 +21,7 @@ const DEFAULT_BLOCK_SIZE: usize = 16 * 1024;
 
 thread_local! {
     /// Thread-local memory pool for reduced contention
-    static THREAD_LOCAL_POOL: RefCell<Option<FastMemoryPool>> = RefCell::new(None);
+    static THREAD_LOCAL_POOL: RefCell<Option<FastMemoryPool>> = const { RefCell::new(None) };
 }
 
 /// Optimized memory pool with adaptive allocation strategies.
@@ -171,7 +171,7 @@ impl OptimizedMemoryPool {
         }
 
         // Use pool for medium-sized allocations
-        size >= MIN_POOL_ALLOCATION_SIZE && size <= MAX_POOL_ALLOCATION_SIZE
+        (MIN_POOL_ALLOCATION_SIZE..=MAX_POOL_ALLOCATION_SIZE).contains(&size)
     }
 
     /// Enables or disables pooling based on performance analysis.
