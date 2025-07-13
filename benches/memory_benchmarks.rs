@@ -10,6 +10,7 @@ use vexy_json::{parse, parse_with_options, ParserOptions};
 /// A tracking allocator that wraps the system allocator
 /// to monitor memory allocations during benchmarks
 #[derive(Debug)]
+#[allow(dead_code)]
 struct TrackingAllocator {
     allocations: Arc<AtomicUsize>,
     deallocations: Arc<AtomicUsize>,
@@ -18,6 +19,7 @@ struct TrackingAllocator {
 }
 
 impl TrackingAllocator {
+    #[allow(dead_code)]
     fn new() -> Self {
         TrackingAllocator {
             allocations: Arc::new(AtomicUsize::new(0)),
@@ -27,6 +29,7 @@ impl TrackingAllocator {
         }
     }
 
+    #[allow(dead_code)]
     fn stats(&self) -> AllocatorStats {
         AllocatorStats {
             total_allocations: self.allocations.load(Ordering::SeqCst),
@@ -36,6 +39,7 @@ impl TrackingAllocator {
         }
     }
 
+    #[allow(dead_code)]
     fn reset(&self) {
         self.allocations.store(0, Ordering::SeqCst);
         self.deallocations.store(0, Ordering::SeqCst);
@@ -80,6 +84,7 @@ unsafe impl GlobalAlloc for TrackingAllocator {
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 struct AllocatorStats {
     total_allocations: usize,
     total_deallocations: usize,
@@ -88,6 +93,7 @@ struct AllocatorStats {
 }
 
 impl AllocatorStats {
+    #[allow(dead_code)]
     fn net_allocations(&self) -> usize {
         self.total_allocations
             .saturating_sub(self.total_deallocations)

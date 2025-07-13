@@ -6,8 +6,10 @@ use std::time::Instant;
 use vexy_json_core::ast::{Number, Value};
 use vexy_json_core::{
     parse_iterative, parse_optimized_v2_with_options, parse_optimized_with_options,
-    parse_recursive, parse_with_options, ParserOptions,
+    parse_recursive, parse_with_options, ParserOptions, Error,
 };
+
+type ParserFn = fn(&str, ParserOptions) -> Result<Value, Error>;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🚀 Vexy JSON Parser Comparison Demo");
@@ -39,10 +41,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("JSON: {json}");
 
         // Test all parsers
-        let parsers: Vec<(
-            &str,
-            fn(&str, ParserOptions) -> Result<Value, vexy_json_core::Error>,
-        )> = vec![
+        let parsers: Vec<(&str, ParserFn)> = vec![
             ("Original", parse_with_options),
             ("Optimized", parse_optimized_with_options),
             ("Optimized V2", parse_optimized_v2_with_options),
@@ -141,10 +140,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("JSON: {invalid_json}");
 
         // Test error handling across parsers
-        let parsers: Vec<(
-            &str,
-            fn(&str, ParserOptions) -> Result<Value, vexy_json_core::Error>,
-        )> = vec![
+        let parsers: Vec<(&str, ParserFn)> = vec![
             ("Recursive", parse_recursive),
             ("Iterative", parse_iterative),
         ];
@@ -177,10 +173,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Testing large JSON with 1000 key-value pairs");
     println!("JSON size: {} bytes", large_json.len());
 
-    let parsers: Vec<(
-        &str,
-        fn(&str, ParserOptions) -> Result<Value, vexy_json_core::Error>,
-    )> = vec![
+    let parsers: Vec<(&str, ParserFn)> = vec![
         ("Recursive", parse_recursive),
         ("Iterative", parse_iterative),
     ];

@@ -229,11 +229,7 @@ fn bench_memory_efficiency(c: &mut Criterion) {
             if i > 0 {
                 json.push(',');
             }
-            json.push_str(&format!(
-                r#"[{}, "{}", true, null]"#,
-                i,
-                format!("item{}", i)
-            ));
+            json.push_str(&format!(r#"[{i}, "item{i}", true, null]"#));
         }
         json.push(']');
         json
