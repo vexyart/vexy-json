@@ -45,7 +45,13 @@ impl DateTimePlugin {
 
         // Try custom formats
         for format in &self.custom_formats {
+            // Try as NaiveDateTime first
             if let Ok(dt) = NaiveDateTime::parse_from_str(s, format) {
+                return Some(DateTime::from_naive_utc_and_offset(dt, Utc));
+            }
+            // Try as NaiveDate if it's just a date
+            if let Ok(date) = chrono::NaiveDate::parse_from_str(s, format) {
+                let dt = date.and_hms_opt(0, 0, 0).unwrap();
                 return Some(DateTime::from_naive_utc_and_offset(dt, Utc));
             }
         }
@@ -176,19 +182,28 @@ mod tests {
     #[test]
     fn test_custom_format() {
         let mut plugin = DateTimePlugin::new();
+        
+        // Add the custom format for YYYY-MM-DD
+        plugin.add_format("%Y-%m-%d");
 
         // Test custom format
         let mut value = Value::String("2023-12-25".to_string());
         plugin.transform_value(&mut value, "$").unwrap();
 
-        if let Value::Object(obj) = value {
-            assert_eq!(
-                obj.get("year"),
-                Some(&Value::Number(crate::ast::Number::Integer(2023)))
-            );
-            assert!(obj.contains_key("_original"));
-        } else {
-            panic!("Expected object");
+        match &value {
+            Value::Object(obj) => {
+                assert_eq!(
+                    obj.get("year"),
+                    Some(&Value::Number(crate::ast::Number::Integer(2023)))
+                );
+                assert!(obj.contains_key("_original"));
+            }
+            Value::String(s) => {
+                panic!("Date was not parsed. String value: {}", s);
+            }
+            _ => {
+                panic!("Unexpected value type: {:?}", value);
+            }
         }
     }
 

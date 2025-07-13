@@ -112,10 +112,6 @@ impl ErrorReporter {
         Self { config, formatter }
     }
 
-    /// Creates a new error reporter with default configuration.
-    pub fn default() -> Self {
-        Self::new(ReportConfig::default())
-    }
 
     /// Creates a new error reporter for minimal output.
     pub fn minimal() -> Self {
@@ -276,12 +272,10 @@ impl ErrorReporter {
         let mut current_line = String::new();
 
         for word in text.split_whitespace() {
-            if current_line.len() + word.len() + 1 > max_width {
-                if !current_line.is_empty() {
-                    wrapped.push_str(&current_line);
-                    wrapped.push('\n');
-                    current_line.clear();
-                }
+            if current_line.len() + word.len() + 1 > max_width && !current_line.is_empty() {
+                wrapped.push_str(&current_line);
+                wrapped.push('\n');
+                current_line.clear();
             }
 
             if !current_line.is_empty() {
@@ -295,6 +289,12 @@ impl ErrorReporter {
         }
 
         wrapped
+    }
+}
+
+impl Default for ErrorReporter {
+    fn default() -> Self {
+        Self::new(ReportConfig::default())
     }
 }
 

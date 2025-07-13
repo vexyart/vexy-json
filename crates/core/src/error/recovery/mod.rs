@@ -445,8 +445,7 @@ impl ErrorRecoveryAnalyzer {
             let unicode_escape = span.extract(input);
 
             // Try to fix common Unicode escape issues
-            if unicode_escape.starts_with("\\u") {
-                let hex_part = &unicode_escape[2..];
+            if let Some(hex_part) = unicode_escape.strip_prefix("\\u") {
                 if hex_part.len() < 4 {
                     // Pad with zeros
                     let padded = format!("\\u{hex_part:0>4}");
@@ -619,7 +618,7 @@ impl ErrorRecoveryAnalyzer {
         }
 
         // Try fixing decimal separators
-        if let Ok(_) = cleaned.replace(",", ".").parse::<f64>() {
+        if cleaned.replace(",", ".").parse::<f64>().is_ok() {
             return Ok(cleaned.replace(",", "."));
         }
 

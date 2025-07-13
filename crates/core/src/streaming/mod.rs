@@ -71,6 +71,8 @@ pub struct StreamingParser {
     finished: bool,
     /// Current token being processed
     current_token: Option<(Token, crate::error::Span)>,
+    /// Input string for extracting token content
+    input_buffer: String,
 }
 
 /// Internal parser state
@@ -87,6 +89,8 @@ enum ParserState {
     },
     /// Between values (handling whitespace/commas)
     BetweenValues,
+    /// Expecting a colon after object key
+    ExpectingColon,
 }
 
 /// Context for nested structures
@@ -113,6 +117,7 @@ impl StreamingParser {
             event_queue: Vec::new(),
             finished: false,
             current_token: None,
+            input_buffer: String::new(),
         }
     }
 
@@ -121,6 +126,9 @@ impl StreamingParser {
         if self.finished {
             return Err(Error::Custom("Parser already finished".to_string()));
         }
+
+        // Add to input buffer for token content extraction
+        self.input_buffer.push_str(chunk);
 
         // Feed to lexer
         self.lexer.feed_str(chunk)?;
@@ -140,7 +148,7 @@ impl StreamingParser {
             }
 
             // If no token available, we're done for now
-            let Some((token, _span)) = self.current_token.clone() else {
+            let Some((token, span)) = self.current_token.clone() else {
                 break;
             };
 
@@ -152,16 +160,28 @@ impl StreamingParser {
 
             // Process token based on current state
             let consumed = match &self.current_state {
-                ParserState::ExpectingValue => self.process_value(token)?,
+                ParserState::ExpectingValue => self.process_value(token, span)?,
                 ParserState::InObject { expecting_key } => {
                     if *expecting_key {
-                        self.process_object_key(token)?
+                        self.process_object_key(token, span)?
                     } else {
-                        self.process_value(token)?
+                        self.process_value(token, span)?
                     }
                 }
-                ParserState::InArray { .. } => self.process_value(token)?,
-                ParserState::BetweenValues => self.process_between_values(token)?,
+                ParserState::InArray { .. } => self.process_value(token, span)?,
+                ParserState::BetweenValues => self.process_between_values(token, span)?,
+                ParserState::ExpectingColon => {
+                    if matches!(token, Token::Colon) {
+                        self.current_state = ParserState::ExpectingValue;
+                        true
+                    } else {
+                        return Err(Error::Expected {
+                            expected: "colon".to_string(),
+                            found: format!("{:?}", token),
+                            position: span.start,
+                        });
+                    }
+                }
             };
 
             if consumed {
@@ -175,7 +195,7 @@ impl StreamingParser {
     }
 
     /// Process a value token
-    fn process_value(&mut self, token: Token) -> Result<bool> {
+    fn process_value(&mut self, token: Token, span: crate::error::Span) -> Result<bool> {
         match token {
             Token::LeftBrace => {
                 self.event_queue.push(StreamingEvent::StartObject);
@@ -198,16 +218,16 @@ impl StreamingParser {
                 Ok(true)
             }
             Token::String => {
-                // Note: actual string content would need to be extracted from lexer
-                self.event_queue
-                    .push(StreamingEvent::String("".to_string()));
+                // Extract actual string content from input buffer
+                let content = self.extract_string_content(span)?;
+                self.event_queue.push(StreamingEvent::String(content));
                 self.transition_after_value();
                 Ok(true)
             }
             Token::Number => {
-                // Note: actual number content would need to be extracted from lexer
-                self.event_queue
-                    .push(StreamingEvent::Number("0".to_string()));
+                // Extract actual number content from input buffer
+                let content = self.extract_token_content(span);
+                self.event_queue.push(StreamingEvent::Number(content));
                 self.transition_after_value();
                 Ok(true)
             }
@@ -231,20 +251,23 @@ impl StreamingParser {
     }
 
     /// Process an object key
-    fn process_object_key(&mut self, token: Token) -> Result<bool> {
+    fn process_object_key(&mut self, token: Token, span: crate::error::Span) -> Result<bool> {
         match token {
             Token::String => {
-                // Note: actual string content would need to be extracted from lexer
+                // Extract actual string content from input buffer
+                let content = self.extract_string_content(span)?;
                 self.event_queue
-                    .push(StreamingEvent::ObjectKey("".to_string()));
-                self.current_state = ParserState::ExpectingValue;
+                    .push(StreamingEvent::ObjectKey(content));
+                // After key, expect colon then value
+                self.current_state = ParserState::ExpectingColon;
                 Ok(true)
             }
             Token::UnquotedString if self.options.allow_unquoted_keys => {
-                // Note: actual string content would need to be extracted from lexer
+                // Extract actual string content from input buffer
+                let content = self.extract_token_content(span);
                 self.event_queue
-                    .push(StreamingEvent::ObjectKey("".to_string()));
-                self.current_state = ParserState::ExpectingValue;
+                    .push(StreamingEvent::ObjectKey(content));
+                self.current_state = ParserState::ExpectingColon;
                 Ok(true)
             }
             Token::RightBrace => {
@@ -259,7 +282,7 @@ impl StreamingParser {
     }
 
     /// Process tokens between values
-    fn process_between_values(&mut self, token: Token) -> Result<bool> {
+    fn process_between_values(&mut self, token: Token, _span: crate::error::Span) -> Result<bool> {
         match token {
             Token::Comma => {
                 // Move to next value
@@ -343,6 +366,78 @@ impl StreamingParser {
     /// Check if the parser has finished
     pub fn is_finished(&self) -> bool {
         self.finished && self.event_queue.is_empty()
+    }
+    
+    /// Extract token content from the input buffer
+    fn extract_token_content(&self, span: crate::error::Span) -> String {
+        if span.start < self.input_buffer.len() && span.end <= self.input_buffer.len() {
+            self.input_buffer[span.start..span.end].to_string()
+        } else {
+            // Fallback for out-of-bounds
+            String::new()
+        }
+    }
+    
+    /// Extract string content from the input buffer, removing quotes and processing escapes
+    fn extract_string_content(&self, span: crate::error::Span) -> Result<String> {
+        let raw = self.extract_token_content(span);
+        
+        // Remove surrounding quotes
+        let content = if (raw.starts_with('"') && raw.ends_with('"')) ||
+            (raw.starts_with('\'') && raw.ends_with('\'') && self.options.allow_single_quotes)
+        {
+            &raw[1..raw.len() - 1]
+        } else {
+            return Err(Error::Custom("Invalid string format".to_string()));
+        };
+        
+        // Process escape sequences
+        let mut result = String::new();
+        let mut chars = content.chars();
+        
+        while let Some(ch) = chars.next() {
+            if ch == '\\' {
+                match chars.next() {
+                    Some('"') => result.push('"'),
+                    Some('\\') => result.push('\\'),
+                    Some('/') => result.push('/'),
+                    Some('b') => result.push('\u{0008}'),
+                    Some('f') => result.push('\u{000C}'),
+                    Some('n') => result.push('\n'),
+                    Some('r') => result.push('\r'),
+                    Some('t') => result.push('\t'),
+                    Some('u') => {
+                        // Unicode escape sequence
+                        let hex: String = chars.by_ref().take(4).collect();
+                        if hex.len() != 4 {
+                            return Err(Error::Custom("Invalid unicode escape".to_string()));
+                        }
+                        match u32::from_str_radix(&hex, 16) {
+                            Ok(code) => {
+                                if let Some(unicode_char) = char::from_u32(code) {
+                                    result.push(unicode_char);
+                                } else {
+                                    return Err(Error::Custom(
+                                        "Invalid unicode code point".to_string(),
+                                    ));
+                                }
+                            }
+                            Err(_) => {
+                                return Err(Error::Custom("Invalid unicode escape".to_string()))
+                            }
+                        }
+                    }
+                    Some(ch) => {
+                        return Err(Error::Custom(format!("Invalid escape sequence: \\{ch}")))
+                    }
+                    None => return Err(Error::Custom("Incomplete escape sequence".to_string())),
+                }
+            } else {
+                result.push(ch);
+            }
+        }
+        
+        Ok(result)
     }
 }
 

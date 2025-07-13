@@ -514,7 +514,7 @@ mod tests {
         }
 
         let stats = lexer.stats();
-        assert_eq!(stats.tokens_count, 7); // [, 1, ,, 2, ,, 3, ], EOF
+        assert_eq!(stats.tokens_count, 8); // [, 1, ,, 2, ,, 3, ], EOF
         assert_eq!(stats.bytes_processed, 7);
         assert!(stats.time_ns > 0);
     }

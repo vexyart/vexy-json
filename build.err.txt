@@ -1,0 +1,480 @@
+   Compiling vexy-json-core v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json-serde v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
+   Compiling vexy-json v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+    Finished `release` profile [optimized] target(s) in 11.14s
+   Compiling logos-codegen v0.15.0
+   Compiling logos-derive v0.15.0
+   Compiling logos v0.15.0
+   Compiling vexy-json-core v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json-serde v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
+   Compiling vexy-json v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 15.12s
+     Running unittests src/lib.rs (target/debug/deps/vexy_json-3821cd6e9a06cdb4)
+     Running tests/advanced_features.rs (target/debug/deps/advanced_features-97ef446e036824bf)
+     Running tests/basic_tests.rs (target/debug/deps/basic_tests-13d9a93fdeb40803)
+     Running tests/comma_handling.rs (target/debug/deps/comma_handling-cc07f6f4c087f019)
+     Running tests/comment_handling.rs (target/debug/deps/comment_handling-8593a7b078bb44b3)
+     Running tests/compat_tests.rs (target/debug/deps/compat_tests-b576b5a184dd505f)
+     Running tests/comprehensive_tests.rs (target/debug/deps/comprehensive_tests-3747095c22216840)
+     Running tests/error_handling.rs (target/debug/deps/error_handling-4c4990e180b923b8)
+     Running tests/feature_tests.rs (target/debug/deps/feature_tests-fb1d1040be165a5c)
+     Running tests/forgiving_features.rs (target/debug/deps/forgiving_features-d5ca21d61af20161)
+     Running tests/lexer_tests.rs (target/debug/deps/lexer_tests-0c678703a5cbbb7c)
+     Running tests/lib_integration.rs (target/debug/deps/lib_integration-4a8ba5e56036656b)
+     Running tests/newline_as_comma.rs (target/debug/deps/newline_as_comma-f3c64026d8b1af18)
+     Running tests/number_formats.rs (target/debug/deps/number_formats-3dd5ab77c617f993)
+     Running tests/property_tests.rs (target/debug/deps/property_tests-a2f68a22de652aef)
+     Running tests/real_world_scenarios.rs (target/debug/deps/real_world_scenarios-df608904643822f7)
+     Running tests/string_handling.rs (target/debug/deps/string_handling-4e706034c6b86afd)
+     Running tests/supported_features.rs (target/debug/deps/supported_features-0eb9c69a6f4b757e)
+     Running tests/test_dot_numbers.rs (target/debug/deps/test_dot_numbers-dac7349fcacf8fcf)
+     Running tests/test_full_parse.rs (target/debug/deps/test_full_parse-bbf7b41953e22583)
+     Running tests/test_implicit.rs (target/debug/deps/test_implicit-3f02d685b487f4ac)
+     Running tests/test_parse.rs (target/debug/deps/test_parse-0be4e4862b7a2e72)
+     Running tests/test_point_zero.rs (target/debug/deps/test_point_zero-7ac2988c0d19c053)
+     Running tests/test_positive_numbers.rs (target/debug/deps/test_positive_numbers-5b76c4cf09dc8045)
+     Running tests/test_rust_parse.rs (target/debug/deps/test_rust_parse-88b4f260db22e9fd)
+     Running tests/test_strict_comment.rs (target/debug/deps/test_strict_comment-b79683447e52d32c)
+     Running tests/test_trailing_decimal.rs (target/debug/deps/test_trailing_decimal-5a9213848c621fae)
+   Doc-tests vexy_json
+   Compiling vexy-json-core v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+error: this `if` has identical blocks
+   --> crates/core/src/parser/iterative.rs:489:71
+    |
+489 |           let content = if text.starts_with('"') && text.ends_with('"') {
+    |  _______________________________________________________________________^
+490 | |             &text[1..text.len() - 1]
+491 | |         } else if text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes
+    | |_________^
+    |
+note: same as this
+   --> crates/core/src/parser/iterative.rs:492:9
+    |
+492 | /         {
+493 | |             &text[1..text.len() - 1]
+494 | |         } else {
+    | |_________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+    = note: `-D clippy::if-same-then-else` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::if_same_then_else)]`
+
+error: this `if` has identical blocks
+   --> crates/core/src/parser/iterative.rs:576:40
+    |
+576 |           if self.parse_stack.is_empty() {
+    |  ________________________________________^
+577 | |             self.result = Some(value);
+578 | |         } else {
+    | |_________^
+    |
+note: same as this
+   --> crates/core/src/parser/iterative.rs:578:16
+    |
+578 |           } else {
+    |  ________________^
+579 | |             self.result = Some(value);
+580 | |         }
+    | |_________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: stripping a prefix manually
+  --> crates/core/src/parser/number.rs:91:17
+   |
+91 |         (-1i64, &cleaned[1..])
+   |                 ^^^^^^^^^^^^^
+   |
+note: the prefix was tested here
+  --> crates/core/src/parser/number.rs:90:30
+   |
+90 |     let (sign, number_str) = if cleaned.starts_with('-') {
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_strip
+   = note: `-D clippy::manual-strip` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::manual_strip)]`
+help: try using the `strip_prefix` method
+   |
+90 ~     let (sign, number_str) = if let Some(<stripped>) = cleaned.strip_prefix('-') {
+91 ~         (-1i64, <stripped>)
+   |
+
+error: stripping a prefix manually
+  --> crates/core/src/parser/number.rs:93:16
+   |
+93 |         (1i64, &cleaned[1..])
+   |                ^^^^^^^^^^^^^
+   |
+note: the prefix was tested here
+  --> crates/core/src/parser/number.rs:92:12
+   |
+92 |     } else if cleaned.starts_with('+') {
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_strip
+help: try using the `strip_prefix` method
+   |
+92 ~     } else if let Some(<stripped>) = cleaned.strip_prefix('+') {
+93 ~         (1i64, <stripped>)
+   |
+
+error: this `if` has identical blocks
+   --> crates/core/src/parser/optimized.rs:138:19
+    |
+138 |                   ) {
+    |  ___________________^
+139 | |                     self.parse_string_pooled(token.1)
+140 | |                 } else {
+    | |_________________^
+    |
+note: same as this
+   --> crates/core/src/parser/optimized.rs:140:24
+    |
+140 |                   } else {
+    |  ________________________^
+141 | |                     self.parse_string_pooled(token.1)
+142 | |                 }
+    | |_________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: this `if` has identical blocks
+   --> crates/core/src/parser/optimized_v2.rs:164:19
+    |
+164 |                   ) {
+    |  ___________________^
+165 | |                     self.parse_string_pooled(token.1)
+166 | |                 } else {
+    | |_________________^
+    |
+note: same as this
+   --> crates/core/src/parser/optimized_v2.rs:166:24
+    |
+166 |                   } else {
+    |  ________________________^
+167 | |                     self.parse_string_pooled(token.1)
+168 | |                 }
+    | |_________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: this `if` has identical blocks
+   --> crates/core/src/parser/recursive.rs:373:71
+    |
+373 |           let content = if text.starts_with('"') && text.ends_with('"') {
+    |  _______________________________________________________________________^
+374 | |             &text[1..text.len() - 1]
+375 | |         } else if text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes
+    | |_________^
+    |
+note: same as this
+   --> crates/core/src/parser/recursive.rs:376:9
+    |
+376 | /         {
+377 | |             &text[1..text.len() - 1]
+378 | |         } else {
+    | |_________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: this `impl` can be derived
+  --> crates/core/src/streaming/buffered/state.rs:32:1
+   |
+32 | / impl Default for CommentType {
+33 | |     fn default() -> Self {
+34 | |         CommentType::None
+35 | |     }
+36 | | }
+   | |_^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#derivable_impls
+   = note: `-D clippy::derivable-impls` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::derivable_impls)]`
+help: replace the manual implementation with a derive attribute and mark the default variant
+   |
+26 + #[derive(Default)]
+27 ~ pub(super) enum CommentType {
+28 ~     #[default]
+29 ~     None,
+   |
+
+error: writing `&mut Vec` instead of `&mut [_]` involves a new object where a slice will do
+   --> crates/core/src/streaming/buffered/mod.rs:422:22
+    |
+422 |         value_stack: &mut Vec<Value>,
+    |                      ^^^^^^^^^^^^^^^ help: change this to: `&mut [Value]`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#ptr_arg
+    = note: `-D clippy::ptr-arg` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::ptr_arg)]`
+
+error: this `if` has identical blocks
+   --> crates/core/src/streaming/ndjson.rs:195:33
+    |
+195 |           } else if self.finished {
+    |  _________________________________^
+196 | |             Ok(None)
+197 | |         } else {
+    | |_________^
+    |
+note: same as this
+   --> crates/core/src/streaming/ndjson.rs:197:16
+    |
+197 |           } else {
+    |  ________________^
+198 | |             Ok(None)
+199 | |         }
+    | |_________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: you should consider adding a `Default` implementation for `StreamingParser`
+   --> crates/core/src/streaming/mod.rs:101:5
+    |
+101 | /     pub fn new() -> Self {
+102 | |         Self::with_options(crate::parser::ParserOptions::default())
+103 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+    = note: `-D clippy::new-without-default` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::new_without_default)]`
+help: try adding this
+    |
+99  + impl Default for StreamingParser {
+100 +     fn default() -> Self {
+101 +         Self::new()
+102 +     }
+103 + }
+    |
+
+error: using `clone` on type `Option<(Token, Span)>` which implements the `Copy` trait
+   --> crates/core/src/streaming/mod.rs:143:40
+    |
+143 |             let Some((token, _span)) = self.current_token.clone() else {
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try removing the `clone` call: `self.current_token`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#clone_on_copy
+    = note: `-D clippy::clone-on-copy` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::clone_on_copy)]`
+
+error: this `if` has identical blocks
+   --> crates/core/src/streaming/mod.rs:308:40
+    |
+308 |           if self.state_stack.is_empty() {
+    |  ________________________________________^
+309 | |             self.current_state = ParserState::BetweenValues;
+310 | |         } else {
+    | |_________^
+    |
+note: same as this
+   --> crates/core/src/streaming/mod.rs:310:16
+    |
+310 |           } else {
+    |  ________________^
+311 | |             self.current_state = ParserState::BetweenValues;
+312 | |         }
+    | |_________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_same_then_else
+
+error: you should consider adding a `Default` implementation for `PerformanceMonitor`
+  --> crates/core/src/optimization/benchmarks.rs:24:5
+   |
+24 | /     pub fn new() -> Self {
+25 | |         Self {
+26 | |             simd_times: Vec::new(),
+27 | |             scalar_times: Vec::new(),
+...  |
+30 | |     }
+   | |_____^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+   |
+22 + impl Default for PerformanceMonitor {
+23 +     fn default() -> Self {
+24 +         Self::new()
+25 +     }
+26 + }
+   |
+
+error: manual slice size calculation
+   --> crates/core/src/optimization/memory_pool.rs:161:20
+    |
+161 |         let size = size_of::<T>() * slice.len();
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `std::mem::size_of_val(slice)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_slice_size_calculation
+    = note: `-D clippy::manual-slice-size-calculation` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::manual_slice_size_calculation)]`
+
+error: initializer for `thread_local` value can be made `const`
+  --> crates/core/src/optimization/memory_pool_v2.rs:24:65
+   |
+24 |     static THREAD_LOCAL_POOL: RefCell<Option<FastMemoryPool>> = RefCell::new(None);
+   |                                                                 ^^^^^^^^^^^^^^^^^^ help: replace with: `const { RefCell::new(None) }`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_const_for_thread_local
+   = note: `-D clippy::missing-const-for-thread-local` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::missing_const_for_thread_local)]`
+
+error: manual `RangeInclusive::contains` implementation
+   --> crates/core/src/optimization/memory_pool_v2.rs:162:9
+    |
+162 |         size >= MIN_POOL_ALLOCATION_SIZE && size <= MAX_POOL_ALLOCATION_SIZE
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use: `(MIN_POOL_ALLOCATION_SIZE..=MAX_POOL_ALLOCATION_SIZE).contains(&size)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_range_contains
+    = note: `-D clippy::manual-range-contains` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::manual_range_contains)]`
+
+error: you should consider adding a `Default` implementation for `TypedArena<T>`
+  --> crates/core/src/optimization/memory_pool_v3.rs:40:5
+   |
+40 | /     pub fn new() -> Self {
+41 | |         Self::with_capacity(1024)
+42 | |     }
+   | |_____^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+   |
+38 + impl<T> Default for TypedArena<T> {
+39 +     fn default() -> Self {
+40 +         Self::new()
+41 +     }
+42 + }
+   |
+
+error: you should consider adding a `Default` implementation for `SmallVec<T>`
+   --> crates/core/src/optimization/memory_pool_v3.rs:153:5
+    |
+153 | /     pub fn new() -> Self {
+154 | |         SmallVec::Inline(Default::default())
+155 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+    |
+151 + impl<T> Default for SmallVec<T> {
+152 +     fn default() -> Self {
+153 +         Self::new()
+154 +     }
+155 + }
+    |
+
+error: you should consider adding a `Default` implementation for `MemoryPoolV3`
+   --> crates/core/src/optimization/memory_pool_v3.rs:187:5
+    |
+187 | /     pub fn new() -> Self {
+188 | |         let mut pool = MemoryPoolV3 {
+189 | |             string_arena: TypedArena::new(),
+190 | |             value_arena: TypedArena::new(),
+...   |
+225 | |         pool
+226 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+    |
+185 + impl Default for MemoryPoolV3 {
+186 +     fn default() -> Self {
+187 +         Self::new()
+188 +     }
+189 + }
+    |
+
+error: initializer for `thread_local` value can be made `const`
+   --> crates/core/src/optimization/memory_pool_v3.rs:303:55
+    |
+303 |     static POOL: RefCell<Option<Arc<MemoryPoolV3>>> = RefCell::new(None);
+    |                                                       ^^^^^^^^^^^^^^^^^^ help: replace with: `const { RefCell::new(None) }`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_const_for_thread_local
+
+error: usage of an `Arc` that is not `Send` and `Sync`
+   --> crates/core/src/optimization/memory_pool_v3.rs:313:51
+    |
+313 |         let pool = pool_ref.get_or_insert_with(|| Arc::new(MemoryPoolV3::new()));
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `Arc<MemoryPoolV3>` is not `Send` and `Sync` as `MemoryPoolV3` is not `Sync`
+    = help: if the `Arc` will not used be across threads replace it with an `Rc`
+    = help: otherwise make `MemoryPoolV3` `Send` and `Sync` or consider a wrapper type such as `Mutex`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#arc_with_non_send_sync
+    = note: `-D clippy::arc-with-non-send-sync` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::arc_with_non_send_sync)]`
+
+error: you should consider adding a `Default` implementation for `ScopedMemoryPoolV3`
+   --> crates/core/src/optimization/memory_pool_v3.rs:325:5
+    |
+325 | /     pub fn new() -> Self {
+326 | |         ScopedMemoryPoolV3 {
+327 | |             pool: Arc::new(MemoryPoolV3::new()),
+328 | |         }
+329 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+help: try adding this
+    |
+323 + impl Default for ScopedMemoryPoolV3 {
+324 +     fn default() -> Self {
+325 +         Self::new()
+326 +     }
+327 + }
+    |
+
+error: usage of an `Arc` that is not `Send` and `Sync`
+   --> crates/core/src/optimization/memory_pool_v3.rs:327:19
+    |
+327 |             pool: Arc::new(MemoryPoolV3::new()),
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `Arc<MemoryPoolV3>` is not `Send` and `Sync` as `MemoryPoolV3` is not `Sync`
+    = help: if the `Arc` will not used be across threads replace it with an `Rc`
+    = help: otherwise make `MemoryPoolV3` `Send` and `Sync` or consider a wrapper type such as `Mutex`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#arc_with_non_send_sync
+
+error: manual check for common ascii range
+   --> crates/core/src/optimization/simd.rs:260:13
+    |
+260 |         if !(b'0'..=b'9').contains(&byte) {
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `byte.is_ascii_digit()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_is_ascii_check
+    = note: `-D clippy::manual-is-ascii-check` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::manual_is_ascii_check)]`
+
+error: use of `or_insert_with` to construct default value
+   --> crates/core/src/plugin/mod.rs:136:18
+    |
+136 |                 .or_insert_with(Vec::new)
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `or_default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unwrap_or_default
+    = note: `-D clippy::unwrap-or-default` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::unwrap_or_default)]`
+
+error: use of `or_insert_with` to construct default value
+  --> crates/core/src/plugin/plugins/comment_preservation.rs:57:14
+   |
+57 |             .or_insert_with(Vec::new)
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `or_default()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unwrap_or_default
+
+error: parameter is only used in recursion
+  --> crates/core/src/plugin/plugins/schema_validation.rs:32:33
+   |
+32 |     fn validate_against_schema(&self, value: &Value, schema: &Value, path: &str) -> Result<()> {
+   |                                 ^^^^
+   |
+note: parameter used here
+  --> crates/core/src/plugin/plugins/schema_validation.rs:59:25
+   |
+59 |                         self.validate_against_schema(prop_value, prop_schema, &prop_path)?;
+   |                         ^^^^
+...
+77 |                     self.validate_against_schema(item, items_schema, &item_path)?;
+   |                     ^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#only_used_in_recursion
+   = note: `-D clippy::only-used-in-recursion` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::only_used_in_recursion)]`
+
+error: could not compile `vexy-json-core` (lib) due to 28 previous errors

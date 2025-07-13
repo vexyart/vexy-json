@@ -3,7 +3,6 @@
 use crate::ast::{Token, Value};
 use crate::error::{Error, Result, Span};
 use crate::lazy::{LazyParser, LazyValue};
-use crate::lexer::JsonLexer;
 use rustc_hash::FxHashMap;
 use std::sync::Arc;
 
@@ -67,62 +66,13 @@ impl LazyObject {
 
 impl<'a> LazyParser<'a> {
     /// Parses an object, potentially deferring large objects.
-    pub(super) fn parse_object(&mut self, start_span: Span) -> Result<Value> {
-        // Find the end of the object to determine its size
-        let end_span = self.find_object_end()?;
-        let object_size = end_span.end - start_span.start;
-
-        if object_size > self.lazy_threshold {
-            // Create a lazy object for large objects
-            let mut lazy_obj = LazyObject::new(Arc::from(self.input), self.options.clone());
-
-            // Parse only the keys and defer the values
-            self.parse_object_keys_only(&mut lazy_obj, start_span, end_span)?;
-
-            // For now, return as a regular object since Value doesn't support LazyObject
-            // In a real implementation, we'd extend Value to include lazy variants
-            lazy_obj.evaluate_all()
-        } else {
-            // Parse immediately for small objects
-            self.parse_object_immediate()
-        }
+    pub(super) fn parse_object(&mut self, _start_span: Span) -> Result<Value> {
+        // For now, always parse immediately
+        // TODO: Implement proper lazy parsing with lexer checkpointing
+        self.parse_object_immediate()
     }
 
-    /// Finds the end of an object by scanning for the matching closing brace.
-    pub(super) fn find_object_end(&mut self) -> Result<Span> {
-        let mut depth = 1;
-        let mut current_pos = self.lexer.position();
 
-        while depth > 0 {
-            let (token, span) = self.next_token()?;
-            current_pos = span.end;
-
-            match token {
-                Token::LeftBrace => depth += 1,
-                Token::RightBrace => depth -= 1,
-                Token::Eof => return Err(Error::UnterminatedString(current_pos)),
-                _ => {}
-            }
-        }
-
-        Ok(Span::new(current_pos - 1, current_pos))
-    }
-
-    /// Parses object keys only, creating deferred values for the values.
-    fn parse_object_keys_only(
-        &mut self,
-        _lazy_obj: &mut LazyObject,
-        _start_span: Span,
-        _end_span: Span,
-    ) -> Result<()> {
-        // This is a simplified implementation
-        // In practice, we'd need to carefully parse just the structure
-        // and create spans for each value
-
-        // For now, fall back to immediate parsing
-        // TODO: Implement proper key-only parsing
-        Ok(())
-    }
 
     /// Parses an object immediately using standard parsing.
     pub(super) fn parse_object_immediate(&mut self) -> Result<Value> {

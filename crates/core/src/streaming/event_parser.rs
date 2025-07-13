@@ -9,7 +9,6 @@
 
 use crate::ast::{Token, Value};
 use crate::error::{Error, Result};
-use crate::streaming::SimpleStreamingLexer;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 use std::io::Read;
@@ -236,15 +235,20 @@ impl<H: JsonEventHandler> EventDrivenParser<H> {
 
     /// Process input and return number of bytes processed and remaining data
     fn process_input(&mut self, input: &str) -> Result<(usize, String)> {
-        let mut lexer = SimpleStreamingLexer::new();
+        // Use the standard lexer which gives us access to the input
+        let mut lexer = crate::lexer::Lexer::new(input);
         let mut position = 0;
-
-        // Feed input to lexer
-        lexer.feed_str(input)?;
+        let mut in_object = false;
+        let mut expecting_key = false;
 
         // Process tokens
-        while let Some((token, span)) = lexer.next_token() {
+        loop {
+            let (token, span) = lexer.next_token_with_span()?;
+            
             if !self.should_process_token(&token)? {
+                if token == Token::Eof {
+                    break;
+                }
                 continue;
             }
 
@@ -255,10 +259,14 @@ impl<H: JsonEventHandler> EventDrivenParser<H> {
                         expecting_key: true,
                         current_key: None,
                     });
+                    in_object = true;
+                    expecting_key = true;
                 }
                 Token::RightBrace => {
                     self.handler.on_object_end()?;
                     self.pop_context()?;
+                    in_object = !self.state.context_stack.is_empty();
+                    expecting_key = false;
                 }
                 Token::LeftBracket => {
                     self.handler.on_array_start()?;
@@ -269,27 +277,50 @@ impl<H: JsonEventHandler> EventDrivenParser<H> {
                     self.pop_context()?;
                 }
                 Token::String => {
-                    // For now, we can't extract string values from tokens
-                    // This would need to be redesigned to work with the lexer API
-                    self.handler.on_string("<string>")?;
+                    let value = &input[span.start..span.end];
+                    let unquoted = if value.starts_with('"') && value.ends_with('"') {
+                        &value[1..value.len()-1]
+                    } else {
+                        value
+                    };
+                    
+                    if in_object && expecting_key {
+                        self.handler.on_key(unquoted)?;
+                        expecting_key = false;
+                    } else {
+                        self.handler.on_string(unquoted)?;
+                    }
                 }
                 Token::Number => {
-                    // For now, we can't extract number values from tokens
-                    self.handler.on_number("<number>")?;
+                    let value = &input[span.start..span.end];
+                    self.handler.on_number(value)?;
                 }
                 Token::True => self.handler.on_bool(true)?,
                 Token::False => self.handler.on_bool(false)?,
                 Token::Null => self.handler.on_null()?,
-                Token::Comma => self.handle_comma()?,
-                Token::Colon => self.handle_colon()?,
+                Token::Comma => {
+                    self.handle_comma()?;
+                    if in_object {
+                        expecting_key = true;
+                    }
+                }
+                Token::Colon => {
+                    self.handle_colon()?;
+                    expecting_key = false;
+                }
+                Token::Eof => break,
                 _ => {}
             }
 
-            position = span.start;
+            position = span.end;
         }
 
         // Return processed bytes and remaining input
-        let remaining = input[position..].to_string();
+        let remaining = if position < input.len() {
+            input[position..].to_string()
+        } else {
+            String::new()
+        };
         Ok((position, remaining))
     }
 

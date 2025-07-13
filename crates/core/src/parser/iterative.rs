@@ -71,8 +71,7 @@ impl<'a> IterativeParser<'a> {
             match self.parse_stack.last() {
                 Some(ParseContext::Value) => {
                     self.parse_stack.pop();
-                    let value = self.parse_value()?;
-                    self.push_value(value)?;
+                    self.parse_value_and_push()?;
                 }
                 Some(ParseContext::Object { .. }) => {
                     self.parse_object_step()?;
@@ -147,13 +146,15 @@ impl<'a> IterativeParser<'a> {
                     current_key: None,
                     expecting_key: true,
                 });
-                Ok(Value::Null) // Placeholder - will be replaced when object is complete
+                // Don't return a value - the object context will handle it
+                return Ok(Value::Null);
             }
             Some(Token::LeftBracket) => {
                 self.advance()?;
                 self.parse_stack
                     .push(ParseContext::Array { array: Vec::new() });
-                Ok(Value::Null) // Placeholder - will be replaced when array is complete
+                // Don't return a value - the array context will handle it
+                return Ok(Value::Null);
             }
             Some(Token::String) => self.parse_string(),
             Some(Token::Number) => self.parse_number(),
@@ -185,6 +186,30 @@ impl<'a> IterativeParser<'a> {
         }
     }
 
+    /// Parses a value and pushes it or creates a new parsing context.
+    fn parse_value_and_push(&mut self) -> Result<()> {
+        match self.peek() {
+            Some(Token::LeftBrace) => {
+                self.advance()?;
+                self.parse_stack.push(ParseContext::Object {
+                    object: FxHashMap::default(),
+                    current_key: None,
+                    expecting_key: true,
+                });
+            }
+            Some(Token::LeftBracket) => {
+                self.advance()?;
+                self.parse_stack
+                    .push(ParseContext::Array { array: Vec::new() });
+            }
+            _ => {
+                let value = self.parse_value()?;
+                self.push_value(value)?;
+            }
+        }
+        Ok(())
+    }
+
     /// Parses one step of an object.
     fn parse_object_step(&mut self) -> Result<()> {
         // Check current stack depth
@@ -200,8 +225,8 @@ impl<'a> IterativeParser<'a> {
             expecting_key,
         } = context
         {
-            // Handle empty object
-            if let Some(Token::RightBrace) = self.peek() {
+            // Handle empty object or immediate close
+            if expecting_key && object.is_empty() && matches!(self.peek(), Some(Token::RightBrace)) {
                 self.advance()?;
                 self.parse_stack.pop();
                 let value = Value::Object(object);
@@ -328,12 +353,20 @@ impl<'a> IterativeParser<'a> {
         let context = self.parse_stack.last().unwrap().clone();
 
         if let ParseContext::Array { mut array } = context {
-            // Handle empty array
-            if let Some(Token::RightBracket) = self.peek() {
-                self.advance()?;
+            // Check if this is the first step (no value parsed yet)
+            if self.result.is_none() {
+                // Handle empty array
+                if matches!(self.peek(), Some(Token::RightBracket)) {
+                    self.advance()?;
+                    self.parse_stack.pop();
+                    let value = Value::Array(array);
+                    self.push_value(value)?;
+                    return Ok(());
+                }
+                // Parse first element
                 self.parse_stack.pop();
-                let value = Value::Array(array);
-                self.push_value(value)?;
+                self.parse_stack.push(ParseContext::Array { array });
+                self.parse_stack.push(ParseContext::Value);
                 return Ok(());
             }
 
@@ -404,9 +437,6 @@ impl<'a> IterativeParser<'a> {
                         });
                     }
                 }
-            } else {
-                // No value yet, parse the first element
-                self.parse_stack.push(ParseContext::Value);
             }
         }
 
@@ -486,9 +516,8 @@ impl<'a> IterativeParser<'a> {
         let text = self.lexer.span_text(&span);
 
         // Remove quotes
-        let content = if text.starts_with('"') && text.ends_with('"') {
-            &text[1..text.len() - 1]
-        } else if text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes
+        let content = if (text.starts_with('"') && text.ends_with('"')) ||
+            (text.starts_with('\'') && text.ends_with('\'') && self.options.allow_single_quotes)
         {
             &text[1..text.len() - 1]
         } else {
@@ -573,13 +602,10 @@ impl<'a> IterativeParser<'a> {
 
     /// Pushes a value to the result or appropriate context.
     fn push_value(&mut self, value: Value) -> Result<()> {
-        if self.parse_stack.is_empty() {
-            self.result = Some(value);
-        } else {
-            self.result = Some(value);
-        }
+        self.result = Some(value);
         Ok(())
     }
+
 }
 
 /// Parses JSON using the stack-based iterative parser.

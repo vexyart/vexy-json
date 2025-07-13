@@ -133,6 +133,12 @@ impl OptimizedMemoryPool {
         let bytes = s.as_bytes();
         let size = bytes.len();
 
+        // Update statistics for string allocations
+        self.stats.allocations.set(self.stats.allocations.get() + 1);
+        self.stats
+            .total_allocated
+            .set(self.stats.total_allocated.get() + size);
+
         // For very small strings, it might be faster to just use regular allocation
         if size < MIN_POOL_ALLOCATION_SIZE {
             // Direct heap allocation for small strings
@@ -141,6 +147,12 @@ impl OptimizedMemoryPool {
             Some(leaked)
         } else {
             // Use the pool for larger strings
+            // Note: allocate() already updates stats, so we need to adjust to avoid double counting
+            self.stats.allocations.set(self.stats.allocations.get() - 1);
+            self.stats
+                .total_allocated
+                .set(self.stats.total_allocated.get() - size);
+            
             let ptr = self.allocate(size)?;
             unsafe {
                 std::ptr::copy_nonoverlapping(bytes.as_ptr(), ptr.as_ptr(), size);

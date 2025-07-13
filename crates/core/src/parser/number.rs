@@ -87,10 +87,10 @@ fn parse_alternative_number_format(input: &str, span: Span) -> Result<Option<i64
     let cleaned = input.replace('_', "");
 
     // Handle signed numbers
-    let (sign, number_str) = if cleaned.starts_with('-') {
-        (-1i64, &cleaned[1..])
-    } else if cleaned.starts_with('+') {
-        (1i64, &cleaned[1..])
+    let (sign, number_str) = if let Some(rest) = cleaned.strip_prefix('-') {
+        (-1i64, rest)
+    } else if let Some(rest) = cleaned.strip_prefix('+') {
+        (1i64, rest)
     } else {
         (1i64, cleaned.as_str())
     };

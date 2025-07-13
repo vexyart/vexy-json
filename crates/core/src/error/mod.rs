@@ -52,3 +52,6 @@ pub use terminal::{ColorScheme, TerminalFormatter};
 pub use reporter::{
     full_error_report, plain_error_report, quick_error_report, ErrorReporter, ReportConfig,
 };
+
+// Re-export error recovery v2 components
+pub use recovery_v2::{ErrorRecoveryEngineV2, RecoverySuggestion, SuggestionCategory, ErrorContext};

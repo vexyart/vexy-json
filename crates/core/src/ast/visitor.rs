@@ -213,8 +213,8 @@ impl fmt::Display for JsonPath {
         write!(f, "$")?;
         for segment in &self.segments {
             match segment {
-                PathSegment::Key(key) => write!(f, ".{}", key)?,
-                PathSegment::Index(idx) => write!(f, "[{}]", idx)?,
+                PathSegment::Key(key) => write!(f, ".{key}")?,
+                PathSegment::Index(idx) => write!(f, "[{idx}]")?,
             }
         }
         Ok(())

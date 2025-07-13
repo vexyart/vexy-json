@@ -367,7 +367,7 @@ impl Error {
     /// This provides more precise location information than just a position,
     /// including the range of characters that caused the error.
     pub fn span(&self) -> Option<Span> {
-        self.position().map(|pos| Span::single(pos))
+        self.position().map(Span::single)
     }
 
     /// Returns suggestions for fixing this error.

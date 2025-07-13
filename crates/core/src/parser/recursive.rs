@@ -123,7 +123,7 @@ impl<'a> RecursiveDescentParser<'a> {
     /// Parses a JSON value.
     ///
     /// Grammar:
-    /// ```
+    /// ```text
     /// value = object | array | string | number | boolean | null
     /// ```
     fn parse_value(&mut self) -> Result<Value> {
@@ -154,7 +154,7 @@ impl<'a> RecursiveDescentParser<'a> {
     /// Parses a JSON object.
     ///
     /// Grammar:
-    /// ```
+    /// ```text
     /// object = "{" [pair ("," pair)*] "}"
     /// pair = string ":" value
     /// ```
@@ -269,7 +269,7 @@ impl<'a> RecursiveDescentParser<'a> {
     /// Parses a JSON array.
     ///
     /// Grammar:
-    /// ```
+    /// ```text
     /// array = "[" [value ("," value)*] "]"
     /// ```
     fn parse_array(&mut self) -> Result<Value> {

@@ -5,7 +5,7 @@
     "Adam Twardoch <adam+github@twardoch.com>"
   ],
   "description": "WebAssembly bindings for vexy_json - a forgiving JSON parser",
-  "version": "1.5.3-dev",
+  "version": "1.5.4",
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",

@@ -1,57 +1,49 @@
-   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
-   Compiling once_cell v1.21.3
-   Compiling vexy-json v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
-   Compiling vexy-json-cli v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/cli)
-   Compiling vexy-json-wasm v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/wasm)
-   Compiling tempfile v3.20.0
-   Compiling wasm-bindgen v0.2.100
-   Compiling rusty-fork v0.3.0
-   Compiling cbindgen v0.29.0
-   Compiling proptest v1.7.0
-   Compiling vexy-json-c-api v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/c-api)
-   Compiling vexy-json-serde v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
-   Compiling vexy-json-test-utils v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/test-utils)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 27.90s
-     Running unittests src/lib.rs (target/debug/deps/vexy_json-099264f25302c2e7)
-     Running tests/advanced_features.rs (target/debug/deps/advanced_features-36d88acb66f8d6d5)
-     Running tests/basic_tests.rs (target/debug/deps/basic_tests-a2707d0d22811ec5)
-     Running tests/comma_handling.rs (target/debug/deps/comma_handling-36dbea858d61f8b5)
-     Running tests/comment_handling.rs (target/debug/deps/comment_handling-b9937ffad721f15a)
-     Running tests/compat_tests.rs (target/debug/deps/compat_tests-b588750f00b620b9)
-     Running tests/comprehensive_tests.rs (target/debug/deps/comprehensive_tests-ddc0329e73594d31)
-     Running tests/error_handling.rs (target/debug/deps/error_handling-9ba7d73824f75903)
-     Running tests/feature_tests.rs (target/debug/deps/feature_tests-ec67b86390507af2)
-     Running tests/forgiving_features.rs (target/debug/deps/forgiving_features-0ae65ecda6919afa)
-     Running tests/lexer_tests.rs (target/debug/deps/lexer_tests-e42178e60165a5d1)
-     Running tests/lib_integration.rs (target/debug/deps/lib_integration-144f7525c162f495)
-     Running tests/newline_as_comma.rs (target/debug/deps/newline_as_comma-416dd5d5dcff145d)
-     Running tests/number_formats.rs (target/debug/deps/number_formats-4c075d43958f3652)
-     Running tests/property_tests.rs (target/debug/deps/property_tests-5090990100276279)
-     Running tests/real_world_scenarios.rs (target/debug/deps/real_world_scenarios-d7b1bfbbddb79440)
-     Running tests/string_handling.rs (target/debug/deps/string_handling-4eec58fc5a90b28f)
-     Running tests/supported_features.rs (target/debug/deps/supported_features-0e691a7d97051507)
-     Running tests/test_dot_numbers.rs (target/debug/deps/test_dot_numbers-ed5fd2c399363989)
-     Running tests/test_full_parse.rs (target/debug/deps/test_full_parse-0eb058162965dda0)
-     Running tests/test_implicit.rs (target/debug/deps/test_implicit-2c07bf800bf99cb8)
-     Running tests/test_parse.rs (target/debug/deps/test_parse-1ddfcbad2af9c723)
-     Running tests/test_point_zero.rs (target/debug/deps/test_point_zero-00b51f8232700ce6)
-     Running tests/test_positive_numbers.rs (target/debug/deps/test_positive_numbers-c37808473e94b043)
-     Running tests/test_rust_parse.rs (target/debug/deps/test_rust_parse-e56f4828db269e94)
-     Running tests/test_strict_comment.rs (target/debug/deps/test_strict_comment-e37d9fb204814083)
-     Running tests/test_trailing_decimal.rs (target/debug/deps/test_trailing_decimal-a03a25a6098dc0ed)
-     Running unittests src/lib.rs (target/debug/deps/vexy_json_c_api-a0793b143786976a)
-     Running unittests src/main.rs (target/debug/deps/vexy_json-b5fda047ac53c0b5)
-     Running unittests src/lib.rs (target/debug/deps/vexy_json_core-4d9862395123b01d)
+    Blocking waiting for file lock on build directory
+   Compiling vexy-json-core v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+   Compiling vexy-json-wasm v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/wasm)
+   Compiling vexy-json-cli v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/cli)
+   Compiling vexy-json-c-api v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/c-api)
+   Compiling vexy-json-serde v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
+   Compiling vexy-json-test-utils v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/test-utils)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3m 11s
+     Running unittests src/lib.rs (target/debug/deps/vexy_json-49533d7df12abe95)
+     Running tests/advanced_features.rs (target/debug/deps/advanced_features-1cc41a1158c4d727)
+     Running tests/basic_tests.rs (target/debug/deps/basic_tests-4f43341cfd602796)
+     Running tests/comma_handling.rs (target/debug/deps/comma_handling-14ccc3cdfa54777b)
+     Running tests/comment_handling.rs (target/debug/deps/comment_handling-8100767899230a2d)
+     Running tests/compat_tests.rs (target/debug/deps/compat_tests-18a87414a9673bcf)
+     Running tests/comprehensive_tests.rs (target/debug/deps/comprehensive_tests-8e6001caabaf0210)
+     Running tests/error_handling.rs (target/debug/deps/error_handling-b920e30feef570e1)
+     Running tests/feature_tests.rs (target/debug/deps/feature_tests-c8a16e6b32db0c3c)
+     Running tests/forgiving_features.rs (target/debug/deps/forgiving_features-5d46f31936f8780e)
+     Running tests/lexer_tests.rs (target/debug/deps/lexer_tests-57741e3791c7eca4)
+     Running tests/lib_integration.rs (target/debug/deps/lib_integration-2134b19d3fd1624c)
+     Running tests/newline_as_comma.rs (target/debug/deps/newline_as_comma-b80bce277781f3c8)
+     Running tests/number_formats.rs (target/debug/deps/number_formats-34a9502bd0fede6c)
+     Running tests/property_tests.rs (target/debug/deps/property_tests-ab3b274e667f89a3)
+     Running tests/real_world_scenarios.rs (target/debug/deps/real_world_scenarios-a309de2a77940e66)
+     Running tests/string_handling.rs (target/debug/deps/string_handling-7673db81849a5cdd)
+     Running tests/supported_features.rs (target/debug/deps/supported_features-6dcb25199735f207)
+     Running tests/test_dot_numbers.rs (target/debug/deps/test_dot_numbers-d00650e7e34559c3)
+     Running tests/test_full_parse.rs (target/debug/deps/test_full_parse-de62a729f6ecff3b)
+     Running tests/test_implicit.rs (target/debug/deps/test_implicit-6529910116ecaabc)
+     Running tests/test_parse.rs (target/debug/deps/test_parse-4731e18273e89809)
+     Running tests/test_point_zero.rs (target/debug/deps/test_point_zero-64d081afb9933aa9)
+     Running tests/test_positive_numbers.rs (target/debug/deps/test_positive_numbers-b78d94a095500edb)
+     Running tests/test_rust_parse.rs (target/debug/deps/test_rust_parse-9bd4702ab6b48351)
+     Running tests/test_strict_comment.rs (target/debug/deps/test_strict_comment-28b06dc50dac51cf)
+     Running tests/test_trailing_decimal.rs (target/debug/deps/test_trailing_decimal-c9f6c588240c2b6d)
+     Running unittests src/lib.rs (target/debug/deps/vexy_json_c_api-f8dbe7a1b6f40db8)
+     Running unittests src/main.rs (target/debug/deps/vexy_json-67131578d647fece)
+     Running unittests src/lib.rs (target/debug/deps/vexy_json_core-36bcc86d8e136a5a)
 error: test failed, to rerun pass `-p vexy-json-core --lib`
 [0;31m❌ Run all Rust tests failed[0m
-   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
-   Compiling vexy-json-cli v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/cli)
-   Compiling vexy-json v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
-   Compiling vexy-json-wasm v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/wasm)
-    Checking once_cell v1.21.3
-   Compiling cbindgen v0.29.0
-    Checking wasm-bindgen v0.2.100
-   Compiling vexy-json-c-api v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/c-api)
+   Compiling vexy-json-core v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json-cli v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/cli)
+   Compiling vexy-json v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+   Compiling vexy-json-wasm v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/wasm)
+   Compiling vexy-json-c-api v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/c-api)
 error: variables can be used directly in the `format!` string
    --> crates/core/src/ast/visitor.rs:216:42
     |
@@ -808,7 +800,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -819,7 +810,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -830,7 +820,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -841,7 +830,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -852,7 +840,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -863,7 +850,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -874,7 +860,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -885,7 +870,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -896,7 +880,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -907,7 +890,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -918,7 +900,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -929,7 +910,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -940,7 +920,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -951,7 +930,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -962,7 +940,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -973,7 +950,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -984,7 +960,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -995,7 +970,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1006,7 +980,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1017,7 +990,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1028,7 +1000,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1039,7 +1010,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 [1;38;5;9merror[internal][0m: [1mleft behind trailing whitespace[0m
   [1;38;5;12m-->[0m /Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core/src/optimization/benchmarks.rs:39:39:1
 [1;38;5;12m   |[0m
@@ -1094,7 +1064,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1105,7 +1074,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1116,7 +1084,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1127,7 +1094,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1138,7 +1104,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1149,7 +1114,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1160,7 +1124,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1171,7 +1134,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1182,7 +1144,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1193,7 +1154,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1204,7 +1164,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1215,7 +1174,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1226,7 +1184,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1237,7 +1194,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1248,7 +1204,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1259,7 +1214,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1270,7 +1224,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1281,7 +1234,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1292,7 +1244,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1303,7 +1254,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1314,7 +1264,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1325,7 +1274,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1336,7 +1284,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1347,7 +1294,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1358,7 +1304,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1369,7 +1314,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1380,7 +1324,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1391,7 +1334,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1402,7 +1344,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1413,7 +1354,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1424,7 +1364,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1435,7 +1374,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1446,7 +1384,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1457,7 +1394,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1468,7 +1404,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1479,7 +1414,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1490,7 +1424,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1501,7 +1434,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1512,7 +1444,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1523,7 +1454,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1534,7 +1464,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1545,7 +1474,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1556,7 +1484,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1567,7 +1494,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1578,7 +1504,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1589,7 +1514,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1600,7 +1524,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1611,7 +1534,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1622,7 +1544,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1633,7 +1554,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1644,7 +1564,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1655,7 +1574,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1666,7 +1584,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1677,7 +1594,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1688,7 +1604,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 Warning: can't set `wrap_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `format_code_in_doc_comments = true`, unstable features are only available in nightly channel.
 Warning: can't set `normalize_comments = true`, unstable features are only available in nightly channel.
@@ -1699,7 +1614,6 @@ Warning: can't set `format_macro_bodies = true`, unstable features are only avai
 Warning: can't set `imports_layout = HorizontalVertical`, unstable features are only available in nightly channel.
 Warning: can't set `imports_granularity = Crate`, unstable features are only available in nightly channel.
 Warning: can't set `group_imports = StdExternalCrate`, unstable features are only available in nightly channel.
-Warning: the `fn_args_layout` option is deprecated. Use `fn_params_layout`. instead
 [0;31m❌ Check code formatting failed[0m
 error: failed to run `rustc` to learn about target-specific information
 
@@ -1749,43 +1663,39 @@ Caused by:
   error: 1 nightly option were parsed
 
 Error: failed to build fuzz script: ASAN_OPTIONS="detect_odr_violation=0" RUSTFLAGS=" -Cpasses=sancov-module -Cllvm-args=-sanitizer-coverage-level=4 -Cllvm-args=-sanitizer-coverage-inline-8bit-counters -Cllvm-args=-sanitizer-coverage-pc-table -Cllvm-args=-sanitizer-coverage-trace-compares --cfg fuzzing -Cllvm-args=-simplifycfg-branch-fold-threshold=0 -Zsanitizer=address -Cdebug-assertions -Ccodegen-units=1" "cargo" "build" "--manifest-path" "/Users/adam/Developer/vcs/github.vexyart/vexy-json/fuzz/Cargo.toml" "--target" "x86_64-apple-darwin" "--release" "--config" "profile.release.debug=\"line-tables-only\"" "--bin" "json_structure"
-   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
-   Compiling vexy-json v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
-   Compiling vexy-json-serde v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
-    Finished `release` profile [optimized] target(s) in 1m 19s
-   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
-   Compiling vexy-json-cli v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/cli)
-    Finished `release` profile [optimized] target(s) in 1m 03s
-   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
-   Compiling vexy-json-serde v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
-   Compiling vexy-json v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
-    Finished `release` profile [optimized] target(s) in 19.83s
-    Checking vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
-    Checking vexy-json-serde v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
- Documenting vexy-json v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.61s
+   Compiling vexy-json-core v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+   Compiling vexy-json-serde v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
+    Finished `release` profile [optimized] target(s) in 6m 28s
+   Compiling vexy-json-core v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json-cli v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/cli)
+    Finished `release` profile [optimized] target(s) in 5m 46s
+   Compiling vexy-json-core v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+   Compiling vexy-json-serde v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
+   Compiling vexy-json v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+    Finished `release` profile [optimized] target(s) in 21.66s
+    Checking vexy-json-core v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+    Checking vexy-json-serde v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/serde)
+ Documenting vexy-json v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.60s
    Generated /Users/adam/Developer/vcs/github.vexyart/vexy-json/target/doc/vexy_json/index.html
 [INFO]: 🎯  Checking for the Wasm target...
 [INFO]: 🌀  Compiling to Wasm...
-   Compiling vexy-json-wasm v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/wasm)
-   Compiling vexy-json-core v1.5.2 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
-    Finished `release` profile [optimized] target(s) in 24.39s
+   Compiling vexy-json-wasm v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/wasm)
+   Compiling vexy-json-core v1.5.5 (/Users/adam/Developer/vcs/github.vexyart/vexy-json/crates/core)
+    Finished `release` profile [optimized] target(s) in 17.10s
 [INFO]: ⬇️  Installing wasm-bindgen...
 [INFO]: Optimizing wasm binaries with `wasm-opt`...
 [INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
-[INFO]: ✨   Done in 26.07s
+[INFO]: ✨   Done in 18.25s
 [INFO]: 📦   Your wasm pkg is ready to publish at /Users/adam/Developer/vcs/github.vexyart/vexy-json/docs/pkg.
 [INFO]: 🎯  Checking for the Wasm target...
 [INFO]: 🌀  Compiling to Wasm...
-    Finished `release` profile [optimized] target(s) in 0.14s
+    Finished `release` profile [optimized] target(s) in 0.08s
 [INFO]: ⬇️  Installing wasm-bindgen...
 [INFO]: Optimizing wasm binaries with `wasm-opt`...
 [INFO]: License key is set in Cargo.toml but no LICENSE file(s) were found; Please add the LICENSE file(s) to your project directory
-[INFO]: ✨   Done in 2.64s
+[INFO]: ✨   Done in 1.14s
 [INFO]: 📦   Your wasm pkg is ready to publish at /Users/adam/Developer/vcs/github.vexyart/vexy-json/docs/pkg/nodejs.
 Searching for mounted interstitial disk image using /dev/disk5s... 
 waited 1 seconds for .DS_STORE to be created.
-To https://github.com/vexyart/vexy-json.git
-   45b8426..ec2bf7f  main -> main
-To https://github.com/vexyart/vexy-json.git
- * [new tag]         v1.5.2 -> v1.5.2

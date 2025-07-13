@@ -440,7 +440,7 @@ mod tests {
         let value = ArrayBuilder::new()
             .string("hello")
             .integer(42)
-            .float(3.14)
+            .float(3.14159)
             .bool(true)
             .null()
             .build()

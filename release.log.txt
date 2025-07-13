@@ -1,9 +1,9 @@
-No version specified. Auto-incrementing patch version to: 1.5.2
+No version specified. Auto-incrementing patch version to: 1.5.5
 
 Running release script from: /Users/adam/Developer/vcs/github.vexyart/vexy-json
-[0;36mℹ️  Preparing release for version 1.5.2[0m
+[0;36mℹ️  Preparing release for version 1.5.5[0m
 [0;35m=== VEXY JSON RELEASE AUTOMATION ===[0m
-[0;36mVexy JSON v1.5.2 Release Automation Script[0m
+[0;36mVexy JSON v1.5.5 Release Automation Script[0m
 [0;36m=========================================[0m
 
 [0;34mRelease Plan:[0m
@@ -12,21 +12,22 @@ Running release script from: /Users/adam/Developer/vcs/github.vexyart/vexy-json
   3. Run comprehensive test suite
   4. Build release artifacts (Rust, WASM, installers)
   5. Create release archives in dist/
-  6. Commit changes and create git tag v1.5.2
+  6. Commit changes and create git tag v1.5.5
   7. Push changes and tag to remote repository
   8. Create GitHub release (if gh CLI available)
   9. Publish to crates.io (interactive)
  10. Cleanup temporary files
 
 
-[0;34m[2025-07-13 00:03:17][0m Checking prerequisites...
+[0;34m[2025-07-13 01:34:42][0m Checking prerequisites...
 [1;33m⚠️  Working directory has uncommitted changes[0m
+ M release.err.txt
  M release.log.txt
 [0;36mℹ️  These changes will be committed as part of the release[0m
 [0;32m✅ Prerequisites check passed[0m
-[0;34m[2025-07-13 00:03:18][0m Updating version to 1.5.2...
-[0;34m[2025-07-13 00:03:18][0m Running: Update all version numbers to 1.5.2
-Updating project to version: 1.5.2
+[0;34m[2025-07-13 01:34:43][0m Updating version to 1.5.5...
+[0;34m[2025-07-13 01:34:43][0m Running: Update all version numbers to 1.5.5
+Updating project to version: 1.5.5
 Updating Cargo.toml files...
 [0;32m✓[0m Updated Cargo.toml
 [0;32m✓[0m Updated crates/c-api/Cargo.toml
@@ -47,19 +48,19 @@ Updating package.json files...
 [0;32m✓[0m Updated docs/pkg/package.json
 Updating Homebrew formula...
 
-Version update complete: 1.5.2
+Version update complete: 1.5.5
 
-Files with version 1.5.2:
+Files with version 1.5.5:
 Cargo.toml
 crates/c-api/Cargo.toml
 crates/cli/Cargo.toml
 crates/core/Cargo.toml
 crates/python/Cargo.toml
 ...
-[0;32m✅ Update all version numbers to 1.5.2 completed[0m
-[0;32m✅ Version updated to 1.5.2[0m
-[0;34m[2025-07-13 00:03:18][0m Running comprehensive test suite...
-[0;34m[2025-07-13 00:03:18][0m Running: Run all Rust tests
+[0;32m✅ Update all version numbers to 1.5.5 completed[0m
+[0;32m✅ Version updated to 1.5.5[0m
+[0;34m[2025-07-13 01:34:44][0m Running comprehensive test suite...
+[0;34m[2025-07-13 01:34:44][0m Running: Run all Rust tests
 
 running 0 tests
 
@@ -69,40 +70,40 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 26 tests
 test advanced_comments::test_nested_multiline_comments ... ok
 test advanced_comments::test_comment_preservation_boundaries ... ok
-test advanced_comments::test_comments_with_special_characters ... ok
 test advanced_comments::test_comment_line_endings ... ok
+test advanced_comments::test_comments_with_special_characters ... ok
+test configuration_edge_cases::test_zero_max_depth ... ok
 test complex_structures::test_deeply_nested_objects ... ok
 test complex_structures::test_asymmetric_nesting ... ok
-test complex_structures::test_mixed_structure_complexity ... ok
-test configuration_edge_cases::test_zero_max_depth ... ok
 test formatting_tolerance::test_minimal_formatting ... ok
 test configuration_edge_cases::test_minimal_max_depth ... ok
-test configuration_edge_cases::test_all_features_disabled ... ok
 test formatting_tolerance::test_extreme_formatting ... ok
-test formatting_tolerance::test_unicode_whitespace ... ok
+test complex_structures::test_mixed_structure_complexity ... ok
 test formatting_tolerance::test_mixed_line_endings ... ok
+test configuration_edge_cases::test_all_features_disabled ... ok
+test formatting_tolerance::test_unicode_whitespace ... ok
 test stress_tests::test_alternating_nested_structures ... ok
 test stress_tests::test_deeply_nested_arrays ... ok
-test stress_tests::test_wide_arrays ... ok
 test unicode_tests::test_unicode_escape_sequences ... ok
+test stress_tests::test_wide_arrays ... ok
 test unicode_tests::test_unicode_keys ... ok
 test unicode_tests::test_unicode_normalization ... ok
-test stress_tests::test_wide_objects ... ok
 test unicode_tests::test_unicode_strings ... ok
+test stress_tests::test_wide_objects ... ok
 test value_edge_cases::test_boundary_numbers ... ok
 test value_edge_cases::test_identifier_edge_cases ... ok
 test value_edge_cases::test_special_float_values ... ok
 test value_edge_cases::test_string_edge_cases ... ok
 
-test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
 
 running 7 tests
-test test_parse_bool ... ok
 test test_parse_null ... ok
+test test_parse_bool ... ok
 test test_parse_array ... ok
-test test_parse_number ... ok
 test test_parse_nested ... ok
+test test_parse_number ... ok
 test test_parse_object ... ok
 test test_parse_string ... ok
 
@@ -110,26 +111,26 @@ test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 running 9 tests
-test test_object_comma_variations ... ok
+test test_implicit_top_level_structures ... ok
 test test_complex_nested_structures ... ok
 test test_newline_as_comma_separator ... ok
+test test_implicit_structures_with_newlines ... ok
 test test_multiple_consecutive_commas ... ok
 test test_basic_comma_usage ... ok
-test test_special_cases ... ok
-test test_implicit_top_level_structures ... ok
-test test_implicit_structures_with_newlines ... ok
 test test_trailing_commas ... ok
+test test_object_comma_variations ... ok
+test test_special_cases ... ok
 
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
 running 8 tests
-test test_comments_in_arrays ... ok
-test test_comments_in_strings ... ok
-test test_comment_at_eof ... ok
 test test_block_comments ... ok
 test test_double_slash_comments ... ok
+test test_comments_in_strings ... ok
 test test_empty_comment ... ok
+test test_comments_in_arrays ... ok
+test test_comment_at_eof ... ok
 test test_unterminated_comment ... ok
 test test_hash_character ... ok
 
@@ -138,41 +139,41 @@ test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 running 17 tests
 test test_comment_options ... ok
-test test_single_char ... ok
 test test_implicit_array ... ok
-test test_implicit_top_level_options ... ok
 test test_implicit_object ... ok
-test test_multi_line_comments ... ok
-test test_happy_path ... ok
-test test_single_quotes_options ... ok
 test test_implicit_comma ... ok
 test test_single_quotes ... ok
-test test_numbers ... ok
+test test_happy_path ... ok
+test test_single_char ... ok
+test test_implicit_top_level_options ... ok
+test test_single_quotes_options ... ok
+test test_multi_line_comments ... ok
 test test_single_line_comments ... ok
-test test_unquoted_keys_options ... ok
 test test_trailing_comma_options ... ok
+test test_numbers ... ok
+test test_unquoted_keys_options ... ok
 test test_unquoted_strings ... ok
 test test_trailing_comma ... ok
 test test_value_standard ... ok
 
-test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
 
 running 41 tests
-test basic_parsing::test_empty_input_variations ... ok
-test basic_parsing::test_implicit_arrays ... ok
-test array_handling::test_nested_arrays ... ok
-test array_handling::test_sparse_arrays ... ok
 test array_handling::test_explicit_arrays ... ok
-test basic_parsing::test_single_values ... ok
+test array_handling::test_nested_arrays ... ok
 test array_handling::test_mixed_type_arrays ... ok
+test basic_parsing::test_empty_input_variations ... ok
+test array_handling::test_sparse_arrays ... ok
+test basic_parsing::test_implicit_arrays ... ok
 test basic_parsing::test_implicit_objects ... ok
-test comment_handling::test_comment_edge_cases ... ok
+test basic_parsing::test_single_values ... ok
 test basic_parsing::test_unquoted_identifiers ... ok
+test comment_handling::test_comment_edge_cases ... ok
 test comment_handling::test_multi_line_comments ... ok
 test comment_handling::test_nested_comments ... ok
-test comment_handling::test_single_line_comment_variations ... ok
 test error_handling::test_number_errors ... ok
+test comment_handling::test_single_line_comment_variations ... ok
 test error_handling::test_unicode_errors ... ok
 test error_handling::test_syntax_errors ... ok
 test number_handling::test_float_variations ... ok
@@ -201,35 +202,35 @@ test whitespace_handling::test_minimal_whitespace ... ok
 test whitespace_handling::test_mixed_whitespace ... ok
 test whitespace_handling::test_newlines_as_separators ... ok
 
-test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
 
 running 15 tests
 test test_empty_input_edge_cases ... ok
-test test_comment_error_cases ... ok
 test test_ascii_escape_errors ... ok
-test test_implicit_array_with_object ... ok
 test test_invalid_colon_usage ... ok
+test test_comment_error_cases ... ok
 test test_invalid_comma_usage ... ok
 test test_nested_structure_errors ... ok
 test test_number_format_errors ... ok
-test test_parser_options_error_behavior ... ok
+test test_implicit_array_with_object ... ok
 test test_unexpected_closing_tokens ... ok
+test test_parser_options_error_behavior ... ok
 test test_unicode_escape_errors ... ok
 test test_unexpected_tokens_in_context ... ok
-test test_unprintable_characters ... ok
 test test_unterminated_strings ... ok
+test test_unprintable_characters ... ok
 test test_valid_edge_cases ... ok
 
 test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
 running 12 tests
-test test_error_recovery ... ok
 test test_edge_cases ... ok
+test test_basic_json_compliance ... ok
+test test_error_recovery ... ok
 test test_comment_features ... ok
 test test_comprehensive_diagnostic ... ok
-test test_basic_json_compliance ... ok
 test test_newline_separators ... ok
 test test_implicit_structures ... ok
 test test_number_features ... ok
@@ -238,18 +239,18 @@ test test_trailing_commas ... ok
 test test_unquoted_keys ... ok
 test test_whitespace_handling ... ok
 
-test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
 
 running 10 tests
 test test_empty_input ... ok
 test test_options_disabled ... ok
-test test_multi_line_comments ... ok
-test test_single_line_comments ... ok
 test test_implicit_array ... ok
-test test_mixed_features ... ok
-test test_implicit_object ... ok
+test test_multi_line_comments ... ok
 test test_single_quoted_strings ... ok
+test test_implicit_object ... ok
+test test_single_line_comments ... ok
+test test_mixed_features ... ok
 test test_trailing_commas ... ok
 test test_unquoted_keys ... ok
 
@@ -257,19 +258,19 @@ test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 
 
 running 13 tests
-test test_brace_handling ... ok
-test test_comment_lexer_behavior ... ok
-test test_complex_lexer_scenarios ... ok
 test test_boolean_null_lexing ... ok
 test test_basic_specials ... ok
-test test_colon_comma_handling ... ok
-test test_space_handling ... ok
+test test_complex_lexer_scenarios ... ok
 test test_line_handling ... ok
+test test_brace_handling ... ok
+test test_colon_comma_handling ... ok
+test test_comment_lexer_behavior ... ok
 test test_lexer_comprehensive_diagnostic ... ok
-test test_square_bracket_handling ... ok
 test test_number_lexing ... ok
-test test_text_lexing ... ok
+test test_space_handling ... ok
+test test_square_bracket_handling ... ok
 test test_string_lexing ... ok
+test test_text_lexing ... ok
 
 test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
@@ -282,34 +283,34 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 running 8 tests
-test test_newline_as_comma_with_comments ... ok
+test test_newline_as_comma_disabled ... ok
+test test_newline_as_comma_arrays ... ok
+test test_newline_as_comma_implicit_array ... ok
 test test_newline_as_comma_mixed_with_commas ... ok
-test test_newline_as_comma_objects ... ok
+test test_newline_as_comma_with_comments ... ok
 test test_newline_as_comma_implicit_object ... ok
 test test_newline_as_comma_nested ... ok
-test test_newline_as_comma_disabled ... ok
-test test_newline_as_comma_implicit_array ... ok
-test test_newline_as_comma_arrays ... ok
+test test_newline_as_comma_objects ... ok
 
 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
 running 8 tests
-test test_underscore_separators ... ok
-test test_number_formats_in_arrays ... ok
-test test_edge_cases ... ok
-test test_octal_numbers ... ok
 test test_mixed_case_prefixes ... ok
-test test_binary_numbers ... ok
 test test_hexadecimal_numbers ... ok
+test test_binary_numbers ... ok
+test test_edge_cases ... ok
 test test_number_formats_in_objects ... ok
+test test_number_formats_in_arrays ... ok
+test test_octal_numbers ... ok
+test test_underscore_separators ... ok
 
 test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
 running 10 tests
-test prop_parser_options_combinations ... ok
 test test_quickcheck_json_generation ... ok
+test prop_parser_options_combinations ... ok
 test prop_parse_serialize_roundtrip ... ok
 test prop_forgiving_features_preserve_meaning ... ok
 test prop_error_recovery_doesnt_crash ... ok
@@ -319,19 +320,19 @@ test test_parser_handles_arbitrary_input ... ok
 test test_parser_deterministic ... ok
 test test_simple_structures ... ok
 
-test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
 
 
 running 13 tests
-test error_recovery::test_partial_parsing_resilience ... ok
-test migration_scenarios::test_yaml_like_syntax ... ok
 test configuration_files::test_build_configuration ... ok
-test migration_scenarios::test_json_to_vexy_json_migration ... ok
-test configuration_files::test_web_server_config ... ok
-test configuration_files::test_docker_compose_style ... ok
-test data_interchange::test_geojson_style ... ok
 test data_interchange::test_log_entry_format ... ok
+test configuration_files::test_web_server_config ... ok
+test error_recovery::test_partial_parsing_resilience ... ok
+test migration_scenarios::test_json_to_vexy_json_migration ... ok
+test configuration_files::test_docker_compose_style ... ok
 test data_interchange::test_api_response_style ... ok
+test data_interchange::test_geojson_style ... ok
+test migration_scenarios::test_yaml_like_syntax ... ok
 test performance_scenarios::test_varied_data_types ... ok
 test error_recovery::test_deeply_nested_input ... ok
 test performance_scenarios::test_repeated_structures ... ok
@@ -341,12 +342,12 @@ test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 
 
 running 12 tests
-test test_basic_string_types ... ok
-test test_newline_handling ... ok
-test test_mixed_quotes_in_structures ... ok
-test test_backslash_behavior ... ok
-test test_escape_edge_cases ... ok
 test test_quote_escaping ... ok
+test test_newline_handling ... ok
+test test_escape_edge_cases ... ok
+test test_basic_string_types ... ok
+test test_backslash_behavior ... ok
+test test_mixed_quotes_in_structures ... ok
 test test_string_edge_cases ... ok
 test test_string_error_cases ... ok
 test test_string_escape_sequences ... ok
@@ -358,22 +359,22 @@ test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 
 
 running 17 tests
+test test_implicit_top_level_options ... ok
 test test_comment_options ... ok
 test test_implicit_array ... ok
-test test_implicit_object ... ok
-test test_explicit_comma ... ok
-test test_happy_path ... ok
-test test_implicit_top_level_options ... ok
-test test_single_char ... ok
-test test_single_quotes_options ... ok
 test test_multi_line_comments ... ok
 test test_single_line_comments ... ok
-test test_numbers ... ok
+test test_single_quotes_options ... ok
+test test_happy_path ... ok
+test test_implicit_object ... ok
+test test_single_char ... ok
+test test_explicit_comma ... ok
 test test_single_quotes ... ok
 test test_trailing_comma ... ok
+test test_unquoted_keys ... ok
 test test_trailing_comma_options ... ok
 test test_unquoted_keys_options ... ok
-test test_unquoted_keys ... ok
+test test_numbers ... ok
 test test_value_standard ... ok
 
 test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -435,34 +436,34 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 running 200 tests
-test ast::builder::tests::test_value_builder_array ... ok
 test ast::builder::tests::test_value_builder_simple ... ok
 test ast::builder::tests::test_array_builder ... ok
+test ast::builder::tests::test_value_builder_array ... ok
+test ast::visitor::tests::test_mut_visitor ... ok
 test ast::builder::tests::test_build_helpers ... ok
 test ast::builder::tests::test_object_builder ... ok
+test ast::visitor::tests::test_counting_visitor ... ok
 test ast::builder::tests::test_value_builder_nested ... ok
 test ast::builder::tests::test_value_builder_object ... ok
-test ast::visitor::tests::test_mut_visitor ... ok
-test ast::visitor::tests::test_counting_visitor ... ok
 test ast::visitor::tests::test_path_visitor ... ok
 test ast::visitor::tests::test_string_collector ... ok
 test error::recovery::tests::test_recovery_analyzer_creation ... ok
-test error::recovery::tests::test_recovery_strategy_confidence ... ok
 test error::recovery::tests::test_number_format_fix ... ok
+test error::recovery::tests::test_recovery_strategy_confidence ... ok
 test error::ml_patterns::tests::test_feature_extraction ... ok
-test error::recovery::tests::test_recovery_strategy_description ... ok
 test error::ml_patterns::tests::test_ml_pattern_recognition ... ok
+test error::recovery::tests::test_recovery_strategy_description ... ok
 test error::recovery::tests::test_trailing_comma_analysis ... ok
 test error::recovery::tests::test_unexpected_eof_analysis ... ok
 test error::recovery_v2::tests::test_quote_inference ... ok
-test error::recovery_v2::tests::test_visual_error ... ok
 test error::recovery_v2::tests::test_bracket_matching ... FAILED
+test error::recovery_v2::tests::test_visual_error ... ok
 test error::reporter::tests::test_error_reporter_creation ... ok
-test error::reporter::tests::test_quick_error_report ... ok
 test error::reporter::tests::test_comprehensive_report ... ok
+test error::reporter::tests::test_quick_error_report ... ok
 test error::reporter::tests::test_report_config_creation ... ok
-test error::span::tests::test_byte_to_line_col ... ok
 test error::reporter::tests::test_text_wrapping ... ok
+test error::span::tests::test_byte_to_line_col ... ok
 test error::span::tests::test_enhanced_span ... ok
 test error::span::tests::test_span_contains ... ok
 test error::span::tests::test_span_creation ... ok
@@ -490,8 +491,8 @@ test lexer::debug_lexer::tests::test_debug_lexer_logging ... ok
 test lexer::debug_lexer::tests::test_debug_lexer_performance_stats ... ok
 test lexer::fast_lexer::tests::test_fast_lexer_basic ... ok
 test lexer::fast_lexer::tests::test_fast_lexer_comments ... ok
-test lexer::fast_lexer::tests::test_fast_lexer_unquoted ... ok
 test lexer::fast_lexer::tests::test_fast_lexer_stats ... FAILED
+test lexer::fast_lexer::tests::test_fast_lexer_unquoted ... ok
 test lexer::logos_lexer::tests::test_line_col_tracking ... ok
 test lexer::logos_lexer::tests::test_logos_lexer ... ok
 test lexer::tests::test_lexer_creation ... ok
@@ -499,16 +500,16 @@ test optimization::benchmarks::tests::test_performance_monitor_creation ... ok
 test optimization::benchmarks::tests::test_scalar_implementations ... ok
 test optimization::memory_pool::tests::test_basic_allocation ... ok
 test optimization::memory_pool::tests::test_large_allocation ... ok
-test optimization::memory_pool::tests::test_scoped_pool ... ok
 test optimization::memory_pool::tests::test_reset ... ok
+test optimization::memory_pool::tests::test_scoped_pool ... ok
 test optimization::memory_pool::tests::test_string_allocation ... ok
 test optimization::memory_pool_v2::tests::test_adaptive_pooling ... ok
 test optimization::memory_pool_v2::tests::test_medium_allocation_pooled ... ok
 test optimization::memory_pool_v2::tests::test_small_allocation_bypass ... ok
 test optimization::memory_pool_v2::tests::test_scoped_pool ... FAILED
 test optimization::memory_pool_v3::tests::test_compact_string ... ok
-test optimization::memory_pool_v3::tests::test_memory_pool_v3 ... ok
 test optimization::memory_pool_v3::tests::test_typed_arena ... ok
+test optimization::memory_pool_v3::tests::test_memory_pool_v3 ... ok
 test optimization::simd::tests::test_has_backslash_simd ... ok
 test optimization::simd::tests::test_parse_number_simd ... ok
 test optimization::simd::tests::test_skip_whitespace_simd ... ok
@@ -537,22 +538,22 @@ test parser::iterative::tests::test_empty_containers ... ok
 test parser::iterative::tests::test_parse_boolean ... ok
 test parser::iterative::tests::test_parse_array ... FAILED
 test parser::iterative::tests::test_parse_deeply_nested ... FAILED
-test parser::iterative::tests::test_parse_nested ... FAILED
 test parser::iterative::tests::test_parse_null ... ok
+test parser::iterative::tests::test_parse_nested ... FAILED
 test parser::iterative::tests::test_parse_number ... ok
 test parallel::tests::test_ndjson_parsing ... ok
 test parser::iterative::tests::test_parse_string ... ok
 test parser::iterative::tests::test_parse_object ... FAILED
 test parallel_chunked::tests::test_chunked_ndjson ... FAILED
-test parser::iterative::tests::test_with_trailing_comma ... ok
 test parser::iterative::tests::test_with_comments ... FAILED
+test parser::iterative::tests::test_with_trailing_comma ... ok
 test parser::optimized::tests::test_branch_prediction_stats ... ok
 test parser::optimized::tests::test_optimized_parser_simple ... ok
 test parser::optimized::tests::test_parser_with_stats ... ok
 test parser::optimized_v2::tests::test_branch_prediction_stats ... ok
 test parser::optimized_v2::tests::test_optimized_parser_v2_simple ... ok
-test parser::optimized_v2::tests::test_parser_v2_with_stats ... FAILED
 test parser::recursive::tests::test_depth_limit ... ok
+test parser::optimized_v2::tests::test_parser_v2_with_stats ... FAILED
 test parser::recursive::tests::test_empty_containers ... ok
 test parser::recursive::tests::test_escape_sequences ... ok
 test parser::recursive::tests::test_parse_array ... ok
@@ -561,10 +562,10 @@ test parser::recursive::tests::test_parse_nested ... ok
 test parser::recursive::tests::test_parse_null ... ok
 test parser::recursive::tests::test_parse_number ... ok
 test parser::recursive::tests::test_parse_object ... ok
-test parser::optimized_v2::tests::test_adaptive_pooling ... ok
 test parser::recursive::tests::test_parse_string ... ok
 test parser::recursive::tests::test_parse_with_comments ... ok
 test parser::recursive::tests::test_parse_with_trailing_comma ... ok
+test parser::optimized_v2::tests::test_adaptive_pooling ... ok
 test parser::recursive::tests::test_parse_with_unquoted_keys ... ok
 test parser::recursive::tests::test_unicode_escape ... ok
 test plugin::plugins::comment_preservation::tests::test_comment_storage ... ok
@@ -575,11 +576,11 @@ test plugin::plugins::custom_number::tests::test_hex_numbers ... ok
 test plugin::plugins::custom_number::tests::test_octal_numbers ... ok
 test plugin::plugins::custom_number::tests::test_special_floats ... ok
 test plugin::plugins::custom_number::tests::test_underscores ... ok
-test plugin::plugins::datetime::tests::test_non_date_string ... ok
-test plugin::plugins::datetime::tests::test_datetime_parsing ... ok
 test plugin::plugins::datetime::tests::test_custom_format ... FAILED
-test plugin::tests::test_duplicate_plugin ... ok
+test plugin::plugins::datetime::tests::test_datetime_parsing ... ok
+test plugin::plugins::datetime::tests::test_non_date_string ... ok
 test plugin::plugins::schema_validation::tests::test_schema_validation ... ok
+test plugin::tests::test_duplicate_plugin ... ok
 test plugin::tests::test_plugin_hooks ... ok
 test plugin::tests::test_plugin_registry ... ok
 test repair::advanced::tests::test_repair_confidence ... ok
@@ -593,9 +594,9 @@ test repair::tests::test_repair_caching ... ok
 test repair::tests::test_string_with_brackets ... ok
 test streaming::buffered::tests::test_buffered_streaming_array ... ok
 test streaming::buffered::tests::test_buffered_streaming_simple_object ... ok
-test streaming::buffered::tests::test_custom_buffer_config ... ok
-test streaming::buffered::tests::test_buffered_streaming_to_value ... ok
 test optimization::benchmarks::tests::test_benchmark_whitespace_skipping ... ok
+test streaming::buffered::tests::test_buffered_streaming_to_value ... ok
+test streaming::buffered::tests::test_custom_buffer_config ... ok
 test streaming::event_parser::tests::test_event_driven_parser ... FAILED
 test streaming::event_parser::tests::test_resumable_parsing ... FAILED
 test streaming::ndjson::tests::test_empty_lines ... FAILED
@@ -611,8 +612,8 @@ test transform::normalizer::tests::test_canonical_normalizer ... ok
 test transform::normalizer::tests::test_cleanup_normalizer ... ok
 test transform::normalizer::tests::test_deduplicate_arrays ... ok
 test transform::normalizer::tests::test_deep_nested_normalization ... ok
-test transform::normalizer::tests::test_max_depth_limit ... ok
 test transform::normalizer::tests::test_normalize_numbers ... ok
+test transform::normalizer::tests::test_max_depth_limit ... ok
 test transform::normalizer::tests::test_normalize_object_with_sorted_keys ... ok
 test transform::normalizer::tests::test_normalize_remove_empty_containers ... ok
 test transform::normalizer::tests::test_normalize_remove_null_values ... ok
@@ -621,16 +622,16 @@ test transform::optimizer::tests::test_collapse_single_arrays ... ok
 test transform::optimizer::tests::test_max_depth_limit ... ok
 test transform::optimizer::tests::test_memory_optimizer ... ok
 test transform::optimizer::tests::test_nested_optimization ... ok
-test transform::optimizer::tests::test_optimize_numbers ... ok
 test transform::optimizer::tests::test_object_to_array_conversion ... ok
+test transform::optimizer::tests::test_optimize_numbers ... ok
 test transform::optimizer::tests::test_optimizer_stats ... ok
 test transform::optimizer::tests::test_performance_optimizer ... ok
 test transform::optimizer::tests::test_remove_empty_containers ... ok
 test transform::optimizer::tests::test_string_interning ... ok
 test optimization::benchmarks::tests::test_benchmark_backslash_detection ... ok
 test repair::advanced::tests::test_preview_mode ... ok
-test repair::advanced::tests::test_quote_repair ... ok
 test repair::advanced::tests::test_repair_history ... ok
+test repair::advanced::tests::test_quote_repair ... ok
 test repair::advanced::tests::test_type_coercion ... ok
 test optimization::benchmarks::tests::test_benchmark_string_unescaping ... ok
 test optimization::benchmarks::tests::test_benchmark_string_validation ... ok
@@ -669,7 +670,7 @@ thread 'lexer::debug_lexer::tests::test_debug_lexer_error_logging' panicked at c
 assertion failed: result.is_err()
 
 === DebugLexer Final Report ===
-Processed 2 tokens in 102µs
+Processed 2 tokens in 101µs
 
 ---- lexer::fast_lexer::tests::test_fast_lexer_stats stdout ----
 
@@ -781,48 +782,48 @@ failures:
 
 test result: FAILED. 180 passed; 20 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
 
-[0;34m[2025-07-13 00:05:07][0m Running: Run clippy linter
-[0;34m[2025-07-13 00:05:24][0m Running: Check code formatting
-[0;34m[2025-07-13 00:05:25][0m Running fuzz tests (quick run)...
-[0;34m[2025-07-13 00:05:25][0m Running: Quick fuzz testing
+[0;34m[2025-07-13 01:40:03][0m Running: Run clippy linter
+[0;34m[2025-07-13 01:40:20][0m Running: Check code formatting
+[0;34m[2025-07-13 01:40:22][0m Running fuzz tests (quick run)...
+[0;34m[2025-07-13 01:40:22][0m Running: Quick fuzz testing
 [0;32m✅ Quick fuzz testing completed[0m
-[0;34m[2025-07-13 00:05:28][0m Running: Build all examples
+[0;34m[2025-07-13 01:40:24][0m Running: Build all examples
 [0;32m✅ Build all examples completed[0m
 [0;32m✅ All tests passed[0m
-[0;34m[2025-07-13 00:06:47][0m Building Rust artifacts...
-[0;34m[2025-07-13 00:06:47][0m Running: Create build directory
+[0;34m[2025-07-13 01:46:53][0m Building Rust artifacts...
+[0;34m[2025-07-13 01:46:53][0m Running: Create build directory
 [0;32m✅ Create build directory completed[0m
-[0;34m[2025-07-13 00:06:47][0m Running: Build release CLI binary
+[0;34m[2025-07-13 01:46:53][0m Running: Build release CLI binary
 [0;32m✅ Build release CLI binary completed[0m
-[0;34m[2025-07-13 00:07:51][0m Running: Build release library
+[0;34m[2025-07-13 01:52:41][0m Running: Build release library
 [0;32m✅ Build release library completed[0m
-[0;34m[2025-07-13 00:08:11][0m Running: Generate documentation
+[0;34m[2025-07-13 01:53:03][0m Running: Generate documentation
 [0;32m✅ Generate documentation completed[0m
 [0;32m✅ Rust artifacts built[0m
-[0;34m[2025-07-13 00:08:18][0m Building WebAssembly module...
-[0;34m[2025-07-13 00:08:18][0m Running: Build WASM for web
+[0;34m[2025-07-13 01:53:09][0m Building WebAssembly module...
+[0;34m[2025-07-13 01:53:09][0m Running: Build WASM for web
 [0;32m✅ Build WASM for web completed[0m
-[0;34m[2025-07-13 00:08:44][0m Running: Build WASM for Node.js
+[0;34m[2025-07-13 01:53:27][0m Running: Build WASM for Node.js
 [0;32m✅ Build WASM for Node.js completed[0m
 [0;32m✅ WebAssembly module built[0m
-[0;34m[2025-07-13 00:08:47][0m Building macOS installer...
-[0;34m[2025-07-13 00:08:47][0m Running: Create installer structure
+[0;34m[2025-07-13 01:53:29][0m Building macOS installer...
+[0;34m[2025-07-13 01:53:29][0m Running: Create installer structure
 [0;32m✅ Create installer structure completed[0m
-[0;34m[2025-07-13 00:08:47][0m Running: Create pkg installer
+[0;34m[2025-07-13 01:53:29][0m Running: Create pkg installer
 pkgbuild: Inferring bundle components from contents of /Users/adam/Developer/vcs/github.vexyart/vexy-json/dist/macos-installer/pkg-root
 pkgbuild: Wrote package to /Users/adam/Developer/vcs/github.vexyart/vexy-json/dist/macos-installer/vexy-json.pkg
 [0;32m✅ Create pkg installer completed[0m
-[0;34m[2025-07-13 00:08:48][0m Running: Create DMG temp directory
+[0;34m[2025-07-13 01:53:29][0m Running: Create DMG temp directory
 [0;32m✅ Create DMG temp directory completed[0m
-[0;34m[2025-07-13 00:08:48][0m Running: Create DMG installer
+[0;34m[2025-07-13 01:53:29][0m Running: Create DMG installer
 Creating disk image...
-created: /Users/adam/Developer/vcs/github.vexyart/vexy-json/dist/rw.42220.vexy-json-1.5.2-macos.dmg
+created: /Users/adam/Developer/vcs/github.vexyart/vexy-json/dist/rw.15771.vexy-json-1.5.5-macos.dmg
 Mounting disk image...
 Device name:     /dev/disk5
-Mount dir:       /Volumes/dmg.teQNNF
+Mount dir:       /Volumes/dmg.ra1f0p
 Making link to Applications dir...
-/Volumes/dmg.teQNNF
-Running AppleScript to make Finder stuff pretty: /usr/bin/osascript "/var/folders/05/clcynl0509ldxltl599hhhx40000gn/T/createdmg.tmp.XXXXXXXXXX.gOcqi5peSz" "dmg.teQNNF"
+/Volumes/dmg.ra1f0p
+Running AppleScript to make Finder stuff pretty: /usr/bin/osascript "/var/folders/05/clcynl0509ldxltl599hhhx40000gn/T/createdmg.tmp.XXXXXXXXXX.yhe4NXFqAV" "dmg.ra1f0p"
 Done running the AppleScript...
 Fixing permissions...
 Done fixing permissions
@@ -835,72 +836,36 @@ Preparing imaging engine…
 Reading Protective Master Boot Record (MBR : 0)…
    (CRC32 $2B0D05B4: Protective Master Boot Record (MBR : 0))
 Reading GPT Header (Primary GPT Header : 1)…
-   (CRC32 $6C8BCF69: GPT Header (Primary GPT Header : 1))
+   (CRC32 $19CD466D: GPT Header (Primary GPT Header : 1))
 Reading GPT Partition Data (Primary GPT Table : 2)…
-   (CRC32 $A7204195: GPT Partition Data (Primary GPT Table : 2))
+   (CRC32 $CA651655: GPT Partition Data (Primary GPT Table : 2))
 Reading  (Apple_Free : 3)…
    (CRC32 $00000000:  (Apple_Free : 3))
 Reading disk image (Apple_HFS : 4)…
-   (CRC32 $FE56D40F: disk image (Apple_HFS : 4))
+   (CRC32 $0FEAA47F: disk image (Apple_HFS : 4))
 Reading  (Apple_Free : 5)…
    (CRC32 $00000000:  (Apple_Free : 5))
 Reading GPT Partition Data (Backup GPT Table : 6)…
-   (CRC32 $A7204195: GPT Partition Data (Backup GPT Table : 6))
+   (CRC32 $CA651655: GPT Partition Data (Backup GPT Table : 6))
 Reading GPT Header (Backup GPT Header : 7)…
-   (CRC32 $2BBAA29A: GPT Header (Backup GPT Header : 7))
+   (CRC32 $5EFC2B9E: GPT Header (Backup GPT Header : 7))
 Adding resources…
-Elapsed Time:  4.443s
-File size: 625630 bytes, Checksum: CRC32 $F745ECC1
+Elapsed Time:  5.421s
+File size: 625630 bytes, Checksum: CRC32 $D3D9B8A3
 Sectors processed: 51280, 3332 compressed
-Speed: 374.9KB/s
+Speed: 307.3KB/s
 Savings: 97.6%
-created: /Users/adam/Developer/vcs/github.vexyart/vexy-json/dist/vexy-json-1.5.2-macos.dmg
+created: /Users/adam/Developer/vcs/github.vexyart/vexy-json/dist/vexy-json-1.5.5-macos.dmg
 hdiutil does not support internet-enable. Note it was removed in macOS 10.15.
 Disk image done
 [0;32m✅ Create DMG installer completed[0m
-[0;32m✅ macOS installer created: vexy-json-1.5.2-macos.dmg[0m
-[0;34m[2025-07-13 00:09:13][0m Building Linux packages...
+[0;32m✅ macOS installer created: vexy-json-1.5.5-macos.dmg[0m
+[0;34m[2025-07-13 01:53:53][0m Building Linux packages...
 [1;33m⚠️  Skipping Linux builds (not on Linux)[0m
 [0;32m✅ Linux packages prepared[0m
-[0;34m[2025-07-13 00:09:13][0m Creating release archives...
-[0;34m[2025-07-13 00:09:13][0m Running: Create archive directory
+[0;34m[2025-07-13 01:53:53][0m Creating release archives...
+[0;34m[2025-07-13 01:53:53][0m Running: Create archive directory
 [0;32m✅ Create archive directory completed[0m
 [0;32m✅ Release archives created[0m
-[0;34m[2025-07-13 00:09:19][0m Committing changes and creating git tag...
-[0;34m[2025-07-13 00:09:19][0m Running: Stage all changes for release
-[0;32m✅ Stage all changes for release completed[0m
-[main ec2bf7f] Release v1.5.2\n\nThis commit updates all version numbers and prepares the release.
- 25 files changed, 3113 insertions(+), 12 deletions(-)
- create mode 100644 dist/vexy-json-1.5.2-macos.dmg
- create mode 100644 dist/vexy-json-1.5.2-src.tar.gz
- create mode 100755 dist/vexy-json-1.5.2-x86_64-darwin
- create mode 100644 dist/vexy-json-1.5.2-x86_64-darwin.tar.gz
- create mode 100644 dist/vexy-json-1.5.2/CHANGELOG.md
- create mode 100644 dist/vexy-json-1.5.2/LICENSE
- create mode 100644 dist/vexy-json-1.5.2/README.md
- create mode 100755 dist/vexy-json-1.5.2/vexy-json
-[0;32m✅ Changes committed for v1.5.2[0m
-[0;34m[2025-07-13 00:09:23][0m Running: Create release tag
-[0;32m✅ Create release tag completed[0m
-[0;32m✅ Git tag v1.5.2 created[0m
-[0;34m[2025-07-13 00:09:23][0m Pushing to remote repository...
-[0;34m[2025-07-13 00:09:23][0m Running: Push commits to origin/main
-[0;32m✅ Push commits to origin/main completed[0m
-[0;34m[2025-07-13 00:09:43][0m Running: Push tag v1.5.2 to origin
-[0;32m✅ Push tag v1.5.2 to origin completed[0m
-[0;32m✅ Changes and tag pushed to remote repository[0m
-[0;34m[2025-07-13 00:09:45][0m Preparing GitHub release...
-[0;34m[2025-07-13 00:09:46][0m Running: Create GitHub release
-https://github.com/vexyart/vexy-json/releases/tag/v1.5.2
-[0;32m✅ Create GitHub release completed[0m
-[0;32m✅ GitHub release created[0m
-[0;34m[2025-07-13 00:10:11][0m Publishing to crates.io...
-[1;33m⚠️  Crates.io publishing requires manual intervention[0m
-[0;36mℹ️  Run the following commands to publish:[0m
-[0;36mℹ️    cargo publish -p vexy-json-test-utils[0m
-[0;36mℹ️    cargo publish -p vexy-json-core[0m
-[0;36mℹ️    cargo publish -p vexy-json-serde[0m
-[0;36mℹ️    cargo publish -p vexy-json-cli[0m
-[0;36mℹ️    cargo publish -p vexy-json-wasm[0m
-[0;36mℹ️    cargo publish -p vexy-json-c-api[0m
-[0;36mℹ️    cargo publish -p vexy-json[0m
+[0;34m[2025-07-13 01:53:57][0m Committing changes and creating git tag...
+[0;34m[2025-07-13 01:53:57][0m Running: Stage all changes for release

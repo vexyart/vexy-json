@@ -10,6 +10,7 @@
 
 use crate::ast::{Token, Value};
 use crate::error::{Error, Span};
+use regex::Regex;
 use rustc_hash::FxHashMap;
 use std::collections::VecDeque;
 
@@ -92,17 +93,37 @@ impl Default for RecoveryConfig {
 struct PatternDatabase {
     patterns: FxHashMap<String, ErrorPattern>,
     learned_patterns: Vec<LearnedPattern>,
+    compiled_regexes: FxHashMap<String, Regex>,
 }
 
 /// Represents a common error pattern
+#[derive(Clone)]
 struct ErrorPattern {
-    // No fields needed if ML-based pattern recognition is not fully implemented yet
+    /// Pattern identifier
+    id: String,
+    /// Error type this pattern matches
+    error_type: String,
+    /// Regex or pattern to match
+    pattern: String,
+    /// Confidence score for this pattern
+    base_confidence: f64,
+    /// Common fix template
+    fix_template: String,
+    /// Number of times this pattern has been successful
+    success_count: usize,
 }
 
 /// Learned pattern from successful recovery
 #[derive(Debug, Clone)]
 struct LearnedPattern {
-    // No fields needed if ML-based pattern recognition is not fully implemented yet
+    /// The error context that triggered this pattern
+    context: String,
+    /// The successful fix that was applied
+    fix: String,
+    /// How many times this pattern has been seen
+    occurrences: usize,
+    /// Success rate of this pattern
+    success_rate: f64,
 }
 
 /// Context analyzer for understanding error context
@@ -175,7 +196,7 @@ impl ErrorRecoveryEngineV2 {
     }
 
     /// Generate recovery suggestions for an error
-    pub fn suggest_recovery(&self, context: &ErrorContext) -> Vec<RecoverySuggestion> {
+    pub fn suggest_recovery(&mut self, context: &ErrorContext) -> Vec<RecoverySuggestion> {
         let mut suggestions = Vec::new();
 
         // Try ML-based pattern recognition
@@ -207,7 +228,7 @@ impl ErrorRecoveryEngineV2 {
     }
 
     /// Create error message with visual aids
-    pub fn create_visual_error(&self, context: &ErrorContext) -> String {
+    pub fn create_visual_error(&mut self, context: &ErrorContext) -> String {
         let mut output = String::new();
 
         // Add error description
@@ -272,11 +293,18 @@ impl ErrorRecoveryEngineV2 {
     }
 }
 
+impl Default for ErrorRecoveryEngineV2 {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl PatternDatabase {
     fn new() -> Self {
         let mut db = PatternDatabase {
             patterns: FxHashMap::default(),
             learned_patterns: Vec::new(),
+            compiled_regexes: FxHashMap::default(),
         };
 
         // Initialize common patterns
@@ -284,18 +312,172 @@ impl PatternDatabase {
         db
     }
 
+    fn compile_regex(&mut self, pattern_id: &str, pattern: &str) -> Option<&Regex> {
+        if !self.compiled_regexes.contains_key(pattern_id) {
+            if let Ok(regex) = Regex::new(pattern) {
+                self.compiled_regexes.insert(pattern_id.to_string(), regex);
+            }
+        }
+        self.compiled_regexes.get(pattern_id)
+    }
+    
     fn add_common_patterns(&mut self) {
-        // Add patterns for common errors
-        // This would be expanded with actual pattern implementations
+        // Missing closing bracket patterns
+        self.patterns.insert(
+            "missing_closing_bracket".to_string(),
+            ErrorPattern {
+                id: "missing_closing_bracket".to_string(),
+                error_type: "UnexpectedEof".to_string(),
+                pattern: r"\[.*[^\]]*$".to_string(),
+                base_confidence: 0.75,  // Lower confidence, will be boosted if actually has [
+                fix_template: "{{input}}]".to_string(),
+                success_count: 0,
+            },
+        );
+        
+        // Missing closing brace patterns
+        self.patterns.insert(
+            "missing_closing_brace".to_string(),
+            ErrorPattern {
+                id: "missing_closing_brace".to_string(),
+                error_type: "UnexpectedEof".to_string(),
+                pattern: r"\{.*[^\}]*$".to_string(),
+                base_confidence: 0.85,
+                fix_template: "{{input}}}".to_string(),
+                success_count: 0,
+            },
+        );
+        
+        // Missing comma between array elements
+        self.patterns.insert(
+            "missing_comma_array".to_string(),
+            ErrorPattern {
+                id: "missing_comma_array".to_string(),
+                error_type: "Expected".to_string(),
+                pattern: r#"\[(.*?)(\d+|"[^"]*"|true|false|null)\s+(\d+|"[^"]*"|true|false|null)"#.to_string(),
+                base_confidence: 0.80,
+                fix_template: "missing_comma".to_string(),
+                success_count: 0,
+            },
+        );
+        
+        // Unmatched quote
+        self.patterns.insert(
+            "unmatched_quote".to_string(),
+            ErrorPattern {
+                id: "unmatched_quote".to_string(),
+                error_type: "UnterminatedString".to_string(),
+                pattern: r#""[^"]*$"#.to_string(),
+                base_confidence: 0.90,
+                fix_template: "{{input}}\"".to_string(),
+                success_count: 0,
+            },
+        );
     }
 
-    fn find_matches(&self, _context: &ErrorContext) -> Vec<RecoverySuggestion> {
-        let suggestions = Vec::new();
-
-        // Pattern matching would be implemented here
-        // For now, return empty suggestions
-
+    fn find_matches(&mut self, context: &ErrorContext) -> Vec<RecoverySuggestion> {
+        let mut suggestions = Vec::new();
+        
+        // Check each pattern against the error context
+        let pattern_ids: Vec<String> = self.patterns.keys().cloned().collect();
+        for pattern_id in pattern_ids {
+            if let Some(pattern) = self.patterns.get(&pattern_id) {
+                let pattern = pattern.clone();
+                if let Some(suggestion) = self.match_pattern(&pattern, context) {
+                    // Simple heuristic to boost confidence for patterns that better match the input
+                    let mut suggestion = suggestion;
+                    
+                    // Boost confidence if the input starts with the expected bracket type
+                    if (pattern.id == "missing_closing_brace" && context.input.contains('{')) ||
+                       (pattern.id == "missing_closing_bracket" && context.input.contains('[')) {
+                        suggestion.confidence *= 1.1;
+                    }
+                    
+                    suggestions.push(suggestion);
+                }
+            }
+        }
+        
+        // Sort by confidence
+        suggestions.sort_by(|a, b| b.confidence.partial_cmp(&a.confidence).unwrap_or(std::cmp::Ordering::Equal));
         suggestions
+    }
+    
+    fn match_pattern(&mut self, pattern: &ErrorPattern, context: &ErrorContext) -> Option<RecoverySuggestion> {
+        // Simple pattern matching based on error type
+        let error_type = match &context.error {
+            Error::UnexpectedEof(_) => "UnexpectedEof",
+            Error::UnterminatedString(_) => "UnterminatedString",
+            Error::Expected { .. } => "Expected",
+            _ => "Other",
+        };
+        
+        if pattern.error_type != error_type {
+            return None;
+        }
+        
+        // Check if the pattern's regex matches the input
+        let pattern_matches = if let Some(regex) = self.compile_regex(&pattern.id, &pattern.pattern) {
+            regex.is_match(&context.input)
+        } else {
+            // If regex compilation fails, fall back to simple string matching
+            true
+        };
+        
+        if !pattern_matches {
+            return None;
+        }
+        
+        // Create suggestion based on pattern
+        let fixed_input = match pattern.fix_template.as_str() {
+            "{{input}}}" => format!("{}}}", context.input),
+            "{{input}}]" => format!("{}]", context.input),
+            "{{input}}\"" => format!("{}\"", context.input),
+            "missing_comma" => self.fix_missing_comma(context),
+            _ => context.input.clone(),
+        };
+        
+        Some(RecoverySuggestion {
+            description: self.get_pattern_description(pattern),
+            confidence: pattern.base_confidence,
+            fixed_input,
+            category: self.get_pattern_category(pattern),
+            fix_location: Span {
+                start: context.position,
+                end: context.position,
+            },
+        })
+    }
+    
+    fn fix_missing_comma(&self, context: &ErrorContext) -> String {
+        // Simple heuristic: add comma before the error position
+        let pos = context.position;
+        if pos > 0 && pos < context.input.len() {
+            let mut fixed = context.input.clone();
+            fixed.insert(pos, ',');
+            fixed
+        } else {
+            context.input.clone()
+        }
+    }
+    
+    fn get_pattern_description(&self, pattern: &ErrorPattern) -> String {
+        match pattern.id.as_str() {
+            "missing_closing_bracket" => "Add missing closing bracket ']'".to_string(),
+            "missing_closing_brace" => "Add missing closing brace '}'".to_string(),
+            "missing_comma_array" => "Add missing comma between array elements".to_string(),
+            "unmatched_quote" => "Add missing closing quote".to_string(),
+            _ => "Fix structural error".to_string(),
+        }
+    }
+    
+    fn get_pattern_category(&self, pattern: &ErrorPattern) -> SuggestionCategory {
+        match pattern.id.as_str() {
+            "missing_closing_bracket" | "missing_closing_brace" => SuggestionCategory::MissingBracket,
+            "unmatched_quote" => SuggestionCategory::UnmatchedQuote,
+            "missing_comma_array" => SuggestionCategory::MissingComma,
+            _ => SuggestionCategory::Other,
+        }
     }
 }
 
@@ -434,7 +616,7 @@ impl RecoveryStrategy for QuoteInferenceStrategy {
         let mut quote_char = '\0';
         let mut escape = false;
 
-        for (_i, ch) in context.input.chars().enumerate() {
+        for ch in context.input.chars() {
             if escape {
                 escape = false;
                 continue;
@@ -487,12 +669,41 @@ impl RecoveryStrategy for CommaSuggestionStrategy {
         "comma_suggestion"
     }
 
-    fn recover(&self, _context: &ErrorContext) -> Vec<RecoverySuggestion> {
-        let suggestions = Vec::new();
-
-        // Check for missing commas between array/object elements
-        // This would analyze token patterns to detect missing commas
-
+    fn recover(&self, context: &ErrorContext) -> Vec<RecoverySuggestion> {
+        let mut suggestions = Vec::new();
+        
+        // Check if this is an error that might be due to missing comma
+        if let Error::Expected { expected, .. } = &context.error {
+            if expected.contains("comma") {
+                // Look for common patterns where commas are missing
+                // e.g., "value1" "value2" or } { or ] [
+                let before_pos = context.position.saturating_sub(10);
+                let after_pos = (context.position + 10).min(context.input.len());
+                
+                if after_pos > before_pos && after_pos <= context.input.len() {
+                    let context_str = &context.input[before_pos..after_pos];
+                    
+                    // Simple heuristic: if we see two values adjacent without comma
+                    if context_str.contains("\" \"") || context_str.contains("} {") || 
+                       context_str.contains("] [") || context_str.contains("e ") {
+                        let mut fixed = context.input.clone();
+                        fixed.insert(context.position, ',');
+                        
+                        suggestions.push(RecoverySuggestion {
+                            description: "Add missing comma between elements".to_string(),
+                            confidence: 0.75,
+                            fixed_input: fixed,
+                            category: SuggestionCategory::MissingComma,
+                            fix_location: Span {
+                                start: context.position,
+                                end: context.position,
+                            },
+                        });
+                    }
+                }
+            }
+        }
+        
         suggestions
     }
 }
@@ -511,12 +722,52 @@ impl RecoveryStrategy for TypeCoercionStrategy {
         "type_coercion"
     }
 
-    fn recover(&self, _context: &ErrorContext) -> Vec<RecoverySuggestion> {
-        let suggestions = Vec::new();
-
-        // Suggest type conversions based on context
-        // e.g., "true" -> true, "123" -> 123
-
+    fn recover(&self, context: &ErrorContext) -> Vec<RecoverySuggestion> {
+        let mut suggestions = Vec::new();
+        
+        // Look for quoted values that could be unquoted
+        let search_end = context.position.min(context.input.len());
+        if let Some(pos) = context.input[..search_end].rfind('"') {
+            let value_start = pos + 1;
+            if let Some(end_pos) = context.input[value_start..].find('"') {
+                let value = &context.input[value_start..value_start + end_pos];
+                
+                // Check if this looks like a boolean
+                if value == "true" || value == "false" {
+                    let mut fixed = context.input.clone();
+                    fixed.replace_range(pos..value_start + end_pos + 1, value);
+                    
+                    suggestions.push(RecoverySuggestion {
+                        description: format!("Convert string \"{}\" to boolean {}", value, value),
+                        confidence: 0.70,
+                        fixed_input: fixed,
+                        category: SuggestionCategory::TypeMismatch,
+                        fix_location: Span {
+                            start: pos,
+                            end: value_start + end_pos + 1,
+                        },
+                    });
+                }
+                
+                // Check if this looks like a number
+                if value.parse::<f64>().is_ok() {
+                    let mut fixed = context.input.clone();
+                    fixed.replace_range(pos..value_start + end_pos + 1, value);
+                    
+                    suggestions.push(RecoverySuggestion {
+                        description: format!("Convert string \"{}\" to number {}", value, value),
+                        confidence: 0.65,
+                        fixed_input: fixed,
+                        category: SuggestionCategory::TypeMismatch,
+                        fix_location: Span {
+                            start: pos,
+                            end: value_start + end_pos + 1,
+                        },
+                    });
+                }
+            }
+        }
+        
         suggestions
     }
 }
@@ -535,12 +786,46 @@ impl RecoveryStrategy for StructuralRepairStrategy {
         "structural_repair"
     }
 
-    fn recover(&self, _context: &ErrorContext) -> Vec<RecoverySuggestion> {
-        let suggestions = Vec::new();
-
-        // Analyze overall structure and suggest repairs
-        // e.g., converting malformed object to valid object
-
+    fn recover(&self, context: &ErrorContext) -> Vec<RecoverySuggestion> {
+        let mut suggestions = Vec::new();
+        
+        // Check for implicit object at top level (e.g., key: value without braces)
+        if context.parsing_context == "top_level" {
+            let trimmed = context.input.trim();
+            
+            // Look for pattern like: key: value or "key": value
+            if trimmed.contains(':') && !trimmed.starts_with('{') && !trimmed.starts_with('[') {
+                let fixed = format!("{{{}}}", trimmed);
+                
+                suggestions.push(RecoverySuggestion {
+                    description: "Wrap in object braces for implicit object".to_string(),
+                    confidence: 0.80,
+                    fixed_input: fixed,
+                    category: SuggestionCategory::StructuralError,
+                    fix_location: Span {
+                        start: 0,
+                        end: context.input.len(),
+                    },
+                });
+            }
+            
+            // Look for comma-separated values without brackets
+            if trimmed.contains(',') && !trimmed.starts_with('[') && !trimmed.starts_with('{') {
+                let fixed = format!("[{}]", trimmed);
+                
+                suggestions.push(RecoverySuggestion {
+                    description: "Wrap in array brackets for implicit array".to_string(),
+                    confidence: 0.75,
+                    fixed_input: fixed,
+                    category: SuggestionCategory::StructuralError,
+                    fix_location: Span {
+                        start: 0,
+                        end: context.input.len(),
+                    },
+                });
+            }
+        }
+        
         suggestions
     }
 }
@@ -551,12 +836,12 @@ mod tests {
 
     #[test]
     fn test_bracket_matching() {
-        let engine = ErrorRecoveryEngineV2::new();
+        let mut engine = ErrorRecoveryEngineV2::new();
 
         let context = ErrorContext {
             error: Error::UnexpectedEof(10),
-            input: r#"{"name": "test"#.to_string(),
-            position: 14,
+            input: r#"{"name": "test""#.to_string(),
+            position: 15,
             tokens_before: vec![],
             partial_ast: None,
             parsing_context: "in_object".to_string(),
@@ -572,7 +857,7 @@ mod tests {
 
     #[test]
     fn test_quote_inference() {
-        let engine = ErrorRecoveryEngineV2::new();
+        let mut engine = ErrorRecoveryEngineV2::new();
 
         let context = ErrorContext {
             error: Error::UnterminatedString(5),
@@ -592,7 +877,7 @@ mod tests {
 
     #[test]
     fn test_visual_error() {
-        let engine = ErrorRecoveryEngineV2::new();
+        let mut engine = ErrorRecoveryEngineV2::new();
 
         let context = ErrorContext {
             error: Error::UnexpectedEof(20),

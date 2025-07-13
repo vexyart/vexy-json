@@ -388,6 +388,12 @@ impl MLPatternRecognizer {
     }
 }
 
+impl Default for MLPatternRecognizer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 // Feature Extractor Implementations
 
 /// Extract token-based patterns

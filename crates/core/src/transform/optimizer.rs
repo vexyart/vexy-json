@@ -109,8 +109,8 @@ impl StringInterner {
             total_occurrences: self.counts.values().sum(),
             saved_bytes: self
                 .strings
-                .iter()
-                .map(|(s, _)| {
+                .keys()
+                .map(|s| {
                     let count = self.counts.get(s).unwrap_or(&0);
                     if *count > 1 {
                         s.len() * (*count - 1)
@@ -354,7 +354,7 @@ impl AstOptimizer {
             (Value::Object(a), Value::Object(b)) => {
                 a.len() == b.len()
                     && a.iter()
-                        .all(|(k, v)| b.get(k).map_or(false, |bv| self.values_equal(v, bv)))
+                        .all(|(k, v)| b.get(k).is_some_and(|bv| self.values_equal(v, bv)))
             }
             _ => false,
         }

@@ -70,6 +70,31 @@ impl NdJsonParser {
 
         Ok(results)
     }
+    
+    /// Finish parsing and return any remaining values
+    pub fn finish(&mut self) -> Result<Vec<Value>> {
+        if self.finished {
+            return Ok(Vec::new());
+        }
+        
+        let mut results = Vec::new();
+        
+        // Process any remaining data in the buffer
+        if !self.line_buffer.trim().is_empty() {
+            match self.parse_line(&self.line_buffer) {
+                Ok(value) => results.push(value),
+                Err(e) => {
+                    return Err(Error::Custom(format!(
+                        "Error on line {}: {}",
+                        self.line_number, e
+                    )));
+                }
+            }
+        }
+        
+        self.finished = true;
+        Ok(results)
+    }
 
     /// Parse a single line as JSON
     fn parse_line(&self, line: &str) -> Result<Value> {
@@ -89,16 +114,6 @@ impl NdJsonParser {
         }
     }
 
-    /// Signal end of input and process any remaining buffer
-    pub fn finish(&mut self) -> Result<Option<Value>> {
-        self.finished = true;
-
-        if !self.line_buffer.trim().is_empty() {
-            Ok(Some(self.parse_line(&self.line_buffer)?))
-        } else {
-            Ok(None)
-        }
-    }
 
     /// Check if the parser has finished
     #[inline(always)]
@@ -170,7 +185,7 @@ impl StreamingNdJsonParser {
     fn start_line_parsing(&mut self) -> Result<()> {
         let mut parser = StreamingParser::with_options(self.options.clone());
         parser.feed(&self.line_buffer)?;
-        parser.finish()?;
+        // Don't call finish - each line is complete JSON
 
         // Collect all events from this line
         let mut line_events = Vec::new();
@@ -278,8 +293,12 @@ impl Iterator for NdJsonIterator {
                 None => {
                     // End of input
                     match self.parser.finish() {
-                        Ok(Some(value)) => return Some(Ok(value)),
-                        Ok(None) => return None,
+                        Ok(values) => {
+                            if !values.is_empty() {
+                                return Some(Ok(values.into_iter().next().unwrap()));
+                            }
+                            return None;
+                        }
                         Err(e) => return Some(Err(e)),
                     }
                 }
@@ -312,7 +331,8 @@ mod tests {
 {"name": "Bob", "age": 25}
 {"name": "Charlie", "age": 35}"#;
 
-        let values = parser.feed(input).unwrap();
+        let mut values = parser.feed(input).unwrap();
+        values.extend(parser.finish().unwrap());
         assert_eq!(values.len(), 3);
 
         // Check first value
@@ -355,7 +375,8 @@ mod tests {
 
 {"also": "valid"}"#;
 
-        let values = parser.feed(input).unwrap();
+        let mut values = parser.feed(input).unwrap();
+        values.extend(parser.finish().unwrap());
         assert_eq!(values.len(), 2);
     }
 }
