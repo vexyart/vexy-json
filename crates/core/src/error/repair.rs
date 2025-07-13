@@ -2,6 +2,7 @@
 
 //! Repair functionality types and structures for JSON error recovery.
 
+use super::recovery_v2::SuggestionCategory;
 use super::types::Error;
 
 /// Represents which parsing tier was used to successfully parse the input.
@@ -15,7 +16,25 @@ pub enum ParsingTier {
     Repair,
 }
 
-/// Represents a repair action that was taken to fix the JSON.
+impl From<SuggestionCategory> for RepairType {
+    fn from(category: SuggestionCategory) -> Self {
+        match category {
+            SuggestionCategory::MissingBracket => RepairType::InsertBracket,
+            SuggestionCategory::UnmatchedQuote => RepairType::BalanceQuotes,
+            SuggestionCategory::MissingComma => RepairType::InsertComma,
+            SuggestionCategory::TrailingComma => RepairType::RemoveComma,
+            SuggestionCategory::InvalidEscape => RepairType::ReplaceText,
+            SuggestionCategory::TypeMismatch => RepairType::TypeCoercion,
+            SuggestionCategory::StructuralError => RepairType::ReplaceText,
+            SuggestionCategory::Other => RepairType::ReplaceText,
+        }
+    }
+}
+
+/// Represents a single repair action that was performed during error recovery.
+/// 
+/// This structure captures all the details about what was changed during the repair process,
+/// including the position, type of change, and the actual text modifications.
 #[derive(Debug, Clone, PartialEq)]
 pub struct RepairAction {
     /// The type of repair that was performed

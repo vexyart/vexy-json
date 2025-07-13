@@ -14,6 +14,7 @@ pub mod number;
 pub mod object;
 pub mod optimized;
 pub mod optimized_v2;
+pub mod optimized_v3;
 /// Clean recursive descent parser implementation.
 pub mod recursive;
 /// Parser state management.
@@ -26,8 +27,8 @@ use self::null::parse_null;
 use self::number::parse_number_token;
 use self::string::parse_string_token;
 use crate::ast::{Number, Token, Value};
-use crate::error::repair::{EnhancedParseResult, ParsingTier};
-use crate::error::{Error, Result, Span};
+use crate::error::repair::{EnhancedParseResult, ParsingTier, RepairAction};
+use crate::error::{Error, ErrorContext, ErrorRecoveryEngineV2, Result, Span};
 use crate::lexer::{FastLexer, JsonLexer, Lexer, LexerConfig, LexerMode};
 use crate::optimization::ValueBuilder;
 use crate::repair::JsonRepairer;
@@ -37,6 +38,9 @@ pub use optimized::{
 };
 pub use optimized_v2::{
     parse_optimized_v2, parse_optimized_v2_with_options, parse_v2_with_stats, OptimizedParserV2,
+};
+pub use optimized_v3::{
+    parse_optimized_v3, parse_optimized_v3_with_options, parse_v3_with_stats, OptimizedParserV3,
 };
 pub use recursive::{parse_recursive, RecursiveDescentParser};
 use rustc_hash::FxHashMap;
@@ -867,8 +871,9 @@ pub fn parse_with_fallback(input: &str, options: ParserOptions) -> EnhancedParse
     }
 }
 
-/// Parse with repair functionality for bracket mismatches
+/// Parse with repair functionality for bracket mismatches and pattern-based recovery
 fn parse_with_repair(input: &str, options: &ParserOptions) -> EnhancedParseResult<Value> {
+    // First, try the basic JsonRepairer for bracket mismatches
     let mut repairer = if options.fast_repair {
         JsonRepairer::new_without_cache(options.max_repairs)
     } else {
@@ -883,22 +888,109 @@ fn parse_with_repair(input: &str, options: &ParserOptions) -> EnhancedParseResul
                     EnhancedParseResult::success_with_repairs(value, repairs, ParsingTier::Repair)
                 }
                 Err(error) => {
-                    // Even repair failed - return best effort
-                    EnhancedParseResult::failure_with_repairs(
-                        Value::Null,
-                        vec![error],
-                        repairs,
-                        ParsingTier::Repair,
-                    )
+                    // Basic repair didn't work, try advanced pattern-based recovery
+                    parse_with_advanced_recovery(input, options, error, repairs)
                 }
             }
         }
-        Err(repair_error) => EnhancedParseResult::failure(
-            Value::Null,
-            vec![Error::RepairFailed(repair_error)],
-            ParsingTier::Repair,
-        ),
+        Err(_repair_error) => {
+            // Basic repair failed, try advanced pattern-based recovery
+            // First try to parse to get the specific error
+            match parse_with_options(input, options.clone()) {
+                Ok(value) => {
+                    // Shouldn't happen, but handle gracefully
+                    EnhancedParseResult::success(value, ParsingTier::Repair)
+                }
+                Err(parse_error) => {
+                    parse_with_advanced_recovery(input, options, parse_error, vec![])
+                }
+            }
+        }
     }
+}
+
+/// Use ErrorRecoveryEngineV2 for advanced pattern-based recovery
+fn parse_with_advanced_recovery(
+    input: &str,
+    options: &ParserOptions,
+    original_error: Error,
+    previous_repairs: Vec<RepairAction>,
+) -> EnhancedParseResult<Value> {
+    // Create the error recovery engine
+    let mut recovery_engine = ErrorRecoveryEngineV2::new();
+    
+    // Build error context for the recovery engine
+    let error_context = ErrorContext {
+        error: original_error.clone(),
+        input: input.to_string(),
+        position: match &original_error {
+            Error::UnexpectedEof(pos) => *pos,
+            Error::UnterminatedString(pos) => *pos,
+            Error::Expected { position, .. } => *position,
+            Error::InvalidNumber(pos) => *pos,
+            Error::InvalidEscape(pos) => *pos,
+            Error::UnexpectedChar(_, pos) => *pos,
+            Error::DepthLimitExceeded(pos) => *pos,
+            _ => 0,
+        },
+        tokens_before: vec![], // Could be populated if we track tokens
+        partial_ast: None,
+        parsing_context: "top_level".to_string(),
+    };
+    
+    // Get recovery suggestions
+    let suggestions = recovery_engine.suggest_recovery(&error_context);
+    
+    // Try each suggestion in order of confidence
+    let mut all_repairs = previous_repairs;
+    
+    for suggestion in suggestions {
+        // Try to parse the suggested fix first
+        match parse_with_options(&suggestion.fixed_input, options.clone()) {
+            Ok(value) => {
+                // Create repair action based on what was actually changed
+                let repair_action = RepairAction {
+                    position: suggestion.fix_location.start,
+                    action_type: suggestion.category.clone().into(),
+                    original: input[suggestion.fix_location.start..suggestion.fix_location.end.min(input.len())].to_string(),
+                    replacement: match suggestion.category {
+                        crate::error::SuggestionCategory::MissingBracket => {
+                            if suggestion.fixed_input.ends_with('}') {
+                                "}".to_string()
+                            } else if suggestion.fixed_input.ends_with(']') {
+                                "]".to_string()
+                            } else {
+                                "".to_string()
+                            }
+                        }
+                        crate::error::SuggestionCategory::UnmatchedQuote => "\"".to_string(),
+                        crate::error::SuggestionCategory::MissingComma => ",".to_string(),
+                        _ => "".to_string(),
+                    },
+                    description: suggestion.description.clone(),
+                };
+                
+                all_repairs.push(repair_action);
+                return EnhancedParseResult::success_with_repairs(
+                    value,
+                    all_repairs,
+                    ParsingTier::Repair,
+                );
+            }
+            Err(_) => {
+                // This suggestion didn't work, try the next one
+                continue;
+            }
+        }
+    }
+    
+    // All recovery attempts failed
+    EnhancedParseResult::failure_with_repairs(
+        Value::Null,
+        vec![original_error],
+        all_repairs,
+        ParsingTier::Repair,
+    )
 }
 
 /// Convert serde_json::Value to vexy_json::Value

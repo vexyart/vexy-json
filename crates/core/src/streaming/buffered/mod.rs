@@ -2,6 +2,7 @@
 
 use crate::ast::{Token, Value};
 use crate::error::{Error, Result};
+use crate::lexer::{LexerConfig, LexerMode};
 use crate::parser::ParserOptions;
 use crate::streaming::{ParserContext, StreamingEvent};
 // use rustc_hash::FxHashMap;
@@ -9,8 +10,10 @@ use std::collections::VecDeque;
 use std::io::{BufReader, Read};
 
 pub mod buffer;
+pub mod lexer;
 pub mod state;
 
+use lexer::BufferedLexer;
 use state::TempParsingState;
 
 /// Configuration for the buffered streaming parser.
@@ -46,21 +49,21 @@ pub struct BufferedStreamingParser<R: Read> {
     reader: BufReader<R>,
     /// Configuration
     config: BufferedStreamingConfig,
-    /// Input buffer for partial reads
-    input_buffer: String,
+    /// Buffered lexer for tokenization
+    lexer: BufferedLexer,
     /// Token buffer for parsed tokens
-    token_buffer: VecDeque<(Token, String)>,
+    token_buffer: VecDeque<(Token, crate::error::Span)>,
     /// Event buffer for generated events
     event_buffer: VecDeque<StreamingEvent>,
     /// Parser state stack
     state_stack: Vec<ParserContext>,
-    /// Current position in the input stream
-    position: usize,
     /// Whether we've reached the end of input
     end_of_input: bool,
     /// Temporary state for parsing complex values
     #[allow(dead_code)]
     temp_state: TempParsingState,
+    /// Accumulated input for token content extraction
+    input_accumulator: String,
 }
 
 impl<R: Read> BufferedStreamingParser<R> {
@@ -72,16 +75,30 @@ impl<R: Read> BufferedStreamingParser<R> {
     /// Creates a new buffered streaming parser with custom configuration.
     pub fn with_config(reader: R, config: BufferedStreamingConfig) -> Self {
         let buffer_size = config.input_buffer_size;
+        
+        // Create lexer config based on parser options
+        let lexer_config = LexerConfig {
+            mode: if config.parser_options.allow_comments {
+                LexerMode::Forgiving
+            } else {
+                LexerMode::Strict
+            },
+            collect_stats: false,
+            buffer_size,
+            max_depth: config.parser_options.max_depth,
+            track_positions: true,
+        };
+        
         BufferedStreamingParser {
             reader: BufReader::with_capacity(buffer_size, reader),
+            lexer: BufferedLexer::new(lexer_config),
             config,
-            input_buffer: String::with_capacity(buffer_size),
             token_buffer: VecDeque::with_capacity(1024),
             event_buffer: VecDeque::with_capacity(512),
             state_stack: Vec::new(),
-            position: 0,
             end_of_input: false,
             temp_state: TempParsingState::default(),
+            input_accumulator: String::new(),
         }
     }
 
@@ -105,90 +122,17 @@ impl<R: Read> BufferedStreamingParser<R> {
         Ok(self.event_buffer.pop_front())
     }
 
-    /// Classifies a token string into a Token enum variant.
-    fn classify_token(&self, token_str: &str) -> Result<Token> {
-        match token_str {
-            "{" => Ok(Token::LeftBrace),
-            "}" => Ok(Token::RightBrace),
-            "[" => Ok(Token::LeftBracket),
-            "]" => Ok(Token::RightBracket),
-            "," => Ok(Token::Comma),
-            ":" => Ok(Token::Colon),
-            "\n" => Ok(Token::Newline),
-            "null" => Ok(Token::Null),
-            "true" => Ok(Token::True),
-            "false" => Ok(Token::False),
-            _ => {
-                // Check if it's a string
-                if (token_str.starts_with('"') && token_str.ends_with('"'))
-                    || (token_str.starts_with('\'') && token_str.ends_with('\''))
-                {
-                    Ok(Token::String)
-                }
-                // Check if it's a number
-                else if self.is_number(token_str) {
-                    Ok(Token::Number)
-                }
-                // Check if it's an unquoted string
-                else if self.is_unquoted_string(token_str) {
-                    Ok(Token::UnquotedString)
-                } else {
-                    Err(Error::UnexpectedChar(
-                        token_str.chars().next().unwrap_or('\0'),
-                        self.position,
-                    ))
-                }
-            }
-        }
-    }
-
-    /// Checks if a string represents a valid number.
-    #[inline(always)]
-    fn is_number(&self, s: &str) -> bool {
-        s.parse::<f64>().is_ok()
-    }
-
-    /// Checks if a string is a valid unquoted string.
-    #[inline(always)]
-    fn is_unquoted_string(&self, s: &str) -> bool {
-        if s.is_empty() {
-            return false;
-        }
-
-        let first_char = s.chars().next().unwrap();
-        if !first_char.is_ascii_alphabetic() && first_char != '_' && first_char != '$' {
-            return false;
-        }
-
-        s.chars()
-            .all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '$')
-    }
-
-    /// Converts a character to its corresponding token.
-    #[allow(dead_code)]
-    fn char_to_token(&self, ch: char) -> Result<Token> {
-        match ch {
-            '{' => Ok(Token::LeftBrace),
-            '}' => Ok(Token::RightBrace),
-            '[' => Ok(Token::LeftBracket),
-            ']' => Ok(Token::RightBracket),
-            ',' => Ok(Token::Comma),
-            ':' => Ok(Token::Colon),
-            '\n' => Ok(Token::Newline),
-            _ => Err(Error::UnexpectedChar(ch, self.position)),
-        }
-    }
 
     /// Processes tokens from the token buffer and generates events.
     fn process_tokens(&mut self) -> Result<()> {
-        while let Some((token, token_str)) = self.token_buffer.pop_front() {
+        while let Some((token, span)) = self.token_buffer.pop_front() {
             if self.event_buffer.len() >= self.config.event_buffer_size {
                 // Event buffer is full, stop processing
-                self.token_buffer.push_front((token, token_str));
+                self.token_buffer.push_front((token, span));
                 break;
             }
 
-            let event = self.token_to_event(token, &token_str)?;
+            let event = self.token_to_event(token, span)?;
             if let Some(event) = event {
                 self.event_buffer.push_back(event);
             }
@@ -197,8 +141,18 @@ impl<R: Read> BufferedStreamingParser<R> {
         Ok(())
     }
 
+    /// Extracts token content from input using span (for strings and numbers)
+    fn extract_token_content(&self, span: &crate::error::Span) -> String {
+        if span.start < self.input_accumulator.len() && span.end <= self.input_accumulator.len() {
+            self.input_accumulator[span.start..span.end].to_string()
+        } else {
+            // Fallback for out-of-bounds spans
+            String::new()
+        }
+    }
+
     /// Converts a token to a streaming event.
-    fn token_to_event(&mut self, token: Token, token_str: &str) -> Result<Option<StreamingEvent>> {
+    fn token_to_event(&mut self, token: Token, span: crate::error::Span) -> Result<Option<StreamingEvent>> {
         match token {
             Token::LeftBrace => {
                 self.state_stack.push(ParserContext::Object {
@@ -210,7 +164,7 @@ impl<R: Read> BufferedStreamingParser<R> {
                 if let Some(ParserContext::Object { .. }) = self.state_stack.pop() {
                     Ok(Some(StreamingEvent::EndObject))
                 } else {
-                    Err(Error::UnexpectedChar('}', self.position))
+                    Err(Error::UnexpectedChar('}', span.start))
                 }
             }
             Token::LeftBracket => {
@@ -223,11 +177,23 @@ impl<R: Read> BufferedStreamingParser<R> {
                 if let Some(ParserContext::Array { .. }) = self.state_stack.pop() {
                     Ok(Some(StreamingEvent::EndArray))
                 } else {
-                    Err(Error::UnexpectedChar(']', self.position))
+                    Err(Error::UnexpectedChar(']', span.start))
                 }
             }
             Token::String => {
-                let content = self.extract_string_content(token_str)?;
+                let raw_content = self.extract_token_content(&span);
+                // Remove quotes and process escape sequences
+                let content = if raw_content.len() >= 2 {
+                    let inner = &raw_content[1..raw_content.len()-1];
+                    // Basic unescaping (simplified for this implementation)
+                    inner.replace("\\\"", "\"")
+                         .replace("\\\\", "\\")
+                         .replace("\\n", "\n")
+                         .replace("\\t", "\t")
+                         .replace("\\r", "\r")
+                } else {
+                    raw_content
+                };
 
                 // Check if this is an object key
                 if let Some(ParserContext::Object { expecting_key }) = self.state_stack.last_mut() {
@@ -242,12 +208,8 @@ impl<R: Read> BufferedStreamingParser<R> {
                 }
             }
             Token::Number => {
-                if self.config.preserve_number_precision {
-                    Ok(Some(StreamingEvent::Number(token_str.to_string())))
-                } else {
-                    // Parse and reformat the number
-                    Ok(Some(StreamingEvent::Number(token_str.to_string())))
-                }
+                let content = self.extract_token_content(&span);
+                Ok(Some(StreamingEvent::Number(content)))
             }
             Token::True => Ok(Some(StreamingEvent::Bool(true))),
             Token::False => Ok(Some(StreamingEvent::Bool(false))),
@@ -275,32 +237,34 @@ impl<R: Read> BufferedStreamingParser<R> {
             Token::Newline => {
                 // Newlines are generally ignored unless they serve as comma replacements
                 if self.config.parser_options.newline_as_comma {
-                    self.token_to_event(Token::Comma, token_str)
+                    self.token_to_event(Token::Comma, span)
                 } else {
                     Ok(None)
                 }
             }
             Token::UnquotedString => {
+                let content = self.extract_token_content(&span);
                 // Similar to string, but for unquoted identifiers
                 if let Some(ParserContext::Object { expecting_key }) = self.state_stack.last_mut() {
                     if *expecting_key {
                         *expecting_key = false;
-                        Ok(Some(StreamingEvent::ObjectKey(token_str.to_string())))
+                        Ok(Some(StreamingEvent::ObjectKey(content)))
                     } else {
-                        Ok(Some(StreamingEvent::String(token_str.to_string())))
+                        Ok(Some(StreamingEvent::String(content)))
                     }
                 } else {
-                    Ok(Some(StreamingEvent::String(token_str.to_string())))
+                    Ok(Some(StreamingEvent::String(content)))
                 }
             }
             _ => Ok(None),
         }
     }
 
-    /// Extracts the content from a quoted string token.
+    /// Extracts the content from a quoted string token (simplified version).
+    /// This is a basic implementation that may need improvement for full escape handling.
     fn extract_string_content(&self, token_str: &str) -> Result<String> {
         if token_str.len() < 2 {
-            return Err(Error::UnterminatedString(self.position));
+            return Err(Error::UnterminatedString(self.lexer.position()));
         }
 
         // Remove quotes
@@ -318,7 +282,7 @@ impl<R: Read> BufferedStreamingParser<R> {
 
     /// Returns the current position in the input stream.
     pub fn position(&self) -> usize {
-        self.position
+        self.lexer.position()
     }
 
     /// Returns whether the end of input has been reached.
@@ -392,7 +356,7 @@ impl<R: Read> BufferedStreamingParser<R> {
                     } else if let Ok(float_val) = n.parse::<f64>() {
                         Value::Number(crate::ast::Number::Float(float_val))
                     } else {
-                        return Err(Error::InvalidNumber(self.position));
+                        return Err(Error::InvalidNumber(self.lexer.position()));
                     };
                     self.add_value_to_parent(&mut value_stack, &mut key_stack, value)?;
                 }
@@ -412,7 +376,7 @@ impl<R: Read> BufferedStreamingParser<R> {
         if let Some(value) = value_stack.pop() {
             Ok(value)
         } else {
-            Err(Error::UnexpectedChar('\0', self.position))
+            Err(Error::UnexpectedChar('\0', self.lexer.position()))
         }
     }
 
@@ -433,13 +397,13 @@ impl<R: Read> BufferedStreamingParser<R> {
                 if let Some(key) = key_stack.pop() {
                     obj.insert(key, value);
                 } else {
-                    return Err(Error::UnexpectedChar('\0', self.position));
+                    return Err(Error::UnexpectedChar('\0', self.lexer.position()));
                 }
             }
             Value::Array(ref mut arr) => {
                 arr.push(value);
             }
-            _ => return Err(Error::UnexpectedChar('\0', self.position)),
+            _ => return Err(Error::UnexpectedChar('\0', self.lexer.position())),
         }
 
         Ok(())

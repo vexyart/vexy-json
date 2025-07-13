@@ -109,7 +109,7 @@ echo "Creating DMG..."
 hdiutil create -volname "vexy-json ${VERSION}" \
     -srcfolder "${BUILD_DIR}/dmg" \
     -ov -format UDZO \
-    "${DMG_NAME}"
+    "dist/macos/${DMG_NAME}"
 
 # Cleanup
 rm -rf "${BUILD_DIR}"

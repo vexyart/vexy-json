@@ -58,7 +58,8 @@ pub use lexer::Lexer;
 pub use parallel::{parse_ndjson_parallel, parse_parallel, ParallelConfig, ParallelParser};
 pub use parser::{
     parse, parse_iterative, parse_optimized, parse_optimized_v2, parse_optimized_v2_with_options,
-    parse_optimized_with_options, parse_recursive, parse_v2_with_stats,
+    parse_optimized_v3, parse_optimized_v3_with_options, parse_optimized_with_options, 
+    parse_recursive, parse_v2_with_stats, parse_v3_with_stats,
     parse_with_detailed_repair_tracking, parse_with_fallback, parse_with_options, parse_with_stats,
     IterativeParser, Parser, ParserOptions, RecursiveDescentParser,
 };

@@ -380,7 +380,7 @@ EOF
     fi
 
     # Create DMG
-    run_cmd "create-dmg --volname \"Vexy JSON $VERSION\" --window-pos 200 120 --window-size 600 400 --icon-size 100 --app-drop-link 425 120 \"$BUILD_DIR/$dmg_name\" \"$dmg_temp_dir\"" "Create DMG installer"
+    run_cmd "create-dmg --volname \"Vexy JSON $VERSION\" --window-pos 200 120 --window-size 600 400 --icon-size 100 --app-drop-link 425 120 \"$BUILD_DIR/macos/$dmg_name\" \"$dmg_temp_dir\"" "Create DMG installer"
 
     success "macOS installer created: $dmg_name"
 }

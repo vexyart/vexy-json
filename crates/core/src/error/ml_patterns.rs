@@ -286,11 +286,19 @@ impl MLPatternRecognizer {
     ) -> Option<RecoverySuggestion> {
         let fixed_input = self.apply_fix_template(&pattern.fix_template, context)?;
 
+        // Determine appropriate category based on pattern ID
+        let category = match pattern.id.as_str() {
+            "missing_closing_brace" | "missing_closing_bracket" => SuggestionCategory::MissingBracket,
+            "unmatched_quote" => SuggestionCategory::UnmatchedQuote,
+            "missing_comma" => SuggestionCategory::MissingComma,
+            _ => SuggestionCategory::Other,
+        };
+
         Some(RecoverySuggestion {
             description: format!("ML: {}", pattern.id.replace('_', " ")),
             confidence: confidence * pattern.success_rate,
             fixed_input,
-            category: SuggestionCategory::Other,
+            category,
             fix_location: Span {
                 start: context.position,
                 end: context.position,
@@ -545,6 +553,42 @@ impl FeatureExtractor for ErrorTypeExtractor {
                     value: 1.0,
                     weight: 1.0,
                 });
+            }
+            Error::Expected { expected, found: _, position } => {
+                // Check if expecting comma
+                if expected.contains("comma") || expected.contains(",") {
+                    features.push(Feature {
+                        name: "expecting_comma".to_string(),
+                        value: 1.0,
+                        weight: 1.0,
+                    });
+                }
+                
+                // Check if we're between values
+                if position > &0 && position < &context.input.len() {
+                    let before = &context.input[..*position];
+                    let after = &context.input[*position..];
+                    
+                    // Check if we have a value before and after
+                    if (before.ends_with('"') || before.chars().last().is_some_and(|c| c.is_numeric())) &&
+                       (after.starts_with('"') || after.starts_with('[') || after.starts_with('{')) {
+                        features.push(Feature {
+                            name: "consecutive_values".to_string(),
+                            value: 1.0,
+                            weight: 1.0,
+                        });
+                        features.push(Feature {
+                            name: "after_string_or_number".to_string(),
+                            value: 1.0,
+                            weight: 1.0,
+                        });
+                        features.push(Feature {
+                            name: "before_string_or_brace".to_string(),
+                            value: 1.0,
+                            weight: 1.0,
+                        });
+                    }
+                }
             }
             _ => {}
         }

@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.6] - 2025-07-13
+
+### 🔧 Fixed
+- **Code Quality Improvements** - Enhanced maintainability and clarity
+  - Added `#[allow(dead_code)]` attributes to suppress warnings in benchmarks and memory tests
+  - Refactored parser function types in comparison examples for better clarity
+  - Simplified string formatting in stack overflow tests
+- **Test Compatibility** - Updated test configurations
+  - Enhanced newline_as_comma.rs test cases for better coverage
+  - Updated compatibility tests with proper feature flags
+  - Improved test structure across benchmark and example files
+- **Build System** - Continuous improvement to build reliability
+  - Enhanced release script with proper error handling
+  - Updated version management across all crates to 1.5.6
+  - Improved WASM compilation and packaging
+
+### 🚀 Added  
+- **Memory Pool Optimization v3** - Enhanced memory management capabilities
+- **Advanced Error Recovery** - Pattern-based recovery system improvements
+- **Streaming Buffer Enhancements** - Improved buffered parsing performance
+- **C API Safety Documentation** - Comprehensive safety documentation for all unsafe functions
+
+### 📝 Documentation
+- **MkDocs Integration** - Automated documentation build system
+- **Internal Planning** - Enhanced project planning and work tracking documents
+- **API Documentation** - Updated Python, Rust, and WASM API documentation
+
+### 🔧 Performance
+- **WASM Optimizations** - Reduced bundle size and improved performance
+- **Memory Efficiency** - Enhanced memory pool usage patterns
+- **Parser Optimizations** - Improved parsing speed for complex JSON structures
+
 ## [1.5.3] - 2025-07-13
 
 ### 🔧 Fixed

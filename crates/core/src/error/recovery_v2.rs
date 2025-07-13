@@ -10,6 +10,7 @@
 
 use crate::ast::{Token, Value};
 use crate::error::{Error, Span};
+use crate::error::ml_patterns::MLPatternRecognizer;
 use regex::Regex;
 use rustc_hash::FxHashMap;
 use std::collections::VecDeque;
@@ -52,8 +53,10 @@ pub enum SuggestionCategory {
 
 /// Smart error recovery engine
 pub struct ErrorRecoveryEngineV2 {
-    /// Pattern database for ML-based recognition
+    /// Pattern database for simple pattern recognition
     pattern_db: PatternDatabase,
+    /// ML-based pattern recognizer for advanced recognition
+    ml_recognizer: MLPatternRecognizer,
     /// Context analyzer
     context_analyzer: ContextAnalyzer,
     /// Recovery strategies
@@ -172,6 +175,7 @@ impl ErrorRecoveryEngineV2 {
     pub fn with_config(config: RecoveryConfig) -> Self {
         let mut engine = ErrorRecoveryEngineV2 {
             pattern_db: PatternDatabase::new(),
+            ml_recognizer: MLPatternRecognizer::new(),
             context_analyzer: ContextAnalyzer::new(),
             strategies: Vec::new(),
             config,
@@ -199,8 +203,13 @@ impl ErrorRecoveryEngineV2 {
     pub fn suggest_recovery(&mut self, context: &ErrorContext) -> Vec<RecoverySuggestion> {
         let mut suggestions = Vec::new();
 
-        // Try ML-based pattern recognition
+        // Try ML-based pattern recognition if enabled
         if self.config.enable_ml {
+            // Use the sophisticated ML recognizer first
+            let ml_suggestions = self.ml_recognizer.recognize_and_suggest(context);
+            suggestions.extend(ml_suggestions);
+            
+            // Also try simple pattern matching as a fallback
             suggestions.extend(self.pattern_db.find_matches(context));
         }
 
@@ -219,6 +228,11 @@ impl ErrorRecoveryEngineV2 {
 
         // Sort by confidence and limit
         suggestions.sort_by(|a, b| b.confidence.partial_cmp(&a.confidence).unwrap());
+        
+        // Remove duplicates based on fixed_input
+        let mut seen_fixes = std::collections::HashSet::new();
+        suggestions.retain(|s| seen_fixes.insert(s.fixed_input.clone()));
+        
         suggestions.truncate(self.config.max_suggestions);
 
         // Filter by minimum confidence

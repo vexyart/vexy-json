@@ -59,8 +59,7 @@ build_macos() {
         "$SCRIPT_DIR/package-macos.sh"
         
         # Move DMG to dist/macos
-        if [[ -f "${BINARY_NAME}-${VERSION}-macos.dmg" ]]; then
-            mv "${BINARY_NAME}-${VERSION}-macos.dmg" "$MACOS_DIR/"
+        if [[ -f "$MACOS_DIR/${BINARY_NAME}-${VERSION}-macos.dmg" ]]; then
             success "Created macOS DMG: $MACOS_DIR/${BINARY_NAME}-${VERSION}-macos.dmg"
         fi
     else

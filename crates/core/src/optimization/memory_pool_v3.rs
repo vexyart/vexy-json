@@ -19,9 +19,6 @@ const SMALL_STRING_SIZE: usize = 16;
 /// Size threshold for inline vector storage (8 elements)
 const SMALL_VEC_SIZE: usize = 8;
 
-/// Size threshold for inline object storage (4 key-value pairs)
-#[allow(dead_code)]
-const SMALL_OBJECT_SIZE: usize = 4;
 
 /// Arena allocator for a specific type
 pub struct TypedArena<T> {

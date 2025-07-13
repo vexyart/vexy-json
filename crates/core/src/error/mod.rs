@@ -55,3 +55,6 @@ pub use reporter::{
 
 // Re-export error recovery v2 components
 pub use recovery_v2::{ErrorRecoveryEngineV2, RecoverySuggestion, SuggestionCategory, ErrorContext};
+
+// Re-export ML pattern recognition components
+pub use ml_patterns::MLPatternRecognizer;
