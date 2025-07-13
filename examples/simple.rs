@@ -63,8 +63,10 @@ fn main() {
 
     // Test with strict options
     println!("\nParsing with strict options:");
-    let mut options = ParserOptions::default();
-    options.implicit_top_level = false;
+    let options = ParserOptions {
+        implicit_top_level: false,
+        ..Default::default()
+    };
     match parse_with_options(r#"{"key": "value"}"#, options) {
         Ok(value) => println!("Success: {value:?}"),
         Err(e) => println!("Error: {e:?}"),

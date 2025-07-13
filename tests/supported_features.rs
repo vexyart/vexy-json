@@ -302,8 +302,10 @@ fn test_single_quotes_options() {
 #[test]
 fn test_unquoted_keys_options() {
     // Test with unquoted keys disabled
-    let mut opts = ParserOptions::default();
-    opts.allow_unquoted_keys = false;
+    let opts = ParserOptions {
+        allow_unquoted_keys: false,
+        ..Default::default()
+    };
 
     assert!(parse_with_options("{a:1}", opts.clone()).is_err());
     assert!(parse_with_options("{foo:2}", opts.clone()).is_err());
@@ -318,8 +320,10 @@ fn test_unquoted_keys_options() {
 #[test]
 fn test_implicit_top_level_options() {
     // Test with implicit top level disabled
-    let mut opts = ParserOptions::default();
-    opts.implicit_top_level = false;
+    let opts = ParserOptions {
+        implicit_top_level: false,
+        ..Default::default()
+    };
 
     // These should fail without explicit object/array delimiters
     assert!(parse_with_options("a:1", opts.clone()).is_err());

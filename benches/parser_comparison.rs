@@ -8,7 +8,8 @@
 //! - Recursive descent parser (recursive)
 //! - Stack-based iterative parser (iterative)
 
-use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use std::hint::black_box;
 use vexy_json_core::{
     parse_iterative, parse_optimized_v2_with_options, parse_optimized_with_options,
     parse_recursive, parse_with_options, ParserOptions,

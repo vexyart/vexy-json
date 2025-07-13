@@ -1,4 +1,5 @@
-use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use std::hint::black_box;
 use vexy_json::{parse, parse_with_options, ParserOptions};
 
 fn benchmark_simple_object(c: &mut Criterion) {

@@ -1,6 +1,7 @@
 // this_file: benches/real_world_benchmarks.rs
 
-use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use std::hint::black_box;
 use std::fs;
 use vexy_json::{parse, parse_with_options, ParserOptions};
 

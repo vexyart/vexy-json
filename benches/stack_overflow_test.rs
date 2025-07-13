@@ -5,7 +5,8 @@
 //! This benchmark suite specifically tests scenarios where the iterative parser
 //! should outperform recursive parsers by avoiding stack overflow issues.
 
-use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use std::hint::black_box;
 use vexy_json_core::{parse_iterative, parse_recursive, ParserOptions};
 
 // Generate extremely deep nested structures

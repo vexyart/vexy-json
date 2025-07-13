@@ -1,6 +1,7 @@
 // this_file: benches/lexer_microbenchmarks.rs
 
-use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use std::hint::black_box;
 use vexy_json_core::lexer::{FastLexer, JsonLexer, LexerConfig, LexerMode};
 
 fn bench_tokenize_simple_json(c: &mut Criterion) {

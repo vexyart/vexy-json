@@ -302,8 +302,10 @@ fn test_single_quotes() {
 #[test]
 fn test_comment_options() {
     // Test with comments disabled
-    let mut opts = ParserOptions::default();
-    opts.allow_comments = false;
+    let opts = ParserOptions {
+        allow_comments: false,
+        ..Default::default()
+    };
 
     // Comments should be treated as regular text when disabled
     assert!(parse_with_options("a: #b", opts.clone()).is_err());
@@ -314,8 +316,10 @@ fn test_comment_options() {
 #[test]
 fn test_trailing_comma_options() {
     // Test with trailing commas disabled
-    let mut opts = ParserOptions::default();
-    opts.allow_trailing_commas = false;
+    let opts = ParserOptions {
+        allow_trailing_commas: false,
+        ..Default::default()
+    };
 
     assert!(parse_with_options("[1,]", opts.clone()).is_err());
     assert!(parse_with_options("{a:1,}", opts.clone()).is_err());
@@ -334,8 +338,10 @@ fn test_trailing_comma_options() {
 #[test]
 fn test_single_quotes_options() {
     // Test with single quotes disabled
-    let mut opts = ParserOptions::default();
-    opts.allow_single_quotes = false;
+    let opts = ParserOptions {
+        allow_single_quotes: false,
+        ..Default::default()
+    };
 
     assert!(parse_with_options("'hello'", opts.clone()).is_err());
     assert!(parse_with_options("{'key':'value'}", opts.clone()).is_err());
@@ -350,8 +356,10 @@ fn test_single_quotes_options() {
 #[test]
 fn test_unquoted_keys_options() {
     // Test with unquoted keys disabled
-    let mut opts = ParserOptions::default();
-    opts.allow_unquoted_keys = false;
+    let opts = ParserOptions {
+        allow_unquoted_keys: false,
+        ..Default::default()
+    };
 
     assert!(parse_with_options("{a:1}", opts.clone()).is_err());
     assert!(parse_with_options("{foo:bar}", opts.clone()).is_err());
@@ -366,8 +374,10 @@ fn test_unquoted_keys_options() {
 #[test]
 fn test_implicit_top_level_options() {
     // Test with implicit top level disabled
-    let mut opts = ParserOptions::default();
-    opts.implicit_top_level = false;
+    let opts = ParserOptions {
+        implicit_top_level: false,
+        ..Default::default()
+    };
 
     // These should fail without explicit object/array delimiters
     assert!(parse_with_options("a:1", opts.clone()).is_err());
