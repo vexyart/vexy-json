@@ -54,8 +54,10 @@ fn test_newline_as_comma_mixed_with_commas() {
 #[test]
 fn test_newline_as_comma_disabled() {
     // Test with newline_as_comma disabled
-    let mut options = ParserOptions::default();
-    options.newline_as_comma = false;
+    let options = ParserOptions {
+        newline_as_comma: false,
+        ..Default::default()
+    };
 
     let input = "[1\n2\n3]";
     let result = parse_with_options(input, options);
