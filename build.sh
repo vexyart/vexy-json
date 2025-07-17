@@ -35,10 +35,14 @@ usage() {
     echo "  llms         - Generate llms.txt file for AI context"
     echo "  clean        - Clean all build artifacts"
     echo "  debug        - Build in debug mode"
-    echo "  release      - Build in release mode"
+    echo "  test         - Run comprehensive test suite"
+    echo "  test-version - Test version management system"
+    echo "  release      - Build in release mode (includes testing)"
     echo "  install      - Install CLI to /usr/local/bin (macOS)"
     echo "  wasm         - Build WebAssembly module"
     echo "  deliverables - Build distribution packages for all platforms"
+    echo "  validate     - Validate project setup and dependencies"
+    echo "  version      - Show current version information"
     echo "  help         - Show this help message"
     echo "  (none)       - Run all build steps (equivalent to 'all')"
     echo
@@ -47,7 +51,25 @@ usage() {
 # Function to generate llms.txt
 build_llms() {
     echo -e "${BLUE}📝 Generating llms.txt...${NC}"
-    llms . "llms*.txt,*.d,*.json,*.html,*.svg,.specstory,ref,testdata,*.lock,*.svg,*.css,*.txt"
+    
+    # Check if llms command is available
+    if ! command -v llms &> /dev/null; then
+        echo -e "${YELLOW}⚠️  llms command not found, trying alternative method...${NC}"
+        
+        # Try using codetoprompt if available
+        if command -v codetoprompt &> /dev/null; then
+            echo -e "${BLUE}Using codetoprompt as alternative...${NC}"
+            codetoprompt --compress --output "llms.txt" --respect-gitignore --cxml --exclude "*.svg,.specstory,*.md,*.txt,ref,testdata,*.lock,*.svg,*.css,*.txt" .
+        else
+            echo -e "${YELLOW}⚠️  Neither llms nor codetoprompt found, skipping llms.txt generation${NC}"
+            echo -e "${YELLOW}    Install llms with: pip install llms${NC}"
+            echo -e "${YELLOW}    Or codetoprompt with: cargo install codetoprompt${NC}"
+            return 0
+        fi
+    else
+        llms . "llms*.txt,*.d,*.json,*.html,*.svg,.specstory,ref,testdata,*.lock,*.svg,*.css,*.txt"
+    fi
+    
     echo -e "${GREEN}✅ llms.txt generated successfully${NC}"
 }
 
@@ -70,9 +92,69 @@ build_debug() {
     echo -e "${GREEN}✅ Debug build completed${NC}"
 }
 
+# Function to validate project setup
+validate_project() {
+    echo -e "${BLUE}🔍 Validating project setup...${NC}"
+    
+    # Check if we're in a git repository
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then
+        echo -e "${RED}❌ Not in a git repository${NC}"
+        return 1
+    fi
+    
+    # Check if required scripts exist
+    for script in "scripts/get-version.sh" "scripts/update-versions.sh"; do
+        if [ ! -f "$script" ]; then
+            echo -e "${RED}❌ Missing required script: $script${NC}"
+            return 1
+        fi
+        
+        # Make scripts executable
+        chmod +x "$script"
+    done
+    
+    # Check Rust installation
+    if ! command -v cargo &> /dev/null; then
+        echo -e "${RED}❌ Rust/Cargo not found${NC}"
+        return 1
+    fi
+    
+    echo -e "${GREEN}✅ Project validation completed${NC}"
+    return 0
+}
+
+# Function to run comprehensive tests
+run_tests() {
+    echo -e "${BLUE}🧪 Running comprehensive test suite...${NC}"
+    
+    # Run workspace tests
+    echo -e "${BLUE}Running workspace tests...${NC}"
+    cargo test --workspace --all-features
+    
+    # Run doc tests
+    echo -e "${BLUE}Running documentation tests...${NC}"
+    cargo test --doc --workspace --all-features
+    
+    # Run example tests
+    echo -e "${BLUE}Running example tests...${NC}"
+    cargo test --examples
+    
+    # Build examples to ensure they compile
+    echo -e "${BLUE}Building examples...${NC}"
+    cargo build --examples
+    
+    echo -e "${GREEN}✅ All tests completed${NC}"
+}
+
 # Function to build in release mode
 build_release() {
     echo -e "${BLUE}🚀 Building in release mode...${NC}"
+
+    # Validate project first
+    if ! validate_project; then
+        echo -e "${RED}❌ Project validation failed${NC}"
+        return 1
+    fi
 
     # Get version
     VERSION=$(./scripts/get-version.sh 2>/dev/null || echo "dev")
@@ -82,13 +164,16 @@ build_release() {
     echo -e "${BLUE}📋 Updating version numbers...${NC}"
     ./scripts/update-versions.sh
 
+    # Run comprehensive tests
+    run_tests
+    
+    # Test version management system
+    echo -e "${BLUE}🧪 Testing version management system...${NC}"
+    ./scripts/test-version-system.sh
+
     # Build release
     echo -e "${BLUE}📦 Building release binaries...${NC}"
     cargo build --release
-
-    # Run tests
-    echo -e "${BLUE}🧪 Running tests...${NC}"
-    cargo test --release
 
     # Build documentation
     echo -e "${BLUE}📚 Building documentation...${NC}"
@@ -125,6 +210,35 @@ build_install() {
         echo -e "${RED}❌ Installation verification failed${NC}"
         exit 1
     fi
+}
+
+# Function to show version information
+show_version() {
+    echo -e "${BLUE}📊 Version Information${NC}"
+    echo "=============================================="
+    echo
+    
+    # Get version from script
+    VERSION=$(./scripts/get-version.sh 2>/dev/null || echo "unknown")
+    echo -e "${BLUE}Current version: ${GREEN}${VERSION}${NC}"
+    
+    # Show git information
+    if git rev-parse --git-dir > /dev/null 2>&1; then
+        echo -e "${BLUE}Git commit: ${GREEN}$(git rev-parse --short HEAD)${NC}"
+        echo -e "${BLUE}Git branch: ${GREEN}$(git rev-parse --abbrev-ref HEAD)${NC}"
+        
+        # Show tags
+        if git describe --tags > /dev/null 2>&1; then
+            echo -e "${BLUE}Git describe: ${GREEN}$(git describe --tags)${NC}"
+        fi
+    fi
+    
+    # Show Rust version
+    if command -v cargo &> /dev/null; then
+        echo -e "${BLUE}Rust version: ${GREEN}$(rustc --version)${NC}"
+    fi
+    
+    echo
 }
 
 # Function to build WASM
@@ -195,6 +309,21 @@ clean)
 debug)
     build_debug
     ;;
+test)
+    if ! validate_project; then
+        echo -e "${RED}❌ Project validation failed${NC}"
+        exit 1
+    fi
+    run_tests
+    ;;
+test-version)
+    if ! validate_project; then
+        echo -e "${RED}❌ Project validation failed${NC}"
+        exit 1
+    fi
+    echo -e "${BLUE}🧪 Running version management system tests...${NC}"
+    ./scripts/test-version-system.sh
+    ;;
 release)
     build_release
     ;;
@@ -206,6 +335,12 @@ wasm)
     ;;
 deliverables)
     "$SCRIPT_DIR/scripts/build-deliverables.sh"
+    ;;
+validate)
+    validate_project
+    ;;
+version)
+    show_version
     ;;
 help | --help | -h)
     usage
