@@ -128,3 +128,243 @@ impl<'a> Parser<'a> {
         Ok(Value::Array(array))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::ast::{Number, Value};
+    use crate::parser::{Parser, ParserOptions};
+    
+    // Helper functions for creating test values
+    fn n(num: i64) -> Value {
+        Value::Number(Number::Integer(num))
+    }
+    
+    fn s(s: &str) -> Value {
+        Value::String(s.to_string())
+    }
+    
+    fn arr(items: Vec<Value>) -> Value {
+        Value::Array(items)
+    }
+
+    #[test]
+    fn test_parse_empty_array() {
+        let input = "[]";
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse().unwrap();
+        assert_eq!(result, Value::Array(vec![]));
+    }
+
+    #[test]
+    fn test_parse_simple_array() {
+        let input = "[1, 2, 3]";
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![n(1), n(2), n(3)]));
+    }
+
+    #[test]
+    fn test_parse_mixed_type_array() {
+        let input = r#"[1, "hello", true, null]"#;
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![
+            n(1),
+            s("hello"),
+            Value::Bool(true),
+            Value::Null
+        ]));
+    }
+
+    #[test]
+    fn test_parse_nested_arrays() {
+        let input = "[[1, 2], [3, 4]]";
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![
+            arr(vec![n(1), n(2)]),
+            arr(vec![n(3), n(4)])
+        ]));
+    }
+
+    #[test]
+    fn test_parse_array_with_trailing_comma() {
+        let input = "[1, 2, 3,]";
+        let mut options = ParserOptions::default();
+        options.allow_trailing_commas = true;
+        let mut parser = Parser::new(input, options);
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![n(1), n(2), n(3)]));
+    }
+
+    #[test]
+    fn test_parse_array_trailing_comma_not_allowed() {
+        let input = "[1, 2, 3,]";
+        let mut options = ParserOptions::default();
+        options.allow_trailing_commas = false;
+        let mut parser = Parser::new(input, options);
+        let result = parser.parse();
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_array_with_newlines_as_commas() {
+        let input = "[1\n2\n3]";
+        let mut options = ParserOptions::default();
+        options.newline_as_comma = true;
+        let mut parser = Parser::new(input, options);
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![n(1), n(2), n(3)]));
+    }
+
+    #[test]
+    fn test_parse_array_sparse_consecutive_commas() {
+        let input = "[1,,3]";
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![n(1), Value::Null, n(3)]));
+    }
+
+    #[test]
+    fn test_parse_array_starting_with_comma() {
+        let input = "[,1,2]";
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![Value::Null, n(1), n(2)]));
+    }
+
+    #[test]
+    fn test_parse_array_multiple_consecutive_commas() {
+        let input = "[1,,,4]";
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![n(1), Value::Null, Value::Null, n(4)]));
+    }
+
+    #[test]
+    fn test_parse_array_with_comments() {
+        let input = r#"[1, /* comment */ 2, 3]"#;
+        let mut options = ParserOptions::default();
+        options.allow_comments = true;
+        let mut parser = Parser::new(input, options);
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![n(1), n(2), n(3)]));
+    }
+
+    #[test]
+    fn test_parse_array_with_line_comments() {
+        let input = "[\n  1, // comment\n  2,\n  3\n]";
+        let mut options = ParserOptions::default();
+        options.allow_comments = true;
+        let mut parser = Parser::new(input, options);
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![n(1), n(2), n(3)]));
+    }
+
+    #[test]
+    fn test_parse_array_with_trailing_newline_comma() {
+        let input = "[1\n2\n3\n]";
+        let mut options = ParserOptions::default();
+        options.newline_as_comma = true;
+        options.allow_trailing_commas = true;
+        let mut parser = Parser::new(input, options);
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![n(1), n(2), n(3)]));
+    }
+
+    #[test]
+    fn test_parse_array_deeply_nested() {
+        let input = "[[[[1]]]]";
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![
+            arr(vec![
+                arr(vec![
+                    arr(vec![n(1)])
+                ])
+            ])
+        ]));
+    }
+
+    #[test]
+    fn test_parse_array_with_objects() {
+        let input = r#"[{"a": 1}, {"b": 2}]"#;
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse().unwrap();
+        
+        if let Value::Array(arr) = result {
+            assert_eq!(arr.len(), 2);
+            
+            // Check first object
+            if let Value::Object(obj1) = &arr[0] {
+                assert_eq!(obj1.get("a").unwrap(), &n(1));
+            } else {
+                panic!("Expected object at index 0");
+            }
+            
+            // Check second object
+            if let Value::Object(obj2) = &arr[1] {
+                assert_eq!(obj2.get("b").unwrap(), &n(2));
+            } else {
+                panic!("Expected object at index 1");
+            }
+        } else {
+            panic!("Expected array");
+        }
+    }
+
+    #[test]
+    fn test_parse_array_depth_limit() {
+        let input = "[".repeat(1000) + &"]".repeat(1000);
+        let mut options = ParserOptions::default();
+        options.max_depth = 100;
+        let mut parser = Parser::new(&input, options);
+        let result = parser.parse();
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_array_whitespace_handling() {
+        let input = "[\n  1,\n  2,\n  3\n]";
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![n(1), n(2), n(3)]));
+    }
+
+    #[test]
+    fn test_parse_array_mixed_separators() {
+        let input = "[1, 2\n3, 4]";
+        let mut options = ParserOptions::default();
+        options.newline_as_comma = true;
+        let mut parser = Parser::new(input, options);
+        let result = parser.parse().unwrap();
+        assert_eq!(result, arr(vec![n(1), n(2), n(3), n(4)]));
+    }
+
+    #[test]
+    fn test_parse_array_error_unclosed() {
+        let input = "[1, 2, 3";
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse();
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_array_error_invalid_token() {
+        let input = "[1, 2, @]";
+        let mut parser = Parser::new(input, ParserOptions::default());
+        let result = parser.parse();
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_array_error_missing_separator() {
+        let input = "[1 2 3]";
+        let mut options = ParserOptions::default();
+        options.newline_as_comma = false; // Ensure newlines are not treated as commas
+        let mut parser = Parser::new(input, options);
+        let result = parser.parse();
+        // This should fail because whitespace is not a valid separator
+        assert!(result.is_err());
+    }
+}
