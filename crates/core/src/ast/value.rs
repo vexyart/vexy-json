@@ -220,3 +220,278 @@ impl Index<usize> for Value {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_value_is_type_checkers() {
+        let null_val = Value::Null;
+        let bool_val = Value::Bool(true);
+        let num_val = Value::Number(Number::Integer(42));
+        let str_val = Value::String("hello".to_string());
+        let arr_val = Value::Array(vec![Value::Null]);
+        let obj_val = Value::Object(FxHashMap::default());
+
+        // Test is_null
+        assert!(null_val.is_null());
+        assert!(!bool_val.is_null());
+        assert!(!num_val.is_null());
+        assert!(!str_val.is_null());
+        assert!(!arr_val.is_null());
+        assert!(!obj_val.is_null());
+
+        // Test is_bool
+        assert!(!null_val.is_bool());
+        assert!(bool_val.is_bool());
+        assert!(!num_val.is_bool());
+        assert!(!str_val.is_bool());
+        assert!(!arr_val.is_bool());
+        assert!(!obj_val.is_bool());
+
+        // Test is_number
+        assert!(!null_val.is_number());
+        assert!(!bool_val.is_number());
+        assert!(num_val.is_number());
+        assert!(!str_val.is_number());
+        assert!(!arr_val.is_number());
+        assert!(!obj_val.is_number());
+
+        // Test is_string
+        assert!(!null_val.is_string());
+        assert!(!bool_val.is_string());
+        assert!(!num_val.is_string());
+        assert!(str_val.is_string());
+        assert!(!arr_val.is_string());
+        assert!(!obj_val.is_string());
+
+        // Test is_array
+        assert!(!null_val.is_array());
+        assert!(!bool_val.is_array());
+        assert!(!num_val.is_array());
+        assert!(!str_val.is_array());
+        assert!(arr_val.is_array());
+        assert!(!obj_val.is_array());
+
+        // Test is_object
+        assert!(!null_val.is_object());
+        assert!(!bool_val.is_object());
+        assert!(!num_val.is_object());
+        assert!(!str_val.is_object());
+        assert!(!arr_val.is_object());
+        assert!(obj_val.is_object());
+    }
+
+    #[test]
+    fn test_value_as_bool() {
+        let true_val = Value::Bool(true);
+        let false_val = Value::Bool(false);
+        let null_val = Value::Null;
+        let num_val = Value::Number(Number::Integer(42));
+
+        assert_eq!(true_val.as_bool(), Some(true));
+        assert_eq!(false_val.as_bool(), Some(false));
+        assert_eq!(null_val.as_bool(), None);
+        assert_eq!(num_val.as_bool(), None);
+    }
+
+    #[test]
+    fn test_value_as_i64() {
+        let int_val = Value::Number(Number::Integer(42));
+        let float_val = Value::Number(Number::Float(3.14));
+        let float_int_val = Value::Number(Number::Float(5.0));
+        let large_float_val = Value::Number(Number::Float(1e20));
+        let null_val = Value::Null;
+
+        assert_eq!(int_val.as_i64(), Some(42));
+        assert_eq!(float_val.as_i64(), None); // Has fractional part
+        assert_eq!(float_int_val.as_i64(), Some(5)); // No fractional part
+        assert_eq!(large_float_val.as_i64(), None); // Too large for i64
+        assert_eq!(null_val.as_i64(), None);
+    }
+
+    #[test]
+    fn test_value_as_f64() {
+        let int_val = Value::Number(Number::Integer(42));
+        let float_val = Value::Number(Number::Float(3.14));
+        let null_val = Value::Null;
+        let str_val = Value::String("hello".to_string());
+
+        assert_eq!(int_val.as_f64(), Some(42.0));
+        assert_eq!(float_val.as_f64(), Some(3.14));
+        assert_eq!(null_val.as_f64(), None);
+        assert_eq!(str_val.as_f64(), None);
+    }
+
+    #[test]
+    fn test_value_as_str() {
+        let str_val = Value::String("hello".to_string());
+        let null_val = Value::Null;
+        let num_val = Value::Number(Number::Integer(42));
+
+        assert_eq!(str_val.as_str(), Some("hello"));
+        assert_eq!(null_val.as_str(), None);
+        assert_eq!(num_val.as_str(), None);
+    }
+
+    #[test]
+    fn test_value_as_array() {
+        let arr_val = Value::Array(vec![Value::Null, Value::Bool(true)]);
+        let null_val = Value::Null;
+        let str_val = Value::String("hello".to_string());
+
+        assert_eq!(arr_val.as_array(), Some(&vec![Value::Null, Value::Bool(true)]));
+        assert_eq!(null_val.as_array(), None);
+        assert_eq!(str_val.as_array(), None);
+    }
+
+    #[test]
+    fn test_value_as_object() {
+        let mut map = FxHashMap::default();
+        map.insert("key".to_string(), Value::String("value".to_string()));
+        let obj_val = Value::Object(map.clone());
+        let null_val = Value::Null;
+        let arr_val = Value::Array(vec![]);
+
+        assert_eq!(obj_val.as_object(), Some(&map));
+        assert_eq!(null_val.as_object(), None);
+        assert_eq!(arr_val.as_object(), None);
+    }
+
+    #[test]
+    fn test_value_index_str() {
+        let mut map = FxHashMap::default();
+        map.insert("name".to_string(), Value::String("John".to_string()));
+        map.insert("age".to_string(), Value::Number(Number::Integer(30)));
+        let obj_val = Value::Object(map);
+
+        assert_eq!(obj_val["name"], Value::String("John".to_string()));
+        assert_eq!(obj_val["age"], Value::Number(Number::Integer(30)));
+        assert_eq!(obj_val["missing"], Value::Null);
+
+        // Test indexing non-object returns null
+        let arr_val = Value::Array(vec![]);
+        assert_eq!(arr_val["any"], Value::Null);
+    }
+
+    #[test]
+    fn test_value_index_usize() {
+        let arr_val = Value::Array(vec![
+            Value::String("first".to_string()),
+            Value::Number(Number::Integer(42)),
+            Value::Bool(true),
+        ]);
+
+        assert_eq!(arr_val[0], Value::String("first".to_string()));
+        assert_eq!(arr_val[1], Value::Number(Number::Integer(42)));
+        assert_eq!(arr_val[2], Value::Bool(true));
+        assert_eq!(arr_val[99], Value::Null); // Out of bounds
+
+        // Test indexing non-array returns null
+        let obj_val = Value::Object(FxHashMap::default());
+        assert_eq!(obj_val[0], Value::Null);
+    }
+
+    #[test]
+    fn test_number_as_f64() {
+        let int_num = Number::Integer(42);
+        let float_num = Number::Float(3.14);
+
+        assert_eq!(int_num.as_f64(), 42.0);
+        assert_eq!(float_num.as_f64(), 3.14);
+    }
+
+    #[test]
+    fn test_value_display() {
+        let null_val = Value::Null;
+        let bool_val = Value::Bool(true);
+        let int_val = Value::Number(Number::Integer(42));
+        let float_val = Value::Number(Number::Float(3.14));
+        let str_val = Value::String("hello".to_string());
+
+        assert_eq!(null_val.to_string(), "null");
+        assert_eq!(bool_val.to_string(), "true");
+        assert_eq!(int_val.to_string(), "42");
+        assert_eq!(float_val.to_string(), "3.14");
+        assert_eq!(str_val.to_string(), "\"hello\"");
+    }
+
+    #[test]
+    fn test_value_display_array() {
+        let arr_val = Value::Array(vec![
+            Value::Number(Number::Integer(1)),
+            Value::Number(Number::Integer(2)),
+            Value::Number(Number::Integer(3)),
+        ]);
+
+        assert_eq!(arr_val.to_string(), "[1, 2, 3]");
+
+        let empty_arr = Value::Array(vec![]);
+        assert_eq!(empty_arr.to_string(), "[]");
+    }
+
+    #[test]
+    fn test_value_display_object() {
+        let mut map = FxHashMap::default();
+        map.insert("name".to_string(), Value::String("John".to_string()));
+        let obj_val = Value::Object(map);
+
+        assert_eq!(obj_val.to_string(), "{\"name\": \"John\"}");
+
+        let empty_obj = Value::Object(FxHashMap::default());
+        assert_eq!(empty_obj.to_string(), "{}");
+    }
+
+    #[test]
+    fn test_number_display() {
+        let int_num = Number::Integer(42);
+        let float_num = Number::Float(3.14);
+
+        assert_eq!(int_num.to_string(), "42");
+        assert_eq!(float_num.to_string(), "3.14");
+    }
+
+    #[test]
+    fn test_value_equality() {
+        let val1 = Value::Number(Number::Integer(42));
+        let val2 = Value::Number(Number::Integer(42));
+        let val3 = Value::Number(Number::Integer(43));
+
+        assert_eq!(val1, val2);
+        assert_ne!(val1, val3);
+    }
+
+    #[test]
+    fn test_number_equality() {
+        let int1 = Number::Integer(42);
+        let int2 = Number::Integer(42);
+        let int3 = Number::Integer(43);
+        let float1 = Number::Float(42.0);
+
+        assert_eq!(int1, int2);
+        assert_ne!(int1, int3);
+        assert_ne!(int1, float1); // Different variants are not equal
+    }
+
+    #[test]
+    fn test_as_i64_edge_cases() {
+        // Test max and min i64 values
+        let max_int = Value::Number(Number::Integer(i64::MAX));
+        let min_int = Value::Number(Number::Integer(i64::MIN));
+        
+        assert_eq!(max_int.as_i64(), Some(i64::MAX));
+        assert_eq!(min_int.as_i64(), Some(i64::MIN));
+
+        // Test float edge cases
+        let max_float = Value::Number(Number::Float(i64::MAX as f64));
+        let min_float = Value::Number(Number::Float(i64::MIN as f64));
+        let too_large = Value::Number(Number::Float(1e20));
+        let negative_zero = Value::Number(Number::Float(-0.0));
+
+        assert_eq!(max_float.as_i64(), Some(i64::MAX));
+        assert_eq!(min_float.as_i64(), Some(i64::MIN));
+        assert_eq!(too_large.as_i64(), None);
+        assert_eq!(negative_zero.as_i64(), Some(0));
+    }
+}

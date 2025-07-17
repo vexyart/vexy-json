@@ -505,3 +505,247 @@ impl Error {
         )
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_error_code_as_str() {
+        assert_eq!(ErrorCode::UnexpectedCharacter.as_str(), "E1001");
+        assert_eq!(ErrorCode::UnexpectedEndOfInput.as_str(), "E1002");
+        assert_eq!(ErrorCode::InvalidNumberFormat.as_str(), "E1003");
+        assert_eq!(ErrorCode::InvalidEscapeSequence.as_str(), "E1004");
+        assert_eq!(ErrorCode::InvalidUnicodeEscape.as_str(), "E1005");
+        assert_eq!(ErrorCode::UnterminatedString.as_str(), "E1006");
+        assert_eq!(ErrorCode::TrailingComma.as_str(), "E1007");
+        assert_eq!(ErrorCode::ExpectedToken.as_str(), "E1008");
+        assert_eq!(ErrorCode::DepthLimitExceeded.as_str(), "E1009");
+        assert_eq!(ErrorCode::Custom.as_str(), "E1010");
+        assert_eq!(ErrorCode::WithContext.as_str(), "E1011");
+        assert_eq!(ErrorCode::RepairFailed.as_str(), "E1012");
+        assert_eq!(ErrorCode::BracketMismatch.as_str(), "E1013");
+        assert_eq!(ErrorCode::UnbalancedBrackets.as_str(), "E1014");
+        assert_eq!(ErrorCode::MaxRepairsExceeded.as_str(), "E1015");
+        assert_eq!(ErrorCode::InvalidUtf8.as_str(), "E1016");
+        assert_eq!(ErrorCode::InvalidChunk.as_str(), "E1017");
+    }
+
+    #[test]
+    fn test_error_code_description() {
+        assert_eq!(ErrorCode::UnexpectedCharacter.description(), "Unexpected character encountered");
+        assert_eq!(ErrorCode::InvalidNumberFormat.description(), "Invalid number format");
+        assert_eq!(ErrorCode::TrailingComma.description(), "Trailing comma found");
+        assert_eq!(ErrorCode::DepthLimitExceeded.description(), "Maximum nesting depth exceeded");
+    }
+
+    #[test]
+    fn test_error_code_suggestions() {
+        let suggestions = ErrorCode::UnexpectedCharacter.suggestions();
+        assert!(!suggestions.is_empty());
+        assert!(suggestions.contains(&"Check for typos in your JSON syntax"));
+
+        let number_suggestions = ErrorCode::InvalidNumberFormat.suggestions();
+        assert!(number_suggestions.contains(&"Check for leading zeros in numbers"));
+        assert!(number_suggestions.contains(&"Ensure decimal numbers have digits after the decimal point"));
+    }
+
+    #[test]
+    fn test_error_code_display() {
+        assert_eq!(ErrorCode::UnexpectedCharacter.to_string(), "E1001");
+        assert_eq!(ErrorCode::InvalidNumberFormat.to_string(), "E1003");
+    }
+
+    #[test]
+    fn test_error_code() {
+        let error = Error::UnexpectedChar('x', 5);
+        assert_eq!(error.code(), ErrorCode::UnexpectedCharacter);
+
+        let error = Error::InvalidNumber(10);
+        assert_eq!(error.code(), ErrorCode::InvalidNumberFormat);
+
+        let error = Error::TrailingComma(20);
+        assert_eq!(error.code(), ErrorCode::TrailingComma);
+
+        let error = Error::Expected {
+            expected: "value".to_string(),
+            found: "EOF".to_string(),
+            position: 15,
+        };
+        assert_eq!(error.code(), ErrorCode::ExpectedToken);
+    }
+
+    #[test]
+    fn test_error_position() {
+        let error = Error::UnexpectedChar('x', 5);
+        assert_eq!(error.position(), Some(5));
+
+        let error = Error::InvalidNumber(10);
+        assert_eq!(error.position(), Some(10));
+
+        let error = Error::Expected {
+            expected: "value".to_string(),
+            found: "EOF".to_string(),
+            position: 15,
+        };
+        assert_eq!(error.position(), Some(15));
+
+        let error = Error::Custom("Custom error".to_string());
+        assert_eq!(error.position(), None);
+
+        let error = Error::UnbalancedBrackets(1, 2);
+        assert_eq!(error.position(), None);
+    }
+
+    #[test]
+    fn test_error_span() {
+        let error = Error::UnexpectedChar('x', 5);
+        let span = error.span();
+        assert_eq!(span, Some(Span::single(5)));
+
+        let error = Error::Custom("Custom error".to_string());
+        assert_eq!(error.span(), None);
+    }
+
+    #[test]
+    fn test_error_suggestions() {
+        let error = Error::UnexpectedChar('x', 5);
+        let suggestions = error.suggestions();
+        assert!(!suggestions.is_empty());
+        assert!(suggestions.contains(&"Check for typos in your JSON syntax"));
+
+        let error = Error::InvalidNumber(10);
+        let suggestions = error.suggestions();
+        assert!(suggestions.contains(&"Check for leading zeros in numbers"));
+    }
+
+    #[test]
+    fn test_error_diagnostic() {
+        let error = Error::UnexpectedChar('x', 5);
+        let diagnostic = error.diagnostic();
+        assert!(diagnostic.contains("[E1001]"));
+        assert!(diagnostic.contains("Unexpected character"));
+        assert!(diagnostic.contains("Suggestions:"));
+        assert!(diagnostic.contains("Check for typos"));
+    }
+
+    #[test]
+    fn test_error_with_context() {
+        let base_error = Error::InvalidNumber(10);
+        let wrapped_error = base_error.with_context("parsing array element");
+        
+        assert_eq!(wrapped_error.code(), ErrorCode::WithContext);
+        assert_eq!(wrapped_error.position(), Some(10)); // Should delegate to source
+        
+        match wrapped_error {
+            Error::WithContext { message, source } => {
+                assert_eq!(message, "parsing array element");
+                assert_eq!(*source.as_ref(), Error::InvalidNumber(10));
+            }
+            _ => panic!("Expected WithContext error"),
+        }
+    }
+
+    #[test]
+    fn test_error_with_parsing_context() {
+        let base_error = Error::UnexpectedChar('x', 5);
+        let wrapped_error = base_error.with_parsing_context("object key", Span::single(5));
+        
+        assert_eq!(wrapped_error.code(), ErrorCode::WithContext);
+        
+        match wrapped_error {
+            Error::WithContext { message, source } => {
+                assert!(message.contains("While parsing object key"));
+                assert_eq!(*source.as_ref(), Error::UnexpectedChar('x', 5));
+            }
+            _ => panic!("Expected WithContext error"),
+        }
+    }
+
+    #[test]
+    fn test_error_is_string_error() {
+        assert!(Error::InvalidEscape(5).is_string_error());
+        assert!(Error::InvalidUnicode(10).is_string_error());
+        assert!(Error::UnterminatedString(0).is_string_error());
+        
+        assert!(!Error::InvalidNumber(5).is_string_error());
+        assert!(!Error::UnexpectedChar('x', 5).is_string_error());
+    }
+
+    #[test]
+    fn test_error_is_number_error() {
+        assert!(Error::InvalidNumber(5).is_number_error());
+        
+        assert!(!Error::InvalidEscape(5).is_number_error());
+        assert!(!Error::UnexpectedChar('x', 5).is_number_error());
+    }
+
+    #[test]
+    fn test_error_is_structural_error() {
+        assert!(Error::UnexpectedChar('x', 5).is_structural_error());
+        assert!(Error::UnexpectedEof(10).is_structural_error());
+        assert!(Error::TrailingComma(15).is_structural_error());
+        assert!(Error::DepthLimitExceeded(20).is_structural_error());
+        assert!(Error::Expected {
+            expected: "value".to_string(),
+            found: "EOF".to_string(),
+            position: 25,
+        }.is_structural_error());
+        
+        assert!(!Error::InvalidNumber(5).is_structural_error());
+        assert!(!Error::InvalidEscape(5).is_structural_error());
+        assert!(!Error::Custom("error".to_string()).is_structural_error());
+    }
+
+    #[test]
+    fn test_error_display_formatting() {
+        let error = Error::UnexpectedChar('x', 5);
+        assert_eq!(error.to_string(), "Unexpected character 'x' at position 5");
+
+        let error = Error::InvalidNumber(10);
+        assert_eq!(error.to_string(), "Invalid number format at position 10");
+
+        let error = Error::Expected {
+            expected: "value".to_string(),
+            found: "EOF".to_string(),
+            position: 15,
+        };
+        assert_eq!(error.to_string(), "Expected value but found EOF at position 15");
+
+        let error = Error::Custom("Custom error message".to_string());
+        assert_eq!(error.to_string(), "Custom error: Custom error message");
+    }
+
+    #[test]
+    fn test_error_equality() {
+        let error1 = Error::UnexpectedChar('x', 5);
+        let error2 = Error::UnexpectedChar('x', 5);
+        let error3 = Error::UnexpectedChar('y', 5);
+        let error4 = Error::UnexpectedChar('x', 6);
+
+        assert_eq!(error1, error2);
+        assert_ne!(error1, error3);
+        assert_ne!(error1, error4);
+
+        let error5 = Error::InvalidNumber(10);
+        let error6 = Error::InvalidNumber(10);
+        let error7 = Error::InvalidNumber(11);
+
+        assert_eq!(error5, error6);
+        assert_ne!(error5, error7);
+        assert_ne!(error1, error5);
+    }
+
+    #[test]
+    fn test_nested_error_position() {
+        let base_error = Error::InvalidNumber(10);
+        let wrapped_error = base_error.with_context("parsing array element");
+        
+        // Position should delegate to the source error
+        assert_eq!(wrapped_error.position(), Some(10));
+        
+        // Double wrapping should still work
+        let double_wrapped = wrapped_error.with_context("parsing JSON document");
+        assert_eq!(double_wrapped.position(), Some(10));
+    }
+}
