@@ -8,6 +8,29 @@ This directory contains the documentation website and interactive web tool for V
 
 Fixed a major bug where WebAssembly bindings returned JavaScript Maps instead of plain objects for parsed JSON. Objects like `{a:1}` now correctly return `{"a":1}` instead of empty objects. See [Troubleshooting](troubleshooting.md) for details.
 
+## Development Quick Start
+
+### Building and Testing
+```bash
+# Complete build with all tests
+./build.sh
+
+# Quick development checks
+./scripts/dev-workflow.sh check
+
+# Create a new release
+./scripts/release.sh --version 2.0.8
+```
+
+### Available Commands
+- `./build.sh` - Complete build and test
+- `./build.sh test` - Run comprehensive tests
+- `./build.sh version` - Show version information
+- `./scripts/dev-workflow.sh setup` - Set up development environment
+- `./scripts/release.sh --version X.Y.Z` - Create a release
+
+For complete development and release documentation, see [RELEASE_GUIDE.md](RELEASE_GUIDE.md).
+
 ## Structure
 
 - **Jekyll Site**: The main documentation is built with Jekyll using the `just-the-docs` theme
