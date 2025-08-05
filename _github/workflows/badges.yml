@@ -1,0 +1,34 @@
+name: Update Badges
+
+on:
+  workflow_run:
+    workflows: ["CI", "Release"]
+    types:
+      - completed
+  schedule:
+    - cron: '0 0 * * *'  # Daily update
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Update README badges
+        run: |
+          # This is a placeholder for badge generation
+          # In practice, badges are usually served dynamically by shields.io
+          echo "Badges are dynamically updated via shields.io"
+          
+      - name: Trigger docs update
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Release'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'docs.yml',
+              ref: 'main'
+            })
