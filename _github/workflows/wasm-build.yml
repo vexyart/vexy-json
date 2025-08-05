@@ -1,0 +1,220 @@
+name: Build and Deploy WASM
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'build-wasm.sh'
+      - 'docs/**'
+      - '.github/workflows/wasm-build.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'Cargo.toml'
+      - 'build-wasm.sh'
+  workflow_dispatch: # Allow manual triggering
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-wasm:
+    name: Build WebAssembly Module
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-wasm-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-wasm-
+
+      - name: Install wasm-pack
+        run: |
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - name: Build WASM module
+        run: |
+          chmod +x ./build-wasm.sh
+          ./build-wasm.sh
+
+      - name: Verify build outputs
+        run: |
+          echo "Checking WASM build outputs..."
+          ls -la docs/pkg/
+          if [ ! -f "docs/pkg/vexy_json.js" ] || [ ! -f "docs/pkg/vexy_json_bg.wasm" ]; then
+            echo "❌ WASM build failed - missing required files"
+            exit 1
+          fi
+          echo "✅ WASM build successful"
+          echo "Bundle sizes:"
+          du -h docs/pkg/vexy_json.js docs/pkg/vexy_json_bg.wasm
+
+      - name: Upload WASM artifacts
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasm-module
+          path: |
+            docs/pkg/
+          retention-days: 30
+
+  test-wasm:
+    name: Test WebAssembly Module
+    needs: build-wasm
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download WASM artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: wasm-module
+          path: docs/pkg/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install test dependencies
+        run: |
+          npm init -y
+          npm install --save-dev playwright @playwright/test
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Create WASM test
+        run: |
+          cat > test-wasm.js << 'EOF'
+          const { chromium } = require('playwright');
+          const path = require('path');
+          const fs = require('fs');
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const context = await browser.newContext();
+            const page = await context.newPage();
+            
+            // Start a local server
+            const express = require('express');
+            const app = express();
+            app.use(express.static('docs'));
+            const server = app.listen(0);
+            const port = server.address().port;
+            
+            try {
+              // Navigate to the tool
+              await page.goto(`http://localhost:${port}/tool.html`);
+              
+              // Wait for WASM to load
+              await page.waitForFunction(() => window.vexy_json !== undefined, { timeout: 10000 });
+              
+              // Test basic parsing
+              const result = await page.evaluate(() => {
+                const testCases = [
+                  { input: '{"key": "value"}', expected: true },
+                  { input: '{key: "value"}', expected: true }, // unquoted key
+                  { input: '{"key": "value",}', expected: true }, // trailing comma
+                  { input: "{'key': 'value'}", expected: true }, // single quotes
+                  { input: '// comment\n{"key": "value"}', expected: true }, // comment
+                ];
+                
+                const results = testCases.map(test => {
+                  try {
+                    const parsed = window.vexy_json.parse(test.input);
+                    return { input: test.input, success: true, parsed };
+                  } catch (e) {
+                    return { input: test.input, success: false, error: e.message };
+                  }
+                });
+                
+                return results;
+              });
+              
+              console.log('WASM Test Results:');
+              result.forEach(r => {
+                console.log(`✅ ${r.input} -> ${r.success ? 'PASS' : 'FAIL'}`);
+              });
+              
+              // Test performance
+              const perfResult = await page.evaluate(() => {
+                const largeJson = JSON.stringify(Array(1000).fill({key: "value"}));
+                const start = performance.now();
+                window.vexy_json.parse(largeJson);
+                const end = performance.now();
+                return end - start;
+              });
+              
+              console.log(`\nPerformance: Parsed 1000-item array in ${perfResult.toFixed(2)}ms`);
+              
+            } finally {
+              server.close();
+              await browser.close();
+            }
+          })();
+          EOF
+
+          # Install express for local server
+          npm install express
+
+      - name: Run WASM tests
+        run: node test-wasm.js
+
+  deploy-docs:
+    name: Deploy to GitHub Pages
+    needs: [build-wasm, test-wasm]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: 'pages'
+      cancel-in-progress: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download WASM artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: wasm-module
+          path: docs/pkg/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Print deployment URL
+        run: |
+          echo "🚀 Deployed to GitHub Pages!"
+          echo "📍 Tool URL: https://twardoch.github.io/vexy_json/tool.html"
