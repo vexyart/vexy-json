@@ -144,7 +144,7 @@ jobs:
 
       - name: Download build artifact
         if: github.ref == 'refs/heads/main'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: github-pages
           path: ./site-test
