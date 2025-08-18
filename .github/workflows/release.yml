@@ -23,7 +23,7 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       version: ${{ steps.get_version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Get version
         id: get_version
@@ -138,7 +138,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Update version numbers
         shell: bash
@@ -191,7 +191,7 @@ jobs:
     needs: create-release
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Update version numbers
         shell: bash
@@ -251,7 +251,7 @@ jobs:
     needs: create-release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Update version numbers
         shell: bash
@@ -293,7 +293,7 @@ jobs:
     needs: [create-release, build-binaries]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Update version numbers
         shell: bash
@@ -323,7 +323,7 @@ jobs:
     needs: [create-release, build-wasm]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Update version numbers
         shell: bash
@@ -357,7 +357,7 @@ jobs:
     needs: [create-release, build-macos-installer]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Update Homebrew Formula
         env:
@@ -371,7 +371,7 @@ jobs:
     needs: [build-binaries, build-macos-installer, build-wasm, publish-crates]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Publish Release
         env:
