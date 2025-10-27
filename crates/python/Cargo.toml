@@ -18,7 +18,7 @@ rustc-hash = "2.1"
 
 
 [dependencies.pyo3]
-version = "0.25"
+version = "0.27"
 features = [ "extension-module" ]
 
 
