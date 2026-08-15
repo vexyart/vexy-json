@@ -3,6 +3,12 @@
 
 set -euo pipefail
 
+# Release automation must never hand control to an interactive pager. In
+# particular, `git diff --cached --check` runs immediately after preflight and
+# otherwise may open `less`, leaving the operator at an unexplained `(END)`.
+export GIT_PAGER=cat
+export PAGER=cat
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 MODE="real"
 TEMP_DIR=""
@@ -10,15 +16,12 @@ PHASE="startup"
 TARGET_VERSION=""
 TARGET_TAG=""
 RELEASE_COMMIT=""
+REMOTE_BASE=""
+LATEST_VERSION=""
+SNAPSHOT_COMMIT=""
+CHECKPOINT_CREATED=0
+CHECKPOINT_MESSAGE="chore: checkpoint work before release"
 COMPLETED=()
-RUST_PACKAGES=(
-    vexy-json-core
-    vexy-json-serde
-    vexy-json-cli
-    vexy-json-wasm
-    vexy-json-c-api
-    vexy-json
-)
 MANIFEST_ALLOWLIST=(
     Cargo.toml
     crates/c-api/Cargo.toml
@@ -44,7 +47,15 @@ finish() {
             printf 'Confirmed published artifacts:\n' >&2
             printf '  %s\n' "${COMPLETED[@]}" >&2
         fi
-        if [[ "$PHASE" == prepare-target || "$PHASE" == target-build ]]; then
+        if (( CHECKPOINT_CREATED == 1 )); then
+            printf 'Checkpoint commit %s was preserved; no files were stashed, reset, cleaned, or discarded.\n' \
+                "$SNAPSHOT_COMMIT" >&2
+        elif [[ -n "$SNAPSHOT_COMMIT" ]]; then
+            printf 'Checkpoint baseline %s was preserved; no files were stashed, reset, cleaned, or discarded.\n' \
+                "$SNAPSHOT_COMMIT" >&2
+        fi
+        if [[ "$PHASE" == prepare-target || "$PHASE" == target-build || \
+              "$PHASE" == release-boundary ]]; then
             printf 'Synchronized manifest changes were preserved for review; nothing was discarded.\n' >&2
         elif [[ "$PHASE" == create-release || "$PHASE" == verify-refs ]]; then
             printf 'Release refs were preserved. Inspect local and live origin refs; do not rewrite them automatically.\n' >&2
@@ -129,13 +140,12 @@ read_only_preflight() {
         printf 'release manifest helper is missing or not executable.\n' >&2
         return 1
     }
-    [[ -z "$(git -C "$ROOT" status --porcelain=v1 --untracked-files=all)" ]] || {
-        printf 'Publish requires a completely clean tree, including untracked files.\n' >&2
-        git -C "$ROOT" status --short >&2
+    [[ -z "$(git -C "$ROOT" ls-files -u)" ]] || {
+        printf 'Publish cannot checkpoint a tree with unresolved conflicts.\n' >&2
         return 1
     }
 
-    local branch upstream head remote_head
+    local branch upstream head repository_state
     branch="$(git -C "$ROOT" symbolic-ref --quiet --short HEAD)" || {
         printf 'Publish requires an attached branch.\n' >&2
         return 1
@@ -154,11 +164,21 @@ read_only_preflight() {
     }
     git -C "$ROOT" remote get-url origin >/dev/null
     head="$(git -C "$ROOT" rev-parse HEAD)"
-    remote_head="$(git -C "$ROOT" ls-remote --exit-code origin refs/heads/main | awk 'NR == 1 {print $1}')"
-    [[ -n "$remote_head" && "$head" == "$remote_head" ]] || {
-        printf 'Local HEAD and live origin/main differ. local=%s remote=%s\n' "$head" "$remote_head" >&2
+    REMOTE_BASE="$(git -C "$ROOT" ls-remote --exit-code origin refs/heads/main | awk 'NR == 1 {print $1}')"
+    [[ -n "$REMOTE_BASE" ]] || {
+        printf 'Live origin/main is missing.\n' >&2
         return 1
     }
+    if [[ "$head" == "$REMOTE_BASE" ]]; then
+        repository_state="equal"
+    elif git -C "$ROOT" cat-file -e "$REMOTE_BASE^{commit}" 2>/dev/null && \
+         git -C "$ROOT" merge-base --is-ancestor "$REMOTE_BASE" "$head"; then
+        repository_state="local-ahead"
+    else
+        printf 'Live origin/main is ahead of or diverged from local HEAD. local=%s remote=%s\n' \
+            "$head" "$REMOTE_BASE" >&2
+        return 1
+    fi
 
     local tags_file="$TEMP_DIR/tags.txt"
     git -C "$ROOT" tag --list 'v*' >"$tags_file"
@@ -173,9 +193,10 @@ read_only_preflight() {
     TARGET_VERSION="$(python3 "$ROOT/scripts/release-manifests.py" next-patch <"$tags_file")"
     TARGET_TAG="v$TARGET_VERSION"
 
-    local major minor patch latest_tag local_latest remote_latest current
+    local major minor patch latest_tag local_latest remote_latest
     IFS=. read -r major minor patch <<<"$TARGET_VERSION"
     latest_tag="v$major.$minor.$((patch - 1))"
+    LATEST_VERSION="${latest_tag#v}"
     local_latest="$(git -C "$ROOT" rev-parse "$latest_tag^{commit}")" || {
         printf 'Latest canonical tag is missing locally: %s\n' "$latest_tag" >&2
         return 1
@@ -191,12 +212,37 @@ read_only_preflight() {
         return 1
     fi
 
-    current="$(python3 "$ROOT/scripts/release-manifests.py" check)"
-    [[ "$current" == "${latest_tag#v}" ]] || {
-        printf 'Cargo version %s does not equal latest release tag %s.\n' "$current" "$latest_tag" >&2
+    printf 'Preflight passed: predicted=%s branch=%s repository=%s remote-base=%s\n' \
+        "$TARGET_VERSION" "$branch" "$repository_state" "$REMOTE_BASE"
+}
+
+report_checkpoint_plan() {
+    PHASE="dry-run-plan"
+    local changes
+    changes="$(git -C "$ROOT" status --short --untracked-files=all)"
+    if [[ -n "$changes" ]]; then
+        printf 'Would checkpoint these non-ignored changes:\n%s\n' "$changes"
+    else
+        printf 'No checkpoint commit would be needed.\n'
+    fi
+}
+
+checkpoint_changes() {
+    PHASE="checkpoint"
+    git -C "$ROOT" add -A -- .
+    git -C "$ROOT" diff --cached --check
+    if git -C "$ROOT" diff --cached --quiet; then
+        printf 'Checkpoint not needed: working tree already clean.\n'
+    else
+        git -C "$ROOT" commit -m "$CHECKPOINT_MESSAGE"
+        CHECKPOINT_CREATED=1
+    fi
+    [[ -z "$(git -C "$ROOT" status --porcelain=v1 --untracked-files=all)" ]] || {
+        printf 'Checkpoint did not produce a clean tree.\n' >&2
         return 1
     }
-    printf 'Preflight passed: current=%s predicted=%s branch=%s\n' "$current" "$TARGET_VERSION" "$branch"
+    SNAPSHOT_COMMIT="$(git -C "$ROOT" rev-parse HEAD)"
+    printf 'Checkpoint commit: %s\n' "$SNAPSHOT_COMMIT"
 }
 
 python_package_gate() {
@@ -233,13 +279,15 @@ PY
 
 pre_mutation_gates() {
     PHASE="pre-mutation-gates"
-    "$ROOT/build.sh"
-    local package
-    for package in "${RUST_PACKAGES[@]}"; do
-        cargo publish --manifest-path "$ROOT/Cargo.toml" --dry-run -p "$package"
-    done
     local current
     current="$(python3 "$ROOT/scripts/release-manifests.py" check)"
+    [[ "$current" == "$LATEST_VERSION" ]] || {
+        printf 'Cargo version %s does not equal latest release tag v%s.\n' \
+            "$current" "$LATEST_VERSION" >&2
+        return 1
+    }
+    "$ROOT/build.sh"
+    cargo publish --manifest-path "$ROOT/Cargo.toml" --dry-run -p vexy-json-core
     python_package_gate "$current" current
     uv publish --dry-run "$PY_WHEEL" "$PY_SDIST"
 }
@@ -270,6 +318,34 @@ prepare_target() {
     PHASE="target-build"
     "$ROOT/build.sh"
     assert_manifest_diff
+}
+
+verify_release_boundary() {
+    PHASE="release-boundary"
+    local live_remote head
+    live_remote="$(git -C "$ROOT" ls-remote --exit-code origin refs/heads/main | awk 'NR == 1 {print $1}')"
+    [[ "$live_remote" == "$REMOTE_BASE" ]] || {
+        printf 'Live origin/main changed after preflight. before=%s now=%s\n' \
+            "$REMOTE_BASE" "$live_remote" >&2
+        return 1
+    }
+    head="$(git -C "$ROOT" rev-parse HEAD)"
+    [[ -n "$SNAPSHOT_COMMIT" && "$head" == "$SNAPSHOT_COMMIT" ]] || {
+        printf 'HEAD changed after checkpoint. snapshot=%s now=%s\n' "$SNAPSHOT_COMMIT" "$head" >&2
+        return 1
+    }
+    git -C "$ROOT" merge-base --is-ancestor "$REMOTE_BASE" "$SNAPSHOT_COMMIT" || {
+        printf 'Checkpoint commit is not descended from the preflight remote base.\n' >&2
+        return 1
+    }
+    if git -C "$ROOT" show-ref --verify --quiet "refs/tags/$TARGET_TAG" || \
+        [[ -n "$(remote_tag_commit "$TARGET_TAG")" ]]; then
+        printf 'Predicted release tag appeared after preflight: %s\n' "$TARGET_TAG" >&2
+        return 1
+    fi
+    assert_manifest_diff
+    printf 'Release boundary verified: snapshot=%s remote-base=%s target=%s\n' \
+        "$SNAPSHOT_COMMIT" "$REMOTE_BASE" "$TARGET_TAG"
 }
 
 verify_release_refs() {
@@ -378,9 +454,9 @@ publish_all() {
 
 TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/vexy-json-release.XXXXXX")"
 read_only_preflight
-pre_mutation_gates
 
 if [[ "$MODE" == "dry-run" ]]; then
+    report_checkpoint_plan
     PHASE="dry-run-complete"
     printf '\nDRY RUN SUCCESS\n'
     printf 'Predicted next release: %s\n' "$TARGET_TAG"
@@ -388,7 +464,10 @@ if [[ "$MODE" == "dry-run" ]]; then
     exit 0
 fi
 
+checkpoint_changes
+pre_mutation_gates
 prepare_target
+verify_release_boundary
 git -C "$ROOT" tag --list 'v*' | LC_ALL=C sort >"$TEMP_DIR/tags-before.txt"
 PHASE="create-release"
 (

@@ -256,26 +256,6 @@ impl<R: Read> BufferedStreamingParser<R> {
         }
     }
 
-    /// Extracts the content from a quoted string token (simplified version).
-    /// This is a basic implementation that may need improvement for full escape handling.
-    fn extract_string_content(&self, token_str: &str) -> Result<String> {
-        if token_str.len() < 2 {
-            return Err(Error::UnterminatedString(self.lexer.position()));
-        }
-
-        // Remove quotes
-        let content = &token_str[1..token_str.len() - 1];
-
-        // Basic unescaping (simplified)
-        Ok(content
-            .replace("\\\"", "\"")
-            .replace("\\'", "'")
-            .replace("\\\\", "\\")
-            .replace("\\n", "\n")
-            .replace("\\t", "\t")
-            .replace("\\r", "\r"))
-    }
-
     /// Returns the current position in the input stream.
     pub fn position(&self) -> usize {
         self.lexer.position()

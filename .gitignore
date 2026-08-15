@@ -1,5 +1,7 @@
 .DS_Store
 ref/
+/.omc/
+/.codegraph/
 
 # Rust
 /target/

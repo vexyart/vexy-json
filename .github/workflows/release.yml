@@ -1,154 +1,123 @@
 name: Release
+# this_file: .github/workflows/release.yml
 
 on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to release (e.g., 2.0.0)'
-        required: true
-        type: string
 
 env:
   CARGO_TERM_COLOR: always
+  GH_REPO: ${{ github.repository }}
   RUST_BACKTRACE: 1
 
 jobs:
-  create-release:
-    name: Create Release
+  validate-release:
+    name: Validate release tag and manifests
     runs-on: ubuntu-latest
     outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-      version: ${{ steps.get_version.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
+      version: ${{ steps.release.outputs.version }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get version
-        id: get_version
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-          else
-            VERSION=${GITHUB_REF#refs/tags/v}
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Update version numbers
+      - name: Validate immutable release inputs
+        id: release
         shell: bash
         run: |
-          # Make scripts executable (skip on Windows)
-          if [[ "${{ runner.os }}" != "Windows" ]]; then
-            chmod +x scripts/get-version.sh scripts/update-versions.sh
+          set -euo pipefail
+          TAG="$GITHUB_REF_NAME"
+          if [[ ! "$TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            printf 'Release tag is not canonical SemVer: %s\n' "$TAG" >&2
+            exit 1
           fi
-          # Update all version numbers to match git tag
-          bash ./scripts/update-versions.sh
+          VERSION="${TAG#v}"
+          python3 scripts/release-manifests.py check "$VERSION"
+          printf 'tag=%s\n' "$TAG" >>"$GITHUB_OUTPUT"
+          printf 'version=%s\n' "$VERSION" >>"$GITHUB_OUTPUT"
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  test-release:
+    name: Test tagged source
+    needs: validate-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          tag_name: v${{ steps.get_version.outputs.version }}
-          release_name: VEXY_JSON v${{ steps.get_version.outputs.version }}
-          draft: true
-          prerelease: false
-          body: |
-            # VEXY_JSON v${{ steps.get_version.outputs.version }}
+          components: clippy,rustfmt
 
-            ## Highlights
+      - uses: Swatinem/rust-cache@v2
 
-            - SIMD-accelerated parsing for 2-3x performance improvement
-            - Memory Pool V3 with 80% reduction in allocations
-            - Parallel processing for large files
-            - Streaming capability for gigabyte-scale files
-            - Plugin system for extensibility
-            - ML-based error recovery with actionable suggestions
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-            ## Installation
+      - uses: astral-sh/setup-uv@v6
 
-            ### macOS
-            ```bash
-            # Using Homebrew
-            brew install vexy_json
+      - name: Run canonical build and package tests
+        run: ./build.sh
 
-            # Or download the installer
-            # Download vexy_json-${{ steps.get_version.outputs.version }}-macos.dmg below
-            ```
+  create-release:
+    name: Create draft GitHub release
+    needs: [validate-release, test-release]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
 
-            ### Linux
-            ```bash
-            # Download and extract
-            curl -L https://github.com/vexyart/vexy-json/releases/download/v${{ steps.get_version.outputs.version }}/vexy_json-${{ steps.get_version.outputs.version }}-linux-x86_64.tar.gz | tar xz
-            sudo mv vexy_json /usr/local/bin/
-            ```
-
-            ### Windows
-            ```powershell
-            # Download vexy_json-${{ steps.get_version.outputs.version }}-windows-x86_64.zip below
-            # Extract and add to PATH
-            ```
-
-            ### Cargo
-            ```bash
-            cargo install vexy_json-cli
-            ```
-
-            ## What's Changed
-
-            See [CHANGELOG.md](https://github.com/vexyart/vexy-json/blob/v${{ steps.get_version.outputs.version }}/CHANGELOG.md) for details.
-
-            ## Assets
-
-            - **macOS**: `vexy_json-${{ steps.get_version.outputs.version }}-macos.dmg` - Installer with PKG
-            - **macOS**: `vexy_json-${{ steps.get_version.outputs.version }}-macos.zip` - Standalone binary
-            - **Linux**: `vexy_json-${{ steps.get_version.outputs.version }}-linux-x86_64.tar.gz` - x86_64 binary
-            - **Linux**: `vexy_json-${{ steps.get_version.outputs.version }}-linux-aarch64.tar.gz` - ARM64 binary
-            - **Windows**: `vexy_json-${{ steps.get_version.outputs.version }}-windows-x86_64.zip` - x86_64 binary
-            - **Source**: `vexy_json-${{ steps.get_version.outputs.version }}.tar.gz` - Source code
+      - name: Create draft release for the existing tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.validate-release.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            if [[ "$(gh release view "$TAG" --json isDraft --jq .isDraft)" != true ]]; then
+              printf 'GitHub release %s already exists and is not a draft.\n' "$TAG" >&2
+              exit 1
+            fi
+            printf 'Reusing existing draft release %s.\n' "$TAG"
+          else
+            gh release create "$TAG" \
+              --draft \
+              --generate-notes \
+              --title "Vexy JSON $TAG" \
+              --verify-tag
+          fi
 
   build-binaries:
-    name: Build ${{ matrix.target }}
-    needs: create-release
+    name: Build ${{ matrix.name }}
+    needs: [validate-release, test-release, create-release]
     strategy:
+      fail-fast: false
       matrix:
         include:
-          # macOS targets
           - os: macos-latest
             target: x86_64-apple-darwin
             name: macos-x86_64
+            archive: tar.gz
           - os: macos-latest
             target: aarch64-apple-darwin
             name: macos-aarch64
-
-          # Linux targets
+            archive: tar.gz
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             name: linux-x86_64
+            archive: tar.gz
           - os: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             name: linux-aarch64
-
-          # Windows targets
+            archive: tar.gz
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             name: windows-x86_64
-
+            archive: zip
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-
-      - name: Update version numbers
-        shell: bash
-        run: |
-          # Make scripts executable (skip on Windows)
-          if [[ "${{ runner.os }}" != "Windows" ]]; then
-            chmod +x scripts/get-version.sh scripts/update-versions.sh
-          fi
-          # Update all version numbers to match git tag
-          bash ./scripts/update-versions.sh
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -156,52 +125,54 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - name: Install cross-compilation tools
+      - name: Install Linux ARM64 cross-linker
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-aarch64-linux-gnu
 
-      - name: Build
-        run: |
-          cargo build --release --target ${{ matrix.target }} --bin vexy_json
-
-      - name: Package Binary
+      - name: Build CLI
         shell: bash
+        env:
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
         run: |
-          cd target/${{ matrix.target }}/release
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            7z a ../../../vexy_json-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.zip vexy_json.exe
+          cargo build \
+            --release \
+            --package vexy-json-cli \
+            --bin vexy-json \
+            --target "${{ matrix.target }}"
+
+      - name: Package CLI
+        shell: bash
+        env:
+          VERSION: ${{ needs.validate-release.outputs.version }}
+        run: |
+          cd "target/${{ matrix.target }}/release"
+          if [[ "${{ matrix.archive }}" == zip ]]; then
+            7z a "../../../vexy-json-$VERSION-${{ matrix.name }}.zip" vexy-json.exe
           else
-            tar czf ../../../vexy_json-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.tar.gz vexy_json
+            tar czf "../../../vexy-json-$VERSION-${{ matrix.name }}.tar.gz" vexy-json
           fi
 
-      - name: Upload Binary
-        uses: actions/upload-release-asset@v1
+      - name: Upload CLI to the draft release
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./vexy_json-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.${{ matrix.os == 'windows-latest' && 'zip' || 'tar.gz' }}
-          asset_name: vexy_json-${{ needs.create-release.outputs.version }}-${{ matrix.name }}.${{ matrix.os == 'windows-latest' && 'zip' || 'tar.gz' }}
-          asset_content_type: ${{ matrix.os == 'windows-latest' && 'application/zip' || 'application/gzip' }}
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.validate-release.outputs.tag }}
+          VERSION: ${{ needs.validate-release.outputs.version }}
+        run: |
+          gh release upload "$TAG" \
+            "vexy-json-$VERSION-${{ matrix.name }}.${{ matrix.archive }}" \
+            --clobber
 
   build-macos-installer:
-    name: Build macOS Installer
-    needs: create-release
+    name: Build macOS installer
+    needs: [validate-release, test-release, create-release]
     runs-on: macos-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-
-      - name: Update version numbers
-        shell: bash
-        run: |
-          # Make scripts executable (skip on Windows)
-          if [[ "${{ runner.os }}" != "Windows" ]]; then
-            chmod +x scripts/get-version.sh scripts/update-versions.sh
-          fi
-          # Update all version numbers to match git tag
-          bash ./scripts/update-versions.sh
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -209,59 +180,42 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - name: Build Universal Binary
+      - name: Build universal CLI
         run: |
-          cargo build --release --target x86_64-apple-darwin --bin vexy_json
-          cargo build --release --target aarch64-apple-darwin --bin vexy_json
-          lipo -create -output vexy_json \
-            target/x86_64-apple-darwin/release/vexy_json \
-            target/aarch64-apple-darwin/release/vexy_json
-          chmod +x vexy_json
+          cargo build --release --target x86_64-apple-darwin --package vexy-json-cli --bin vexy-json
+          cargo build --release --target aarch64-apple-darwin --package vexy-json-cli --bin vexy-json
+          lipo -create -output vexy-json \
+            target/x86_64-apple-darwin/release/vexy-json \
+            target/aarch64-apple-darwin/release/vexy-json
+          chmod +x vexy-json
 
-      - name: Create macOS ZIP
-        run: |
-          zip -9 vexy_json-${{ needs.create-release.outputs.version }}-macos.zip vexy_json
-
-      - name: Create macOS Installer
-        run: |
-          ./scripts/package-macos.sh ${{ needs.create-release.outputs.version }}
-
-      - name: Upload macOS ZIP
-        uses: actions/upload-release-asset@v1
+      - name: Package macOS artifacts
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./vexy_json-${{ needs.create-release.outputs.version }}-macos.zip
-          asset_name: vexy_json-${{ needs.create-release.outputs.version }}-macos.zip
-          asset_content_type: application/zip
+          VERSION: ${{ needs.validate-release.outputs.version }}
+        run: |
+          zip -9 "vexy-json-$VERSION-macos.zip" vexy-json
+          mkdir -p dist/macos
+          ./scripts/package-macos.sh "$VERSION"
 
-      - name: Upload macOS DMG
-        uses: actions/upload-release-asset@v1
+      - name: Upload macOS artifacts to the draft release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./dist/vexy_json-${{ needs.create-release.outputs.version }}.dmg
-          asset_name: vexy_json-${{ needs.create-release.outputs.version }}-macos.dmg
-          asset_content_type: application/x-apple-diskimage
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.validate-release.outputs.tag }}
+          VERSION: ${{ needs.validate-release.outputs.version }}
+        run: |
+          gh release upload "$TAG" \
+            "vexy-json-$VERSION-macos.zip" \
+            "dist/macos/vexy-json-$VERSION-macos.dmg" \
+            --clobber
 
   build-wasm:
-    name: Build WASM
-    needs: create-release
+    name: Build WASM release artifact
+    needs: [validate-release, test-release, create-release]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-
-      - name: Update version numbers
-        shell: bash
-        run: |
-          # Make scripts executable (skip on Windows)
-          if [[ "${{ runner.os }}" != "Windows" ]]; then
-            chmod +x scripts/get-version.sh scripts/update-versions.sh
-          fi
-          # Update all version numbers to match git tag
-          bash ./scripts/update-versions.sh
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -270,111 +224,45 @@ jobs:
       - name: Install wasm-pack
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
-      - name: Build WASM
-        run: ./scripts/build-wasm.sh
-
-      - name: Package WASM
-        run: |
-          cd crates/wasm
-          tar czf ../../vexy_json-wasm-${{ needs.create-release.outputs.version }}.tar.gz pkg/
-
-      - name: Upload WASM Package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./vexy_json-wasm-${{ needs.create-release.outputs.version }}.tar.gz
-          asset_name: vexy_json-wasm-${{ needs.create-release.outputs.version }}.tar.gz
-          asset_content_type: application/gzip
-
-  publish-crates:
-    name: Publish to crates.io
-    needs: [create-release, build-binaries]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Update version numbers
-        shell: bash
-        run: |
-          # Make scripts executable (skip on Windows)
-          if [[ "${{ runner.os }}" != "Windows" ]]; then
-            chmod +x scripts/get-version.sh scripts/update-versions.sh
-          fi
-          # Update all version numbers to match git tag
-          bash ./scripts/update-versions.sh
-
-      - uses: dtolnay/rust-toolchain@stable
-
-      - name: Publish crates
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-        run: |
-          # Publish in dependency order
-          cargo publish -p vexy_json-core
-          sleep 30
-          cargo publish -p vexy_json-cli
-          sleep 30
-          cargo publish -p vexy_json-wasm
-
-  publish-npm:
-    name: Publish to NPM
-    needs: [create-release, build-wasm]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Update version numbers
-        shell: bash
-        run: |
-          # Make scripts executable (skip on Windows)
-          if [[ "${{ runner.os }}" != "Windows" ]]; then
-            chmod +x scripts/get-version.sh scripts/update-versions.sh
-          fi
-          # Update all version numbers to match git tag
-          bash ./scripts/update-versions.sh
-
       - uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: '20'
 
-      - name: Build WASM
+      - name: Build and test WASM
         run: |
-          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-          ./scripts/build-wasm.sh
+          ./scripts/build-wasm.sh release
+          cp README.md docs/pkg/README.md
+          cp LICENSE docs/pkg/LICENSE
+          mkdir -p crates/wasm/pkg
+          cp -R docs/pkg/. crates/wasm/pkg/
+          node crates/wasm/test.mjs
 
-      - name: Publish to NPM
+      - name: Package WASM
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd crates/wasm/pkg
-          npm publish
+          VERSION: ${{ needs.validate-release.outputs.version }}
+        run: tar czf "vexy-json-wasm-$VERSION.tar.gz" -C docs pkg
 
-  update-homebrew:
-    name: Update Homebrew Formula
-    needs: [create-release, build-macos-installer]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Update Homebrew Formula
+      - name: Upload WASM to the draft release
         env:
-          HOMEBREW_GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.validate-release.outputs.tag }}
+          VERSION: ${{ needs.validate-release.outputs.version }}
         run: |
-          # This would typically create a PR to homebrew-core
-          echo "Homebrew formula update would go here"
+          gh release upload "$TAG" "vexy-json-wasm-$VERSION.tar.gz" --clobber
 
   finalize-release:
-    name: Finalize Release
-    needs: [build-binaries, build-macos-installer, build-wasm, publish-crates]
+    name: Publish GitHub release
+    needs:
+      - validate-release
+      - build-binaries
+      - build-macos-installer
+      - build-wasm
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Publish Release
+      - name: Publish the completed draft
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release edit v${{ needs.create-release.outputs.version }} --draft=false
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.validate-release.outputs.tag }}
+        run: gh release edit "$TAG" --draft=false

@@ -1,16 +1,39 @@
 name: Build and Publish WASM
+# this_file: .github/workflows/wasm.yml
 
 on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  validate-release:
+    name: Validate release tag and manifests
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate immutable release inputs
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="$GITHUB_REF_NAME"
+          if [[ ! "$TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            printf 'Release tag is not canonical SemVer: %s\n' "$TAG" >&2
+            exit 1
+          fi
+          VERSION="${TAG#v}"
+          python3 scripts/release-manifests.py check "$VERSION"
+          printf 'version=%s\n' "$VERSION" >>"$GITHUB_OUTPUT"
+
   build-wasm:
+    needs: validate-release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,12 +45,24 @@ jobs:
       
       - name: Install wasm-pack
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       
       - name: Build WASM package
         run: wasm-pack build --target web --out-dir pkg --scope twardoch crates/wasm
-      
-      - name: Copy README to package
-        run: cp crates/wasm/README.md crates/wasm/pkg/
+
+      - name: Complete and verify npm package
+        env:
+          EXPECTED_VERSION: ${{ needs.validate-release.outputs.version }}
+        run: |
+          cp README.md crates/wasm/pkg/README.md
+          cp LICENSE crates/wasm/pkg/LICENSE
+          node -e "const p=require('./crates/wasm/pkg/package.json'); if(p.version!==process.env.EXPECTED_VERSION) throw new Error('npm package version '+p.version+' does not equal '+process.env.EXPECTED_VERSION)"
+          node crates/wasm/test.mjs
+          cd crates/wasm/pkg
+          npm pack --dry-run
       
       - name: Upload WASM artifacts
         uses: actions/upload-artifact@v4
