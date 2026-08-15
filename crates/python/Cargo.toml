@@ -1,7 +1,7 @@
 # this_file: crates/python/Cargo.toml
 [package]
 name = "vexy-json-python"
-version = "1.5.10"
+version = "1.5.11"
 edition = "2021"
 description = "Python bindings for vexy_json - a forgiving JSON parser"
 repository = "https://github.com/vexyart/vexy-json"
@@ -26,7 +26,7 @@ features = [ "extension-module" ]
 
 [dependencies.vexy-json-core]
 path = "../core"
-version = "=1.5.10"
+version = "=1.5.11"
 
 
 [build-dependencies]

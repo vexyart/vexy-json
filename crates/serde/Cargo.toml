@@ -1,7 +1,7 @@
 # this_file: crates/serde/Cargo.toml
 [package]
 name = "vexy-json-serde"
-version = "1.5.10"
+version = "1.5.11"
 edition = "2021"
 description = "Serde integration for Vexy JSON values"
 license = "MIT OR Apache-2.0"
@@ -19,7 +19,7 @@ path = "src/lib.rs"
 
 [dependencies.vexy-json-core]
 path = "../core"
-version = "=1.5.10"
+version = "=1.5.11"
 features = [ "serde" ]
 
 
