@@ -15,7 +15,7 @@ exclude = [ "bindings/python", "fuzz" ]
 
 [package]
 name = "vexy-json"
-version = "1.5.12"
+version = "1.5.13"
 edition = "2021"
 description = "A forgiving JSON parser that accepts non-standard JSON formats"
 license = "MIT OR Apache-2.0"
@@ -39,12 +39,12 @@ include = [
 
 [dependencies.vexy-json-core]
 path = "crates/core"
-version = "=1.5.12"
+version = "=1.5.13"
 
 
 [dependencies.vexy-json-serde]
 path = "crates/serde"
-version = "=1.5.12"
+version = "=1.5.13"
 optional = true
 
 
