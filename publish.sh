@@ -405,7 +405,11 @@ publish_crate() {
     local package=$1
     PHASE="upload-crate-$package"
     cargo publish --manifest-path "$ROOT/Cargo.toml" --dry-run -p "$package"
-    if ! cargo publish --manifest-path "$ROOT/Cargo.toml" -p "$package"; then
+    # Cargo/libcurl HTTP/2 uploads can fail mid-stream for registry writes.
+    # Disable multiplexing for the irreversible upload while retaining the
+    # ordinary dry-run verification above.
+    if ! CARGO_HTTP_MULTIPLEXING=false \
+        cargo publish --manifest-path "$ROOT/Cargo.toml" -p "$package"; then
         printf 'Cargo upload failed or is ambiguous: %s@%s\n' "$package" "$TARGET_VERSION" >&2
         return 1
     fi

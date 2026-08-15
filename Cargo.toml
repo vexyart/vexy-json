@@ -25,6 +25,16 @@ keywords = [ "json", "parser", "forgiving", "relaxed", "lenient" ]
 categories = [ "parsing", "data-structures", "web-programming" ]
 readme = "README.md"
 publish = [ "crates-io" ]
+include = [
+    "/Cargo.toml",
+    "/LICENSE",
+    "/README.md",
+    "/build.rs",
+    "/src/**",
+    "/examples/**",
+    "/tests/**",
+    "/benches/**",
+]
 
 
 [dependencies.vexy-json-core]

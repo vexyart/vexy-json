@@ -75,6 +75,7 @@ make_fixture() {
         --exclude=target \
         --exclude=build.log.txt \
         -cf - . | tar -C "$destination" -xf -
+    "$REAL_PYTHON" "$destination/scripts/release-manifests.py" sync 1.5.10 >/dev/null
     "$REAL_GIT" init --bare "$bare" >/dev/null
     "$REAL_GIT" -C "$destination" init -b main >/dev/null
     "$REAL_GIT" -C "$destination" config user.name "Workflow Contract"
@@ -183,6 +184,10 @@ case "${1:-}" in
         ;;
     pip)
         ;;
+    python)
+        [[ ${2:-} == find && ${3:-} == --system && ${4:-} == --no-managed-python ]]
+        printf '%s\n' "$REAL_PYTHON"
+        ;;
     publish)
         if [[ " $* " != *' --dry-run '* && ${ALLOW_FAKE_UPLOADS:-0} != 1 ]]; then
             printf '%s\n' 'non-dry Python upload forbidden by workflow fixture' >&2
@@ -253,6 +258,10 @@ for active in build.sh install.sh; do
     assert_not_contains bindings/python "$ROOT/$active"
 done
 assert_not_contains bindings/python "$ROOT/publish.sh"
+assert_contains 'uv pip install --system --python "$SYSTEM_PYTHON" --reinstall "$WHEEL"' "$ROOT/install.sh"
+assert_contains 'uv build --python "$SYSTEM_PYTHON" --no-sources' "$ROOT/install.sh"
+assert_contains 'uv publish "$PY_WHEEL" "$PY_SDIST"' "$ROOT/publish.sh"
+assert_contains 'CARGO_HTTP_MULTIPLEXING=false' "$ROOT/publish.sh"
 [[ "$(grep -Fc 'uvx gitnextver@1.0.1 --directory . --verbose' "$ROOT/publish.sh")" == 1 ]] \
     || fail "publish.sh must contain exactly one authorized gitnextver command"
 
@@ -361,6 +370,8 @@ PREFIX="$TEMP_DIR/install prefix"
 "$DRY_REPO/install.sh" --prefix "$PREFIX"
 [[ -x "$PREFIX/bin/vexy-json" ]] || fail "repeatable install did not create CLI"
 [[ -x "$PREFIX/share/vexy-json/venv/bin/python" ]] || fail "repeatable install did not create Python environment"
+[[ "$(grep -Fc 'uv pip install --system --python' "$TOOL_LOG")" == 2 ]] \
+    || fail "repeatable install did not use uv pip install --system twice"
 
 printf '\nworkflow contract modification\n' >>"$DRY_REPO/README.md"
 printf '%s\n' 'checkpoint me' >"$DRY_REPO/checkpoint-new.txt"
@@ -476,10 +487,14 @@ printf '%s\n' 'local omc state' >"$REAL_REPO/.omc/state.json"
 printf '%s\n' 'local codegraph index' >"$REAL_REPO/.codegraph/index.bin"
 : >"$TOOL_LOG"
 CORE_PUBLISHED_MARKER="$TEMP_DIR/core-published"
-CARGO_REGISTRY_TOKEN=fake UV_PUBLISH_TOKEN=fake ALLOW_FAKE_UPLOADS=1 \
+if ! CARGO_REGISTRY_TOKEN=fake UV_PUBLISH_TOKEN=fake ALLOW_FAKE_UPLOADS=1 \
     REQUIRE_PAGER_DISABLED=1 GIT_PAGER=/usr/bin/false PAGER=/usr/bin/false \
     FAIL_PREMATURE_DEPENDENT_DRY_RUN=1 FAKE_CORE_PUBLISHED_MARKER="$CORE_PUBLISHED_MARKER" \
-    "$REAL_REPO/publish.sh" >"$TEMP_DIR/real.out" 2>"$TEMP_DIR/real.err"
+    "$REAL_REPO/publish.sh" >"$TEMP_DIR/real.out" 2>"$TEMP_DIR/real.err"; then
+    cat "$TEMP_DIR/real.out" >&2
+    cat "$TEMP_DIR/real.err" >&2
+    fail "real publish fixture failed"
+fi
 [[ "$(grep -Fc 'uvx gitnextver@1.0.1 --directory . --verbose' "$TOOL_LOG")" == 1 ]] \
     || fail "real fixture did not invoke gitnextver exactly once"
 [[ "$($REAL_GIT -C "$REAL_REPO" describe --tags --exact-match)" == v1.5.11 ]] \

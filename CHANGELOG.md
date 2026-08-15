@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Release
+
+- Restricted the root crate package to its manifest, license, README, build
+  script, Rust source, examples, tests, and benchmarks. This removes generated
+  documentation, old installers, release archives, and other repository
+  artifacts from crates.io uploads.
+- Replaced the stale documentation-site README with project installation,
+  usage, development, and interrupted-release guidance.
+- Made `install.sh` build for the selected system interpreter and install the
+  Python wheel with `uv pip install --system --reinstall`, while retaining an
+  isolated smoke test of the exact artifact.
+- Bound the installer build and system install to the same interpreter returned
+  by `uv python find --system --no-managed-python`, preventing CPython wheel ABI
+  mismatches and avoiding mutation of uv-managed Python installations.
+- Disabled Cargo HTTP multiplexing for irreversible registry uploads after the
+  v1.5.11 root upload repeatedly failed in the HTTP/2 framing layer.
+
 ### Fixed
 
 - Repaired `StreamingParser` termination so end-of-input is emitted once and

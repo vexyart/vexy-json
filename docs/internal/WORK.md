@@ -2,6 +2,18 @@
 
 # Work Progress
 
+## Release publication recovery
+
+- Diagnosed the interrupted v1.5.11 release as an oversized root crate: its
+  implicit Cargo file set produced a 30.2 MiB upload containing generated docs,
+  old installers, release archives, and local development artifacts.
+- Confirmed the five dependency crates and release refs, then published the
+  missing Python 1.5.11 artifacts without replaying completed uploads.
+- Restricted the root crate package surface and updated the public README.
+- Confirmed `build.sh` builds and tests both language surfaces, and updated
+  `install.sh` to install the Rust CLI plus the Python wheel via
+  `uv pip install --system`.
+
 ## Latest completed work
 
 ### Streaming parser emergency repair — completed

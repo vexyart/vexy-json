@@ -72,11 +72,13 @@ git -C "$ROOT" status --porcelain=v1 --untracked-files=all >"$TEMP_DIR/before.st
 git -C "$ROOT" diff --no-ext-diff --binary HEAD -- >"$TEMP_DIR/before.diff"
 
 VERSION="$(python3 "$ROOT/scripts/release-manifests.py" check)"
+SYSTEM_PYTHON="$(uv python find --system --no-managed-python)"
 printf 'Installing Vexy JSON %s\n' "$VERSION"
 printf 'rustc: %s\n' "$(rustc --version)"
 printf 'cargo: %s\n' "$(cargo --version)"
 printf 'uv: %s\n' "$(uv --version)"
 printf 'python builder: %s\n' "$(python3 --version 2>&1)"
+printf 'system Python: %s\n' "$SYSTEM_PYTHON"
 
 CARGO_TARGET_DIR="$TEMP_DIR/cargo-target" cargo install \
     --path "$ROOT/crates/cli" \
@@ -89,11 +91,16 @@ CARGO_TARGET_DIR="$TEMP_DIR/cargo-target" cargo install \
 
 (
     cd "$ROOT/crates/python"
-    uv build --no-sources --out-dir "$DIST"
+    uv build --python "$SYSTEM_PYTHON" --no-sources --out-dir "$DIST"
 )
 python3 "$ROOT/scripts/check-python-artifacts.py" "$DIST" "$VERSION" >"$TEMP_DIR/artifacts.txt"
 WHEEL="$(sed -n '1p' "$TEMP_DIR/artifacts.txt")"
-uv venv --clear --python python3 "$VENV"
+
+# Install the native extension into the interpreter selected as the system
+# Python by uv. The temporary environment below independently smoke-tests the
+# exact wheel without affecting the checkout.
+uv pip install --system --python "$SYSTEM_PYTHON" --reinstall "$WHEEL"
+uv venv --clear --python "$SYSTEM_PYTHON" "$VENV"
 uv pip install --python "$PYTHON" "$WHEEL"
 
 "$CLI" --version
@@ -120,7 +127,5 @@ fi
 printf '\nInstallation complete.\n'
 printf 'Prefix: %s\n' "$PREFIX"
 printf 'CLI: %s\n' "$CLI"
-printf 'Python environment: %s\n' "$VENV"
-printf 'Python executable: %s\n' "$PYTHON"
+printf 'Python package: installed into the system Python with uv pip install --system\n'
 printf 'Add the CLI for this shell with: export PATH="%s/bin:$%s"\n' "$PREFIX" PATH
-printf 'Activate the Python environment with: source "%s/bin/activate"\n' "$VENV"

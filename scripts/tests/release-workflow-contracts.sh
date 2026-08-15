@@ -8,6 +8,7 @@ RELEASE="$ROOT/.github/workflows/release.yml"
 WASM="$ROOT/.github/workflows/wasm.yml"
 WASM_BUILD="$ROOT/.github/workflows/wasm-build.yml"
 DEPLOY="$ROOT/.github/workflows/deploy.yml"
+ROOT_MANIFEST="$ROOT/Cargo.toml"
 
 fail() {
     printf 'release workflow contract failure: %s\n' "$*" >&2
@@ -43,6 +44,9 @@ assert_not_contains 'cargo publish' "$RELEASE"
 assert_not_contains 'uv publish' "$RELEASE"
 assert_not_contains 'maturin publish' "$RELEASE"
 assert_not_contains 'npm publish' "$RELEASE"
+
+assert_contains 'include = [' "$ROOT_MANIFEST"
+assert_contains '"/src/**"' "$ROOT_MANIFEST"
 
 assert_contains 'python3 scripts/release-manifests.py check "$VERSION"' "$WASM"
 assert_contains 'cp README.md crates/wasm/pkg/README.md' "$WASM"

@@ -1,99 +1,103 @@
-# Vexy JSON Documentation & Web Tool
+# Vexy JSON
 
-This directory contains the documentation website and interactive web tool for Vexy JSON.
+Vexy JSON is a forgiving JSON parser for Rust and Python. It accepts standard
+JSON as well as practical extensions commonly found in configuration files and
+LLM output, while still producing ordinary JSON values.
 
-## Recent Updates
+Supported extensions include comments, trailing commas, single-quoted strings,
+unquoted object keys, implicit top-level objects and arrays, newline separators,
+and binary, octal, hexadecimal, or underscore-separated numbers.
 
-### Version 1.2.4 - Critical WebAssembly Fix
+## Rust
 
-Fixed a major bug where WebAssembly bindings returned JavaScript Maps instead of plain objects for parsed JSON. Objects like `{a:1}` now correctly return `{"a":1}` instead of empty objects. See [Troubleshooting](troubleshooting.md) for details.
+Add the high-level crate:
 
-## Development Quick Start
+```toml
+[dependencies]
+vexy-json = "1.5.11"
+```
 
-### Building and Testing
+Parse forgiving JSON with the default options:
+
+```rust
+use vexy_json::parse;
+
+fn main() -> vexy_json::Result<()> {
+    let value = parse("{name: 'Vexy', enabled: true,}")?;
+    println!("{value}");
+    Ok(())
+}
+```
+
+The workspace also publishes focused crates for the core parser, CLI, Serde
+integration, WebAssembly bindings, and the C API.
+
+## Python
+
+Install the native Python package:
+
 ```bash
-# Complete build with all tests
+python -m pip install vexy-json
+```
+
+```python
+import vexy_json
+
+value = vexy_json.parse("{name: 'Vexy', enabled: true,}")
+assert value == {"name": "Vexy", "enabled": True}
+```
+
+## Command line
+
+Install the CLI from crates.io:
+
+```bash
+cargo install vexy-json-cli
+```
+
+Then parse a file or standard input with `vexy-json`.
+
+## Development
+
+Run the repository's complete formatting, linting, Rust, and packaged-Python
+gate with:
+
+```bash
 ./build.sh
-
-# Quick development checks
-./scripts/dev-workflow.sh check
-
-# Create a new release
-./scripts/release.sh --version 2.0.8
 ```
 
-### Available Commands
-- `./build.sh` - Complete build and test
-- `./build.sh test` - Run comprehensive tests
-- `./build.sh version` - Show version information
-- `./scripts/dev-workflow.sh setup` - Set up development environment
-- `./scripts/release.sh --version X.Y.Z` - Create a release
+Do not invoke individual Cargo test or lint commands for release verification;
+`build.sh` is the canonical gate and records its output in `build.log.txt`.
 
-For complete development and release documentation, see [RELEASE_GUIDE.md](RELEASE_GUIDE.md).
-
-## Structure
-
-- **Jekyll Site**: The main documentation is built with Jekyll using the `just-the-docs` theme
-- **Web Tool**: Interactive JSON parser tool at `/tool.html`
-- **WASM Package**: Pre-built WebAssembly module in `/pkg/`
-- **Debug Tools**: Various test pages for debugging WebAssembly issues
-
-## Hosting Configuration
-
-### GitHub Pages
-
-The site is automatically deployed to GitHub Pages via the `.github/workflows/pages.yml` workflow:
-
-1. **Build Process**: 
-   - Builds WASM module using `wasm-pack`
-   - Builds Jekyll site with proper asset inclusion
-   - Deploys to GitHub Pages
-
-2. **MIME Type Handling**:
-   - `_headers`: Netlify-style headers (for potential future migration)
-   - `.htaccess`: Apache-style configuration for WASM files
-   - Jekyll includes both files for maximum compatibility
-
-3. **Asset Management**:
-   - WASM files are included via Jekyll's `include` directive
-   - Proper caching headers set for static assets
-   - CORS enabled for WebAssembly files
-
-### Local Development
-
-To run locally:
+Install the Rust CLI under `~/.local` and the Python extension into the system
+Python selected by `uv` with:
 
 ```bash
-# Install dependencies
-bundle install
-
-# Serve Jekyll site
-bundle exec jekyll serve
-
-# Or serve with drafts and live reload
-bundle exec jekyll serve --drafts --livereload
+./install.sh
 ```
 
-## Web Tool Features
+The installer resolves one unmanaged interpreter with `uv python find --system
+--no-managed-python`, builds a matching native wheel, and installs it explicitly
+with `uv pip install --system`. Pass `--prefix PATH` to change only the Rust CLI
+installation prefix.
 
-The interactive tool (`/tool.html`) provides:
+## Releasing
 
-- **Real-time parsing** with debounced input
-- **Syntax highlighting** for JSON input
-- **Error highlighting** with position indicators
-- **Example library** showcasing Vexy JSON features
-- **Download functionality** for parsed results
-- **Share URLs** for collaboration
-- **Performance metrics** display
+`./publish.sh` verifies the repository boundary, checkpoints intended changes,
+runs the complete build, creates and verifies the release tag, then publishes
+the workspace crates in dependency order followed by the Python package.
+Python distributions are built with `uv build` and uploaded with `uv publish`.
 
-## Browser Compatibility
+If publication stops after a tag is created, check crates.io and PyPI before
+retrying anything. Registry uploads are irreversible, and a transport error can
+be ambiguous. Resume only the artifacts confirmed absent; do not rerun the full
+script, because the next version is derived from existing tags.
 
-- **Modern Browsers**: Chrome 57+, Firefox 52+, Safari 11+, Edge 16+
-- **WebAssembly**: Required for parser functionality
-- **Fallback**: Graceful degradation when WASM unavailable
+The root Rust package deliberately includes only its manifest, license, README,
+build script, Rust source, examples, tests, and benchmarks. Generated
+documentation, installers, previous release archives, and local development
+artifacts are not shipped to crates.io.
 
-## Security
+## License
 
-- **Content Security Policy**: Configured for WASM execution
-- **CORS Headers**: Properly configured for cross-origin requests
-- **HTTPS**: Required for some WASM features (served via GitHub Pages)
+Licensed under either the MIT License or the Apache License 2.0, at your option.
