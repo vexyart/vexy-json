@@ -6,11 +6,11 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Lenient and tolerant JSON parser in Rust">
+        <meta name="description" content="Forgiving JSON parser for Rust, Python, WebAssembly, and the command line">
       
       
       
-        <link rel="canonical" href="https://vexyart.github.io/vexy-json/user/guides/migration/">
+        <link rel="canonical" href="https://vexy.dev/vexy-json/user/guides/migration/">
       
       
         <link rel="prev" href="../json-repair/">
@@ -19,8 +19,11 @@
         <link rel="next" href="../transform/">
       
       
+        
+      
+      
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -28,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.a40c8224.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -54,7 +57,6 @@
     
       
 
-    
     
     
   </head>
@@ -147,11 +149,13 @@
     
     
     
-      <label class="md-header__button md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-      </label>
-      <div class="md-search" data-md-component="search" role="dialog">
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
@@ -183,13 +187,14 @@
     </div>
   </div>
 </div>
+      
     
     
       <div class="md-header__source">
         <a href="https://github.com/vexyart/vexy-json" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
     vexyart/vexy-json
@@ -215,13 +220,15 @@
   
   
   
+  
     <li class="md-tabs__item">
       <a href="../../.." class="md-tabs__link">
         
   
+  
     
   
-  Vexy JSON Documentation
+  JSON from the real world, parsed without ceremony
 
       </a>
     </li>
@@ -232,11 +239,13 @@
   
   
   
+  
     
     
       <li class="md-tabs__item">
         <a href="../../../dev/" class="md-tabs__link">
           
+  
   
   Dev
 
@@ -251,23 +260,6 @@
   
   
     
-    
-      <li class="md-tabs__item">
-        <a href="../../../internal/naming-unification-plan/" class="md-tabs__link">
-          
-  
-  Internal
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-    
   
   
     
@@ -275,6 +267,7 @@
       <li class="md-tabs__item md-tabs__item--active">
         <a href="../../" class="md-tabs__link">
           
+  
   
   User
 
@@ -288,11 +281,13 @@
   
   
   
+  
     
     
       <li class="md-tabs__item">
         <a href="../../../wasm/npm-package/" class="md-tabs__link">
           
+  
   
   Wasm
 
@@ -336,7 +331,7 @@
       <a href="https://github.com/vexyart/vexy-json" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
     vexyart/vexy-json
@@ -356,9 +351,16 @@
       <a href="../../.." class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
-    Vexy JSON Documentation
+    
+  
+    JSON from the real world, parsed without ceremony
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -372,6 +374,7 @@
   
   
   
+    
     
     
     
@@ -389,9 +392,16 @@
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
+  
   <span class="md-ellipsis">
+    
+  
     Dev
+  
+
+    
   </span>
+  
   
 
             <span class="md-nav__icon md-icon"></span>
@@ -400,7 +410,11 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
-            Dev
+            
+  
+    Dev
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -414,9 +428,16 @@
       <a href="../../../dev/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
-    Developer Documentation
+    
+  
+    Development guide
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -435,9 +456,16 @@
       <a href="../../../dev/benchmarks/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     Benchmark Results
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -456,9 +484,16 @@
       <a href="../../../dev/build-process/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     Build Status Dashboard
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -477,9 +512,16 @@
       <a href="../../../dev/contributing/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
-    Contributing to vexy_json
+    
+  
+    Contributing
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -498,72 +540,16 @@
       <a href="../../../dev/design/" class="md-nav__link">
         
   
-  <span class="md-ellipsis">
-    Design
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../dev/developer-guide/" class="md-nav__link">
-        
   
   <span class="md-ellipsis">
-    Developer Guide for Extending the vexy_json Web Tool
+    
+  
+    Architecture
+  
+
+    
   </span>
   
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../dev/development/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Development
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../dev/feedback/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Feedback &amp; Support
-  </span>
   
 
       </a>
@@ -582,9 +568,16 @@
       <a href="../../../dev/packaging-macos/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     macOS Packaging Guide
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -603,9 +596,16 @@
       <a href="../../../dev/plugin-development/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     Vexy JSON Plugin Development Guide
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -624,9 +624,16 @@
       <a href="../../../dev/plugin-registry/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     Vexy JSON Plugin Registry
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -645,89 +652,16 @@
       <a href="../../../dev/release-process/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     Release Process
+  
+
+    
   </span>
   
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_13" >
-        
-          
-          <label class="md-nav__link" for="__nav_2_13" id="__nav_2_13_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Design
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_13_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_13">
-            <span class="md-nav__icon md-icon"></span>
-            Design
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../dev/design/cli-enhancements/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    CLI Enhancements Design for vexy_json
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../dev/design/python-api/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Python API Design for vexy_json
-  </span>
   
 
       </a>
@@ -742,508 +676,6 @@
     </li>
   
 
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Internal
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            Internal
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/naming-unification-plan/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Naming Unification Plan for Vexy JSON
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/PLAN/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    this_file: docs-src/internal/PLAN.md
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/TODO/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    this_file: docs/internal/TODO.md
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/WORK/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    this_file: docs-src/internal/WORK.md
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Development
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_5">
-            <span class="md-nav__icon md-icon"></span>
-            Development
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/development/agents/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    AI Agent Development Guidelines
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/development/distribution-builds/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    vexy_json Distribution Build Scripts
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/development/gemini/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Gemini Development Guidelines
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/development/implementation-summary/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Task Implementation Summary - vexy_json WebAssembly &amp; Feature Verification
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/development/lean-minimalization/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    LEAN.md
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/development/RELEASE_CANDIDATE/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Vexy JSON v2.0-RC1 Release Candidate
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/development/RELEASE_CHECKLIST/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Vexy JSON Release Checklist
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/development/RELEASE_PROCESS/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Vexy JSON Release Process
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/development/RELEASE_v2.0.0_SUMMARY/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Vexy JSON v2.0.0 Release Summary
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/development/refactor-plan/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    REFACTOR.md – Authoring Brief (Revised for Lean &amp; Refactor Principles)
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
-        
-          
-          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Drafts
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_6">
-            <span class="md-nav__icon md-icon"></span>
-            Drafts
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/drafts/publication-ready/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    🚀 vexy_json v1.1.0 - Ready for Publication
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/drafts/refactor-prompt/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Refactor prompt
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../internal/drafts/work-progress/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Work progress
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
     
       
       
@@ -1253,6 +685,7 @@
   
   
   
+    
     
     
     
@@ -1267,24 +700,35 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
+  
   <span class="md-ellipsis">
+    
+  
     User
+  
+
+    
   </span>
+  
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            User
+            
+  
+    User
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1298,9 +742,16 @@
       <a href="../../" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
-    User Documentation
+    
+  
+    User guide
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1319,9 +770,16 @@
       <a href="../../features/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
-    Features
+    
+  
+    Forgiving syntax
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1340,9 +798,16 @@
       <a href="../../features-overview/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     Vexy JSON Features Overview
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1361,9 +826,16 @@
       <a href="../../getting-started/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
-    Usage Guide v2.0.0
+    
+  
+    Getting started
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1381,6 +853,7 @@
     
     
     
+    
       
       
     
@@ -1389,24 +862,35 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
             
   
+  
   <span class="md-ellipsis">
+    
+  
     Api
+  
+
+    
   </span>
+  
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
             <span class="md-nav__icon md-icon"></span>
-            Api
+            
+  
+    Api
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1420,9 +904,16 @@
       <a href="../../api/python-bindings/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     Python Bindings
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1441,9 +932,16 @@
       <a href="../../api/rust/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
-    API Reference v2.0.0
+    
+  
+    Rust API
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1462,9 +960,16 @@
       <a href="../../api/streaming-api/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     Streaming Parser API Documentation
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1483,9 +988,16 @@
       <a href="../../api/wasm/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     WebAssembly (WASM) API Reference
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1503,6 +1015,7 @@
     
     
     
+    
       
       
     
@@ -1511,24 +1024,35 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_5" >
         
           
-          <label class="md-nav__link" for="__nav_4_5_5" id="__nav_4_5_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_5_5" id="__nav_3_5_5_label" tabindex="0">
             
   
+  
   <span class="md-ellipsis">
+    
+  
     Python
+  
+
+    
   </span>
+  
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_5_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_5_5">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_5">
             <span class="md-nav__icon md-icon"></span>
-            Python
+            
+  
+    Python
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1542,9 +1066,16 @@
       <a href="../../api/python/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
-    vexy_json - Forgiving JSON Parser for Python
+    
+  
+    Python API
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1580,6 +1111,7 @@
     
     
     
+    
       
       
     
@@ -1588,24 +1120,35 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
             
   
+  
   <span class="md-ellipsis">
+    
+  
     Guides
+  
+
+    
   </span>
+  
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4_6">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_6">
             <span class="md-nav__icon md-icon"></span>
-            Guides
+            
+  
+    Guides
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1619,9 +1162,16 @@
       <a href="../json-repair/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     JSON Repair
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1649,9 +1199,16 @@
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
+  
   <span class="md-ellipsis">
+    
+  
     Migration Guide: vexy_json v2.0.0
+  
+
+    
   </span>
+  
   
 
           <span class="md-nav__icon md-icon"></span>
@@ -1660,9 +1217,16 @@
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     Migration Guide: vexy_json v2.0.0
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1685,7 +1249,9 @@
         <li class="md-nav__item">
   <a href="#migrating-from-v1x-to-v200" class="md-nav__link">
     <span class="md-ellipsis">
-      Migrating from v1.x to v2.0.0
+      
+        Migrating from v1.x to v2.0.0
+      
     </span>
   </a>
   
@@ -1695,7 +1261,9 @@
           <li class="md-nav__item">
   <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      
+        Overview
+      
     </span>
   </a>
   
@@ -1704,7 +1272,9 @@
           <li class="md-nav__item">
   <a href="#backward-compatible-changes" class="md-nav__link">
     <span class="md-ellipsis">
-      ✅ Backward Compatible Changes
+      
+        ✅ Backward Compatible Changes
+      
     </span>
   </a>
   
@@ -1713,7 +1283,9 @@
           <li class="md-nav__item">
   <a href="#new-features-to-adopt" class="md-nav__link">
     <span class="md-ellipsis">
-      🚀 New Features to Adopt
+      
+        🚀 New Features to Adopt
+      
     </span>
   </a>
   
@@ -1723,7 +1295,9 @@
           <li class="md-nav__item">
   <a href="#streaming-api" class="md-nav__link">
     <span class="md-ellipsis">
-      Streaming API
+      
+        Streaming API
+      
     </span>
   </a>
   
@@ -1732,7 +1306,9 @@
           <li class="md-nav__item">
   <a href="#parallel-processing" class="md-nav__link">
     <span class="md-ellipsis">
-      Parallel Processing
+      
+        Parallel Processing
+      
     </span>
   </a>
   
@@ -1746,7 +1322,9 @@
           <li class="md-nav__item">
   <a href="#minor-breaking-changes" class="md-nav__link">
     <span class="md-ellipsis">
-      ⚠️ Minor Breaking Changes
+      
+        ⚠️ Minor Breaking Changes
+      
     </span>
   </a>
   
@@ -1755,7 +1333,9 @@
           <li class="md-nav__item">
   <a href="#dependency-updates" class="md-nav__link">
     <span class="md-ellipsis">
-      📦 Dependency Updates
+      
+        📦 Dependency Updates
+      
     </span>
   </a>
   
@@ -1764,7 +1344,9 @@
           <li class="md-nav__item">
   <a href="#cli-changes" class="md-nav__link">
     <span class="md-ellipsis">
-      🔧 CLI Changes
+      
+        🔧 CLI Changes
+      
     </span>
   </a>
   
@@ -1794,9 +1376,16 @@
       <a href="../transform/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     JSON Transformation
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -1815,76 +1404,16 @@
       <a href="../troubleshooting/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     Troubleshooting
+  
+
+    
   </span>
   
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Reference
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
-            <span class="md-nav__icon md-icon"></span>
-            Reference
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/release-notes/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    vexy_json v2.0.0 Release Notes
-  </span>
   
 
       </a>
@@ -1917,6 +1446,7 @@
     
     
     
+    
       
       
     
@@ -1925,24 +1455,35 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
+  
   <span class="md-ellipsis">
+    
+  
     Wasm
+  
+
+    
   </span>
+  
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
-            Wasm
+            
+  
+    Wasm
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1956,9 +1497,16 @@
       <a href="../../../wasm/npm-package/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
+    
+  
     @twardoch/vexy_json-wasm
+  
+
+    
   </span>
+  
   
 
       </a>
@@ -2003,7 +1551,9 @@
         <li class="md-nav__item">
   <a href="#migrating-from-v1x-to-v200" class="md-nav__link">
     <span class="md-ellipsis">
-      Migrating from v1.x to v2.0.0
+      
+        Migrating from v1.x to v2.0.0
+      
     </span>
   </a>
   
@@ -2013,7 +1563,9 @@
           <li class="md-nav__item">
   <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      
+        Overview
+      
     </span>
   </a>
   
@@ -2022,7 +1574,9 @@
           <li class="md-nav__item">
   <a href="#backward-compatible-changes" class="md-nav__link">
     <span class="md-ellipsis">
-      ✅ Backward Compatible Changes
+      
+        ✅ Backward Compatible Changes
+      
     </span>
   </a>
   
@@ -2031,7 +1585,9 @@
           <li class="md-nav__item">
   <a href="#new-features-to-adopt" class="md-nav__link">
     <span class="md-ellipsis">
-      🚀 New Features to Adopt
+      
+        🚀 New Features to Adopt
+      
     </span>
   </a>
   
@@ -2041,7 +1597,9 @@
           <li class="md-nav__item">
   <a href="#streaming-api" class="md-nav__link">
     <span class="md-ellipsis">
-      Streaming API
+      
+        Streaming API
+      
     </span>
   </a>
   
@@ -2050,7 +1608,9 @@
           <li class="md-nav__item">
   <a href="#parallel-processing" class="md-nav__link">
     <span class="md-ellipsis">
-      Parallel Processing
+      
+        Parallel Processing
+      
     </span>
   </a>
   
@@ -2064,7 +1624,9 @@
           <li class="md-nav__item">
   <a href="#minor-breaking-changes" class="md-nav__link">
     <span class="md-ellipsis">
-      ⚠️ Minor Breaking Changes
+      
+        ⚠️ Minor Breaking Changes
+      
     </span>
   </a>
   
@@ -2073,7 +1635,9 @@
           <li class="md-nav__item">
   <a href="#dependency-updates" class="md-nav__link">
     <span class="md-ellipsis">
-      📦 Dependency Updates
+      
+        📦 Dependency Updates
+      
     </span>
   </a>
   
@@ -2082,7 +1646,9 @@
           <li class="md-nav__item">
   <a href="#cli-changes" class="md-nav__link">
     <span class="md-ellipsis">
-      🔧 CLI Changes
+      
+        🔧 CLI Changes
+      
     </span>
   </a>
   
@@ -2103,9 +1669,11 @@
           
           
             <div class="md-content" data-md-component="content">
+              
               <article class="md-content__inner md-typeset">
                 
                   
+
 
   
   
@@ -2382,10 +1950,13 @@ vexy_json<span class="w"> </span>--pretty<span class="w"> </span>--sort-keys<spa
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.60a45f97.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
