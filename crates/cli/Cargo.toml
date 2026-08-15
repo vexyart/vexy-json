@@ -2,7 +2,7 @@
 
 [package]
 name = "vexy-json-cli"
-version = "1.5.11"
+version = "1.5.12"
 edition = "2021"
 description = "Command-line interface for parsing and formatting forgiving JSON"
 license = "MIT OR Apache-2.0"
@@ -30,7 +30,7 @@ tempfile = "3.27"
 
 [dependencies.vexy-json-core]
 path = "../core"
-version = "=1.5.11"
+version = "=1.5.12"
 
 
 [dependencies.clap]
