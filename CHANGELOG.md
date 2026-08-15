@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Release
 
+- Changed the Python distribution metadata name from `vexy_json` to
+  `vexy-json`, while preserving `vexy_json` as the import module.
+- Expanded the public documentation, enriched Python package metadata, made
+  `https://vexy.dev/vexy-json/` canonical, and added a strict MkDocs render to
+  the canonical build and publication gates.
+
 - Restricted the root crate package to its manifest, license, README, build
   script, Rust source, examples, tests, and benchmarks. This removes generated
   documentation, old installers, release archives, and other repository

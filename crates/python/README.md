@@ -1,41 +1,62 @@
-# this_file: crates/python/README.md
+# Vexy JSON for Python
 
-# vexy_json Python Bindings
+Parse configuration files, hand-edited data, and LLM-generated JSON without
+pre-cleaning the text first. Vexy JSON accepts strict JSON plus comments,
+trailing commas, unquoted keys, single quotes, implicit containers, newline
+separators, and extended number formats. A Rust engine performs the parsing and
+returns ordinary Python values.
 
-Python bindings for the vexy_json library - a forgiving JSON parser written in Rust.
-
-## Installation
+## Install
 
 ```bash
-pip install vexy_json
+uv add vexy-json
+# or: python -m pip install vexy-json
 ```
 
-## Usage
+The PyPI distribution is named `vexy-json`; Python imports use `vexy_json`.
+
+## Parse
 
 ```python
 import vexy_json
 
-# Parse forgiving JSON
-result = vexy_json.parse('{"key": "value", trailing: true,}')
-print(result)  # {'key': 'value', 'trailing': True}
+settings = vexy_json.parse("""
+{
+  // readable configuration
+  environment: 'preview',
+  retries: 3,
+  regions: ['eu', 'us',],
+}
+""")
 
-# Use NumPy integration
-import numpy as np
-arr = vexy_json.loads_numpy('[1, 2, 3, 4, 5]')
-print(type(arr))  # <class 'numpy.ndarray'>
+assert settings["environment"] == "preview"
 ```
 
-## Features
+Use keyword options when an input boundary must be stricter:
 
-- Standard JSON parsing with forgiving extensions
-- Comments (single-line and multi-line)
-- Trailing commas in arrays and objects
-- Unquoted object keys
-- Single-quoted strings
-- Implicit top-level objects and arrays
-- NumPy integration for efficient array parsing
-- Streaming parser for large files
-- pandas DataFrame integration
-- JSON repair functionality
+```python
+strict = vexy_json.parse_with_options(
+    '{"ready": true}',
+    allow_comments=False,
+    allow_trailing_commas=False,
+    allow_unquoted_keys=False,
+    allow_single_quotes=False,
+    implicit_top_level=False,
+    newline_as_comma=False,
+    enable_repair=False,
+)
+```
 
-For more information, see the [main vexy_json documentation](https://github.com/vexyart/vexy-json).
+The package also provides `load`, `loads`, `dump`, `dumps`, `is_valid`, an
+NDJSON-capable `StreamingParser`, and optional NumPy and pandas conversion
+helpers. It ships inline typing information for editors and type checkers.
+
+## Documentation
+
+Complete guides, option tables, Rust documentation, and troubleshooting are at
+[vexy.dev/vexy-json](https://vexy.dev/vexy-json/).
+
+Source and issue tracking live at
+[github.com/vexyart/vexy-json](https://github.com/vexyart/vexy-json).
+
+Licensed under MIT or Apache-2.0, at your option.

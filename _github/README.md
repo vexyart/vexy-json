@@ -124,7 +124,7 @@ Configure build-time variables:
 ```yaml
 env:
   MKDOCS_VERSION: "latest"
-  SITE_URL: "https://vexyart.github.io/vexy-json"
+  SITE_URL: "https://vexy.dev/vexy-json/"
 ```
 
 ## Troubleshooting

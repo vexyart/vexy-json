@@ -26,13 +26,13 @@ console.log(result); // { a: 1 }
 
 ## Options
 
-All forgiving features can be toggled via options (see [features.md](features.md)).
+All forgiving features can be toggled via options (see [forgiving syntax](../features.md)).
 
 ## Recent Fixes
 
-- As of v1.2.4, parsed objects are returned as plain JavaScript objects, not Maps. See [Troubleshooting](troubleshooting.md).
+- As of v1.2.4, parsed objects are returned as plain JavaScript objects, not Maps. See [Troubleshooting](../guides/troubleshooting.md).
 
-> **📝 Note**: Version 1.2.4 includes a critical fix for object conversion. Previous versions incorrectly returned JavaScript Maps instead of plain objects for parsed JSON. If you're experiencing issues where `{a:1}` returns `{}`, please upgrade to version 1.2.4 or later. See [Troubleshooting](troubleshooting.md) for details.
+> **📝 Note**: Version 1.2.4 includes a critical fix for object conversion. Previous versions incorrectly returned JavaScript Maps instead of plain objects for parsed JSON. If you're experiencing issues where `{a:1}` returns `{}`, please upgrade to version 1.2.4 or later. See [Troubleshooting](../guides/troubleshooting.md) for details.
 
 To use the WASM bindings, you need to enable the `wasm` feature in your `Cargo.toml`:
 

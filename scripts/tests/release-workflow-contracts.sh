@@ -9,6 +9,8 @@ WASM="$ROOT/.github/workflows/wasm.yml"
 WASM_BUILD="$ROOT/.github/workflows/wasm-build.yml"
 DEPLOY="$ROOT/.github/workflows/deploy.yml"
 ROOT_MANIFEST="$ROOT/Cargo.toml"
+PYTHON_PROJECT="$ROOT/crates/python/pyproject.toml"
+MKDOCS="$ROOT/mkdocs.yml"
 
 fail() {
     printf 'release workflow contract failure: %s\n' "$*" >&2
@@ -47,6 +49,9 @@ assert_not_contains 'npm publish' "$RELEASE"
 
 assert_contains 'include = [' "$ROOT_MANIFEST"
 assert_contains '"/src/**"' "$ROOT_MANIFEST"
+assert_contains 'name = "vexy-json"' "$PYTHON_PROJECT"
+assert_contains 'Documentation = "https://vexy.dev/vexy-json/"' "$PYTHON_PROJECT"
+assert_contains 'site_url: https://vexy.dev/vexy-json/' "$MKDOCS"
 
 assert_contains 'python3 scripts/release-manifests.py check "$VERSION"' "$WASM"
 assert_contains 'cp README.md crates/wasm/pkg/README.md' "$WASM"

@@ -61,7 +61,7 @@ def make_artifacts(dist: Path, version: str) -> None:
     dist.mkdir(parents=True, exist_ok=True)
     metadata = (
         "Metadata-Version: 2.3\n"
-        "Name: vexy_json\n"
+        "Name: vexy-json\n"
         f"Version: {version}\n"
         "Summary: shell-contract fixture\n\n"
     ).encode()

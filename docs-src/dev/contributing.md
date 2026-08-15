@@ -3,68 +3,43 @@ nav_title: Contributing
 nav_order: 7
 ---
 
-# Contributing to vexy_json
+# Contributing
 
-We welcome contributions to `vexy_json`! Whether it's bug reports, feature requests, documentation improvements, or code contributions, your help is greatly appreciated.
+Vexy JSON welcomes focused fixes, tests, documentation improvements, and API
+proposals. Open an issue before a large architectural change so the intended
+behaviour and compatibility constraints are clear.
 
-## How to Contribute
+## Prepare a change
 
-1.  **Fork the Repository**: Start by forking the `vexy_json` repository on GitHub.
-2.  **Clone Your Fork**: Clone your forked repository to your local machine:
-    ```bash
-    git clone https://github.com/your-username/vexy_json.git
-    cd vexy_json
-    ```
-3.  **Create a New Branch**: Create a new branch for your feature or bug fix:
-    ```bash
-    git checkout -b feature/your-feature-name
-    # or
-    git checkout -b bugfix/fix-description
-    ```
-4.  **Make Your Changes**: Implement your changes. Ensure your code adheres to the existing style and conventions.
-5.  **Test Your Changes**: Run the test suite to ensure your changes haven't introduced any regressions and that new features are adequately covered.
-    ```bash
-    cargo test --all-features
-    ```
-6.  **Format and Lint**: Ensure your code is properly formatted and passes lint checks.
-    ```bash
-    cargo fmt
-    cargo clippy --all-targets --all-features
-    ```
-7.  **Commit Your Changes**: Write clear and concise commit messages.
-    ```bash
-    git commit -m "feat: Add new feature X" # or "fix: Resolve bug Y"
-    ```
-8.  **Push to Your Fork**: Push your changes to your GitHub fork.
-    ```bash
-    git push origin feature/your-feature-name
-    ```
-9.  **Create a Pull Request**: Open a pull request from your fork to the `main` branch of the `vexy_json` repository. Provide a detailed description of your changes.
+1. Fork and clone `vexyart/vexy-json`.
+2. Create a short-lived branch from `main`.
+3. Add or update tests that demonstrate the required behaviour.
+4. Keep changes scoped; the workspace serves Rust, Python, CLI, WASM, and C API
+   users from the same parser core.
+5. Update user documentation when public behaviour changes.
 
-## Code Style and Conventions
+## Run the canonical gate
 
--   Follow Rust's official style guidelines (enforced by `rustfmt`).
--   Use `clippy` to catch common mistakes and improve code quality.
--   Write clear and concise code comments and documentation where necessary.
--   Ensure new features have corresponding tests.
+Use the repository script instead of invoking individual Cargo commands:
 
-## Extending the Web Tool
+```bash
+./build.sh
+cat build.log.txt
+```
 
-If you're looking to contribute specifically to the `vexy_json` web tool, please refer to the [Developer Guide for Extending the Web Tool](developer-guide.md) for detailed information on its structure, build process, and development considerations.
+The gate formats and checks the Rust workspace, runs unit, integration, and
+documentation tests, builds the Python source distribution and native wheel,
+tests the installed wheel in an isolated environment, and builds this MkDocs
+site in strict mode.
 
-## Reporting Bugs
+## Submit the pull request
 
-If you find a bug, please open an issue on the [GitHub Issues page](https://github.com/vexyart/vexy-json/issues). When reporting a bug, please include:
+Describe the problem, the chosen behaviour, and the verification you ran. Link
+the relevant issue and call out changes to public syntax, error behaviour, or
+package metadata. Avoid committing generated build output or local tool caches.
 
--   A clear and concise description of the bug.
--   Steps to reproduce the behavior.
--   Expected behavior.
--   Actual behavior.
--   Any relevant error messages or stack traces.
--   Your Rust version (`rustc --version`).
+For implementation details, continue with the [build process](build-process.md),
+[plugin development](plugin-development.md), or the public [Rust API](../user/api/rust.md).
 
-## Feature Requests
-
-Have an idea for a new feature? Open an issue on the [GitHub Issues page](https://github.com/vexyart/vexy-json/issues) to discuss it. Describe the feature, why you think it would be valuable, and any potential implementation details.
-
-Thank you for contributing to `vexy_json`!
+Report defects and feature requests in the
+[GitHub issue tracker](https://github.com/vexyart/vexy-json/issues).

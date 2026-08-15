@@ -1,37 +1,38 @@
-# User Documentation
+---
+nav_title: User Guide
+nav_order: 2
+---
 
-Welcome to Vexy JSON! This section contains everything you need to get started and make the most of our forgiving JSON parser.
+# User guide
 
-## 🚀 Quick Start
-- **[Interactive Demo](../demo/)** - Try Vexy JSON in your browser
-- **[Getting Started](getting-started.md)** - Installation and basic usage
-- **[Features Overview](features.md)** - What makes Vexy JSON special
+Vexy JSON turns relaxed JSON-like text into ordinary values without requiring
+a cleanup pass. Choose a guide based on the surface you use:
 
-## 📚 API Documentation
-Choose your preferred language or platform:
+- [Getting started](getting-started.md) for installation and first parses.
+- [Forgiving syntax](features.md) for accepted extensions and strict settings.
+- [Python API](api/python/index.md) for Python functions and options.
+- [Rust API](api/rust.md) for Rust types and configuration.
+- [Streaming API](api/streaming-api.md) for incremental processing.
+- [WebAssembly API](api/wasm.md) for browser and Node.js integration.
+- [JSON repair](guides/json-repair.md) for repair boundaries.
+- [Migration](guides/migration.md) for adopting the parser.
+- [Troubleshooting](guides/troubleshooting.md) for common failures.
 
-- **[Rust](api/rust.md)** - Native Rust library
-- **[Python](api/python-bindings.md)** - Python bindings 
-- **[JavaScript/WASM](api/wasm.md)** - WebAssembly for browsers
-- **[CLI Tool](api/cli.md)** - Command-line interface
-- **[Streaming API](api/streaming-api.md)** - Process large JSON files
+The browser-based [interactive demo](../demo/index.html) is useful for quickly
+checking how a sample is interpreted.
 
-## 🎯 How-To Guides
-Step-by-step guides for common tasks:
+## Naming at a glance
 
-- **[Migration Guide](guides/migration.md)** - Switching from other JSON parsers
-- **[JSON Repair](guides/json-repair.md)** - Fix broken JSON automatically
-- **[Error Handling](guides/error-handling.md)** - Handle parsing errors gracefully
-- **[Troubleshooting](guides/troubleshooting.md)** - Common issues and solutions
+| Surface | Name |
+| --- | --- |
+| Python distribution | `vexy-json` |
+| Python import | `vexy_json` |
+| Rust package | `vexy-json` |
+| Rust crate | `vexy_json` |
+| CLI executable | `vexy-json` |
 
-## 📖 Reference
-- **[Release Notes](reference/release-notes.md)** - Version history and changes
-- **[Configuration Options](reference/config.md)** - All parser options
-- **[Error Types](reference/errors.md)** - Complete error reference
+## Safe adoption
 
-## 💡 Examples
-Real-world usage examples:
-
-- **[Configuration Files](examples/config-files.md)** - Parse config files with comments
-- **[API Responses](examples/api-responses.md)** - Handle malformed API data
-- **[Log Processing](examples/log-processing.md)** - Process JSON logs
+Start with forgiving defaults for trusted configuration and generated text.
+At external trust boundaries, explicitly disable syntax extensions and repair,
+then validate the parsed value against your application schema.

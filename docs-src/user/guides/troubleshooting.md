@@ -144,7 +144,7 @@ console.log('JSON:', JSON.stringify(result2));
 If you encounter issues not covered here:
 
 1. Check the [GitHub Issues](https://github.com/vexyart/vexy-json/issues)
-2. Review the [API documentation](api.md)
+2. Review the [Rust API documentation](../api/rust.md)
 3. Examine the [test files](https://github.com/vexyart/vexy-json/tree/main/tests) for usage examples
 4. Create a new issue with:
    - Your vexy_json version

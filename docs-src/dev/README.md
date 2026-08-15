@@ -1,42 +1,44 @@
-# Developer Documentation
+---
+nav_title: Development
+nav_order: 8
+---
 
-Welcome to the Vexy JSON developer documentation! This section is for contributors, plugin developers, and anyone wanting to understand the internals.
+# Development guide
 
-## 🚀 Getting Started
-- **[Contributing Guide](contributing.md)** - How to contribute to the project
-- **[Development Setup](development-setup.md)** - Set up your development environment
-- **[Build Process](build-process.md)** - Building and testing the project
+The repository is a Cargo workspace containing the core parser, CLI, Python,
+Serde, WebAssembly, C API, and test-support crates.
 
-## 🏗️ Architecture
-- **[Architecture Overview](architecture.md)** - High-level system design
-- **[Parser Implementation](parser-internals.md)** - How the parser works
-- **[Error Recovery](error-recovery.md)** - Error handling and repair mechanisms
-- **[WASM Integration](wasm-integration.md)** - WebAssembly compilation details
+## Canonical commands
 
-## 🔧 Extension Development  
-- **[Plugin Development](plugin-development.md)** - Creating plugins for Vexy JSON
-- **[Plugin Registry](plugin-registry.md)** - Available plugins and extensions
-- **[Custom Parsers](custom-parsers.md)** - Extending parsing capabilities
+```bash
+./build.sh
+./install.sh
+./publish.sh --dry-run
+```
 
-## 🚀 Release & Deployment
-- **[Release Process](release-process.md)** - Release procedures and guidelines
-- **[Packaging](packaging/)** - Platform-specific packaging
-  - [macOS Packaging](packaging-macos.md)
-  - [Windows Packaging](packaging-windows.md)
-  - [Linux Packaging](packaging-linux.md)
+`build.sh` is the complete verification gate. It checks formatting and linting,
+builds and tests the Rust workspace, builds and tests the Python wheel, and
+renders this MkDocs site in strict mode. Its output is recorded in
+`build.log.txt`.
 
-## 📊 Testing & Performance
-- **[Testing Strategy](testing.md)** - Testing approach and guidelines
-- **[Benchmarks](benchmarks.md)** - Performance comparisons and benchmarks
-- **[Profiling](profiling.md)** - Performance analysis tools
+`install.sh` installs the CLI under `~/.local` by default and builds a native
+wheel matching the unmanaged system Python selected by uv.
 
-## 🔍 Debugging & Troubleshooting
-- **[Debug Tools](debugging.md)** - Available debugging utilities
-- **[Common Issues](dev-troubleshooting.md)** - Developer-specific issues
-- **[Performance Debugging](perf-debugging.md)** - Optimizing performance
+`publish.sh` checkpoints intended dirty changes, runs `build.sh`, synchronizes
+versions, runs `build.sh` again, creates and verifies release refs, then
+publishes crates in dependency order and uploads Python artifacts with
+`uv publish`.
 
-## 📋 Internal Documentation
-For project maintainers:
-- **[Internal Docs](../internal/)** - Planning documents and internal tools
-- **[Release Planning](../internal/PLAN.md)** - Current development roadmap
-- **[TODO List](../internal/TODO.md)** - Outstanding tasks
+## Contributor references
+
+- [Contributing](contributing.md)
+- [Architecture](design.md)
+- [Build process](build-process.md)
+- [Benchmarks](benchmarks.md)
+- [Plugin development](plugin-development.md)
+- [Plugin registry](plugin-registry.md)
+- [Release process](release-process.md)
+- [macOS packaging](packaging-macos.md)
+
+Historical plans, debug fixtures, and completed migration notes remain under
+`docs-src/internal/` as project evidence but are excluded from the public site.

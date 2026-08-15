@@ -1,218 +1,120 @@
 ---
-nav_title: Python Bindings
-nav_order: 6
+nav_title: Python API
+nav_order: 1
 ---
 
-# vexy_json - Forgiving JSON Parser for Python
+# Python API
 
-A Python library for parsing "forgiving" JSON, which is JSON that includes features like:
-
-- Comments (single-line `//` and multi-line `/* */`)
-- Trailing commas in arrays and objects
-- Unquoted object keys
-- Single-quoted strings
-- Implicit top-level objects and arrays
-- Newlines as comma separators
-
-This is a Python binding for the Rust [vexy_json](https://github.com/vexyart/vexy-json) library, which is a port of the JavaScript [the reference implementation](https://github.com/the reference implementationjs/the reference implementation) library.
-
-## Installation
+Install the `vexy-json` distribution and import `vexy_json`:
 
 ```bash
-pip install vexy_json
+uv add vexy-json
 ```
-
-## Quick Start
 
 ```python
 import vexy_json
-
-# Parse forgiving JSON
-result = vexy_json.parse('''
-{
-    // This is a comment
-    name: "Alice",
-    age: 30,
-    active: true,  // trailing comma is OK
-}
-''')
-
-print(result)
-# Output: {'name': 'Alice', 'age': 30, 'active': True}
 ```
 
-## Features
+The package ships type information (`py.typed`) and a native Rust extension.
 
-### Basic Parsing
+## Parsing
+
+### `parse(input)` / `loads(input)`
+
+Parse a string with forgiving defaults. Both names return JSON-compatible
+Python values: `dict`, `list`, `str`, `int`, `float`, `bool`, or `None`.
 
 ```python
-import vexy_json
-
-# Standard JSON
-data = vexy_json.parse('{"key": "value"}')
-
-# Forgiving features
-data = vexy_json.parse('''
-{
-    // Comments are allowed
-    unquoted_key: "value",
-    'single_quotes': true,
-    trailing_comma: "ok",
-}
-''')
+value = vexy_json.loads("{name: 'Ada', active: true,}")
+assert value == {"name": "Ada", "active": True}
 ```
 
-### Custom Options
+Invalid input raises `ValueError`.
+
+### `parse_with_options(input, **options)`
+
+| Option | Default | Purpose |
+| --- | ---: | --- |
+| `allow_comments` | `True` | Accept line and block comments |
+| `allow_trailing_commas` | `True` | Accept a final comma |
+| `allow_unquoted_keys` | `True` | Accept identifier-like object keys |
+| `allow_single_quotes` | `True` | Accept single-quoted strings |
+| `implicit_top_level` | `True` | Infer a top-level object or array |
+| `newline_as_comma` | `True` | Treat line boundaries as separators |
+| `max_depth` | `128` | Bound nesting |
+| `enable_repair` | `True` | Enable structural repair |
+| `max_repairs` | `100` | Bound repair attempts |
+| `fast_repair` | `False` | Prefer faster repair heuristics |
+| `report_repairs` | `True` | Retain repair reporting behavior |
 
 ```python
-import vexy_json
-
-# Parse with specific options
-data = vexy_json.parse_with_options(
-    'key: value',
-    allow_comments=True,
-    allow_trailing_commas=True,
-    allow_unquoted_keys=True,
-    allow_single_quotes=True,
-    implicit_top_level=True,
-    newline_as_comma=True,
-    max_depth=128
+strict = vexy_json.parse_with_options(
+    '{"answer": 42}',
+    allow_comments=False,
+    allow_trailing_commas=False,
+    allow_unquoted_keys=False,
+    allow_single_quotes=False,
+    implicit_top_level=False,
+    newline_as_comma=False,
+    enable_repair=False,
 )
-# Output: {'key': 'value'}
 ```
 
-### Validation
+### `is_valid(input)`
+
+Return `True` when the string parses under Vexy JSON defaults. This checks
+syntax, not an application schema.
+
+## Serialization
+
+### `dumps(obj, indent=None)`
+
+Serialize a JSON-compatible Python value to text. Set `indent` for readable
+output.
+
+### `load(fp, **options)` and `dump(obj, fp, indent=None)`
+
+Read from or write to a text or binary file-like object:
+
+```python
+from pathlib import Path
+import vexy_json
+
+with Path("input.json").open() as source:
+    value = vexy_json.load(source, allow_comments=True)
+
+with Path("output.json").open("w") as destination:
+    vexy_json.dump(value, destination, indent=2)
+```
+
+## Streaming and NDJSON
+
+`StreamingParser.parse_lines(fp)` yields one parsed value per NDJSON line.
+`parse_stream(fp)` provides the package's stream-oriented interface. Use the
+context manager so resources are released predictably:
 
 ```python
 import vexy_json
 
-# Check if JSON is valid
-if vexy_json.is_valid('{"valid": true}'):
-    print("Valid JSON!")
-
-if not vexy_json.is_valid('invalid json'):
-    print("Invalid JSON!")
+with open("events.ndjson") as source:
+    with vexy_json.StreamingParser() as parser:
+        for event in parser.parse_lines(source):
+            process(event)
 ```
 
-### Serialization
+## Optional data integrations
 
-```python
-import vexy_json
+`loads_numpy`, `loads_numpy_zerocopy`, and `loads_dataframe` require their
+corresponding NumPy or pandas runtime dependency. Import failures are reported
+when the optional library is unavailable.
 
-data = {'name': 'Alice', 'age': 30}
+## Package identity
 
-# Compact output
-json_str = vexy_json.dumps(data)
-print(json_str)
-# Output: {"name":"Alice","age":30}
+These names intentionally differ:
 
-# Pretty printed output
-json_str = vexy_json.dumps(data, indent=2)
-print(json_str)
-# Output:
-# {
-#   "age": 30,
-#   "name": "Alice"
-# }
-```
+- PyPI distribution and installer name: `vexy-json`
+- Python module and native extension namespace: `vexy_json`
 
-## API Reference
-
-### Functions
-
-#### `parse(input: str) -> Any`
-
-Parse a JSON string with all forgiving features enabled.
-
-**Parameters:**
-- `input` (str): The JSON string to parse
-
-**Returns:**
-- The parsed JSON as a Python object (dict, list, str, int, float, bool, or None)
-
-**Raises:**
-- `ValueError`: If the input is not valid JSON
-
-#### `parse_with_options(input: str, **options) -> Any`
-
-Parse a JSON string with custom options.
-
-**Parameters:**
-- `input` (str): The JSON string to parse
-- `allow_comments` (bool): Allow single-line and multi-line comments (default: True)
-- `allow_trailing_commas` (bool): Allow trailing commas (default: True)
-- `allow_unquoted_keys` (bool): Allow unquoted object keys (default: True)
-- `allow_single_quotes` (bool): Allow single-quoted strings (default: True)
-- `implicit_top_level` (bool): Allow implicit top-level objects/arrays (default: True)
-- `newline_as_comma` (bool): Treat newlines as commas (default: True)
-- `max_depth` (int): Maximum nesting depth (default: 128)
-
-**Returns:**
-- The parsed JSON as a Python object
-
-**Raises:**
-- `ValueError`: If the input is not valid JSON
-
-#### `is_valid(input: str) -> bool`
-
-Check if a string is valid JSON/Vexy JSON.
-
-**Parameters:**
-- `input` (str): The JSON string to validate
-
-**Returns:**
-- `bool`: True if valid, False otherwise
-
-#### `dumps(obj: Any, indent: Optional[int] = None) -> str`
-
-Serialize a Python object to a JSON string.
-
-**Parameters:**
-- `obj`: The Python object to serialize
-- `indent` (int, optional): Number of spaces for indentation
-
-**Returns:**
-- `str`: The JSON string representation
-
-**Raises:**
-- `TypeError`: If the object cannot be serialized
-
-## Comparison with Standard Library
-
-Unlike Python's built-in `json` module, vexy_json is forgiving and accepts non-standard JSON:
-
-```python
-import json
-import vexy_json
-
-forgiving_json = '''
-{
-    // Comment
-    name: "Alice",
-    'age': 30,
-}
-'''
-
-# This will raise an exception
-try:
-    json.loads(forgiving_json)
-except json.JSONDecodeError as e:
-    print(f"json module failed: {e}")
-
-# This works fine
-result = vexy_json.parse(forgiving_json)
-print(f"vexy_json parsed: {result}")
-```
-
-## Performance
-
-vexy_json is implemented in Rust and should be competitive with other JSON parsers for most use cases. The forgiving features add minimal overhead.
-
-## License
-
-This project is licensed under either of:
-
-- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
-- MIT License ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
-
-at your option.
+Python packaging normalizes hyphens and underscores for resolution, but the
+hyphenated metadata keeps the public project name consistent across PyPI,
+crates.io, the CLI, and this documentation.

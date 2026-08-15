@@ -43,7 +43,7 @@ class VexyJsonPerformanceMonitor {
      * Monitor bundle size and loading performance
      */
     async monitorBundleMetrics() {
-        const baseUrl = 'https://twardoch.github.io/vexy_json';
+        const baseUrl = 'https://vexy.dev/vexy-json';
         const files = [
             '/pkg/vexy_json.js',
             '/pkg/vexy_json_bg.wasm',

@@ -1,5 +1,5 @@
 site_name: Vexy JSON Documentation
-site_url: https://vexyart.github.io/vexy-json
+site_url: https://vexy.dev/vexy-json/
 site_description: A forgiving JSON parser for Rust - Complete Documentation
 repo_url: https://github.com/vexyart/vexy-json
 repo_name: vexyart/vexy-json

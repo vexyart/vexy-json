@@ -5,8 +5,8 @@ build-backend = "maturin"
 
 
 [project]
-name = "vexy_json"
-description = "A forgiving JSON parser - Python bindings for the Rust vexy_json library"
+name = "vexy-json"
+description = "Parse relaxed, configuration-style, and LLM-generated JSON with a fast Rust engine"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
@@ -21,12 +21,26 @@ classifiers = [
 "Programming Language :: Python :: 3.10",
 "Programming Language :: Python :: 3.11",
 "Programming Language :: Python :: 3.12",
+"Programming Language :: Python :: 3.13",
 "Programming Language :: Rust",
+"Typing :: Typed",
+"Topic :: File Formats :: JSON",
+"Topic :: Software Development :: Interpreters",
 "Topic :: Software Development :: Libraries :: Python Modules",
 "Topic :: Text Processing",
 "Topic :: Internet :: WWW/HTTP :: Dynamic Content"
 ]
-keywords = [ "json", "parser", "forgiving", "lenient", "rust" ]
+keywords = [
+"json",
+"json parser",
+"relaxed json",
+"forgiving json",
+"json repair",
+"configuration",
+"llm output",
+"rust",
+"pyo3"
+]
 dynamic = [ "version" ]
 
 
@@ -43,7 +57,8 @@ text = "MIT OR Apache-2.0"
 Homepage = "https://github.com/vexyart/vexy-json"
 Repository = "https://github.com/vexyart/vexy-json.git"
 Issues = "https://github.com/vexyart/vexy-json/issues"
-Documentation = "https://twardoch.github.io/vexy_json/"
+Documentation = "https://vexy.dev/vexy-json/"
+Changelog = "https://github.com/vexyart/vexy-json/blob/main/CHANGELOG.md"
 
 
 [project.optional-dependencies]

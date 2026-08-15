@@ -219,7 +219,7 @@ Features:
 
 For more information:
   Website: https://github.com/vexyart/vexy-json
-  Documentation: https://twardoch.github.io/vexy_json/
+  Documentation: https://vexy.dev/vexy-json/
 
 License: MIT OR Apache-2.0
 EOF

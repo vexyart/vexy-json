@@ -206,6 +206,14 @@ set -euo pipefail
 printf 'uvx %s\n' "$*" >>"$TOOL_LOG"
 if [[ ${1:-} == --from ]]; then
     printf '%s\n' 'maturin 1.9.4 (workflow-contract)'
+elif [[ ${1:-} == --with-requirements ]]; then
+    site_dir=""
+    while (( $# > 0 )); do
+        if [[ $1 == --site-dir ]]; then site_dir=$2; shift 2; else shift; fi
+    done
+    [[ -n "$site_dir" ]]
+    mkdir -p "$site_dir"
+    printf '%s\n' '<!doctype html><title>fixture docs</title>' >"$site_dir/index.html"
 elif [[ ${1:-} == gitnextver@1.0.1 ]]; then
     [[ ${ALLOW_FAKE_UPLOADS:-0} == 1 ]]
     [[ "$*" == 'gitnextver@1.0.1 --directory . --verbose' ]]
@@ -258,6 +266,8 @@ for active in build.sh install.sh; do
     assert_not_contains bindings/python "$ROOT/$active"
 done
 assert_not_contains bindings/python "$ROOT/publish.sh"
+assert_contains 'mkdocs build --strict' "$ROOT/build.sh"
+assert_contains 'documentation_gate' "$ROOT/build.sh"
 assert_contains 'uv pip install --system --python "$SYSTEM_PYTHON" --reinstall "$WHEEL"' "$ROOT/install.sh"
 assert_contains 'uv build --python "$SYSTEM_PYTHON" --no-sources' "$ROOT/install.sh"
 assert_contains 'uv publish "$PY_WHEEL" "$PY_SDIST"' "$ROOT/publish.sh"

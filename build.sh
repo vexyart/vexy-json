@@ -64,6 +64,8 @@ verify_layout() {
         crates/python/Cargo.toml \
         crates/python/pyproject.toml \
         crates/python/tests \
+        mkdocs.yml \
+        requirements-docs.txt \
         scripts/release-manifests.py \
         scripts/check-python-artifacts.py; do
         [[ -e "$ROOT/$required" ]] || {
@@ -124,6 +126,17 @@ print(f"Python smoke passed: vexy_json {vexy_json.__version__}")
 PY
 }
 
+documentation_gate() {
+    local site="$TEMP_DIR/docs-site"
+    uvx --with-requirements "$ROOT/requirements-docs.txt" \
+        mkdocs build --strict --config-file "$ROOT/mkdocs.yml" --site-dir "$site"
+    [[ -f "$site/index.html" ]] || {
+        printf 'Documentation build did not create index.html.\n' >&2
+        return 1
+    }
+    printf 'Documentation build passed: %s\n' "$ROOT/mkdocs.yml"
+}
+
 run_build() {
     local tool
     for tool in git cargo rustc uv uvx python3; do
@@ -151,6 +164,7 @@ run_build() {
     cargo test --manifest-path "$ROOT/Cargo.toml" --workspace --exclude vexy-json-python --all-features --doc
     cargo build --manifest-path "$ROOT/Cargo.toml" --workspace --exclude vexy-json-python --all-features --examples
     python_gate "$version"
+    documentation_gate
 
     record_tree "$TEMP_DIR/after"
     verify_tree_unchanged "$TEMP_DIR/before" "$TEMP_DIR/after"

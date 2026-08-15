@@ -1,12 +1,22 @@
 site_name: Vexy JSON
-site_url: https://vexyart.github.io/vexy-json
-site_description: Lenient and tolerant JSON parser in Rust
+site_url: https://vexy.dev/vexy-json/
+site_description: Forgiving JSON parser for Rust, Python, WebAssembly, and the command line
 repo_url: https://github.com/vexyart/vexy-json
 repo_name: vexyart/vexy-json
 
 docs_dir: docs-src        # points to moved sources
 site_dir: docs            # rendered HTML overwrites /docs
 use_directory_urls: true
+
+# Historical plans and debugging fixtures remain in the repository as source
+# evidence, but are not part of the public documentation site.
+exclude_docs: |
+  internal/**
+  dev/design/**
+  dev/development.md
+  dev/developer-guide.md
+  dev/feedback.md
+  user/reference/**
 
 theme:
   name: material

@@ -3,139 +3,84 @@ nav_title: Home
 nav_order: 1
 ---
 
-# Vexy JSON Documentation
+# JSON from the real world, parsed without ceremony
 
-**A forgiving JSON parser that handles real-world JSON with comments, trailing commas, unquoted keys, and more.**
+Vexy JSON accepts strict JSON and the useful deviations people actually write:
+comments, trailing commas, unquoted keys, single quotes, implicit containers,
+newline separators, and extended number formats. Its Rust engine is available
+as a Rust library, native Python package, CLI, WebAssembly module, and C API.
 
----
-
-## 🚀 Quick Start
-
-### Try It Now
-- **[Interactive Demo](demo/)** - Test Vexy JSON in your browser with WASM
-- **[Legacy Tool](demo/legacy.html)** - Previous version of the web tool
-
-### Installation
-```bash
-# Rust
-cargo add vexy-json
-
-# Python
-pip install vexy-json
-
-# CLI
-cargo install vexy-json
+```text
+// Configuration, generated output, or a hand-edited file
+service: 'preview'
+retries: 0b11
+hosts: [api, cache,]
 ```
 
----
+The default parser turns that into an ordinary object. You can disable every
+extension when an input boundary requires strict JSON.
 
-## Quick Start (Rust)
+## Install
 
-```rust
-use vexy_json::parse;
+=== "Rust"
 
-fn main() {
-    let data = r#"{ key: 1, /* comment */ arr: [1,2,3,], hex: 0x10 }"#;
-    let value = parse(data).unwrap();
-    println!("{:?}", value);
-}
-```
+    ```bash
+    cargo add vexy-json
+    ```
 
-## 📚 Documentation
+=== "Python"
 
-### For Users
-**[📖 User Documentation](user/)** - Complete user guide including:
-- Installation and getting started
-- API documentation for all languages
-- How-to guides and examples
-- Troubleshooting and reference
+    ```bash
+    uv add vexy-json
+    ```
 
-### For Developers
-**[🔧 Developer Documentation](dev/)** - For contributors and extension developers:
-- Contributing guidelines and setup
-- Architecture and internals
-- Plugin development
-- Build, test, and release processes
+=== "CLI"
 
----
+    ```bash
+    cargo install vexy-json-cli
+    ```
 
-## ✨ Key Features
+Python installs the `vexy-json` distribution and imports it as `vexy_json`.
 
-### 💬 Comments Support
-```json
-{
-    // Single-line comments
-    "name": "example",
-    /* Multi-line
-       comments */ 
-    "value": 42
-}
-```
+## Start here
 
-### 🏷️ Unquoted Keys
-```json
-{
-    name: "No quotes needed",
-    version: 1.0,
-    active: true
-}
-```
+- [Getting started](user/getting-started.md) — install, parse, configure, and
+  handle errors.
+- [Forgiving syntax](user/features.md) — the accepted extensions and how to
+  switch them off.
+- [Python API](user/api/python/index.md) — functions, options, files, and typed
+  interfaces.
+- [Rust API](user/api/rust.md) — core types and parser configuration.
+- [Troubleshooting](user/guides/troubleshooting.md) — installation, parsing,
+  WASM, and release diagnostics.
+- [Interactive demo](demo/index.html) — parse examples in the browser.
 
-### ➕ Trailing Commas
-```json
-{
-    "items": [
-        "first",
-        "second",  // <- This comma is OK
-    ],
-    "done": true,  // <- And this one too
-}
-```
+## Choose the right surface
 
-### 🔧 Error Recovery
-```json
-{
-    "broken": "json,
-    "gets": "fixed automatically"
-}
-```
+| Need | Package | Entry point |
+| --- | --- | --- |
+| Rust application | `vexy-json` | `vexy_json::parse` |
+| Python application | `vexy-json` | `vexy_json.parse` |
+| Terminal or shell pipeline | `vexy-json-cli` | `vexy-json` |
+| Browser or Node.js | `vexy-json-wasm` | WASM bindings |
+| C or C++ integration | `vexy-json-c-api` | C headers and library |
 
----
+## Guarantees and boundaries
 
-## 🎯 Use Cases
+Vexy JSON returns normal JSON-compatible values. Forgiving syntax changes what
+the parser accepts; it does not invent application-specific data. Parsing can
+still fail for incomplete strings, invalid escapes, excessive nesting, and
+inputs that remain ambiguous after the enabled recovery rules.
 
-- **Configuration Files** - More readable config with comments
-- **API Development** - Forgiving parsing for client-side JSON
-- **Data Migration** - Repair malformed JSON data
-- **Developer Tools** - Build JSON editors and validators
-- **Log Processing** - Handle JSON logs with comments
+Use strict options at trust boundaries. Use forgiving defaults for
+configuration, migrations, editor input, logs, and generated text where a
+helpful parser is more valuable than a brittle one.
 
----
+## Project links
 
-## 🌟 Performance
+- [Source and issues](https://github.com/vexyart/vexy-json)
+- [Rust package](https://crates.io/crates/vexy-json)
+- [Python package](https://pypi.org/project/vexy-json/)
+- [Documentation](https://vexy.dev/vexy-json/)
 
-Vexy JSON is designed for both **correctness** and **speed**:
-
-- ⚡ **Fast parsing** - Competitive with standard JSON parsers
-- 🧠 **Smart recovery** - Fixes common JSON errors automatically  
-- 🌐 **Multi-platform** - Rust, Python, WebAssembly, and C/C++ bindings
-- 🔒 **Memory safe** - Built in Rust with comprehensive error handling
-
----
-
-## 🔗 Links
-
-- **[GitHub Repository](https://github.com/vexyart/vexy-json)** - Source code and issues
-- **[Crates.io](https://crates.io/crates/vexy-json)** - Rust package
-- **[PyPI](https://pypi.org/project/vexy-json/)** - Python package
-- **[NPM](https://www.npmjs.com/package/@vexyart/vexy-json)** - WebAssembly package
-
----
-
-## 📄 License
-
-Licensed under either of:
-- Apache License, Version 2.0
-- MIT License
-
-at your option.
+Vexy JSON is available under MIT or Apache-2.0, at your option.

@@ -14,7 +14,7 @@ Add the high-level crate:
 
 ```toml
 [dependencies]
-vexy-json = "1.5.11"
+vexy-json = "1"
 ```
 
 Parse forgiving JSON with the default options:
@@ -32,12 +32,15 @@ fn main() -> vexy_json::Result<()> {
 The workspace also publishes focused crates for the core parser, CLI, Serde
 integration, WebAssembly bindings, and the C API.
 
+Complete guides and API references are published at
+[vexy.dev/vexy-json](https://vexy.dev/vexy-json/).
+
 ## Python
 
-Install the native Python package:
+Install the native Python package with uv:
 
 ```bash
-python -m pip install vexy-json
+uv add vexy-json
 ```
 
 ```python

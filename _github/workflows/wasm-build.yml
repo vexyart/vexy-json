@@ -217,4 +217,4 @@ jobs:
       - name: Print deployment URL
         run: |
           echo "🚀 Deployed to GitHub Pages!"
-          echo "📍 Tool URL: https://twardoch.github.io/vexy_json/tool.html"
+          echo "📍 Tool URL: https://vexy.dev/vexy-json/tool.html"

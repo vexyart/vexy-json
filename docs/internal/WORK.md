@@ -4,6 +4,12 @@
 
 ## Release publication recovery
 
+- Corrected the Python distribution name to `vexy-json`; the Python import
+  remains `vexy_json`.
+- Reworked the public user and developer documentation, enriched PyPI metadata,
+  adopted `https://vexy.dev/vexy-json/`, and added strict documentation
+  rendering to `build.sh` and therefore `publish.sh`.
+
 - Diagnosed the interrupted v1.5.11 release as an oversized root crate: its
   implicit Cargo file set produced a 30.2 MiB upload containing generated docs,
   old installers, release archives, and local development artifacts.

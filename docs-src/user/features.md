@@ -1,129 +1,77 @@
 ---
-nav_title: Forgiving Features
-nav_order: 5
+nav_title: Forgiving Syntax
+nav_order: 3
 ---
 
-a: 1, b: 2
+# Forgiving syntax
 
-# Forgiving Features
+Strict JSON is always accepted. The default parser additionally accepts the
+following extensions.
 
-`vexy_json` is a forgiving JSON parser, handling common deviations from strict JSON (RFC 8259). Below are the supported forgiving features, enhanced in v2.0.0 with streaming, parallel processing, and plugin capabilities:
+| Extension | Example | Option |
+| --- | --- | --- |
+| Line comments | `// note` | `allow_comments` |
+| Block comments | `/* note */` | `allow_comments` |
+| Trailing commas | `[1, 2,]` | `allow_trailing_commas` |
+| Unquoted keys | `{port: 8080}` | `allow_unquoted_keys` |
+| Single quotes | `{'mode': 'dev'}` | `allow_single_quotes` |
+| Implicit top level | `port: 8080` | `implicit_top_level` |
+| Newline separators | `1\n2\n3` | `newline_as_comma` |
+| Extended numbers | `0xff`, `0o77`, `0b10`, `1_000` | enabled parser support |
 
 ## Comments
 
-- Single-line: `// ...` and `# ...`
-- Multi-line: `/* ... */`
+Comments are discarded rather than returned in the parsed value:
 
-Comments are ignored anywhere whitespace is allowed.
-
-**Example:**
-
-```json
+```text
 {
-  // This is a single-line comment
-  age: 30, # Another single-line comment
-  /* Multi-line
-     comment */
-  name: "Alice"
+  // deployment target
+  region: 'eu-central',
+  /* keep this low in development */
+  workers: 2,
 }
 ```
 
-## Unquoted Keys
+## Implicit containers
 
-Object keys can be unquoted if they are valid identifiers.
+A top-level sequence of key/value pairs becomes an object:
 
-```json
-{ name: "vexy_json", version: 1.0 }
+```text
+host: localhost
+port: 8080
 ```
 
-## Trailing Commas
+A top-level sequence of values becomes an array:
 
-Trailing commas are allowed in arrays and objects.
-
-```json
-{
-  a: 1,
-  b: 2,
-}
+```text
+'red'
+'green'
+'blue'
 ```
 
-## Implicit Top-Level Objects and Arrays
+Explicit `{}` and `[]` remain preferable when the input could be ambiguous.
 
-You can omit brackets for top-level arrays or objects:
+## Numbers
 
-```json
-apple, banana, cherry
-# Interpreted as ["apple", "banana", "cherry"]
+Extended integers accept hexadecimal, octal, and binary prefixes. Underscores
+may separate digits for readability:
 
-
-# Interpreted as {"a": 1, "b": 2}
+```text
+permissions: 0o755
+mask: 0xff
+flags: 0b1010
+budget: 1_000_000
 ```
 
-## Newlines as Comma Separators
+## Repair is bounded
 
-When enabled, newlines can act as value separators, like commas, in arrays and objects.
+Repair handles selected structural mistakes; it is not a promise that every
+broken string can be guessed correctly. Incomplete strings, invalid UTF-8,
+partial tokens, or semantically ambiguous input may still fail. Configure
+`max_repairs` and `max_depth` for untrusted inputs, or disable repair entirely.
 
-```json
-[
-  1
-  2
-  3
-]
-```
+## Strict parsing
 
-```json
-{
-  key1: "value1"
-  key2: "value2"
-}
-```
-
-## Extended Number Formats
-
-- Hexadecimal: `0xFF`
-- Octal: `0o77`
-- Binary: `0b1010`
-- Underscores: `1_000_000`
-
-## Single-Quoted Strings
-
-Both single and double quotes are supported for strings.
-
-```json
-{ key: 'value', other: "also ok" }
-```
-
-## Strict Mode
-
-All forgiving features can be disabled for strict RFC 8259 compliance.
-
-These forgiving features make `vexy_json` a flexible parser for configurations, data files, and other scenarios where strict JSON adherence might be relaxed.
-
-## New in v2.0.0: Advanced Features
-
-### Streaming Parser
-Process large JSON files incrementally:
-- Memory-efficient parsing for gigabyte-sized files
-- Event-driven API for fine-grained control
-- Support for incremental data feeds
-
-### Parallel Processing
-Leverage multiple CPU cores:
-- Automatic work distribution across threads
-- Intelligent chunk boundary detection
-- Linear scalability with core count
-
-### Plugin Architecture
-Extend vexy_json with custom functionality:
-- Transform values during parsing
-- Add custom validation rules
-- Implement domain-specific logic
-
-### NDJSON Support
-Native support for newline-delimited JSON:
-- Process streaming data sources
-- Handle log files and data exports
-- Efficient line-by-line parsing
-
-For detailed API documentation on these features, see the [API Reference](api/).
-
+For protocol boundaries, signatures, or canonical files, disable all forgiving
+options and repair. See [Getting started](getting-started.md#control-accepted-syntax)
+for complete Rust and Python examples.

@@ -5,7 +5,7 @@ Vexy JSON provides comprehensive Python bindings that offer all the functionalit
 ## Installation
 
 ```bash
-pip install vexy_json
+pip install vexy-json
 ```
 
 ## Basic Usage
