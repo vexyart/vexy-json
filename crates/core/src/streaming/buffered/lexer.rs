@@ -56,8 +56,9 @@ impl BufferedLexer {
     pub fn feed(&mut self, input: &str) -> Result<(Vec<(Token, Span)>, bool)> {
         let mut tokens = Vec::new();
         let mut chars = input.chars().peekable();
-        
-        while let Some(ch) = chars.next() {
+        let mut pending = None;
+
+        while let Some(ch) = pending.take().or_else(|| chars.next()) {
             match &self.state {
                 LexerState::Normal => {
                     match ch {
@@ -178,9 +179,9 @@ impl BufferedLexer {
                         tokens.push((Token::Number, self.make_span_from_start()));
                         self.state = LexerState::Normal;
                         self.token_buffer.clear();
-                        
+
                         // Reprocess this character
-                        self.position -= 1;
+                        pending = Some(ch);
                         continue;
                     }
                 }
@@ -209,9 +210,9 @@ impl BufferedLexer {
                         tokens.push((token, self.make_span_from_start()));
                         self.state = LexerState::Normal;
                         self.token_buffer.clear();
-                        
+
                         // Reprocess this character
-                        self.position -= 1;
+                        pending = Some(ch);
                         continue;
                     }
                 }
@@ -287,5 +288,52 @@ impl BufferedLexer {
             start: self.token_start,
             end: self.position,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn feed_reprocesses_number_and_identifier_delimiters_in_order() {
+        let mut lexer = BufferedLexer::new(LexerConfig::default());
+
+        let (tokens, needs_more) = lexer.feed("[12,true]").unwrap();
+
+        assert_eq!(
+            tokens,
+            vec![
+                (Token::LeftBracket, Span::new(0, 1)),
+                (Token::Number, Span::new(1, 3)),
+                (Token::Comma, Span::new(3, 4)),
+                (Token::True, Span::new(4, 8)),
+                (Token::RightBracket, Span::new(8, 9)),
+            ]
+        );
+        assert!(!needs_more);
+        assert_eq!(lexer.position(), 9);
+    }
+
+    #[test]
+    fn feed_preserves_delimiters_across_chunks_and_flushes_eof_identifier() {
+        let mut lexer = BufferedLexer::new(LexerConfig::default());
+
+        let (first_tokens, first_needs_more) = lexer.feed("[12").unwrap();
+        let (second_tokens, second_needs_more) = lexer.feed(",true").unwrap();
+        let eof_tokens = lexer.flush().unwrap();
+
+        assert_eq!(first_tokens, vec![(Token::LeftBracket, Span::new(0, 1))]);
+        assert!(first_needs_more);
+        assert_eq!(
+            second_tokens,
+            vec![
+                (Token::Number, Span::new(1, 3)),
+                (Token::Comma, Span::new(3, 4)),
+            ]
+        );
+        assert!(second_needs_more);
+        assert_eq!(eof_tokens, vec![(Token::True, Span::new(4, 8))]);
+        assert_eq!(lexer.position(), 8);
     }
 }

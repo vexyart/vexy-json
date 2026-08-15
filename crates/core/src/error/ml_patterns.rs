@@ -567,7 +567,7 @@ impl FeatureExtractor for ErrorTypeExtractor {
                 // Check if we're between values
                 if position > &0 && position < &context.input.len() {
                     let before = &context.input[..*position];
-                    let after = &context.input[*position..];
+                    let after = context.input[*position..].trim_start();
                     
                     // Check if we have a value before and after
                     if (before.ends_with('"') || before.chars().last().is_some_and(|c| c.is_numeric())) &&

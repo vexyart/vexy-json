@@ -1,3 +1,4 @@
+# this_file: crates/python/pyproject.toml
 [build-system]
 requires = [ "maturin>=1.0,<2.0" ]
 build-backend = "maturin"
@@ -54,6 +55,14 @@ features = [ "pyo3/extension-module" ]
 python-source = "python"
 module-name = "vexy_json._vexy_json"
 include = [ "python/vexy_json/__init__.pyi", "python/vexy_json/py.typed" ]
+
+
+[tool.hatch.version]
+source = "vcs"
+
+
+[tool.hatch.version.raw-options]
+root = "../.."
 
 
 [tool.pytest.ini_options]

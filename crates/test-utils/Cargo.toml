@@ -1,7 +1,9 @@
+# this_file: crates/test-utils/Cargo.toml
 [package]
 name = "vexy-json-test-utils"
 version = "1.5.10"
 edition = "2021"
+publish = false
 
 
 [lib]
@@ -10,3 +12,4 @@ path = "src/lib.rs"
 
 [dependencies.vexy-json-core]
 path = "../core"
+version = "=1.5.10"

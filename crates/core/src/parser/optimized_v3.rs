@@ -8,12 +8,10 @@
 //! - Compact string optimization
 //! - Efficient collection pre-sizing
 
-use crate::ast::{Number, Token, Value};
+use crate::ast::{Token, Value};
 use crate::error::{Error, Result, Span};
 use crate::lexer::Lexer;
-use crate::optimization::{
-    extract_string_content, AllocationStats,
-};
+use crate::optimization::{extract_string_content, AllocationStats};
 use crate::parser::ParserOptions;
 use rustc_hash::FxHashMap;
 
@@ -121,34 +119,20 @@ impl<'a> OptimizedParserV3<'a> {
         if content.len() <= 16 {
             self.stats.compact_string_optimizations += 1;
         }
-        
+
         // TODO: Implement compact string optimization when Value supports it
         Ok(Value::String(content.to_string()))
     }
 
     /// Parse number with optimizations
     fn parse_number_optimized(&mut self, span: Span) -> Result<Value> {
-        let number_str = &self.input[span.start..span.end];
-        
-        // Try integer parsing first (most common case)
-        if !number_str.contains('.') && !number_str.contains('e') && !number_str.contains('E') {
-            if let Ok(int_val) = number_str.parse::<i64>() {
-                return Ok(Value::Number(Number::Integer(int_val)));
-            }
-        }
-
-        // Fall back to float parsing
-        if let Ok(float_val) = number_str.parse::<f64>() {
-            Ok(Value::Number(Number::Float(float_val)))
-        } else {
-            Err(Error::InvalidNumber(span.start))
-        }
+        super::number::parse_number_token(self.input, span)
     }
 
     /// Parse array with small vector optimization
     fn parse_array_optimized(&mut self) -> Result<Value> {
         self.stats.arrays_parsed += 1;
-        
+
         // Check recursion depth
         self.depth += 1;
         if self.depth > self.options.max_depth {
@@ -198,7 +182,7 @@ impl<'a> OptimizedParserV3<'a> {
             let (value_token, value_span) = self.next_token()?;
             let value = self.parse_value((value_token, value_span))?;
             elements.push(value);
-            
+
             first = false;
         }
 
@@ -251,6 +235,16 @@ impl<'a> OptimizedParserV3<'a> {
                 }
             }
 
+            // Skip newlines after comma
+            loop {
+                let (next_token, _) = self.peek_token()?;
+                if next_token == Token::Newline {
+                    self.next_token()?;
+                } else {
+                    break;
+                }
+            }
+
             // Parse key
             let (key_token, key_span) = self.next_token()?;
             let key = match key_token {
@@ -281,7 +275,7 @@ impl<'a> OptimizedParserV3<'a> {
             // Parse value
             let (value_token, value_span) = self.next_token()?;
             let value = self.parse_value((value_token, value_span))?;
-            
+
             object.insert(key, value);
             first = false;
         }
@@ -349,7 +343,7 @@ mod tests {
         let input = r#"{"name": "test", "values": [1, 2, 3]}"#;
         let result = parse_optimized_v3(input);
         assert!(result.is_ok());
-        
+
         let value = result.unwrap();
         match value {
             Value::Object(obj) => {
@@ -365,7 +359,7 @@ mod tests {
         let input = r#"{"items": [1, 2, 3, 4], "meta": {"count": 4}}"#;
         let result = parse_v3_with_stats(input, ParserOptions::default());
         assert!(result.is_ok());
-        
+
         let (_, stats, _) = result.unwrap();
         assert!(stats.objects_parsed >= 2); // root object + meta object
         assert!(stats.arrays_parsed >= 1); // items array
@@ -378,7 +372,7 @@ mod tests {
         let input = r#"[1, 2]"#; // Small array
         let result = parse_v3_with_stats(input, ParserOptions::default());
         assert!(result.is_ok());
-        
+
         let (_, stats, _) = result.unwrap();
         assert!(stats.small_vec_optimizations > 0);
     }

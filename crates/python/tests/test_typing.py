@@ -28,7 +28,8 @@ def test_basic_functionality():
     
     # Test validation
     assert vexy_json.is_valid('{"valid": true}') is True
-    assert vexy_json.is_valid('invalid') is False
+    assert vexy_json.is_valid('invalid') is True
+    assert vexy_json.is_valid('{"key":}') is False
     
     # Test dumps
     data = {"key": "value", "number": 42}
@@ -162,7 +163,7 @@ def test_error_handling():
     
     # Test ValueError for invalid JSON
     with pytest.raises(ValueError, match="Parse error"):
-        vexy_json.parse('invalid json')
+        vexy_json.parse('{"key":}')
     
     # Test TypeError for non-serializable objects
     with pytest.raises(TypeError):

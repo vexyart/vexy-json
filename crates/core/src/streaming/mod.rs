@@ -1,4 +1,4 @@
-// this_file: src/streaming/mod.rs
+// this_file: crates/core/src/streaming/mod.rs
 
 //! Streaming parser implementation for vexy_json.
 //!
@@ -164,6 +164,12 @@ impl StreamingParser {
                 continue;
             }
 
+            if matches!(token, Token::Newline) {
+                self.process_newline(span)?;
+                self.current_token = None;
+                continue;
+            }
+
             // Process token based on current state
             let consumed = match &self.current_state {
                 ParserState::ExpectingValue => self.process_value(token, span)?,
@@ -197,6 +203,15 @@ impl StreamingParser {
                 break;
             }
         }
+        Ok(())
+    }
+
+    /// Consume formatting newlines, using them as separators only after a value.
+    fn process_newline(&mut self, span: crate::error::Span) -> Result<()> {
+        if self.options.newline_as_comma && matches!(self.current_state, ParserState::BetweenValues) {
+            self.process_between_values(Token::Comma, span)?;
+        }
+
         Ok(())
     }
 
@@ -249,6 +264,14 @@ impl StreamingParser {
             }
             Token::Null => {
                 self.event_queue.push(StreamingEvent::Null);
+                self.transition_after_value();
+                Ok(true)
+            }
+            Token::RightBracket
+                if matches!(self.state_stack.last(), Some(ParserContext::Array { .. })) =>
+            {
+                self.event_queue.push(StreamingEvent::EndArray);
+                self.state_stack.pop();
                 self.transition_after_value();
                 Ok(true)
             }
@@ -343,17 +366,19 @@ impl StreamingParser {
         self.process_tokens()?;
 
         // Return queued event if available
-        if !self.event_queue.is_empty() {
-            Ok(Some(self.event_queue.remove(0)))
-        } else if self.finished && self.state_stack.is_empty() {
-            Ok(Some(StreamingEvent::EndOfInput))
+        Ok(if self.event_queue.is_empty() {
+            None
         } else {
-            Ok(None)
-        }
+            Some(self.event_queue.remove(0))
+        })
     }
 
     /// Signal end of input
     pub fn finish(&mut self) -> Result<()> {
+        if self.finished {
+            return Ok(());
+        }
+
         self.lexer.finish()?;
         self.process_tokens()?;
 
@@ -361,6 +386,7 @@ impl StreamingParser {
             return Err(Error::Custom("Unexpected end of input".to_string()));
         }
 
+        self.event_queue.push(StreamingEvent::EndOfInput);
         self.finished = true;
         Ok(())
     }

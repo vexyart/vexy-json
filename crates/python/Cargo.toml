@@ -1,3 +1,4 @@
+# this_file: crates/python/Cargo.toml
 [package]
 name = "vexy-json-python"
 version = "1.5.10"
@@ -6,6 +7,7 @@ description = "Python bindings for vexy_json - a forgiving JSON parser"
 repository = "https://github.com/vexyart/vexy-json"
 license = "MIT OR Apache-2.0"
 authors = [ "Adam Twardoch <adam+github@twardoch.com>" ]
+publish = false
 
 
 [lib]
@@ -24,6 +26,7 @@ features = [ "extension-module" ]
 
 [dependencies.vexy-json-core]
 path = "../core"
+version = "=1.5.10"
 
 
 [build-dependencies]

@@ -104,22 +104,18 @@ impl<R: Read> BufferedStreamingParser<R> {
 
     /// Returns the next streaming event, if available.
     pub fn next_event(&mut self) -> Result<Option<StreamingEvent>> {
-        // Return buffered events first
-        if let Some(event) = self.event_buffer.pop_front() {
-            return Ok(Some(event));
+        loop {
+            if let Some(event) = self.event_buffer.pop_front() {
+                return Ok(Some(event));
+            }
+
+            if self.end_of_input && self.token_buffer.is_empty() {
+                return Ok(None);
+            }
+
+            self.fill_buffers()?;
+            self.process_tokens()?;
         }
-
-        // If we've reached end of input and no more events, return None
-        if self.end_of_input && self.token_buffer.is_empty() {
-            return Ok(None);
-        }
-
-        // Try to fill buffers and generate more events
-        self.fill_buffers()?;
-        self.process_tokens()?;
-
-        // Return the next event if available
-        Ok(self.event_buffer.pop_front())
     }
 
 

@@ -1,7 +1,17 @@
+# this_file: crates/cli/Cargo.toml
+
 [package]
 name = "vexy-json-cli"
 version = "1.5.10"
 edition = "2021"
+description = "Command-line interface for parsing and formatting forgiving JSON"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/vexyart/vexy-json"
+homepage = "https://github.com/vexyart/vexy-json"
+readme = "../../README.md"
+keywords = [ "json", "parser", "cli", "forgiving", "formatting" ]
+categories = [ "command-line-utilities", "parsing" ]
+publish = [ "crates-io" ]
 
 
 [[bin]]
@@ -15,10 +25,12 @@ colored = "3.0"
 thiserror = "2.0"
 notify = "8.1"
 dirs = "6.0"
+tempfile = "3.27"
 
 
 [dependencies.vexy-json-core]
 path = "../core"
+version = "=1.5.10"
 
 
 [dependencies.clap]
@@ -38,3 +50,7 @@ features = [ "derive" ]
 
 [features]
 cli = [ ]
+
+
+[dev-dependencies]
+serde_json = "1.0"

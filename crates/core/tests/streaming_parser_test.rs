@@ -1,8 +1,26 @@
-// this_file: tests/streaming_parser_test.rs
+// this_file: crates/core/tests/streaming_parser_test.rs
 
-use vexy_json_core::streaming::{StreamingParser, StreamingEvent, StreamingValueBuilder};
+use vexy_json_core::ast::{Number, Value};
 use vexy_json_core::parser::ParserOptions;
-use vexy_json_core::ast::{Value, Number};
+use vexy_json_core::streaming::{StreamingEvent, StreamingParser, StreamingValueBuilder};
+
+const MAX_STREAMING_EVENTS: usize = 64;
+
+fn collect_events(parser: &mut StreamingParser) -> Vec<StreamingEvent> {
+    let mut events = Vec::new();
+
+    for _ in 0..MAX_STREAMING_EVENTS {
+        match parser
+            .next_event()
+            .expect("streaming parser should not fail")
+        {
+            Some(event) => events.push(event),
+            None => return events,
+        }
+    }
+
+    panic!("streaming parser did not terminate within {MAX_STREAMING_EVENTS} events");
+}
 
 #[test]
 fn test_streaming_parser_simple_object() {
@@ -12,10 +30,7 @@ fn test_streaming_parser_simple_object() {
     parser.feed(input).unwrap();
     parser.finish().unwrap();
     
-    let mut events = Vec::new();
-    while let Some(event) = parser.next_event().unwrap() {
-        events.push(event);
-    }
+    let events = collect_events(&mut parser);
     
     assert_eq!(events, vec![
         StreamingEvent::StartObject,
@@ -34,10 +49,7 @@ fn test_streaming_parser_array() {
     parser.feed(input).unwrap();
     parser.finish().unwrap();
     
-    let mut events = Vec::new();
-    while let Some(event) = parser.next_event().unwrap() {
-        events.push(event);
-    }
+    let events = collect_events(&mut parser);
     
     assert_eq!(events, vec![
         StreamingEvent::StartArray,
@@ -59,10 +71,7 @@ fn test_streaming_parser_nested() {
     parser.feed(input).unwrap();
     parser.finish().unwrap();
     
-    let mut events = Vec::new();
-    while let Some(event) = parser.next_event().unwrap() {
-        events.push(event);
-    }
+    let events = collect_events(&mut parser);
     
     assert_eq!(events, vec![
         StreamingEvent::StartObject,
@@ -84,15 +93,12 @@ fn test_streaming_parser_chunked() {
     let mut parser = StreamingParser::new();
     
     // Feed in chunks
-    parser.feed(r#"{"key"#).unwrap();
-    parser.feed(r#": "val"#).unwrap();
-    parser.feed(r#"ue"}"#).unwrap();
+    parser.feed("{\"ke").unwrap();
+    parser.feed("y\": \"val").unwrap();
+    parser.feed("ue\"}").unwrap();
     parser.finish().unwrap();
     
-    let mut events = Vec::new();
-    while let Some(event) = parser.next_event().unwrap() {
-        events.push(event);
-    }
+    let events = collect_events(&mut parser);
     
     assert_eq!(events, vec![
         StreamingEvent::StartObject,
@@ -150,10 +156,7 @@ fn test_streaming_parser_with_comments() {
     parser.feed(input).unwrap();
     parser.finish().unwrap();
     
-    let mut events = Vec::new();
-    while let Some(event) = parser.next_event().unwrap() {
-        events.push(event);
-    }
+    let events = collect_events(&mut parser);
     
     assert_eq!(events, vec![
         StreamingEvent::StartObject,
@@ -172,10 +175,7 @@ fn test_streaming_parser_empty_containers() {
     parser.feed("{}").unwrap();
     parser.finish().unwrap();
     
-    let mut events = Vec::new();
-    while let Some(event) = parser.next_event().unwrap() {
-        events.push(event);
-    }
+    let events = collect_events(&mut parser);
     
     assert_eq!(events, vec![
         StreamingEvent::StartObject,
@@ -188,10 +188,7 @@ fn test_streaming_parser_empty_containers() {
     parser.feed("[]").unwrap();
     parser.finish().unwrap();
     
-    let mut events = Vec::new();
-    while let Some(event) = parser.next_event().unwrap() {
-        events.push(event);
-    }
+    let events = collect_events(&mut parser);
     
     assert_eq!(events, vec![
         StreamingEvent::StartArray,
@@ -208,10 +205,7 @@ fn test_streaming_parser_string_escapes() {
     parser.feed(input).unwrap();
     parser.finish().unwrap();
     
-    let mut events = Vec::new();
-    while let Some(event) = parser.next_event().unwrap() {
-        events.push(event);
-    }
+    let events = collect_events(&mut parser);
     
     assert_eq!(events[2], StreamingEvent::String("Hello\nWorld\t\"quoted\"".to_string()));
 }
@@ -224,10 +218,7 @@ fn test_streaming_parser_unicode() {
     parser.feed(input).unwrap();
     parser.finish().unwrap();
     
-    let mut events = Vec::new();
-    while let Some(event) = parser.next_event().unwrap() {
-        events.push(event);
-    }
+    let events = collect_events(&mut parser);
     
     assert_eq!(events[2], StreamingEvent::String("Hello".to_string()));
 }
@@ -240,10 +231,63 @@ fn test_streaming_parser_iterator() {
     
     // Use iterator interface
     let events: Vec<StreamingEvent> = parser
+        .take(MAX_STREAMING_EVENTS)
         .map(|r| r.unwrap())
         .collect();
     
-    assert_eq!(events.len(), 6); // Start, Key, Num, Key, Num, End, EOF
+    assert_eq!(events.len(), 7); // Start, Key, Num, Key, Num, End, EOF
     assert_eq!(events[0], StreamingEvent::StartObject);
-    assert_eq!(events[5], StreamingEvent::EndOfInput);
+    assert_eq!(events[6], StreamingEvent::EndOfInput);
+}
+
+#[test]
+fn test_streaming_parser_emits_end_of_input_once() {
+    let mut parser = StreamingParser::new();
+    parser.feed("{}").unwrap();
+    parser.finish().unwrap();
+
+    assert!(!parser.is_finished());
+    assert_eq!(
+        parser.next_event().unwrap(),
+        Some(StreamingEvent::StartObject)
+    );
+    assert_eq!(
+        parser.next_event().unwrap(),
+        Some(StreamingEvent::EndObject)
+    );
+    assert_eq!(
+        parser.next_event().unwrap(),
+        Some(StreamingEvent::EndOfInput)
+    );
+    assert_eq!(parser.next_event().unwrap(), None);
+    assert_eq!(parser.next_event().unwrap(), None);
+    assert!(parser.is_finished());
+}
+
+#[test]
+fn test_streaming_parser_handles_newlines_by_state() {
+    let mut parser = StreamingParser::new();
+    parser
+        .feed(
+            r#"{
+                "a":
+                1
+                "b": 2
+            }"#,
+        )
+        .unwrap();
+    parser.finish().unwrap();
+
+    assert_eq!(
+        collect_events(&mut parser),
+        vec![
+            StreamingEvent::StartObject,
+            StreamingEvent::ObjectKey("a".to_string()),
+            StreamingEvent::Number("1".to_string()),
+            StreamingEvent::ObjectKey("b".to_string()),
+            StreamingEvent::Number("2".to_string()),
+            StreamingEvent::EndObject,
+            StreamingEvent::EndOfInput,
+        ]
+    );
 }

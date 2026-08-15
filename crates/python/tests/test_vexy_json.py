@@ -1,22 +1,21 @@
-#!/usr/bin/env python3
-# Test file for vexy_json renaming
+# this_file: crates/python/tests/test_vexy_json.py
+"""Canonical public API and package-version tests."""
+
+from importlib.metadata import version
 
 import vexy_json
-from vexy_json import VexyJSONParser, VexyJSONConfig
 
 
-class VexyJSONWrapper:
-    """A wrapper for Vexy JSON functionality"""
-
-    def __init__(self):
-        self.parser = VexyJSONParser()
-        self.config = VexyJSONConfig()
-
-    def parse(self, data):
-        # Parse vexy_json data
-        return self.parser.parse(data)
+def test_runtime_version_matches_installed_metadata():
+    """Require the native runtime and wheel metadata to expose one version."""
+    assert vexy_json.__version__ == version("vexy_json")
 
 
-# Test with a string that contains "vexy_json"
-test_string = "This is a vexy_json parser"
-print(f"Vexy JSON version: {vexy_json.__version__}")
+def test_public_parser_handles_representative_forgiving_input():
+    """Exercise the exported parser instead of stale compatibility classes."""
+    assert vexy_json.parse("{answer: 42,}") == {"answer": 42}
+
+
+def test_standard_loads_alias_uses_the_public_parser():
+    """Keep the standard-library-compatible loads alias operational."""
+    assert vexy_json.loads("['vexy', 'json',]") == ["vexy", "json"]

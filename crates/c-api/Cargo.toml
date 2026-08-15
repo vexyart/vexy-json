@@ -1,3 +1,4 @@
+# this_file: crates/c-api/Cargo.toml
 [package]
 name = "vexy-json-c-api"
 version = "1.5.10"
@@ -6,6 +7,11 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "C API for the vexy_json JSON parser"
 repository = "https://github.com/vexyart/vexy-json"
+homepage = "https://github.com/vexyart/vexy-json"
+readme = "../../README.md"
+keywords = [ "json", "ffi", "parser", "forgiving" ]
+categories = [ "api-bindings", "parsing" ]
+publish = [ "crates-io" ]
 
 
 [lib]
@@ -20,6 +26,7 @@ serde_json = "1.0"
 
 [dependencies.vexy-json-core]
 path = "../core"
+version = "=1.5.10"
 features = [ "serde" ]
 
 

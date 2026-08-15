@@ -6,16 +6,17 @@ use clap::{Args, Parser};
 use colored::*;
 use rayon::prelude::*;
 use std::fs;
-use std::io::{self, Read, Write};
+use std::io::{self, Read, Seek, SeekFrom, Write};
 use std::path::PathBuf;
+use std::process::{Command, Stdio};
+use tempfile::NamedTempFile;
 use thiserror::Error;
 use tokio::time::{sleep, Duration};
 use vexy_json_core::ast::Value;
-use vexy_json_core::error::{EnhancedParseResult, ParsingTier, RepairType};
-use vexy_json_core::{
-    parse_with_detailed_repair_tracking, parse_with_fallback, ParallelConfig, ParallelParser,
-    ParserOptions,
-};
+use vexy_json_core::{parse_with_fallback, ParallelConfig, ParallelParser, ParserOptions};
+
+const MAX_LMS_CAPTURE_BYTES: u64 = 256 * 1024 * 1024;
+const LMS_COMMAND_DESCRIPTION: &str = "lms ls --json --llm";
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -61,15 +62,34 @@ struct CliArgs {
     #[clap(long = "verbose-errors")]
     verbose_errors: bool,
 
-    /// Enable JSON repair functionality
-    #[clap(short = 'r', long = "repair")]
+    /// Lossily close safely incomplete JSON at unexpected EOF
+    #[clap(
+        short = 'r',
+        long = "repair",
+        conflicts_with_all = ["watch", "ndjson", "parallel_parse"]
+    )]
     repair: bool,
 
     /// Show detailed repair information
-    #[clap(long = "repair-details")]
+    #[clap(long = "repair-details", requires = "repair")]
     repair_details: bool,
 
-    /// Enable fallback parsing (fast → forgiving → repair)
+    /// Losslessly capture and parse `lms ls --json --llm` via a regular file
+    #[clap(
+        long = "lms",
+        conflicts_with_all = [
+            "files",
+            "watch",
+            "parallel",
+            "repair",
+            "repair_details",
+            "parallel_parse",
+            "ndjson"
+        ]
+    )]
+    lms: bool,
+
+    /// Use fast → forgiving parser fallback (never implies --repair)
     #[clap(long = "fallback")]
     fallback: bool,
 
@@ -140,6 +160,26 @@ enum CliError {
     WatchError(#[from] notify::Error),
     #[error("File not found: {0}")]
     FileNotFound(String),
+    #[error("Input from {input_name} is not valid UTF-8 at byte {byte}")]
+    InvalidUtf8 { input_name: String, byte: usize },
+    #[error("Cannot safely repair {input_name} at byte {byte}: {message}")]
+    UnsafeRepair {
+        input_name: String,
+        byte: usize,
+        message: String,
+    },
+    #[error("Failed to execute `lms ls --json --llm`: {0}")]
+    LmsSpawn(std::io::Error),
+    #[error("`lms ls --json --llm` exited unsuccessfully ({status})")]
+    LmsExit { status: String },
+    #[error("`lms ls --json --llm` captured no output")]
+    EmptyLmsCapture,
+    #[error("`lms ls --json --llm` capture is too large ({bytes} bytes; maximum 256 MiB)")]
+    OversizedLmsCapture { bytes: u64 },
+    #[error("Failed to remove the temporary lms capture: {0}")]
+    TempCleanup(std::io::Error),
+    #[error("Downstream output closed before all JSON was written (broken pipe)")]
+    BrokenPipe,
 }
 
 type Result<T> = std::result::Result<T, CliError>;
@@ -148,7 +188,9 @@ type Result<T> = std::result::Result<T, CliError>;
 async fn main() {
     let args = CliArgs::parse();
 
-    let result = if args.watch {
+    let result = if args.lms {
+        process_lms(&args).await
+    } else if args.watch {
         watch_mode(&args).await
     } else if args.files.is_empty() {
         process_stdin(&args).await
@@ -165,8 +207,9 @@ async fn main() {
 }
 
 async fn process_stdin(args: &CliArgs) -> Result<()> {
-    let mut input = String::new();
-    io::stdin().read_to_string(&mut input)?;
+    let mut bytes = Vec::new();
+    io::stdin().read_to_end(&mut bytes)?;
+    let input = decode_utf8(bytes, "<stdin>")?;
 
     if input.trim().is_empty() {
         if !args.validate {
@@ -176,6 +219,48 @@ async fn process_stdin(args: &CliArgs) -> Result<()> {
     }
 
     process_content(&input, "<stdin>", args)?;
+    Ok(())
+}
+
+async fn process_lms(args: &CliArgs) -> Result<()> {
+    let mut capture = NamedTempFile::new()?;
+    let child_stdout = capture.reopen()?;
+    let status = Command::new("lms")
+        .args(["ls", "--json", "--llm"])
+        .stdout(Stdio::from(child_stdout))
+        .stderr(Stdio::inherit())
+        .status()
+        .map_err(CliError::LmsSpawn)?;
+
+    if !status.success() {
+        return Err(CliError::LmsExit {
+            status: status.code().map_or_else(
+                || "terminated by signal".to_string(),
+                |code| code.to_string(),
+            ),
+        });
+    }
+
+    let captured_bytes = capture.as_file().metadata()?.len();
+    if captured_bytes == 0 {
+        return Err(CliError::EmptyLmsCapture);
+    }
+    if captured_bytes > MAX_LMS_CAPTURE_BYTES {
+        return Err(CliError::OversizedLmsCapture {
+            bytes: captured_bytes,
+        });
+    }
+
+    capture.as_file_mut().seek(SeekFrom::Start(0))?;
+    let mut bytes = Vec::with_capacity(captured_bytes as usize);
+    capture.as_file_mut().read_to_end(&mut bytes)?;
+    capture.close().map_err(CliError::TempCleanup)?;
+
+    let input = decode_utf8(bytes, "<lms regular-file capture>")?;
+    process_content(&input, "<lms regular-file capture>", args)?;
+    eprintln!(
+        "Captured {captured_bytes} bytes from `{LMS_COMMAND_DESCRIPTION}` via a regular temporary file (lossless input path)."
+    );
     Ok(())
 }
 
@@ -202,7 +287,7 @@ fn process_single_file(file: &PathBuf, args: &CliArgs) -> Result<()> {
         return Err(CliError::FileNotFound(file.display().to_string()));
     }
 
-    let content = fs::read_to_string(file)?;
+    let content = decode_utf8(fs::read(file)?, &file.display().to_string())?;
     process_content(&content, &file.display().to_string(), args)?;
     Ok(())
 }
@@ -219,46 +304,268 @@ fn process_content(content: &str, source: &str, args: &CliArgs) -> Result<()> {
 
     let parser_options = create_parser_options(&args.parser_opts);
 
-    // Choose parsing strategy based on CLI options
-    if args.repair_details {
-        // Use detailed repair tracking
-        let result = parse_with_detailed_repair_tracking(content, parser_options);
-        if result.errors.is_empty() {
-            if args.validate {
-                print_validation_result_with_repair(source, &result, args);
-            } else {
-                let formatted = format_output(&result.value, args);
-                write_output(&formatted, args)?;
-            }
-            print_repair_summary(&result, args);
+    let result = parse_with_fallback(content, parser_options.clone());
+    if result.errors.is_empty() {
+        return emit_value(&result.value, source, args, false);
+    }
+
+    let first_error = &result.errors[0];
+    if !args.repair {
+        return Err(format_parse_error(first_error, source, content));
+    }
+
+    let repair = repair_unexpected_eof(content, source)?;
+    let repaired_result = parse_with_fallback(&repair.content, parser_options);
+    if !repaired_result.errors.is_empty() {
+        return Err(CliError::UnsafeRepair {
+            input_name: source.to_string(),
+            byte: content.len(),
+            message:
+                "closing the open structures did not produce valid JSON; no output was emitted"
+                    .to_string(),
+        });
+    }
+
+    emit_value(&repaired_result.value, source, args, true)?;
+    eprintln!(
+        "WARNING: unexpected EOF at byte {}; emitted partial/lossy JSON.",
+        content.len()
+    );
+    eprintln!("Repair actions: {}.", repair.actions.join("; "));
+    eprintln!("Missing upstream bytes were not recovered; use --lms when complete data matters.");
+    Ok(())
+}
+
+fn emit_value(value: &Value, source: &str, args: &CliArgs, repaired: bool) -> Result<()> {
+    if args.validate {
+        let qualifier = if repaired {
+            " (partial/lossy repair)"
         } else {
-            // Create error from the first error in the result
-            let first_error = &result.errors[0];
-            let cli_error = format_parse_error(first_error, source, content);
-            return Err(cli_error);
+            ""
+        };
+        if args.files.len() > 1 || args.watch {
+            println!("{source} is valid JSON{qualifier}");
+        } else {
+            println!("Valid JSON{qualifier}");
         }
     } else {
-        // Use fallback parsing by default (fast → forgiving → repair)
-        let result = parse_with_fallback(content, parser_options);
-        if result.errors.is_empty() {
-            if args.validate {
-                print_validation_result_with_repair(source, &result, args);
-            } else {
-                let formatted = format_output(&result.value, args);
-                write_output(&formatted, args)?;
+        write_output(&format_output(value, args), args)?;
+    }
+    Ok(())
+}
+
+struct EofRepair {
+    content: String,
+    actions: Vec<String>,
+}
+
+fn repair_unexpected_eof(content: &str, source: &str) -> Result<EofRepair> {
+    let mut stack = Vec::new();
+    let mut quote = None;
+    let mut escaped = false;
+    let bytes = content.as_bytes();
+    let mut index = 0;
+    let mut line_comment_at_eof = false;
+
+    while index < bytes.len() {
+        let byte = bytes[index];
+        if let Some(delimiter) = quote {
+            if escaped {
+                escaped = false;
+            } else if byte == b'\\' {
+                escaped = true;
+            } else if byte == delimiter {
+                quote = None;
             }
-            if args.repair_details {
-                print_repair_info(&result, args);
+            index += 1;
+            continue;
+        }
+
+        if byte == b'/' && index + 1 < bytes.len() {
+            match bytes[index + 1] {
+                b'/' => {
+                    index += 2;
+                    while index < bytes.len() && bytes[index] != b'\n' {
+                        index += 1;
+                    }
+                    line_comment_at_eof = index == bytes.len();
+                    continue;
+                }
+                b'*' => {
+                    index += 2;
+                    let mut closed = false;
+                    while index + 1 < bytes.len() {
+                        if bytes[index] == b'*' && bytes[index + 1] == b'/' {
+                            index += 2;
+                            closed = true;
+                            break;
+                        }
+                        index += 1;
+                    }
+                    if !closed {
+                        return unsafe_repair(
+                            source,
+                            content.len(),
+                            "EOF occurred inside a block comment",
+                        );
+                    }
+                    continue;
+                }
+                _ => {}
             }
-        } else {
-            // Create error from the first error in the result
-            let first_error = &result.errors[0];
-            let cli_error = format_parse_error(first_error, source, content);
-            return Err(cli_error);
+        }
+
+        match byte {
+            b'"' | b'\'' => quote = Some(byte),
+            b'{' | b'[' => stack.push(byte),
+            b'}' => pop_expected(&mut stack, b'{', source, index)?,
+            b']' => pop_expected(&mut stack, b'[', source, index)?,
+            _ => {}
+        }
+        index += 1;
+    }
+
+    if quote.is_some() || escaped {
+        return unsafe_repair(
+            source,
+            content.len(),
+            "EOF occurred inside a quoted string; closing it would fabricate string contents",
+        );
+    }
+    if stack.is_empty() {
+        return unsafe_repair(
+            source,
+            content.len(),
+            "input did not end inside an open JSON structure",
+        );
+    }
+    if line_comment_at_eof {
+        return unsafe_repair(
+            source,
+            content.len(),
+            "EOF occurred inside a line comment; appending closures would change comment contents",
+        );
+    }
+    if !has_safe_eof_token(content) {
+        return unsafe_repair(
+            source,
+            content.len(),
+            "the final token is incomplete or no complete value can be closed safely",
+        );
+    }
+
+    let mut repaired = content.to_string();
+    let mut actions = Vec::with_capacity(stack.len());
+    for opening in stack.iter().rev() {
+        let closing = if *opening == b'{' { '}' } else { ']' };
+        repaired.push(closing);
+        actions.push(format!(
+            "inserted closing '{closing}' at byte {}",
+            content.len()
+        ));
+    }
+
+    Ok(EofRepair {
+        content: repaired,
+        actions,
+    })
+}
+
+fn pop_expected(stack: &mut Vec<u8>, expected: u8, source: &str, byte: usize) -> Result<()> {
+    if stack.pop() == Some(expected) {
+        return Ok(());
+    }
+    unsafe_repair(
+        source,
+        byte,
+        "encountered mismatched or unmatched closing delimiter before EOF",
+    )
+}
+
+fn unsafe_repair<T>(source: &str, byte: usize, message: &str) -> Result<T> {
+    Err(CliError::UnsafeRepair {
+        input_name: source.to_string(),
+        byte,
+        message: message.to_string(),
+    })
+}
+
+fn has_safe_eof_token(content: &str) -> bool {
+    let trimmed = content.trim_end();
+    let Some(last) = trimmed.as_bytes().last().copied() else {
+        return false;
+    };
+
+    match last {
+        b'{' | b'[' | b'}' | b']' | b'"' | b'\'' => true,
+        b'0'..=b'9' => trailing_scalar(trimmed).is_some_and(is_complete_json_number),
+        b'e' => matches!(trailing_scalar(trimmed), Some("true") | Some("false")),
+        b'l' => trailing_scalar(trimmed) == Some("null"),
+        _ => false,
+    }
+}
+
+fn trailing_scalar(content: &str) -> Option<&str> {
+    let start = content
+        .rfind(|character: char| {
+            character.is_whitespace() || matches!(character, '[' | ']' | '{' | '}' | ',' | ':')
+        })
+        .map_or(0, |position| position + 1);
+    let scalar = &content[start..];
+    (!scalar.is_empty()).then_some(scalar)
+}
+
+fn is_complete_json_number(value: &str) -> bool {
+    let bytes = value.as_bytes();
+    let mut index = usize::from(bytes.first() == Some(&b'-'));
+    if index >= bytes.len() {
+        return false;
+    }
+
+    if bytes[index] == b'0' {
+        index += 1;
+    } else if bytes[index].is_ascii_digit() && bytes[index] != b'0' {
+        index += 1;
+        while index < bytes.len() && bytes[index].is_ascii_digit() {
+            index += 1;
+        }
+    } else {
+        return false;
+    }
+
+    if bytes.get(index) == Some(&b'.') {
+        index += 1;
+        let fraction_start = index;
+        while index < bytes.len() && bytes[index].is_ascii_digit() {
+            index += 1;
+        }
+        if index == fraction_start {
+            return false;
         }
     }
 
-    Ok(())
+    if matches!(bytes.get(index), Some(b'e' | b'E')) {
+        index += 1;
+        if matches!(bytes.get(index), Some(b'+' | b'-')) {
+            index += 1;
+        }
+        let exponent_start = index;
+        while index < bytes.len() && bytes[index].is_ascii_digit() {
+            index += 1;
+        }
+        if index == exponent_start {
+            return false;
+        }
+    }
+
+    index == bytes.len()
+}
+
+fn decode_utf8(bytes: Vec<u8>, source: &str) -> Result<String> {
+    String::from_utf8(bytes).map_err(|error| CliError::InvalidUtf8 {
+        input_name: source.to_string(),
+        byte: error.utf8_error().valid_up_to(),
+    })
 }
 
 fn process_parallel_content(content: &str, source: &str, args: &CliArgs) -> Result<()> {
@@ -397,130 +704,10 @@ fn create_parser_options(args: &ParserOptionsArgs) -> ParserOptions {
         implicit_top_level: !args.no_implicit_top_level,
         newline_as_comma: !args.no_newline_as_comma,
         max_depth: args.max_depth,
-        enable_repair: true,
+        enable_repair: false,
         max_repairs: 100,
         fast_repair: false,
-        report_repairs: true,
-    }
-}
-
-fn print_validation_result_with_repair(
-    source: &str,
-    result: &EnhancedParseResult<Value>,
-    args: &CliArgs,
-) {
-    let status = match result.parsing_tier {
-        ParsingTier::Fast => "✓ Valid JSON (fast path)".green(),
-        ParsingTier::Forgiving => "✓ Valid JSON (forgiving path)".yellow(),
-        ParsingTier::Repair => "✓ Valid JSON (repaired)".cyan(),
-    };
-
-    if args.files.len() > 1 || args.watch {
-        println!("{source}: {status}");
-    } else {
-        println!("{status}");
-    }
-}
-
-fn print_repair_info(result: &EnhancedParseResult<Value>, _args: &CliArgs) {
-    if !result.repairs.is_empty() {
-        println!("{}", "Repair actions performed:".yellow().bold());
-        for action in &result.repairs {
-            match action.action_type {
-                RepairType::InsertBracket => {
-                    println!(
-                        "  • Added missing bracket at position {}: {}",
-                        action.position, action.description
-                    );
-                }
-                RepairType::RemoveBracket => {
-                    println!(
-                        "  • Removed extra bracket at position {}: {}",
-                        action.position, action.description
-                    );
-                }
-                RepairType::ReplaceBracket => {
-                    println!(
-                        "  • Replaced '{}' with '{}' at position {}: {}",
-                        action.original, action.replacement, action.position, action.description
-                    );
-                }
-                RepairType::BalanceQuotes => {
-                    println!(
-                        "  • Balanced quotes at position {}: {}",
-                        action.position, action.description
-                    );
-                }
-                RepairType::InsertComma => {
-                    println!(
-                        "  • Added comma at position {}: {}",
-                        action.position, action.description
-                    );
-                }
-                RepairType::RemoveComma => {
-                    println!(
-                        "  • Removed comma at position {}: {}",
-                        action.position, action.description
-                    );
-                }
-                RepairType::InsertText => {
-                    println!(
-                        "  • Inserted text at position {}: {}",
-                        action.position, action.description
-                    );
-                }
-                RepairType::ReplaceText => {
-                    println!(
-                        "  • Replaced text at position {}: {}",
-                        action.position, action.description
-                    );
-                }
-                RepairType::ReplaceQuotes => {
-                    println!(
-                        "  • Replaced quotes at position {}: {}",
-                        action.position, action.description
-                    );
-                }
-                RepairType::TypeCoercion => {
-                    println!(
-                        "  • Applied type coercion at position {}: {}",
-                        action.position, action.description
-                    );
-                }
-                RepairType::QuoteKey => {
-                    println!(
-                        "  • Added quotes to object key at position {}: {}",
-                        action.position, action.description
-                    );
-                }
-            }
-        }
-    }
-}
-
-fn print_repair_summary(result: &EnhancedParseResult<Value>, _args: &CliArgs) {
-    println!("{}", "=== Repair Summary ===".cyan().bold());
-    println!("Parsing tier: {:?}", result.parsing_tier);
-    println!("Repair actions: {}", result.repairs.len());
-
-    if !result.repairs.is_empty() {
-        println!("\n{}", "Detailed repair actions:".yellow().bold());
-        for (i, action) in result.repairs.iter().enumerate() {
-            println!(
-                "{}. {:?} at position {}: {}",
-                i + 1,
-                action.action_type,
-                action.position,
-                action.description
-            );
-        }
-    }
-
-    if !result.errors.is_empty() {
-        println!("\n{}", "Errors encountered:".red().bold());
-        for (i, error) in result.errors.iter().enumerate() {
-            println!("{}. {}", i + 1, error);
-        }
+        report_repairs: false,
     }
 }
 
@@ -646,10 +833,22 @@ fn write_output(content: &str, args: &CliArgs) -> Result<()> {
     if let Some(output_file) = &args.output {
         fs::write(output_file, content)?;
     } else {
-        print!("{content}");
-        io::stdout().flush()?;
+        let stdout = io::stdout();
+        let mut output = stdout.lock();
+        output
+            .write_all(content.as_bytes())
+            .map_err(map_output_error)?;
+        output.flush().map_err(map_output_error)?;
     }
     Ok(())
+}
+
+fn map_output_error(error: std::io::Error) -> CliError {
+    if error.kind() == std::io::ErrorKind::BrokenPipe {
+        CliError::BrokenPipe
+    } else {
+        CliError::IoError(error)
+    }
 }
 
 fn format_parse_error(error: &vexy_json_core::Error, file: &str, content: &str) -> CliError {

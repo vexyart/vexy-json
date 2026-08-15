@@ -191,7 +191,7 @@ fn parse_with_options_py(
 ///     >>> import vexy_json
 ///     >>> vexy_json.is_valid('{"valid": true}')
 ///     True
-///     >>> vexy_json.is_valid('invalid json')
+///     >>> vexy_json.is_valid('{"key":}')
 ///     False
 #[pyfunction]
 fn is_valid(input: &str) -> bool {

@@ -1,9 +1,33 @@
+# this_file: CHANGELOG.md
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Fixed
+
+- Repaired `StreamingParser` termination so end-of-input is emitted once and
+  iteration finishes instead of returning `EndOfInput` forever. This prevents
+  the seven affected tests from collecting an unbounded event sequence.
+- Added bounded regression drains and corrected streaming newline handling,
+  empty-array closure, and malformed test fixtures.
+- Made `build.sh` report interruption (`INT`/`TERM`) and command failures
+  truthfully, and aligned its workflow contracts with the verified build path.
+- Aligned stale Python wheel tests and documentation with the established
+  forgiving-parser semantics.
+
+### Verification
+
+- Workflow contracts passed.
+- `./build.sh` passed the Rust workspace and packaged Python suite: 36 passed,
+  2 skipped.
+- Final `./build.sh` run exited 0 in 14.22 s with 429,047,808-byte maximum RSS
+  and 0 swaps.
 
 ## [1.5.6] - 2025-07-13
 
@@ -60,7 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This release focuses on stability and fixing all critical issues identified in the v1.5.2 release
 - All 200 tests are now passing successfully
 
-## [Unreleased]
+## Historical unreleased development notes
 
 ### 🚀 Added
 - Completed migration from ZZSON to Vexy JSON project name
@@ -379,7 +403,7 @@ let result = parse_parallel_chunked(large_json_input, config)?;
 - Newlines as comma separators (configurable)
 - Extended number formats: hexadecimal, octal, binary, underscores
 
-## [Unreleased]
+## Historical unreleased plans
 
 ### Planned for v2.1
 - **Plugin implementations** - Schema validation, datetime parsing

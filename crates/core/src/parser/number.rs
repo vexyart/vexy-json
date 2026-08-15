@@ -31,7 +31,7 @@ pub(super) fn parse_number_token(original_input: &str, span: Span) -> Result<Val
     let number_value = match normalized_number.parse::<f64>() {
         Ok(f) => {
             // Check if it's actually an integer and within i64 range
-            // Don't treat scientific notation or decimal notation as integers even if they have no fractional part
+            // Preserve decimal notation as a float even if it has no fractional part
             // Also preserve special float values like -0.0
             let has_no_fract = f.fract() == 0.0;
             let is_finite = f.is_finite();
@@ -47,8 +47,6 @@ pub(super) fn parse_number_token(original_input: &str, span: Span) -> Result<Val
 
             // Check if the original string contains indicators that it should be a float
             let has_decimal_point = number_slice.contains('.');
-            let has_exponent = number_slice.contains('e') || number_slice.contains('E');
-
             // For negative zero, return Integer(0) not Float(-0.0)
             if is_neg_zero && !has_decimal_point {
                 return Ok(Value::Number(Number::Integer(0)));
@@ -60,13 +58,11 @@ pub(super) fn parse_number_token(original_input: &str, span: Span) -> Result<Val
             // - In i64 range
             // - Not negative zero (already handled above)
             // - Either no decimal point OR trailing decimal point (vexy_json compatibility)
-            // - No exponent (scientific notation should be treated as float)
             if has_no_fract
                 && is_finite
                 && in_range
                 && !is_neg_zero
                 && (!has_decimal_point || has_trailing_decimal)
-                && !has_exponent
             {
                 Number::Integer(f as i64)
             } else {
@@ -181,8 +177,8 @@ mod tests {
         assert_eq!(parse_number_token("-1.5", Span::new(0, 4)).unwrap(), Value::Number(Number::Float(-1.5)));
         
         // Scientific notation
-        assert_eq!(parse_number_token("1e10", Span::new(0, 4)).unwrap(), Value::Number(Number::Float(1e10)));
-        assert_eq!(parse_number_token("1E10", Span::new(0, 4)).unwrap(), Value::Number(Number::Float(1E10)));
+        assert_eq!(parse_number_token("1e10", Span::new(0, 4)).unwrap(), Value::Number(Number::Integer(10_000_000_000)));
+        assert_eq!(parse_number_token("1E10", Span::new(0, 4)).unwrap(), Value::Number(Number::Integer(10_000_000_000)));
         assert_eq!(parse_number_token("1e-5", Span::new(0, 4)).unwrap(), Value::Number(Number::Float(1e-5)));
         assert_eq!(parse_number_token("2.5e3", Span::new(0, 5)).unwrap(), Value::Number(Number::Float(2500.0)));
     }

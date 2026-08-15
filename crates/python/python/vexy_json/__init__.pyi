@@ -1,4 +1,4 @@
-# this_file: crates/python/vexy_json.pyi
+# this_file: crates/python/python/vexy_json/__init__.pyi
 
 """
 Type stubs for vexy_json Python bindings.
@@ -97,7 +97,7 @@ def is_valid(input: str) -> bool:
         >>> import vexy_json
         >>> vexy_json.is_valid('{"valid": true}')
         True
-        >>> vexy_json.is_valid('invalid json')
+        >>> vexy_json.is_valid('{"key":}')
         False
     """
     ...

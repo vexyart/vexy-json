@@ -1,3 +1,5 @@
+# this_file: crates/python/tests/test_basic.py
+
 """
 Basic functionality tests for vexy_json Python bindings.
 """
@@ -24,6 +26,11 @@ class TestBasicParsing:
         result = vexy_json.parse("null")
         assert result is None
 
+    def test_parse_empty_input(self):
+        """Test that empty and whitespace-only input parse as null."""
+        assert vexy_json.parse("") is None
+        assert vexy_json.parse(" \t\n") is None
+
     def test_parse_boolean(self):
         """Test parsing boolean values."""
         assert vexy_json.parse("true") is True
@@ -39,10 +46,11 @@ class TestBasicParsing:
         assert vexy_json.parse("1.5e2") == 150.0
 
     def test_parse_strings(self):
-        """Test parsing string values."""
+        """Test parsing quoted and unquoted string values."""
         assert vexy_json.parse('"hello"') == "hello"
         assert vexy_json.parse('"hello world"') == "hello world"
         assert vexy_json.parse('""') == ""
+        assert vexy_json.parse("hello") == "hello"
 
     def test_parse_nested_structures(self):
         """Test parsing nested objects and arrays."""
@@ -113,6 +121,10 @@ class TestForgivingFeatures:
         result = vexy_json.parse("1, 2, 3")
         assert result == [1, 2, 3]
 
+        # Space-separated bare values form an implicit array
+        result = vexy_json.parse("hello world")
+        assert result == ["hello", "world"]
+
     def test_newline_as_comma(self):
         """Test newlines as comma separators."""
         json_with_newlines = """
@@ -145,7 +157,7 @@ class TestCustomOptions:
 
     def test_disable_comments(self):
         """Test disabling comment support."""
-        json_with_comment = '{"key": "value", // comment}'
+        json_with_comment = '{"key": "value", // comment\n}'
 
         # Should work with comments enabled (default)
         result = vexy_json.parse(json_with_comment)
@@ -232,6 +244,10 @@ class TestValidation:
             "false",
             "42",
             '"string"',
+            "",
+            " \t\n",
+            "unquoted",
+            "multiple bare values",
             "{key: value}",  # unquoted key
             "{'key': 'value'}",  # single quotes
             '{"a": 1,}',  # trailing comma
@@ -243,14 +259,13 @@ class TestValidation:
     def test_is_valid_false_cases(self):
         """Test cases that should be invalid."""
         invalid_cases = [
-            "",
             "{",
             "}",
             "[",
             "]",
             '{"key":}',
             '{:"value"}',
-            "undefined",
+            "{invalid json}",
             "{key value}",  # missing colon
         ]
 
@@ -269,12 +284,7 @@ class TestErrorHandling:
     def test_parse_with_options_error(self):
         """Test that parse_with_options errors raise ValueError."""
         with pytest.raises(ValueError, match="Parse error"):
-            vexy_json.parse_with_options("{invalid}", allow_comments=False)
-
-    def test_empty_input(self):
-        """Test parsing empty input."""
-        with pytest.raises(ValueError):
-            vexy_json.parse("")
+            vexy_json.parse_with_options('{"key":}', allow_comments=False)
 
     def test_malformed_json(self):
         """Test various malformed JSON inputs."""

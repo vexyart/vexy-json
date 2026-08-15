@@ -4,12 +4,11 @@
 //! to reduce allocation overhead and branch prediction hints for better CPU
 //! pipeline utilization.
 
-use crate::ast::{Number, Token, Value};
+use crate::ast::{Token, Value};
 use crate::error::{Error, Result, Span};
 use crate::lexer::{JsonLexer, Lexer};
 use crate::optimization::{
-    extract_string_content, parse_number_optimized, unescape_string_optimized, OptimizedMemoryPool,
-    PoolStats,
+    extract_string_content, unescape_string_optimized, OptimizedMemoryPool, PoolStats,
 };
 use crate::parser::ParserOptions;
 use rustc_hash::FxHashMap;
@@ -207,13 +206,7 @@ impl<'a> OptimizedParserV2<'a> {
 
     /// Parses a number using optimized routines
     fn parse_number_optimized(&mut self, span: Span) -> Result<Value> {
-        let number_str = &self.input[span.start..span.end];
-
-        // Use optimized number parsing
-        match parse_number_optimized(number_str) {
-            Ok(value) => Ok(Value::Number(Number::Float(value))),
-            Err(_) => Err(Error::InvalidNumber(span.start)),
-        }
+        super::number::parse_number_token(self.input, span)
     }
 
     /// Parses an object with optimized string handling
@@ -446,6 +439,7 @@ pub fn parse_v2_with_stats(input: &str) -> Result<(Value, ParserStats, PoolStats
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::ast::Number;
 
     #[test]
     fn test_optimized_parser_v2_simple() {
@@ -455,7 +449,7 @@ mod tests {
         match value {
             Value::Object(obj) => {
                 assert_eq!(obj.get("name"), Some(&Value::String("test".to_string())));
-                assert_eq!(obj.get("value"), Some(&Value::Number(Number::Float(42.0))));
+                assert_eq!(obj.get("value"), Some(&Value::Number(Number::Integer(42))));
             }
             _ => panic!("Expected object"),
         }
@@ -468,7 +462,7 @@ mod tests {
 
         // Should have some allocations tracked in parser stats
         assert!(stats.pooled_allocations > 0 || stats.bypassed_allocations > 0);
-        
+
         // Memory pool stats might be zero if using direct allocation
         // which is OK for small strings
         // assert!(memory_stats.total_bytes > 0); // This may not always be true

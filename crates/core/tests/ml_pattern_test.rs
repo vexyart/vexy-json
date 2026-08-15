@@ -1,7 +1,7 @@
 // this_file: crates/core/tests/ml_pattern_test.rs
 
-use vexy_json_core::error::{Error, ErrorContext};
 use vexy_json_core::error::ml_patterns::MLPatternRecognizer;
+use vexy_json_core::error::{Error, ErrorContext, SuggestionCategory};
 
 #[test]
 fn test_ml_pattern_recognizer_missing_bracket() {
@@ -56,14 +56,16 @@ fn test_ml_pattern_recognizer_missing_comma() {
     
     // Should have suggestions
     assert!(!suggestions.is_empty());
-    
-    // Check if we get a comma suggestion - the ML recognizer inserts at position 8
-    let comma_suggestion = suggestions.iter()
-        .find(|s| s.fixed_input.contains(r#"["item1","#) || 
-                  s.fixed_input.contains(r#""item1", "item2""#) ||
-                  s.fixed_input == r#"["item1", "item2"]"#);
-    
-    assert!(comma_suggestion.is_some(), "Should suggest adding a comma");
+
+    let comma_suggestion = suggestions
+        .iter()
+        .find(|suggestion| suggestion.category == SuggestionCategory::MissingComma);
+
+    assert_eq!(
+        comma_suggestion.map(|suggestion| suggestion.fixed_input.as_str()),
+        Some(r#"["item1", "item2"]"#),
+        "Should suggest adding a comma at the original error position",
+    );
 }
 
 #[test]
