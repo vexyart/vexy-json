@@ -44,5 +44,7 @@ jobs:
           git add -A docs
           if git diff --cached --quiet; then echo "docs/ unchanged"; exit 0; fi
           git commit -m "docs: rebuild site [skip ci]"
+          # The WASM build regenerates tracked files outside docs/; drop them before rebasing.
+          git reset -q --hard HEAD
           git pull --rebase
           git push
