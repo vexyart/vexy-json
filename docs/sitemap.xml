@@ -1,99 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://vexy.dev/vexy-json/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/dev/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/architecture/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/dev/benchmarks/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/c-api/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/dev/build-process/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/cli/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/dev/contributing/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/contributing/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/dev/design/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/installation/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/dev/packaging-macos/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/options/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/dev/plugin-development/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/python/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/dev/plugin-registry/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/quickstart/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/dev/release-process/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/repair/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/user/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/rust-api/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/user/features-overview/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/syntax/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/user/features/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/troubleshooting/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://vexy.dev/vexy-json/user/getting-started/</loc>
-         <lastmod>2026-08-15</lastmod>
-    </url>
-    <url>
-         <loc>https://vexy.dev/vexy-json/user/api/python-bindings/</loc>
-         <lastmod>2026-08-15</lastmod>
-    </url>
-    <url>
-         <loc>https://vexy.dev/vexy-json/user/api/rust/</loc>
-         <lastmod>2026-08-15</lastmod>
-    </url>
-    <url>
-         <loc>https://vexy.dev/vexy-json/user/api/streaming-api/</loc>
-         <lastmod>2026-08-15</lastmod>
-    </url>
-    <url>
-         <loc>https://vexy.dev/vexy-json/user/api/wasm/</loc>
-         <lastmod>2026-08-15</lastmod>
-    </url>
-    <url>
-         <loc>https://vexy.dev/vexy-json/user/api/python/</loc>
-         <lastmod>2026-08-15</lastmod>
-    </url>
-    <url>
-         <loc>https://vexy.dev/vexy-json/user/guides/json-repair/</loc>
-         <lastmod>2026-08-15</lastmod>
-    </url>
-    <url>
-         <loc>https://vexy.dev/vexy-json/user/guides/migration/</loc>
-         <lastmod>2026-08-15</lastmod>
-    </url>
-    <url>
-         <loc>https://vexy.dev/vexy-json/user/guides/transform/</loc>
-         <lastmod>2026-08-15</lastmod>
-    </url>
-    <url>
-         <loc>https://vexy.dev/vexy-json/user/guides/troubleshooting/</loc>
-         <lastmod>2026-08-15</lastmod>
-    </url>
-    <url>
-         <loc>https://vexy.dev/vexy-json/wasm/npm-package/</loc>
-         <lastmod>2026-08-15</lastmod>
+        <loc>https://vexy.dev/vexy-json/webassembly/</loc>
+        <lastmod>2026-10-13</lastmod>
+        <changefreq>daily</changefreq>
     </url>
 </urlset>

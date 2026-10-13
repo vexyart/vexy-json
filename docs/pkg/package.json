@@ -1,0 +1,31 @@
+{
+  "name": "vexy-json-wasm",
+  "type": "module",
+  "collaborators": [
+    "Adam Twardoch <adam+github@twardoch.com>"
+  ],
+  "description": "WebAssembly bindings for vexy_json - a forgiving JSON parser",
+  "version": "1.5.13-dev",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vexyart/vexy-json"
+  },
+  "files": [
+    "vexy_json_wasm_bg.wasm",
+    "vexy_json_wasm.js",
+    "vexy_json_wasm.d.ts"
+  ],
+  "main": "vexy_json_wasm.js",
+  "homepage": "https://github.com/vexyart/vexy-json",
+  "types": "vexy_json_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ],
+  "keywords": [
+    "json",
+    "wasm",
+    "parser",
+    "forgiving"
+  ]
+}

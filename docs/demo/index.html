@@ -204,7 +204,7 @@
         <div>
             <p>Powered by Vexy JSON WASM • 
             <a href="https://github.com/vexyart/vexy-json" class="link">GitHub</a> • 
-            <a href="../user/quick-start.html" class="link">Get Started</a></p>
+            <a href="../quickstart/" class="link">Get Started</a></p>
         </div>
     </footer>
 
@@ -353,8 +353,8 @@
         // Initialize WASM
         async function initWasm() {
             try {
-                // Try to load from the assets directory
-                const wasmModule = await import('../assets/wasm/vexy_json_wasm.js');
+                // Load the wasm-pack bundle published at ../pkg/ (built by scripts/build-wasm.sh)
+                const wasmModule = await import('../pkg/vexy_json_wasm.js');
                 await wasmModule.default();
                 vexyJson = wasmModule;
                 return true;
@@ -378,8 +378,8 @@
                 let result;
                 
                 if (vexyJson && vexyJson.parse_json) {
-                    // Use WASM parser
-                    result = vexyJson.parse_json(input);
+                    // Use WASM parser; parse_json returns a JSON string
+                    result = JSON.parse(vexyJson.parse_json(input));
                 } else {
                     // Fallback to native JSON.parse
                     result = JSON.parse(input);

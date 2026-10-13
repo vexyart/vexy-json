@@ -1,5 +1,7 @@
 # Vexy JSON
 
+**Documentation:** https://vexy.dev/vexy-json/
+
 Vexy JSON is a forgiving JSON parser for Rust and Python. It accepts standard
 JSON as well as practical extensions commonly found in configuration files and
 LLM output, while still producing ordinary JSON values.

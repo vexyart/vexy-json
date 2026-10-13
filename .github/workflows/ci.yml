@@ -113,7 +113,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wasm-bindings
-          path: crates/wasm/pkg/
+          path: src_docs/md/pkg/
 
   docs:
     name: Documentation

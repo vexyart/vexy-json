@@ -1,16 +1,16 @@
 #!/bin/bash
-# this_file: build-wasm.sh
+# this_file: scripts/build-wasm.sh
 
 # WebAssembly Build Script for vexy_json
 # Automated build script using wasm-pack with configurable dev/release modes
-# Outputs to docs/pkg/ directory for web integration
+# Outputs to src_docs/md/pkg/; ProperDocs copies it to docs/pkg/ for the live demo
 
 set -e
 
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-OUTPUT_DIR="$PROJECT_ROOT/docs/pkg"
+OUTPUT_DIR="$PROJECT_ROOT/src_docs/md/pkg"
 BUILD_MODE="${1:-dev}" # dev or release (using dev with optimized release profile)
 
 # Colors for output
@@ -85,6 +85,10 @@ else
     exit 1
 fi
 
+# wasm-pack writes a catch-all .gitignore into the output directory; remove it so
+# the bundle can be committed and published with the documentation site.
+rm -f "$OUTPUT_DIR/.gitignore"
+
 # Additional optimization with wasm-opt if available
 if [ -f "$OUTPUT_DIR/vexy_json_wasm_bg.wasm" ] && command -v wasm-opt &>/dev/null; then
     echo -e "${BLUE}🔧 Optimizing WASM bundle with wasm-opt...${NC}"
@@ -123,7 +127,7 @@ echo -e "${GREEN}🎉 WebAssembly build process completed!${NC}"
 echo
 echo -e "${BLUE}Next steps:${NC}"
 echo "1. Test the WASM module with a simple HTML page"
-echo "2. Integrate into the web interface (docs/tool.html)"
+echo "2. Rebuild the documentation site: src_docs/build.sh"
 echo "3. Add error handling and user feedback"
 echo "4. Test with various JSON inputs"
 echo

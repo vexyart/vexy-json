@@ -10,7 +10,7 @@ on:
       - 'crates/core/**'
       - 'crates/wasm/**'
       - 'scripts/build-wasm.sh'
-      - 'docs/**'
+      - 'src_docs/md/demo/**'
       - '.github/workflows/wasm-build.yml'
   pull_request:
     branches: [main]
@@ -20,7 +20,7 @@ on:
       - 'crates/core/**'
       - 'crates/wasm/**'
       - 'scripts/build-wasm.sh'
-      - 'docs/**'
+      - 'src_docs/md/demo/**'
       - '.github/workflows/wasm-build.yml'
   workflow_dispatch:
 
@@ -48,15 +48,15 @@ jobs:
 
       - name: Verify build outputs
         run: |
-          test -s docs/pkg/vexy_json_wasm.js
-          test -s docs/pkg/vexy_json_wasm_bg.wasm
-          test -s docs/pkg/vexy_json_wasm.d.ts
+          test -s src_docs/md/pkg/vexy_json_wasm.js
+          test -s src_docs/md/pkg/vexy_json_wasm_bg.wasm
+          test -s src_docs/md/pkg/vexy_json_wasm.d.ts
 
       - name: Upload WASM artifacts
         uses: actions/upload-artifact@v4
         with:
           name: wasm-module
-          path: docs/pkg/
+          path: src_docs/md/pkg/
           retention-days: 30
 
   test-wasm:

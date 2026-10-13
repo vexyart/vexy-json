@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Forgiving JSON parser for Rust, Python, WebAssembly, and the command line">
+        <meta name="description" content="Forgiving JSON parser for Rust, Python, WebAssembly, C and the command line">
       
       
       
@@ -14,30 +14,38 @@
       
       
       
-        <link rel="next" href="dev/">
+        <link rel="next" href="installation/">
       
       
         
       
       
-      <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
-    
-    
       
-        <title>Vexy JSON</title>
-      
-    
-    
-      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        
+        
+          <link rel="icon" href="assets/images/favicon.png">
+        
       
+      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-materialx-10.1.8">
+    
+    
       
-
+        <title>vexy-json</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.314bbef5.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.a45159b5.min.css">
+      
+    
+    
 
     
+
     
       
     
@@ -60,6 +68,8 @@
   </head>
   
   
+  
+  
     
     
       
@@ -67,16 +77,18 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" data-mx-topbar="glass">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="toc" type="checkbox" id="__toc" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
+    <label class="md-overlay" for="__toc"></label>
     <div data-md-component="skip">
       
         
-        <a href="#json-from-the-real-world-parsed-without-ceremony" class="md-skip">
+        <a href="#vexy-json" class="md-skip">
           Skip to content
         </a>
       
@@ -88,11 +100,14 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Vexy JSON" class="md-header__button md-logo" aria-label="Vexy JSON" data-md-component="logo">
+    <a href="." title="vexy-json" class="md-header__button md-logo" aria-label="vexy-json" data-md-component="logo">
       
-  <img src="assets/images/flamegraph.svg" alt="logo">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -103,13 +118,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Vexy JSON
+            vexy-json
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              JSON from the real world, parsed without ceremony
+              Home
             
           </span>
         </div>
@@ -122,20 +137,20 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
-      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
       </label>
     
   
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
-      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
       </label>
     
   
@@ -151,7 +166,7 @@
       
         <label class="md-header__button md-icon" for="__search">
           
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.25 2a8.25 8.25 0 0 1 6.34 13.53l5.69 5.69a.749.749 0 0 1-.326 1.275.75.75 0 0 1-.734-.215l-5.69-5.69A8.25 8.25 0 1 1 10.25 2M3.5 10.25a6.75 6.75 0 1 0 13.5 0 6.75 6.75 0 0 0-13.5 0"/></svg>
         </label>
         <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -160,7 +175,7 @@
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.25 2a8.25 8.25 0 0 1 6.34 13.53l5.69 5.69a.749.749 0 0 1-.326 1.275.75.75 0 0 1-.734-.215l-5.69-5.69A8.25 8.25 0 1 1 10.25 2M3.5 10.25a6.75 6.75 0 1 0 13.5 0 6.75 6.75 0 0 0-13.5 0"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
@@ -174,7 +189,7 @@
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0">
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -209,96 +224,6 @@
       
         
           
-            
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
-  <div class="md-grid">
-    <ul class="md-tabs__list">
-      
-        
-  
-  
-  
-    
-  
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
-        
-  
-  
-    
-  
-  JSON from the real world, parsed without ceremony
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="dev/" class="md-tabs__link">
-          
-  
-  
-  Dev
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="user/" class="md-tabs__link">
-          
-  
-  
-  User
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="wasm/npm-package/" class="md-tabs__link">
-          
-  
-  
-  Wasm
-
-        </a>
-      </li>
-    
-  
-
-      
-    </ul>
-  </div>
-</nav>
-          
         
       
       <main class="md-main" data-md-component="main">
@@ -312,17 +237,16 @@
                     
 
 
-  
 
-
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Vexy JSON" class="md-nav__button md-logo" aria-label="Vexy JSON" data-md-component="logo">
+    <a href="." title="vexy-json" class="md-nav__button md-logo" aria-label="vexy-json" data-md-component="logo">
       
-  <img src="assets/images/flamegraph.svg" alt="logo">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Vexy JSON
+    vexy-json
   </label>
   
     <div class="md-nav__source">
@@ -337,7 +261,7 @@
 </a>
     </div>
   
-  <ul class="md-nav__list" data-md-scrollfix>
+  <ul class="md-nav__list">
     
       
       
@@ -362,7 +286,7 @@
   <span class="md-ellipsis">
     
   
-    JSON from the real world, parsed without ceremony
+    Home
   
 
     
@@ -380,7 +304,7 @@
   <span class="md-ellipsis">
     
   
-    JSON from the real world, parsed without ceremony
+    Home
   
 
     
@@ -403,13 +327,13 @@
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc">
       
         <li class="md-nav__item">
-  <a href="#install" class="md-nav__link">
+  <a href="#what-it-accepts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install
+        What it accepts
       
     </span>
   </a>
@@ -417,10 +341,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#start-here" class="md-nav__link">
+  <a href="#one-example" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Start here
+        One example
       
     </span>
   </a>
@@ -428,10 +352,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#choose-the-right-surface" class="md-nav__link">
+  <a href="#ways-to-use-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Choose the right surface
+        Ways to use it
       
     </span>
   </a>
@@ -439,10 +363,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#guarantees-and-boundaries" class="md-nav__link">
+  <a href="#try-it-in-the-browser" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Guarantees and boundaries
+        Try it in the browser
       
     </span>
   </a>
@@ -479,24 +403,26 @@
     
     
       
+        
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Dev
+    Getting started
   
 
     
@@ -512,11 +438,11 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Dev
+    Getting started
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list">
             
               
                 
@@ -525,14 +451,14 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/" class="md-nav__link">
+      <a href="installation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Development guide
+    Installation
   
 
     
@@ -553,210 +479,14 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/benchmarks/" class="md-nav__link">
+      <a href="quickstart/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Benchmark Results
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="dev/build-process/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Build Status Dashboard
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="dev/contributing/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Contributing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="dev/design/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Architecture
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="dev/packaging-macos/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    macOS Packaging Guide
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="dev/plugin-development/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Vexy JSON Plugin Development Guide
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="dev/plugin-registry/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Vexy JSON Plugin Registry
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="dev/release-process/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Release Process
+    Quickstart
   
 
     
@@ -788,24 +518,26 @@
     
     
       
+        
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    User
+    Guide
   
 
     
@@ -821,11 +553,11 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    User
+    Guide
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list">
             
               
                 
@@ -834,14 +566,14 @@
   
   
     <li class="md-nav__item">
-      <a href="user/" class="md-nav__link">
+      <a href="syntax/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    User guide
+    Accepted syntax
   
 
     
@@ -862,14 +594,14 @@
   
   
     <li class="md-nav__item">
-      <a href="user/features/" class="md-nav__link">
+      <a href="options/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Forgiving syntax
+    Parser options
   
 
     
@@ -890,14 +622,14 @@
   
   
     <li class="md-nav__item">
-      <a href="user/features-overview/" class="md-nav__link">
+      <a href="repair/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Vexy JSON Features Overview
+    Repairing incomplete input
   
 
     
@@ -911,36 +643,15 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="user/getting-started/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Getting started
-  
-
-    
-  </span>
-  
-  
-
-      </a>
+          </ul>
+        </nav>
+      
     </li>
   
 
-              
-            
-              
-                
+    
+      
+      
   
   
   
@@ -950,24 +661,26 @@
     
     
       
+        
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Api
+    Interfaces
   
 
     
@@ -978,16 +691,16 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Api
+    Interfaces
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list">
             
               
                 
@@ -996,14 +709,14 @@
   
   
     <li class="md-nav__item">
-      <a href="user/api/python-bindings/" class="md-nav__link">
+      <a href="cli/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Python Bindings
+    Command line
   
 
     
@@ -1024,7 +737,7 @@
   
   
     <li class="md-nav__item">
-      <a href="user/api/rust/" class="md-nav__link">
+      <a href="rust-api/" class="md-nav__link">
         
   
   
@@ -1052,14 +765,14 @@
   
   
     <li class="md-nav__item">
-      <a href="user/api/streaming-api/" class="md-nav__link">
+      <a href="python/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Streaming Parser API Documentation
+    Python
   
 
     
@@ -1080,14 +793,14 @@
   
   
     <li class="md-nav__item">
-      <a href="user/api/wasm/" class="md-nav__link">
+      <a href="webassembly/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    WebAssembly (WASM) API Reference
+    JavaScript and WebAssembly
   
 
     
@@ -1107,65 +820,15 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_3_5_5" id="__nav_3_5_5_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Python
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_5_5">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Python
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
-      <a href="user/api/python/" class="md-nav__link">
+      <a href="c-api/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Python API
+    C and C++
   
 
     
@@ -1185,45 +848,38 @@
     </li>
   
 
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
     
       
       
+  
+  
+  
+  
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    
+    
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Guides
+    Project
   
 
     
@@ -1234,16 +890,16 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_6">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Guides
+    Project
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list">
             
               
                 
@@ -1252,14 +908,14 @@
   
   
     <li class="md-nav__item">
-      <a href="user/guides/json-repair/" class="md-nav__link">
+      <a href="architecture/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    JSON Repair
+    Architecture
   
 
     
@@ -1280,63 +936,7 @@
   
   
     <li class="md-nav__item">
-      <a href="user/guides/migration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Migration Guide: vexy_json v2.0.0
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="user/guides/transform/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    JSON Transformation
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="user/guides/troubleshooting/" class="md-nav__link">
+      <a href="troubleshooting/" class="md-nav__link">
         
   
   
@@ -1357,71 +957,6 @@
 
               
             
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Wasm
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Wasm
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
               
                 
   
@@ -1429,14 +964,14 @@
   
   
     <li class="md-nav__item">
-      <a href="wasm/npm-package/" class="md-nav__link">
+      <a href="contributing/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    @twardoch/vexy_json-wasm
+    Contributing
   
 
     
@@ -1481,13 +1016,13 @@
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc">
       
         <li class="md-nav__item">
-  <a href="#install" class="md-nav__link">
+  <a href="#what-it-accepts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install
+        What it accepts
       
     </span>
   </a>
@@ -1495,10 +1030,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#start-here" class="md-nav__link">
+  <a href="#one-example" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Start here
+        One example
       
     </span>
   </a>
@@ -1506,10 +1041,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#choose-the-right-surface" class="md-nav__link">
+  <a href="#ways-to-use-it" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Choose the right surface
+        Ways to use it
       
     </span>
   </a>
@@ -1517,10 +1052,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#guarantees-and-boundaries" class="md-nav__link">
+  <a href="#try-it-in-the-browser" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Guarantees and boundaries
+        Try it in the browser
       
     </span>
   </a>
@@ -1552,116 +1087,107 @@
               <article class="md-content__inner md-typeset">
                 
                   
-
-
   
   
 
 
-<h1 id="json-from-the-real-world-parsed-without-ceremony">JSON from the real world, parsed without ceremony<a class="headerlink" href="#json-from-the-real-world-parsed-without-ceremony" title="Permanent link">&para;</a></h1>
-<p>Vexy JSON accepts strict JSON and the useful deviations people actually write:
-comments, trailing commas, unquoted keys, single quotes, implicit containers,
-newline separators, and extended number formats. Its Rust engine is available
-as a Rust library, native Python package, CLI, WebAssembly module, and C API.</p>
-<div class="highlight"><pre><span></span><code>// Configuration, generated output, or a hand-edited file
-service: &#39;preview&#39;
-retries: 0b11
-hosts: [api, cache,]
-</code></pre></div>
-<p>The default parser turns that into an ordinary object. You can disable every
-extension when an input boundary requires strict JSON.</p>
-<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
-<p>=== "Rust"</p>
-<div class="highlight"><pre><span></span><code>```bash
-cargo add vexy-json
-```
-</code></pre></div>
-<p>=== "Python"</p>
-<div class="highlight"><pre><span></span><code>```bash
-uv add vexy-json
-```
-</code></pre></div>
-<p>=== "CLI"</p>
-<div class="highlight"><pre><span></span><code>```bash
-cargo install vexy-json-cli
-```
-</code></pre></div>
-<p>Python installs the <code>vexy-json</code> distribution and imports it as <code>vexy_json</code>.</p>
-<h2 id="start-here">Start here<a class="headerlink" href="#start-here" title="Permanent link">&para;</a></h2>
+<h1 id="vexy-json">Vexy JSON<a class="headerlink" href="#vexy-json" title="Permanent link">&para;</a></h1>
+<p>Vexy JSON is a forgiving JSON parser written in Rust. It reads standard JSON and
+the relaxed syntax found in hand-written configuration files and in text
+produced by language models, and it returns ordinary JSON values.</p>
+<p>The same parser is available as a Rust library, a command-line tool, a Python
+package, a WebAssembly module and a C library.</p>
+<h2 id="what-it-accepts">What it accepts<a class="headerlink" href="#what-it-accepts" title="Permanent link">&para;</a></h2>
+<p>Standard JSON parses unchanged. On top of that, the default settings accept:</p>
 <ul>
-<li><a href="user/getting-started/">Getting started</a> — install, parse, configure, and
-  handle errors.</li>
-<li><a href="user/features/">Forgiving syntax</a> — the accepted extensions and how to
-  switch them off.</li>
-<li><a href="user/api/python/">Python API</a> — functions, options, files, and typed
-  interfaces.</li>
-<li><a href="user/api/rust/">Rust API</a> — core types and parser configuration.</li>
-<li><a href="user/guides/troubleshooting/">Troubleshooting</a> — installation, parsing,
-  WASM, and release diagnostics.</li>
-<li><a href="demo/">Interactive demo</a> — parse examples in the browser.</li>
+<li><code>//</code>, <code>/* … */</code> and <code>#</code> comments</li>
+<li>trailing commas in arrays and objects</li>
+<li>unquoted object keys and unquoted single-word string values</li>
+<li>single-quoted strings</li>
+<li>implicit top-level objects (<code>a: 1, b: 2</code>) and arrays (<code>1, 2, 3</code>)</li>
+<li>newlines in place of commas</li>
+<li>hexadecimal (<code>0x1F</code>), octal (<code>0o17</code>) and binary (<code>0b101</code>) integers, and
+  underscores in numbers (<code>1_000</code>)</li>
 </ul>
-<h2 id="choose-the-right-surface">Choose the right surface<a class="headerlink" href="#choose-the-right-surface" title="Permanent link">&para;</a></h2>
+<p>Each extension can be switched off. See <a href="syntax/">Accepted syntax</a> and
+<a href="options/">Parser options</a>.</p>
+<h2 id="one-example">One example<a class="headerlink" href="#one-example" title="Permanent link">&para;</a></h2>
+<p>This input is not valid JSON:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>// service settings
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>{
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  name: 'cache',
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  ports: [8080, 8081,],
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  retries: 0x3
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>}
+</code></pre></div>
+<p>Vexy JSON turns it into this value:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cache"</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">"ports"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">8080</span><span class="p">,</span><span class="w"> </span><span class="mi">8081</span><span class="p">],</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">"retries"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
+</code></pre></div>
+<p>The comment is dropped, the unquoted key and the single-quoted string become
+ordinary strings, the trailing comma is ignored and the hexadecimal number
+becomes a decimal integer.</p>
+<h2 id="ways-to-use-it">Ways to use it<a class="headerlink" href="#ways-to-use-it" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Need</th>
+<th>Interface</th>
 <th>Package</th>
 <th>Entry point</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Rust application</td>
-<td><code>vexy-json</code></td>
+<td>Rust library</td>
+<td><code>vexy-json</code> on crates.io</td>
 <td><code>vexy_json::parse</code></td>
 </tr>
 <tr>
-<td>Python application</td>
-<td><code>vexy-json</code></td>
-<td><code>vexy_json.parse</code></td>
+<td>Command line</td>
+<td><code>vexy-json-cli</code> on crates.io</td>
+<td><code>vexy-json</code> binary</td>
 </tr>
 <tr>
-<td>Terminal or shell pipeline</td>
-<td><code>vexy-json-cli</code></td>
-<td><code>vexy-json</code></td>
+<td>Python</td>
+<td><code>vexy-json</code> on PyPI</td>
+<td><code>import vexy_json</code></td>
 </tr>
 <tr>
-<td>Browser or Node.js</td>
-<td><code>vexy-json-wasm</code></td>
-<td>WASM bindings</td>
+<td>Browser and Node.js</td>
+<td>built with <code>wasm-pack</code> from <code>crates/wasm</code></td>
+<td><code>parse_json</code></td>
 </tr>
 <tr>
-<td>C or C++ integration</td>
-<td><code>vexy-json-c-api</code></td>
-<td>C headers and library</td>
+<td>C and C++</td>
+<td><code>vexy-json-c-api</code> (static and dynamic library)</td>
+<td><code>vexy_json_parse</code></td>
 </tr>
 </tbody>
 </table>
-<h2 id="guarantees-and-boundaries">Guarantees and boundaries<a class="headerlink" href="#guarantees-and-boundaries" title="Permanent link">&para;</a></h2>
-<p>Vexy JSON returns normal JSON-compatible values. Forgiving syntax changes what
-the parser accepts; it does not invent application-specific data. Parsing can
-still fail for incomplete strings, invalid escapes, excessive nesting, and
-inputs that remain ambiguous after the enabled recovery rules.</p>
-<p>Use strict options at trust boundaries. Use forgiving defaults for
-configuration, migrations, editor input, logs, and generated text where a
-helpful parser is more valuable than a brittle one.</p>
+<p>Start with <a href="installation/">Installation</a> and the <a href="quickstart/">Quickstart</a>.</p>
+<h2 id="try-it-in-the-browser">Try it in the browser<a class="headerlink" href="#try-it-in-the-browser" title="Permanent link">&para;</a></h2>
+<p>The <a href="demo/">interactive demo</a> runs the WebAssembly build of the
+parser in your browser. Type relaxed JSON on the left and the normalized JSON
+appears on the right. An older version of the demo is kept at
+<a href="demo/legacy.html">demo/legacy.html</a>.</p>
 <h2 id="project-links">Project links<a class="headerlink" href="#project-links" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="https://github.com/vexyart/vexy-json">Source and issues</a></li>
-<li><a href="https://crates.io/crates/vexy-json">Rust package</a></li>
-<li><a href="https://pypi.org/project/vexy-json/">Python package</a></li>
-<li><a href="https://vexy.dev/vexy-json/">Documentation</a></li>
+<li>Source code: <a href="https://github.com/vexyart/vexy-json">github.com/vexyart/vexy-json</a></li>
+<li>Rust crate: <a href="https://crates.io/crates/vexy-json">crates.io/crates/vexy-json</a></li>
+<li>Python package: <a href="https://pypi.org/project/vexy-json/">pypi.org/project/vexy-json</a></li>
+<li>Changes: <a href="https://github.com/vexyart/vexy-json/blob/main/CHANGELOG.md">CHANGELOG.md</a></li>
 </ul>
-<p>Vexy JSON is available under MIT or Apache-2.0, at your option.</p>
+<p>Vexy JSON is licensed under either the MIT License or the Apache License 2.0,
+at your option.</p>
 
 
 
 
 
 
-
-  
-  
 
 
 
@@ -1675,10 +1201,56 @@ helpful parser is more valuable than a brittle one.</p>
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
-        
+          <div class="md-top" data-md-component="top" hidden>
+  <div class="md-top__center">
+    <button type="button" class="md-top__button md-top__button--main" data-md-action="top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+      <span>Back to top</span>
+    </button>
+    
+      
+      
+      <label class="md-top__button md-top__side md-top__side--nav" for="__drawer" >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-panel-left" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+      </label>
+    
+    
+      
+      
+      <label class="md-top__button md-top__side md-top__side--toc" for="__toc" >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-panel-right" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg>
+      </label>
+    
+  </div>
+</div>
       </main>
       
         <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+        
+          
+          <a href="installation/" class="md-footer__link md-footer__link--next" aria-label="Next: Installation">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Installation
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1686,8 +1258,8 @@ helpful parser is more valuable than a brittle one.</p>
   
   
     Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
+    <a href="https://jaywhj.github.io/mkdocs-materialx/" target="_blank" rel="noopener">
+      MaterialX
     </a>
   
 </div>
@@ -1705,10 +1277,10 @@ helpful parser is more valuable than a brittle one.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "code": null, "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "code.collapse": "Collapse", "code.download": "Download", "code.expand": "Expand remaining # lines", "code.select": "Toggle line selection", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="assets/javascripts/bundle.fc193f93.min.js"></script>
       
     
   </body>

@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 # this_file: build.sh
+# Canonical build gate for the Rust workspace, the Python package and the docs.
+# Usage: ./build.sh                 # full gate (fmt, clippy, build, tests, wheel, docs)
+#        ./build.sh docs [args]     # only rebuild the documentation site into docs/
+#        ./build.sh --docs [args]   # same as `docs`; extra args go to src_docs/build.sh
+if [[ "${1:-}" == docs || "${1:-}" == --docs ]]; then
+  shift
+  set -euo pipefail
+  cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
+  exec src_docs/build.sh "$@"
+fi
 
 set -euo pipefail
 
@@ -64,8 +74,8 @@ verify_layout() {
         crates/python/Cargo.toml \
         crates/python/pyproject.toml \
         crates/python/tests \
-        mkdocs.yml \
-        requirements-docs.txt \
+        src_docs/build.sh \
+        src_docs/mkdocs.yml \
         scripts/release-manifests.py \
         scripts/check-python-artifacts.py; do
         [[ -e "$ROOT/$required" ]] || {
@@ -128,13 +138,14 @@ PY
 
 documentation_gate() {
     local site="$TEMP_DIR/docs-site"
-    uvx --with-requirements "$ROOT/requirements-docs.txt" \
-        mkdocs build --strict --config-file "$ROOT/mkdocs.yml" --site-dir "$site"
+    # Strict ProperDocs build into a temporary site directory, so the gate does
+    # not modify the committed docs/ tree.
+    "$ROOT/src_docs/build.sh" build --site-dir "$site"
     [[ -f "$site/index.html" ]] || {
         printf 'Documentation build did not create index.html.\n' >&2
         return 1
     }
-    printf 'Documentation build passed: %s\n' "$ROOT/mkdocs.yml"
+    printf 'Documentation build passed: %s\n' "$ROOT/src_docs/mkdocs.yml"
 }
 
 run_build() {

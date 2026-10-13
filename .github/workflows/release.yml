@@ -231,16 +231,16 @@ jobs:
       - name: Build and test WASM
         run: |
           ./scripts/build-wasm.sh release
-          cp README.md docs/pkg/README.md
-          cp LICENSE docs/pkg/LICENSE
+          cp README.md src_docs/md/pkg/README.md
+          cp LICENSE src_docs/md/pkg/LICENSE
           mkdir -p crates/wasm/pkg
-          cp -R docs/pkg/. crates/wasm/pkg/
+          cp -R src_docs/md/pkg/. crates/wasm/pkg/
           node crates/wasm/test.mjs
 
       - name: Package WASM
         env:
           VERSION: ${{ needs.validate-release.outputs.version }}
-        run: tar czf "vexy-json-wasm-$VERSION.tar.gz" -C docs pkg
+        run: tar czf "vexy-json-wasm-$VERSION.tar.gz" -C src_docs/md pkg
 
       - name: Upload WASM to the draft release
         env:
