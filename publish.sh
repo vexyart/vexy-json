@@ -126,8 +126,8 @@ read_only_preflight() {
             printf 'CARGO_REGISTRY_TOKEN is required for a real release.\n' >&2
             return 1
         }
-        [[ -n "${UV_PUBLISH_TOKEN:-}" ]] || {
-            printf 'UV_PUBLISH_TOKEN is required for a real release.\n' >&2
+        gh auth status >/dev/null 2>&1 || {
+            printf 'gh must be logged in: PyPI uploads go through scripts/pypi-upload.sh (Trusted Publishing).\n' >&2
             return 1
         }
     fi
@@ -289,7 +289,7 @@ pre_mutation_gates() {
     "$ROOT/build.sh"
     cargo publish --manifest-path "$ROOT/Cargo.toml" --dry-run -p vexy-json-core
     python_package_gate "$current" current
-    uv publish --dry-run "$PY_WHEEL" "$PY_SDIST"
+    "$ROOT/scripts/pypi-upload.sh" --dry-run "$PY_WHEEL" "$PY_SDIST"
 }
 
 assert_manifest_diff() {
@@ -445,9 +445,9 @@ publish_all() {
     local hatch_version
     hatch_version="$(cd "$ROOT/crates/python" && uvx --with hatch-vcs hatchling version)"
     [[ "$hatch_version" == "$TARGET_VERSION" ]]
-    uv publish --dry-run "$PY_WHEEL" "$PY_SDIST"
+    "$ROOT/scripts/pypi-upload.sh" --dry-run "$PY_WHEEL" "$PY_SDIST"
     PHASE="upload-python"
-    if ! uv publish "$PY_WHEEL" "$PY_SDIST"; then
+    if ! "$ROOT/scripts/pypi-upload.sh" "$PY_WHEEL" "$PY_SDIST"; then
         printf 'PyPI upload failed or is ambiguous: vexy-json@%s\n' "$TARGET_VERSION" >&2
         return 1
     fi
