@@ -44,3 +44,9 @@ The release will:
 2. Create distribution packages
 3. Tag the release
 4. Publish to crates.io (if desired)
+
+## 2026-10-18: documentation plugins
+
+- Use MaterialX search, inherited metadata and a topic index; keep ordered navigation in awesome-nav.
+- The documentation wrapper installs the plugins required by this site.
+- Strict documentation build and rendered output checks passed.

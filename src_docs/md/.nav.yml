@@ -1,0 +1,21 @@
+# this_file: src_docs/md/.nav.yml
+nav:
+  - Home: index.md
+  - Getting started:
+      - Installation: installation.md
+      - Quickstart: quickstart.md
+  - Guide:
+      - Accepted syntax: syntax.md
+      - Parser options: options.md
+      - Repairing incomplete input: repair.md
+  - Interfaces:
+      - Command line: cli.md
+      - Rust API: rust-api.md
+      - Python: python.md
+      - JavaScript and WebAssembly: webassembly.md
+      - C and C++: c-api.md
+  - Project:
+      - Architecture: architecture.md
+      - Troubleshooting: troubleshooting.md
+      - Contributing: contributing.md
+  - Topics: topics.md

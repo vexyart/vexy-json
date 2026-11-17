@@ -1,3 +1,8 @@
+---
+this_file: src_docs/md/cli.md
+tags: [Command line]
+---
+
 # Command line
 
 The `vexy-json` program reads relaxed JSON from files or standard input and

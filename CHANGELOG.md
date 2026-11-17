@@ -447,3 +447,9 @@ let result = parse_parallel_chunked(large_json_input, config)?;
 [1.5.24]: https://github.com/vexyart/vexy-json/compare/v1.5.23...v1.5.24
 [1.5.23]: https://github.com/vexyart/vexy-json/releases/tag/v1.5.23
 [Unreleased]: https://github.com/vexyart/vexy-json/compare/v2.0.0...HEAD
+
+## 2026-10-18: documentation plugins
+
+- Use MaterialX search, inherited metadata and a topic index; keep ordered navigation in awesome-nav.
+- The documentation wrapper installs the plugins required by this site.
+- Strict documentation build and rendered output checks passed.
