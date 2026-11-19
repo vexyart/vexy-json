@@ -48,7 +48,7 @@ async = [ "tokio" ]
 
 
 [dev-dependencies.criterion]
-version = "0.6"
+version = "0.8"
 features = [ "html_reports" ]
 
 
