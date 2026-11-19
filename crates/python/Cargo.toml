@@ -30,4 +30,4 @@ version = "=1.5.14"
 
 
 [build-dependencies]
-pyo3-build-config = "0.25"
+pyo3-build-config = "0.27"
