@@ -75,7 +75,7 @@ Do not invoke individual Cargo test or lint commands for release verification;
 `build.sh` is the canonical gate and records its output in `build.log.txt`.
 
 Run `./build.sh docs` to rebuild the GitHub Pages site in `docs/`. The strict
-ProperDocs build uses `src_docs/mkdocs.yml` and fly-january 0.1.0 with
+ProperDocs build uses `src_docs/mkdocs.yml` and fly-january 0.1.1 with
 unbranded navigation. Run `src_docs/build.sh serve` for a local preview.
 
 Install the Rust CLI under `~/.local` and the Python extension into the system

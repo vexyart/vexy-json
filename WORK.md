@@ -53,7 +53,7 @@ The release will:
 
 ## 2026-11-23: documentation theme
 
-- Rebuilt `docs/` with `./build.sh docs` using fly-january 0.1.0 and unbranded navigation. The strict build passed without warnings.
+- Rebuilt `docs/` with `./build.sh docs` using fly-january 0.1.1 and unbranded navigation. The strict build passed without warnings.
 - Synced the demo source bundle with the tracked 1.5.14 release so local documentation builds preserve the published WebAssembly files.
-- Checked the header, navigation, footer and favicon on all 18 generated HTML pages. All five Fly assets match the 0.1.0 wheel.
+- Checked the header, navigation, footer and favicon on all 18 generated HTML pages. All five Fly assets match the 0.1.1 wheel.
 - The full gate passed 561 Rust tests, 5 doctests and 36 Python tests. Installing the optional NumPy and pandas dependencies brought the Python count to 38 with no skips.
