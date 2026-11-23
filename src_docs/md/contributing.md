@@ -47,7 +47,7 @@ The output is also written to `build.log.txt`. The last line is
 
 The documentation sources are Markdown files in `src_docs/md/`. The site
 configuration is `src_docs/mkdocs.yml`. ProperDocs builds the GitHub Pages
-site in `docs/` with fly-january 0.1.1 and unbranded navigation.
+site in `docs/` with fly-january 0.2.0 and unbranded navigation.
 
 1. Edit or add a page in `src_docs/md/`. Add new pages to the `nav` list in
    `src_docs/md/.nav.yml`.
