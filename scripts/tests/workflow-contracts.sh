@@ -206,7 +206,7 @@ set -euo pipefail
 printf 'uvx %s\n' "$*" >>"$TOOL_LOG"
 if [[ ${1:-} == --from ]]; then
     printf '%s\n' 'maturin 1.9.4 (workflow-contract)'
-elif [[ ${1:-} == --with-requirements ]]; then
+elif [[ " $* " == *' properdocs build --strict '* ]]; then
     site_dir=""
     while (( $# > 0 )); do
         if [[ $1 == --site-dir ]]; then site_dir=$2; shift 2; else shift; fi
@@ -266,7 +266,9 @@ for active in build.sh install.sh; do
     assert_not_contains bindings/python "$ROOT/$active"
 done
 assert_not_contains bindings/python "$ROOT/publish.sh"
-assert_contains 'mkdocs build --strict' "$ROOT/build.sh"
+assert_contains '"$ROOT/src_docs/build.sh" build --site-dir "$site"' "$ROOT/build.sh"
+assert_contains 'properdocs build --strict -f mkdocs.yml' "$ROOT/src_docs/build.sh"
+assert_contains 'fly-january==0.1.1' "$ROOT/src_docs/build.sh"
 assert_contains 'documentation_gate' "$ROOT/build.sh"
 assert_contains 'uv pip install --system --python "$SYSTEM_PYTHON" --reinstall "$WHEEL"' "$ROOT/install.sh"
 assert_contains 'uv build --python "$SYSTEM_PYTHON" --no-sources' "$ROOT/install.sh"

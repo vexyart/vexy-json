@@ -148,23 +148,31 @@ export function parse_json(input) {
  * @returns {string}
  */
 export function parse_json_with_options(input, allow_comments, allow_trailing_commas, allow_unquoted_keys, allow_single_quotes, implicit_top_level, newline_as_comma, enable_repair, max_depth) {
-    let deferred3_0;
-    let deferred3_1;
+    let deferred11_0;
+    let deferred11_1;
     try {
+        const val2 = +allow_comments;
+        const val3 = +allow_trailing_commas;
+        const val4 = +allow_unquoted_keys;
+        const val5 = +allow_single_quotes;
+        const val6 = +implicit_top_level;
+        const val7 = +newline_as_comma;
+        const val8 = +enable_repair;
+        const val9 = +(isLikeNone(max_depth) ? Number.MAX_SAFE_INTEGER : (max_depth) >>> 0);
         const ptr0 = passStringToWasm0(input, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len0 = WASM_VECTOR_LEN;
-        const ret = wasm.parse_json_with_options(ptr0, len0, allow_comments, allow_trailing_commas, allow_unquoted_keys, allow_single_quotes, implicit_top_level, newline_as_comma, enable_repair, isLikeNone(max_depth) ? Number.MAX_SAFE_INTEGER : (max_depth) >>> 0);
-        var ptr2 = ret[0];
-        var len2 = ret[1];
+        const ret = wasm.parse_json_with_options(ptr0, len0, val2, val3, val4, val5, val6, val7, val8, val9);
+        var ptr10 = ret[0];
+        var len10 = ret[1];
         if (ret[3]) {
-            ptr2 = 0; len2 = 0;
+            ptr10 = 0; len10 = 0;
             throw takeFromExternrefTable0(ret[2]);
         }
-        deferred3_0 = ptr2;
-        deferred3_1 = len2;
-        return getStringFromWasm0(ptr2, len2);
+        deferred11_0 = ptr10;
+        deferred11_1 = len10;
+        return getStringFromWasm0(ptr10, len10);
     } finally {
-        wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
+        wasm.__wbindgen_free(deferred11_0, deferred11_1, 1);
     }
 }
 
@@ -179,23 +187,29 @@ export function parse_json_with_options(input, allow_comments, allow_trailing_co
  * @returns {string}
  */
 export function parse_with_options_js(input, allow_comments, allow_trailing_commas, allow_unquoted_keys, allow_single_quotes, implicit_top_level, newline_as_comma) {
-    let deferred3_0;
-    let deferred3_1;
+    let deferred9_0;
+    let deferred9_1;
     try {
+        const val2 = +allow_comments;
+        const val3 = +allow_trailing_commas;
+        const val4 = +allow_unquoted_keys;
+        const val5 = +allow_single_quotes;
+        const val6 = +implicit_top_level;
+        const val7 = +newline_as_comma;
         const ptr0 = passStringToWasm0(input, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len0 = WASM_VECTOR_LEN;
-        const ret = wasm.parse_with_options_js(ptr0, len0, allow_comments, allow_trailing_commas, allow_unquoted_keys, allow_single_quotes, implicit_top_level, newline_as_comma);
-        var ptr2 = ret[0];
-        var len2 = ret[1];
+        const ret = wasm.parse_with_options_js(ptr0, len0, val2, val3, val4, val5, val6, val7);
+        var ptr8 = ret[0];
+        var len8 = ret[1];
         if (ret[3]) {
-            ptr2 = 0; len2 = 0;
+            ptr8 = 0; len8 = 0;
             throw takeFromExternrefTable0(ret[2]);
         }
-        deferred3_0 = ptr2;
-        deferred3_1 = len2;
-        return getStringFromWasm0(ptr2, len2);
+        deferred9_0 = ptr8;
+        deferred9_1 = len8;
+        return getStringFromWasm0(ptr8, len8);
     } finally {
-        wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
+        wasm.__wbindgen_free(deferred9_0, deferred9_1, 1);
     }
 }
 
@@ -206,23 +220,24 @@ export function parse_with_options_js(input, allow_comments, allow_trailing_comm
  * @returns {string}
  */
 export function stringify_value(input, indent) {
-    let deferred3_0;
-    let deferred3_1;
+    let deferred4_0;
+    let deferred4_1;
     try {
+        const val2 = +(isLikeNone(indent) ? Number.MAX_SAFE_INTEGER : (indent) >>> 0);
         const ptr0 = passStringToWasm0(input, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len0 = WASM_VECTOR_LEN;
-        const ret = wasm.stringify_value(ptr0, len0, isLikeNone(indent) ? Number.MAX_SAFE_INTEGER : (indent) >>> 0);
-        var ptr2 = ret[0];
-        var len2 = ret[1];
+        const ret = wasm.stringify_value(ptr0, len0, val2);
+        var ptr3 = ret[0];
+        var len3 = ret[1];
         if (ret[3]) {
-            ptr2 = 0; len2 = 0;
+            ptr3 = 0; len3 = 0;
             throw takeFromExternrefTable0(ret[2]);
         }
-        deferred3_0 = ptr2;
-        deferred3_1 = len2;
-        return getStringFromWasm0(ptr2, len2);
+        deferred4_0 = ptr3;
+        deferred4_1 = len3;
+        return getStringFromWasm0(ptr3, len3);
     } finally {
-        wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
+        wasm.__wbindgen_free(deferred4_0, deferred4_1, 1);
     }
 }
 
@@ -240,22 +255,21 @@ export function validate_json(input) {
 function __wbg_get_imports() {
     const import0 = {
         __proto__: null,
-        __wbg___wbindgen_throw_bb96b2010945f0bc: function(arg0, arg1) {
+        __wbg___wbindgen_throw_4c88d8bf264fd984: function(arg0, arg1) {
             throw new Error(getStringFromWasm0(arg0, arg1));
         },
-        __wbindgen_cast_0000000000000001: function(arg0, arg1) {
+        __wbindgen_generic_0000000000000001: function(arg0, arg1) {
             // Cast intrinsic for `Ref(String) -> Externref`.
             const ret = getStringFromWasm0(arg0, arg1);
             return ret;
         },
         __wbindgen_init_externref_table: function() {
             const table = wasm.__wbindgen_externrefs;
-            const offset = table.grow(4);
             table.set(0, undefined);
-            table.set(offset + 0, undefined);
-            table.set(offset + 1, null);
-            table.set(offset + 2, true);
-            table.set(offset + 3, false);
+            table.set(1024, undefined);
+            table.set(1025, null);
+            table.set(1026, true);
+            table.set(1027, false);
         },
     };
     return {
@@ -265,7 +279,8 @@ function __wbg_get_imports() {
 }
 
 function getStringFromWasm0(ptr, len) {
-    return decodeText(ptr >>> 0, len);
+    ptr = ptr >>> 0;
+    return decodeText(getUint8ArrayMemory0().subarray(ptr, ptr + len));
 }
 
 let cachedUint8ArrayMemory0 = null;
@@ -323,18 +338,18 @@ function takeFromExternrefTable0(idx) {
     return value;
 }
 
-let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
+let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true });
 cachedTextDecoder.decode();
 const MAX_SAFARI_DECODE_BYTES = 2146435072;
 let numBytesDecoded = 0;
-function decodeText(ptr, len) {
-    numBytesDecoded += len;
+function decodeText(bytes) {
+    numBytesDecoded += bytes.length;
     if (numBytesDecoded >= MAX_SAFARI_DECODE_BYTES) {
-        cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
+        cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true });
         cachedTextDecoder.decode();
-        numBytesDecoded = len;
+        numBytesDecoded = bytes.length;
     }
-    return cachedTextDecoder.decode(getUint8ArrayMemory0().subarray(ptr, ptr + len));
+    return cachedTextDecoder.decode(bytes);
 }
 
 const cachedTextEncoder = new TextEncoder();
@@ -421,9 +436,17 @@ function initSync(module) {
     return __wbg_finalize_init(instance, module);
 }
 
+let __wbg_init_promise;
 async function __wbg_init(module_or_path) {
     if (wasm !== undefined) return wasm;
+    if (__wbg_init_promise === undefined) {
+        __wbg_init_promise = __wbg_init_once(module_or_path);
+        __wbg_init_promise.catch(() => { __wbg_init_promise = undefined; });
+    }
+    return __wbg_init_promise;
+}
 
+async function __wbg_init_once(module_or_path) {
 
     if (module_or_path !== undefined) {
         if (Object.getPrototypeOf(module_or_path) === Object.prototype) {

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+
+- Site now uses the fly-january 0.1.1 theme (chrome: none).
+
 ### Release
 
 - Changed the Python distribution metadata name from `vexy_json` to

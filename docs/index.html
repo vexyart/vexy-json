@@ -32,16 +32,21 @@
     
     
       
-        <title>vexy-json</title>
+        <title>JSON Parser Guide</title>
       
     
     
+  
       <link rel="stylesheet" href="assets/stylesheets/main.314bbef5.min.css">
       
         
         <link rel="stylesheet" href="assets/stylesheets/palette.a45159b5.min.css">
       
     
+  <link rel="stylesheet" data-fly-photoswipe href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css"
+      integrity="sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei+Zx/1oA/0l8ysE" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/fly/fly.css?v=24c03d88bb">
+
     
 
     
@@ -65,6 +70,19 @@
 
     
     
+  
+  <script>try{if(sessionStorage.getItem("fly-l2")==="in"){document.documentElement.dataset.flyL2="in";sessionStorage.removeItem("fly-l2")}}catch(e){}</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0&icon_names=arrow_back,arrow_forward,dark_mode,light_mode&display=block">
+  <script>try{document.fonts.load('20px "Material Symbols Outlined"',"arrow_backarrow_forwarddark_modelight_mode").then(function(f){if(f.length)document.documentElement.classList.add("fly-msym")})}catch(e){}</script>
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+  <link rel="preconnect" href="https://p.typekit.net" crossorigin>
+  <link rel="stylesheet" href="https://use.typekit.net/cmv5add.css" data-fly-font>
+  <link rel="stylesheet" href="https://use.typekit.net/cna4jfp.css" data-fly-font>
+  <link rel="stylesheet" href="https://use.typekit.net/wck5koo.css" data-fly-font>
+
   </head>
   
   
@@ -77,7 +95,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" data-mx-topbar="glass">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" data-mx-topbar="glass" class="fly-margin-left fly-chrome-none" data-fly-hue="indigo" data-fly-links="accent">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -98,13 +116,14 @@
     </div>
     
     
+  
       
 
   
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="vexy-json" class="md-header__button md-logo" aria-label="vexy-json" data-md-component="logo">
+    <a href="." title="JSON Parser Guide" class="md-header__button md-logo" aria-label="JSON Parser Guide" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -118,7 +137,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            vexy-json
+            JSON Parser Guide
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -210,7 +229,7 @@
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
-    vexyart/vexy-json
+    GitHub
   </div>
 </a>
       </div>
@@ -219,6 +238,7 @@
   
 </header>
     
+
     <div class="md-container" data-md-component="container">
       
       
@@ -240,13 +260,13 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="vexy-json" class="md-nav__button md-logo" aria-label="vexy-json" data-md-component="logo">
+    <a href="." title="JSON Parser Guide" class="md-nav__button md-logo" aria-label="JSON Parser Guide" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    vexy-json
+    JSON Parser Guide
   </label>
   
     <div class="md-nav__source">
@@ -256,7 +276,7 @@
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
-    vexyart/vexy-json
+    GitHub
   </div>
 </a>
     </div>
@@ -267,13 +287,13 @@
       
   
   
+  
     
   
   
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
         
@@ -283,7 +303,7 @@
           
   
   
-  <span class="md-ellipsis">
+  <span class="md-ellipsis" title="Home">
     
   
     Home
@@ -301,7 +321,7 @@
         
   
   
-  <span class="md-ellipsis">
+  <span class="md-ellipsis" title="Home">
     
   
     Home
@@ -320,12 +340,14 @@
   
   
   
+  
+    
     
   
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      Overview
     </label>
     <ul class="md-nav__list" data-md-component="toc">
       
@@ -398,6 +420,7 @@
   
   
   
+  
     
     
     
@@ -419,7 +442,7 @@
             
   
   
-  <span class="md-ellipsis">
+  <span class="md-ellipsis" title="Getting started">
     
   
     Getting started
@@ -450,6 +473,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="installation/" class="md-nav__link">
         
@@ -474,6 +498,7 @@
             
               
                 
+  
   
   
   
@@ -513,6 +538,7 @@
   
   
   
+  
     
     
     
@@ -534,7 +560,7 @@
             
   
   
-  <span class="md-ellipsis">
+  <span class="md-ellipsis" title="Guide">
     
   
     Guide
@@ -561,6 +587,7 @@
             
               
                 
+  
   
   
   
@@ -593,6 +620,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="options/" class="md-nav__link">
         
@@ -617,6 +645,7 @@
             
               
                 
+  
   
   
   
@@ -656,6 +685,7 @@
   
   
   
+  
     
     
     
@@ -677,7 +707,7 @@
             
   
   
-  <span class="md-ellipsis">
+  <span class="md-ellipsis" title="Interfaces">
     
   
     Interfaces
@@ -704,6 +734,7 @@
             
               
                 
+  
   
   
   
@@ -736,6 +767,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="rust-api/" class="md-nav__link">
         
@@ -760,6 +792,7 @@
             
               
                 
+  
   
   
   
@@ -792,6 +825,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="webassembly/" class="md-nav__link">
         
@@ -816,6 +850,7 @@
             
               
                 
+  
   
   
   
@@ -855,6 +890,7 @@
   
   
   
+  
     
     
     
@@ -876,7 +912,7 @@
             
   
   
-  <span class="md-ellipsis">
+  <span class="md-ellipsis" title="Project">
     
   
     Project
@@ -903,6 +939,7 @@
             
               
                 
+  
   
   
   
@@ -935,6 +972,7 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="troubleshooting/" class="md-nav__link">
         
@@ -959,6 +997,7 @@
             
               
                 
+  
   
   
   
@@ -998,12 +1037,13 @@
   
   
   
+  
     <li class="md-nav__item">
       <a href="topics/" class="md-nav__link">
         
   
   
-  <span class="md-ellipsis">
+  <span class="md-ellipsis" title="Topics">
     
   
     Topics
@@ -1036,12 +1076,14 @@
   
   
   
+  
+    
     
   
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      Overview
     </label>
     <ul class="md-nav__list" data-md-component="toc">
       
@@ -1118,13 +1160,13 @@
   
 
 
-<h1 id="vexy-json">Vexy JSON<a class="headerlink" href="#vexy-json" title="Permanent link">&para;</a></h1>
+<h1 id="vexy-json">Vexy JSON<a aria-label="Permanent link" class="headerlink" href="#vexy-json" title="Permanent link">&para;</a></h1>
 <p>Vexy JSON is a forgiving JSON parser written in Rust. It reads standard JSON and
 the relaxed syntax found in hand-written configuration files and in text
 produced by language models, and it returns ordinary JSON values.</p>
 <p>The same parser is available as a Rust library, a command-line tool, a Python
 package, a WebAssembly module and a C library.</p>
-<h2 id="what-it-accepts">What it accepts<a class="headerlink" href="#what-it-accepts" title="Permanent link">&para;</a></h2>
+<h2 id="what-it-accepts">What it accepts<a aria-label="Permanent link" class="headerlink" href="#what-it-accepts" title="Permanent link">&para;</a></h2>
 <p>Standard JSON parses unchanged. On top of that, the default settings accept:</p>
 <ul>
 <li><code>//</code>, <code>/* … */</code> and <code>#</code> comments</li>
@@ -1138,7 +1180,7 @@ package, a WebAssembly module and a C library.</p>
 </ul>
 <p>Each extension can be switched off. See <a href="syntax/">Accepted syntax</a> and
 <a href="options/">Parser options</a>.</p>
-<h2 id="one-example">One example<a class="headerlink" href="#one-example" title="Permanent link">&para;</a></h2>
+<h2 id="one-example">One example<a aria-label="Permanent link" class="headerlink" href="#one-example" title="Permanent link">&para;</a></h2>
 <p>This input is not valid JSON:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>// service settings
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>{
@@ -1157,7 +1199,7 @@ package, a WebAssembly module and a C library.</p>
 <p>The comment is dropped, the unquoted key and the single-quoted string become
 ordinary strings, the trailing comma is ignored and the hexadecimal number
 becomes a decimal integer.</p>
-<h2 id="ways-to-use-it">Ways to use it<a class="headerlink" href="#ways-to-use-it" title="Permanent link">&para;</a></h2>
+<h2 id="ways-to-use-it">Ways to use it<a aria-label="Permanent link" class="headerlink" href="#ways-to-use-it" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1195,12 +1237,12 @@ becomes a decimal integer.</p>
 </tbody>
 </table>
 <p>Start with <a href="installation/">Installation</a> and the <a href="quickstart/">Quickstart</a>.</p>
-<h2 id="try-it-in-the-browser">Try it in the browser<a class="headerlink" href="#try-it-in-the-browser" title="Permanent link">&para;</a></h2>
+<h2 id="try-it-in-the-browser">Try it in the browser<a aria-label="Permanent link" class="headerlink" href="#try-it-in-the-browser" title="Permanent link">&para;</a></h2>
 <p>The <a href="demo/">interactive demo</a> runs the WebAssembly build of the
 parser in your browser. Type relaxed JSON on the left and the normalized JSON
 appears on the right. An older version of the demo is kept at
 <a href="demo/legacy.html">demo/legacy.html</a>.</p>
-<h2 id="project-links">Project links<a class="headerlink" href="#project-links" title="Permanent link">&para;</a></h2>
+<h2 id="project-links">Project links<a aria-label="Permanent link" class="headerlink" href="#project-links" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Source code: <a href="https://github.com/vexyart/vexy-json">github.com/vexyart/vexy-json</a></li>
 <li>Rust crate: <a href="https://crates.io/crates/vexy-json">crates.io/crates/vexy-json</a></li>
@@ -1264,6 +1306,7 @@ at your option.</p>
 </div>
       </main>
       
+  
         <footer class="md-footer">
   
     
@@ -1271,18 +1314,11 @@ at your option.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
         
-          
           <a href="installation/" class="md-footer__link md-footer__link--next" aria-label="Next: Installation">
             <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                Installation
-              </div>
+              <div class="md-ellipsis">Installation</div>
             </div>
-            <div class="md-footer__button md-icon">
-              
+            <div class="md-footer__button md-icon fly-arrow fly-arrow--forward" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
             </div>
           </a>
@@ -1290,22 +1326,10 @@ at your option.</p>
       </nav>
     
   
-  <div class="md-footer-meta md-typeset">
-    <div class="md-footer-meta__inner md-grid">
-      <div class="md-copyright">
   
-  
-    Made with
-    <a href="https://jaywhj.github.io/mkdocs-materialx/" target="_blank" rel="noopener">
-      MaterialX
-    </a>
-  
-</div>
-      
-    </div>
-  </div>
 </footer>
       
+
     </div>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
@@ -1318,8 +1342,12 @@ at your option.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": ".", "code": null, "features": ["navigation.sections", "navigation.top", "navigation.footer", "toc.follow", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "code.collapse": "Collapse", "code.download": "Download", "code.expand": "Expand remaining # lines", "code.select": "Toggle line selection", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
+  
       <script src="assets/javascripts/bundle.fc193f93.min.js"></script>
       
     
+  <script src="assets/fly/fly-bridge.js?v=86c9984233"></script>
+  <script type="module" src="assets/fly/fly.js?v=f51ac22526"></script>
+
   </body>
 </html>

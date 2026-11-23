@@ -87,6 +87,10 @@ After running the script, always review the output log to check for errors or wa
 cat ./build.log.txt
 ```
 
+For documentation changes, run `./build.sh docs` to rebuild the tracked
+`docs/` site in strict mode. The wrapper installs fly-january 0.1.0 and reads
+`src_docs/mkdocs.yml`. Keep `extra.fly.chrome` set to `none` for this site.
+
 ### 4.2. Reference Implementation (the reference implementation)
 
 When working with the reference JavaScript implementation in `ref/the reference implementation/`:

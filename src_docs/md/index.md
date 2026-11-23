@@ -1,4 +1,4 @@
-# Vexy JSON
+# Vexy JSON {data-toc-label="Overview"}
 
 Vexy JSON is a forgiving JSON parser written in Rust. It reads standard JSON and
 the relaxed syntax found in hand-written configuration files and in text

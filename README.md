@@ -64,8 +64,8 @@ Then parse a file or standard input with `vexy-json`.
 
 ## Development
 
-Run the repository's complete formatting, linting, Rust, and packaged-Python
-gate with:
+Run the repository's formatting, linting, Rust, packaged-Python and documentation
+checks with:
 
 ```bash
 ./build.sh
@@ -73,6 +73,10 @@ gate with:
 
 Do not invoke individual Cargo test or lint commands for release verification;
 `build.sh` is the canonical gate and records its output in `build.log.txt`.
+
+Run `./build.sh docs` to rebuild the GitHub Pages site in `docs/`. The strict
+ProperDocs build uses `src_docs/mkdocs.yml` and fly-january 0.1.0 with
+unbranded navigation. Run `src_docs/build.sh serve` for a local preview.
 
 Install the Rust CLI under `~/.local` and the Python extension into the system
 Python selected by `uv` with:
