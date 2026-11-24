@@ -268,7 +268,7 @@ done
 assert_not_contains bindings/python "$ROOT/publish.sh"
 assert_contains '"$ROOT/src_docs/build.sh" build --site-dir "$site"' "$ROOT/build.sh"
 assert_contains 'properdocs build --strict -f mkdocs.yml' "$ROOT/src_docs/build.sh"
-assert_contains 'fly-january==0.2.0' "$ROOT/src_docs/build.sh"
+assert_contains 'fly-january==0.2.1' "$ROOT/src_docs/build.sh"
 assert_contains 'documentation_gate' "$ROOT/build.sh"
 assert_contains 'uv pip install --system --python "$SYSTEM_PYTHON" --reinstall "$WHEEL"' "$ROOT/install.sh"
 assert_contains 'uv build --python "$SYSTEM_PYTHON" --no-sources' "$ROOT/install.sh"
