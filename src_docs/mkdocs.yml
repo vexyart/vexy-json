@@ -13,7 +13,7 @@ use_directory_urls: true
 exclude_docs: |
   pkg/README.md
 theme:
-  name: fly-january
+  name: fly-january-remote
   features:
     - navigation.sections
     - navigation.top

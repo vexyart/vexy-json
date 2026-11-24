@@ -88,7 +88,7 @@ cat ./build.log.txt
 ```
 
 For documentation changes, run `./build.sh docs` to rebuild the tracked
-`docs/` site in strict mode. The wrapper installs fly-january 0.3.0 or later and reads
+`docs/` site in strict mode. The wrapper installs fly-january 0.4.0 or later (remote theme assets) and reads
 `src_docs/mkdocs.yml`. Keep `extra.fly.chrome` set to `none` for this site.
 
 ### 4.2. Reference Implementation (the reference implementation)
