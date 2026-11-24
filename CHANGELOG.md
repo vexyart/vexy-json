@@ -13,8 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Site now uses the fly-january 0.2.1 theme (chrome: none).
 
+### Verified backlog items
+
+- Pattern-based error recovery handles common syntax errors. Verified by `pattern_recovery_test.rs` and `recovery_engine_test.rs`.
+- Parser fallback invokes weighted pattern recognition in `crates/core/src/parser/mod.rs`. Recognizer behavior is covered by `ml_pattern_test.rs`.
+- The V3 memory pool supports compact strings and capacity estimates. Verified by `memory_pool_optimization_test.rs`.
+- SIMD helpers cover string scanning and whitespace with scalar fallbacks. Verified by the `optimization::simd` unit tests.
+- Parser edge cases have property-based coverage. All 10 cases in `tests/property_tests.rs` passed.
+- The plugin trait and registry are implemented. Verified by the registry and hook unit tests.
+- Runnable examples cover the built-in plugins, including validation of parsed values. `plugin_examples` ran all six sections.
+- Release assets include a macOS installer, a Windows executable ZIP and Linux executable tarballs. Verified against the published v1.5.14 asset list.
+
 ### Release
 
+- Python distributions use PyPI Trusted Publishing through `pypi-upload.yml` (`cdfd7fd`). The owner must configure the `vexy-json` PyPI project to trust `vexyart/vexy-json`, workflow `pypi-upload.yml`, environment `pypi`.
 - Changed the Python distribution metadata name from `vexy_json` to
   `vexy-json`, while preserving `vexy_json` as the import module.
 - Expanded the public documentation, enriched Python package metadata, made

@@ -95,7 +95,11 @@ installation prefix.
 `./publish.sh` verifies the repository boundary, checkpoints intended changes,
 runs the complete build, creates and verifies the release tag, then publishes
 the workspace crates in dependency order followed by the Python package.
-Python distributions are built with `uv build` and uploaded with `uv publish`.
+The script builds the wheel and sdist with `uv build`. An authenticated
+`gh` hands those files to `pypi-upload.yml` through a draft GitHub release.
+The workflow publishes them using PyPI Trusted Publishing (OIDC) and the
+`pypi` environment. Register that workflow and environment for the
+`vexy-json` project on PyPI.
 
 If publication stops after a tag is created, check crates.io and PyPI before
 retrying anything. Registry uploads are irreversible, and a transport error can

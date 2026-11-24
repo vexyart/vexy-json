@@ -263,7 +263,7 @@ The system includes comprehensive validation:
 - **Rust**: crates.io (multiple crates)
 - **JavaScript**: NPM (WASM package)
 - **macOS**: Homebrew formula
-- **Python**: PyPI (future)
+- **Python**: PyPI Trusted Publishing (OIDC) through `pypi-upload.yml`, environment `pypi`
 
 ### Documentation
 - **API Documentation**: Generated with rustdoc

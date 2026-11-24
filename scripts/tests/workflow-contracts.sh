@@ -188,12 +188,6 @@ case "${1:-}" in
         [[ ${2:-} == find && ${3:-} == --system && ${4:-} == --no-managed-python ]]
         printf '%s\n' "$REAL_PYTHON"
         ;;
-    publish)
-        if [[ " $* " != *' --dry-run '* && ${ALLOW_FAKE_UPLOADS:-0} != 1 ]]; then
-            printf '%s\n' 'non-dry Python upload forbidden by workflow fixture' >&2
-            exit 91
-        fi
-        ;;
     *)
         printf 'unsupported fake uv command: %s\n' "$*" >&2
         exit 2
@@ -206,6 +200,8 @@ set -euo pipefail
 printf 'uvx %s\n' "$*" >>"$TOOL_LOG"
 if [[ ${1:-} == --from ]]; then
     printf '%s\n' 'maturin 1.9.4 (workflow-contract)'
+elif [[ ${1:-} == twine && ${2:-} == check ]]; then
+    [[ -f "$3" && -f "$4" ]]
 elif [[ " $* " == *' properdocs build --strict '* ]]; then
     site_dir=""
     while (( $# > 0 )); do
@@ -228,6 +224,22 @@ else
     printf 'unsupported fake uvx command: %s\n' "$*" >&2
     exit 2
 fi
+EOF
+    cat >"$SHIMS/gh" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+printf 'gh %s\n' "$*" >>"$TOOL_LOG"
+[[ ${ALLOW_FAKE_UPLOADS:-0} == 1 ]]
+case "$1 $2" in
+    'auth status'|'workflow run'|'run watch') ;;
+    'repo view')
+        [[ "$(pwd -P)" == "$(cd "$FIXTURE_ROOT/scripts" && pwd -P)" ]]
+        printf '%s\n' 'example/fixture'
+        ;;
+    'release create') [[ -f "$4" && -f "$5" ]] ;;
+    'run list') printf '%s\n' 123 ;;
+    *) exit 2 ;;
+esac
 EOF
     cat >"$SHIMS/curl" <<'EOF'
 #!/usr/bin/env bash
@@ -272,7 +284,12 @@ assert_contains 'fly-january==0.2.1' "$ROOT/src_docs/build.sh"
 assert_contains 'documentation_gate' "$ROOT/build.sh"
 assert_contains 'uv pip install --system --python "$SYSTEM_PYTHON" --reinstall "$WHEEL"' "$ROOT/install.sh"
 assert_contains 'uv build --python "$SYSTEM_PYTHON" --no-sources' "$ROOT/install.sh"
-assert_contains 'uv publish "$PY_WHEEL" "$PY_SDIST"' "$ROOT/publish.sh"
+assert_not_contains 'uv publish' "$ROOT/publish.sh"
+assert_contains '"$ROOT/scripts/pypi-upload.sh" --dry-run "$PY_WHEEL" "$PY_SDIST"' "$ROOT/publish.sh"
+assert_contains '"$ROOT/scripts/pypi-upload.sh" "$PY_WHEEL" "$PY_SDIST"' "$ROOT/publish.sh"
+assert_contains 'name: pypi' "$ROOT/.github/workflows/pypi-upload.yml"
+assert_contains 'id-token: write' "$ROOT/.github/workflows/pypi-upload.yml"
+assert_contains 'pypa/gh-action-pypi-publish@' "$ROOT/.github/workflows/pypi-upload.yml"
 assert_contains 'CARGO_HTTP_MULTIPLEXING=false' "$ROOT/publish.sh"
 [[ "$(grep -Fc 'uvx gitnextver@1.0.1 --directory . --verbose' "$ROOT/publish.sh")" == 1 ]] \
     || fail "publish.sh must contain exactly one authorized gitnextver command"
@@ -499,7 +516,7 @@ printf '%s\n' 'local omc state' >"$REAL_REPO/.omc/state.json"
 printf '%s\n' 'local codegraph index' >"$REAL_REPO/.codegraph/index.bin"
 : >"$TOOL_LOG"
 CORE_PUBLISHED_MARKER="$TEMP_DIR/core-published"
-if ! CARGO_REGISTRY_TOKEN=fake UV_PUBLISH_TOKEN=fake ALLOW_FAKE_UPLOADS=1 \
+if ! CARGO_REGISTRY_TOKEN=fake ALLOW_FAKE_UPLOADS=1 \
     REQUIRE_PAGER_DISABLED=1 GIT_PAGER=/usr/bin/false PAGER=/usr/bin/false \
     FAIL_PREMATURE_DEPENDENT_DRY_RUN=1 FAKE_CORE_PUBLISHED_MARKER="$CORE_PUBLISHED_MARKER" \
     "$REAL_REPO/publish.sh" >"$TEMP_DIR/real.out" 2>"$TEMP_DIR/real.err"; then
@@ -513,6 +530,8 @@ fi
     || fail "real fixture did not create v1.5.11"
 "$REAL_PYTHON" "$REAL_REPO/scripts/release-manifests.py" check 1.5.11 >/dev/null
 assert_contains 'RELEASE SUCCESS: v1.5.11' "$TEMP_DIR/real.out"
+assert_contains 'gh workflow run pypi-upload.yml -R example/fixture' "$TOOL_LOG"
+assert_contains 'gh run watch 123 -R example/fixture --exit-status' "$TOOL_LOG"
 assert_contains 'Checkpoint commit:' "$TEMP_DIR/real.out"
 RELEASE_COMMIT="$($REAL_GIT -C "$REAL_REPO" rev-parse HEAD)"
 CHECKPOINT_COMMIT="$($REAL_GIT -C "$REAL_REPO" rev-parse "$RELEASE_COMMIT^")"
@@ -555,7 +574,7 @@ RACE_REMOTE_MARKER="$TEMP_DIR/remote-race.marker"
 RACE_REMOTE_WORK="$TEMP_DIR/remote-race-writer"
 : >"$TOOL_LOG"
 set +e
-CARGO_REGISTRY_TOKEN=fake UV_PUBLISH_TOKEN=fake ALLOW_FAKE_UPLOADS=1 \
+CARGO_REGISTRY_TOKEN=fake ALLOW_FAKE_UPLOADS=1 \
     RACE_REMOTE_MARKER="$RACE_REMOTE_MARKER" RACE_REMOTE_WORK="$RACE_REMOTE_WORK" \
     "$RACE_REPO/publish.sh" >"$TEMP_DIR/race.out" 2>"$TEMP_DIR/race.err"
 RACE_STATUS=$?

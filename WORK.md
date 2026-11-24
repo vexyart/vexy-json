@@ -1,59 +1,9 @@
 # this_file: WORK.md
 
-# Work Progress - v1.5.0 Release Preparation
+# Work progress
 
-## Release Issues Fixed
-
-### 1. Rustfmt Formatting ✅
-- Applied rustfmt to all packages to fix formatting inconsistencies
-- Resolved formatting warnings that were blocking the release
-
-### 2. Build Target Specification ✅
-- Fixed CLI build commands in release.sh to specify package with `-p vexy-json-cli`
-- Fixed both regular and Linux static binary build commands
-- CLI now builds successfully in release process
-
-### 3. Test Suite Exclusions ✅
-- Excluded vexy-json-python from test runs due to PyO3 0.25 API compatibility issues
-- Modified cargo test and cargo clippy commands to exclude Python bindings
-- Tests now run successfully without Python binding failures
-
-## Remaining Issues
-
-### Python Bindings (Non-Blocking)
-- PyO3 0.25 has significant API changes that need more work
-- Python bindings excluded from release for now
-- Can be fixed in a patch release later
-
-## Release Status
-
-The v1.5.0 release is now ready to proceed:
-- ✅ Version numbers updated to 1.5.0
-- ✅ Rust formatting applied
-- ✅ CLI builds successfully
-- ✅ Tests pass (excluding Python bindings)
-- ✅ Release script fixed
-
-To complete the release, run:
-```bash
-./release.sh 1.5.0
-```
-
-The release will:
-1. Build all artifacts (CLI, library, WASM)
-2. Create distribution packages
-3. Tag the release
-4. Publish to crates.io (if desired)
-
-## 2026-10-18: documentation plugins
-
-- Use MaterialX search, inherited metadata and a topic index; keep ordered navigation in awesome-nav.
-- The documentation wrapper installs the plugins required by this site.
-- Strict documentation build and rendered output checks passed.
-
-## 2026-11-23: documentation theme
-
-- Rebuilt `docs/` with `./build.sh docs` using fly-january 0.2.1 and unbranded navigation. The strict build passed without warnings.
-- Synced the demo source bundle with the tracked 1.5.14 release so local documentation builds preserve the published WebAssembly files.
-- Checked the header, navigation, footer and favicon on all 18 generated HTML pages. All five Fly assets match the 0.2.1 wheel.
-- The full gate passed 561 Rust tests, 5 doctests and 36 Python tests. Installing the optional NumPy and pandas dependencies brought the Python count to 38 with no skips.
+- PyPI publishing uses the `pypi` environment and OIDC through `pypi-upload.yml`. The repository-side workflow and local handoff were checked without publishing. The PyPI project owner must confirm the trusted publisher registration.
+- `./build.sh docs` rebuilt the fly-january 0.2.1 site in strict mode with zero warnings.
+- The workspace gate with Cargo's `--no-fail-fast` passed 559 Rust tests and 5 doctests. Two CLI fixtures failed because the sandbox denied access to `/dev/stdout`.
+- A fresh Python wheel passed 38 tests. The published WebAssembly bundle passed six smoke cases and four assertions. The C API smoke passed. The C++ example failed to compile against the current C header.
+- The scheduled fuzz workflow is disabled for inactivity. The active backlog and its next checks are in `PLAN.md` and `TODO.md`.

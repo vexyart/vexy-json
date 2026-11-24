@@ -109,11 +109,14 @@ To rebuild the bundle after changing `crates/core` or `crates/wasm`:
 
 ## Releasing
 
-Maintainers release with `./publish.sh`. According to the README, the script
+Maintainers release with `./publish.sh`. The script
 verifies the repository boundary, checkpoints intended changes, runs the full
 build, creates and verifies the release tag, then publishes the workspace
-crates in dependency order followed by the Python package (built with
-`uv build`, uploaded with `uv publish`).
+crates in dependency order. For PyPI, it builds the wheel and sdist with
+`uv build`, then hands them to `scripts/pypi-upload.sh`. The helper uses
+an authenticated `gh` to stage the files in a draft release and dispatch
+`pypi-upload.yml`. That workflow publishes through PyPI Trusted Publishing
+(OIDC) in the `pypi` environment.
 
 Pushing the `v*` tag starts `.github/workflows/release.yml`, which tests the
 tagged source, builds the CLI binaries, the macOS installer and the

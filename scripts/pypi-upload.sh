@@ -23,7 +23,7 @@ if [[ -n "$dry" ]]; then
   exit 0
 fi
 
-REPO="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
+REPO="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && gh repo view --json nameWithOwner -q .nameWithOwner)"
 RELEASE="pypi-staging-$(date -u +%Y%m%d%H%M%S)-$$"
 
 gh release create "$RELEASE" "$@" -R "$REPO" --draft --title "$RELEASE" \

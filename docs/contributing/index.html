@@ -1314,11 +1314,14 @@ that changes <code>src_docs/</code> or the WebAssembly sources, and commits the 
 <li>Record user-visible changes in <code>CHANGELOG.md</code> under <code>Unreleased</code>.</li>
 </ul>
 <h2 id="releasing">Releasing<a aria-label="Permanent link" class="headerlink" href="#releasing" title="Permanent link">&para;</a></h2>
-<p>Maintainers release with <code>./publish.sh</code>. According to the README, the script
+<p>Maintainers release with <code>./publish.sh</code>. The script
 verifies the repository boundary, checkpoints intended changes, runs the full
 build, creates and verifies the release tag, then publishes the workspace
-crates in dependency order followed by the Python package (built with
-<code>uv build</code>, uploaded with <code>uv publish</code>).</p>
+crates in dependency order. For PyPI, it builds the wheel and sdist with
+<code>uv build</code>, then hands them to <code>scripts/pypi-upload.sh</code>. The helper uses
+an authenticated <code>gh</code> to stage the files in a draft release and dispatch
+<code>pypi-upload.yml</code>. That workflow publishes through PyPI Trusted Publishing
+(OIDC) in the <code>pypi</code> environment.</p>
 <p>Pushing the <code>v*</code> tag starts <code>.github/workflows/release.yml</code>, which tests the
 tagged source, builds the CLI binaries, the macOS installer and the
 WebAssembly archive, and attaches them to the GitHub release.</p>
